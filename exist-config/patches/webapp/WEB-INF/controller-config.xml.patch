@@ -1,0 +1,34 @@
+diff --git a/webapp/WEB-INF/controller-config.xml b/webapp/WEB-INF/controller-config.xml
+index 6271f82..a4755d7 100644
+--- a/webapp/WEB-INF/controller-config.xml
++++ b/webapp/WEB-INF/controller-config.xml
+@@ -17,6 +17,9 @@
+   
+   <!-- betterFORM resource-servlet -->
+   <forward pattern=".*bfResources/" servlet="ResourceServlet"/>
++
++  <forward pattern="/Flux/" servlet="Flux"/>
++  <forward pattern="/inspector/" servlet="inspector" />
+   
+   <!-- REST interface -->
+   <forward pattern="/(rest|servlet)/" servlet="EXistServlet"/>
+@@ -52,7 +55,7 @@
+   	++ root line and uncomment the block below with the server-name
+   	++ attribute.
+     -->
+-  <root pattern=".*" path="/"/>
++  <!--root pattern=".*" path="/"/-->
+   
+   
+   <!-- 
+@@ -68,8 +71,8 @@
+       ++ is stored in the database. However, the contents of the /webapp directory
+       ++ should still be accessible with a /fs prefix in the path.
+   -->
+-  <!--root pattern="/fs" path="/"/>
+-    <root pattern=".*" path="xmldb:exist:///db/www"/-->
++  <root pattern="/fs" path="/"/>
++  <root pattern=".*" path="xmldb:exist:///db/totenbuch"/>
+   
+   <!--
+       ++ Order is important here: the forward rule for XQuery resources has 

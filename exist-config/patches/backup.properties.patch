@@ -1,0 +1,13 @@
+diff --git a/backup.properties b/backup.properties
+index ef444b5..f391f19 100644
+--- a/backup.properties
++++ b/backup.properties
+@@ -8,7 +8,7 @@ driver=org.exist.xmldb.DatabaseImpl
+ #uri=xmldb:exist://localhost:8088/xmlrpc
+ 
+ # access eXist via XML-RPC provided by remote Tomcat
+-uri=xmldb:exist://localhost:8080/exist/xmlrpc
++uri=xmldb:exist://localhost:8080/xmlrpc
+ 
+ # access a local instance of the database
+ #uri=xmldb:exist://

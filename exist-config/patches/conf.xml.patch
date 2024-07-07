@@ -1,0 +1,33 @@
+diff --git a/conf.xml b/conf.xml
+index 2cbe03f..72ebcd1 100644
+--- a/conf.xml
++++ b/conf.xml
+@@ -181,7 +181,7 @@
+         you have some more memory to waste. If you deal with lots of 
+         collections, you can also increase the collectionCacheSize value 
+     -->
+-    <db-connection cacheSize="256M" checkMaxCacheSize="true" collectionCache="64M" database="native"
++    <db-connection cacheSize="256M" checkMaxCacheSize="true" collectionCache="128M" database="native"
+         files="../data" pageSize="4096" nodesBuffer="1000" cacheShrinkThreshold="10000"
+         minDiskSpace="1024M" posix-chown-restricted="true" preserve-on-copy="false">
+ 
+@@ -687,7 +687,18 @@
+             <parameter name="output-dir" value="backup" />
+         </job>
+         -->
+-        
++       
++	<job type="system" name="check1" 
++   		class="org.exist.storage.ConsistencyCheckTask"
++   		cron-trigger="0 0 3 * * ?">
++  		<parameter name="output" value="export"/>
++   		<parameter name="backup" value="yes"/>
++   		<parameter name="incremental" value="yes"/>
++   		<parameter name="incremental-check" value="no"/>
++  		 <parameter name="max" value="7"/>
++	</job>
++
++ 
+     </scheduler>
+ 
+     <!--

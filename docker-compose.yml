@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  existdb:
+    build: .
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    environment:
+      EXIST_HOME: /exist
+    volumes:
+      - ./docker/exist-data:/exist/data
+      - exist_images:/totenbuch/images
+
+volumes:
+  exist_images:
+    driver: vieux/sshfs:latest
+    driver_opts:
+      sshcmd: ${IMAGE_VOLUME_SSH_USER}@archilochos.cceh.uni-koeln.de:/nfs/cceh/projects/images-totenbuch
+      password: ${IMAGE_VOLUME_SSH_PASS}
+      allow_other: ""
+      ro: ""
+
+

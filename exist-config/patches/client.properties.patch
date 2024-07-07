@@ -1,0 +1,34 @@
+diff --git a/client.properties b/client.properties
+index 593f8fd..5b1818c 100644
+--- a/client.properties
++++ b/client.properties
+@@ -5,11 +5,11 @@ driver=org.exist.xmldb.DatabaseImpl
+ ## uncomment one "uri=" and one "ssl-enable=" line
+ 
+ ## Default XMLRPC (HTTP)
+-uri=xmldb:exist://localhost:8080/exist/xmlrpc
++uri=xmldb:exist://localhost:8080/xmlrpc
+ ssl-enable=false
+ 
+ ## Secure XMLRPC (HTTPS)
+-#uri=xmldb:exist://localhost:8443/exist/xmlrpc
++#uri=xmldb:exist://localhost:8443/xmlrpc
+ #ssl-enable=true
+ 
+ ## URI for stand-alone server
+@@ -20,7 +20,7 @@ ssl-enable=false
+ #uri=xmldb:exist://
+ 
+ ## Alternate URIs  (to be checked)
+-alternate_uri_0=xmldb:exist://localhost:8080/exist/xmlrpc
++alternate_uri_0=xmldb:exist://localhost:8080/xmlrpc
+ alternate_uri_1=xmldb:exist://localhost:8088/xmlrpc
+ alternate_uri_2=xmldb:exist://
+ 
+@@ -48,6 +48,3 @@ expand-xincludes=yes
+ ## highlight matches in element and attribute values?
+ ## possible values are "none", "both", "elements", "attributes"
+ highlight-matches=none
+-
+-## output the doctype of documents
+-output-doctype=yes

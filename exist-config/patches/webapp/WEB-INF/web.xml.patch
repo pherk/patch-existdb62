@@ -1,0 +1,126 @@
+diff --git a/webapp/WEB-INF/web.xml b/webapp/WEB-INF/web.xml
+index ed44a50..6d47ff2 100644
+--- a/webapp/WEB-INF/web.xml
++++ b/webapp/WEB-INF/web.xml
+@@ -12,6 +12,13 @@
+          version="3.1">
+    <description>eXist Open Source Native XML Database</description>
+    <display-name>eXist XML Database</display-name>
++
++   <!--====================== betterFORM configuration file ====================== -->
++   <context-param>
++      <param-name>betterform.configfile</param-name>
++      <param-value>WEB-INF/betterform-config.xml</param-value>
++   </context-param>
++
+    <!--
+ 	 | ScaleImageJAI servlet: scale images on the fly and cache
+ 	 | the output. Commented out by default.
+@@ -274,6 +281,107 @@
+       <servlet-name>jnlp</servlet-name>
+       <servlet-class>org.exist.webstart.JnlpServlet</servlet-class>
+    </servlet>
++
++      <!--====================== betterFORM filter and servlets ======================-->
++   <!--====================== betterFORM servlets ======================-->
++   <servlet>
++      <servlet-name>Flux</servlet-name>
++      <servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
++
++      <init-param>
++         <param-name>debug</param-name>
++         <param-value>false</param-value>
++      </init-param>
++
++   </servlet>
++   <servlet>
++      <servlet-name>XFormsPostServlet</servlet-name>
++      <servlet-class>de.betterform.agent.web.servlet.XFormsPostServlet</servlet-class>
++   </servlet>
++   <servlet>
++      <servlet-name>FormsServlet</servlet-name>
++      <servlet-class>de.betterform.agent.web.servlet.FormsServlet</servlet-class>
++   </servlet>
++   <servlet>
++      <servlet-name>inspector</servlet-name>
++      <servlet-class>de.betterform.agent.web.servlet.XFormsInspectorServlet</servlet-class>
++   </servlet>
++   <servlet>
++      <servlet-name>ResourceServlet</servlet-name>
++      <servlet-class>de.betterform.agent.web.resources.ResourceServlet</servlet-class>
++      <init-param>
++         <param-name>caching</param-name>
++         <param-value>true</param-value>
++      </init-param>
++   </servlet>
++   <servlet>
++      <servlet-name>error</servlet-name>
++      <servlet-class>de.betterform.agent.web.servlet.ErrorServlet</servlet-class>
++   </servlet>
++
++   <!--====================== betterFORM servlets mapping ======================-->
++
++   <servlet-mapping>
++      <servlet-name>Flux</servlet-name>
++      <url-pattern>/Flux/*</url-pattern>
++   </servlet-mapping>
++   <servlet-mapping>
++      <servlet-name>XFormsPostServlet</servlet-name>
++      <url-pattern>/XFormsPost</url-pattern>
++   </servlet-mapping>
++   <servlet-mapping>
++      <servlet-name>XQueryServlet</servlet-name>
++      <url-pattern>*.xql</url-pattern>
++   </servlet-mapping>
++   <servlet-mapping>
++      <servlet-name>FormsServlet</servlet-name>
++      <url-pattern>/forms/formslist</url-pattern>
++   </servlet-mapping>
++   <servlet-mapping>
++      <servlet-name>inspector</servlet-name>
++      <url-pattern>/fs/inspector/*</url-pattern>
++   </servlet-mapping>
++   <servlet-mapping>
++      <servlet-name>ResourceServlet</servlet-name>
++      <url-pattern>/fs/bfResources/*</url-pattern>
++   </servlet-mapping>
++   <servlet-mapping>
++      <servlet-name>error</servlet-name>
++      <url-pattern>/error/*</url-pattern>
++   </servlet-mapping>
++
++   <!--====================== betterFORM filter ======================-->
++  <filter>
++      <filter-name>XFormsFilter</filter-name>
++      <filter-class>de.betterform.agent.web.filter.XFormsFilter</filter-class>
++   </filter>
++
++   <!--====================== betterFORM filter mapping ======================-->
++   <filter-mapping>
++      <filter-name>XFormsFilter</filter-name>
++      <url-pattern>/apps/*</url-pattern>
++      <url-pattern>/totenbuch/*</url-pattern>
++      <url-pattern>/</url-pattern>
++      <url-pattern>/spruch/*</url-pattern>
++      <url-pattern>/register/*</url-pattern>
++      <url-pattern>/uebersicht/*</url-pattern>
++      <url-pattern>/projekt/*</url-pattern>
++      <url-pattern>/account/*</url-pattern>
++      <url-pattern>/account/registrieren</url-pattern>	
++      <url-pattern>/queries/*</url-pattern>
++      <url-pattern>/objekt/*</url-pattern>
++      <url-pattern>/bibliografie/*</url-pattern>
++      <url-pattern>/bibliografie-bearbeiten/*</url-pattern>
++      <url-pattern>/objekt-bearbeiten/*</url-pattern>
++      <url-pattern>/teilobjekt-bearbeiten/*</url-pattern>
++      <url-pattern>/admin/*</url-pattern>
++      <url-pattern>/report/*</url-pattern>
++      <url-pattern>/kurztitel/*</url-pattern>
++      <url-pattern>/motiv/*</url-pattern>
++      <url-pattern>/liste/*</url-pattern>
++      <url-pattern>/view/*</url-pattern>
++    </filter-mapping>
++
+    <!--
+         ====================== URL space mappings =======================
+     -->
