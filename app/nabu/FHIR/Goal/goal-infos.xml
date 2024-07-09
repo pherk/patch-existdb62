@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<goal-infos>
+    <lifecycleStatus>
+        <code label-de="vorgeschlagen" value="proposed"/>
+        <code label-de="geplant" value="planned"/>
+        <code label-de="angenommen" value="accepted"/>
+        <code label-de="aktiv" value="active"/>
+        <code label-de="angehalten" value="on-hold"/>
+        <code label-de="beendet" value="completed"/>
+        <code label-de="cancelled" value="cancelled"/>
+        <code label-de="Fehler" value="entered-in-error"/>
+        <code label-de="zurückgewiesen" value="rejected"/>
+        <code label-de="Alle" value="all"/>
+        <code label-de="nur Aktive" value="active-only"/>
+    </lifecycleStatus>
+    <achievementStatus>
+        <code label-de="in Arbeit" value="in-progress"/>
+        <code label-de="Besserung" value="improving"/>
+        <code label-de="Verschlechterung" value="worsening"/>
+        <code label-de="unverändert" value="no-change"/>
+        <code label-de="erreicht" value="achieved"/>
+        <code label-de="nachhaltig erreicht" value="sustaining"/>
+        <code label-de="nicht-erreicht" value="not-achieved"/>
+        <code label-de="ohne Fortschritt" value="no-progress"/>
+        <code label-de="nicht erreichbar" value="not-attainable"/>
+    </achievementStatus>
+    <registrationStatus>
+        <code label-de="alle" value="all" ls="active-only" as=""/>
+        <code label-de="NeuAnmeldung" value="new" ls="proposed" as="in-progress"/>
+        <code label-de="Anmeldebogen" value="infos" ls="accepted" as="in-progress"/>
+        <code label-de="Anforderung" value="order" ls="active" as="improving"/>
+        <code label-de="Termin geplant" value="planned" ls="active" as="achieved"/>
+        <code label-de="Termin finished" value="achieved" ls="completed" as="sustaining"/>
+        <code label-de="Abbruch o.w.T." value="cancelled" ls="completed" as="not-attainable"/>
+        <code label-de="Cancelled" value="entered-in-error" ls="cancelled" as="not-attainable"/>
+    </registrationStatus>
+    <category>
+        <code label-de="Anmeldung" value="registration"/>
+        <code label-de="Diagnostik" value="diagnosis"/>
+        <code label-de="Behandlung" value="treatment"/>
+        <code label-de="Aktivität" value="activity"/>
+        <code label-de="Teilhabe" value="participation"/>
+        <code label-de="Ernährung" value="dietary"/>
+        <code label-de="Sicherheit" value="safety"/>
+        <code label-de="Verhalten" value="behavioral"/>
+        <code label-de="Pflege" value="nursing"/>
+        <code label-de="Vorsorge" value="living-will"/>
+    </category>
+    <priority>
+        <code label-de="sbwm" value="asap-priority"/>
+        <code label-de="hoch" value="high-priority"/>
+        <code label-de="mittel" value="medium-priority"/>
+        <code label-de="niedrig" value="other-priority"/>
+    </priority>
+    <sort>
+        <code label-de="jüngste" value="startDate_desc"/>
+        <code label-de="älteste" value="startDate_asc"/>
+        <code label-de="Änderung" value="statusDate"/>
+        <code label-de="Priorität" value="priority"/>
+        <code label-de="Patient" value="subject"/>
+    </sort>
+    <consent-ext-code>
+        <code label-de="zugestimmt" value="opt-in"/>
+        <code label-de="abgelehnt" value="opt-out"/>
+        <code label-de="offen" value="open"/>
+        <code label-de="unklar" value="unknown"/>
+    </consent-ext-code>
+    <consent-ext-actor>
+        <code label-de="Familie" value="family"/>
+        <code label-de="Eltern" value="parent"/>
+        <code label-de="Patient" value="patient"/>
+        <code label-de="Vormund" value="gardian"/>
+        <code label-de="Sonstige" value="other"/>
+        <code label-de="unklar" value="unknown"/>
+    </consent-ext-actor>
+    <bricks xmlns="http://hl7.org/fhir" comp="4.0.1">
+        <Goal>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+            <lifecycleStatus value="proposed"/>
+            <achievementStatus>
+                <coding>
+                    <system value="http://hl7.org/fhir/ValueSet/goal-achievement"/>
+                    <code value="in-progress"/>
+                    <display value="in Arbeit"/>
+                </coding>
+                <text value="in Arbeit"/>
+            </achievementStatus>
+            <category>
+                <coding> 
+                    <system value="http://hl7.org/fhir/ValueSet/goal-category"/> 
+                    <code value="activity"/> 
+                    <display value="Aktivität"/>
+                </coding>  
+                <text value="Aktivität"/>
+            </category>
+            <priority>
+                <coding> 
+                    <system value="http://hl7.org/fhir/ValueSet/goal-priority"/> 
+                    <code value="medium-priority"/> 
+                    <display value="mittel"/> 
+                </coding> 
+                <text value="mittel"/>                
+            </priority>
+            <description>
+                <coding>
+                    <system value="http://eNahar.org/nabu/extension#nabu-finding"/>
+                    <version value="2017"/>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>
+            </description>
+            <subject>
+                <reference value=""/>
+                <display value=""/>
+            </subject>
+            <startDate value=""/>
+            <target>
+                <measure>
+                    <coding>
+                        <system value="http://hl7.org/fhir/ValueSet/observation-codes"/>
+                        <code value=""/>
+                        <display value=""/>
+                    </coding>
+                    <text value=""/>                    
+                </measure>
+                <dueDate value=""/>
+            </target>
+            <outcomeCode>
+                <coding>
+                    <system value="http://hl7.org/fhir/ValueSet/clinical-findings"/>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>
+            </outcomeCode>
+            <statusDate value=""/>
+            <statusReason value=""/>
+            <expressedBy>
+                <reference value=""/>
+                <display value=""/>
+            </expressedBy>
+        </Goal>
+        <detailQuantity/>
+        <detailRange/>
+        <detailCodeableConcept/>
+        <addresses>
+            <reference value=""/>
+            <display value=""/>
+        </addresses>
+        <note>
+            <authorReference>
+                <reference value=""/>
+                <display value=""/>
+            </authorReference>
+            <time value=""/>
+            <text value=""/>
+        </note>
+        <outcomeCode>
+            <coding>
+                <system value="http://hl7.org/fhir/ValueSet/clinical-findings"/>
+                <code value=""/>
+                <display value=""/>
+            </coding>
+            <text value=""/>
+        </outcomeCode>
+        <outcomeReference>
+            <reference value=""/>
+            <display value=""/>            
+        </outcomeReference>
+        <extension url="http://eNahar.org/nabu/StructureDefinition/nabu-goal-consent">
+            <extension url="http://eNahar.org/nabu/StructureDefinition/nabu-goal-consent-actor">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="#nabu-goal-consent-actor"/>
+                        <code value=""/>
+                        <display value=""/>
+                    </coding>
+                </valueCodeableConcept>
+            </extension>
+            <extension url="http://eNahar.org/nabu/StructureDefinition/nabu-goal-consent-code">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="#nabu-goal-consent-code"/>
+                        <code value=""/>
+                        <display value=""/>
+                    </coding>
+                </valueCodeableConcept>
+                <text value=""/>
+            </extension>
+        </extension>
+        <identifier><!-- 0..* Identifier External Ids for this goal --></identifier>
+    </bricks>
+</goal-infos>

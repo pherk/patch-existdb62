@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Task>
+    <id value=""/>
+    <meta>
+        <versionId value="0"/>
+    </meta>
+    <identifier><!-- 0..* Identifier Task Instance Identifier --></identifier>
+    <definition><!-- 0..1 uri|Reference(ActivityDefinition) Formal definition of task --></definition>
+    <basedOn><!-- 0..* Reference(Any) Request fulfilled by this task --></basedOn>
+    <groupIdentifier><!-- 0..1 Identifier Requisition or grouper id --></groupIdentifier>
+    <partOf><!-- 0..* Reference(Task) Composite task --></partOf>
+    
+    <status value="assigned"/>
+    
+    <statusReason/>
+    <businessStatus/>
+    
+    <intent value="plan"/>
+    <priority value="normal"/>
+    <code>
+        <coding>
+            <system value="#task-reason"/>
+            <code value="task"/>
+            <display value="ToDo"/>
+        </coding>
+        <text value="ToDo"/>
+    </code>
+    <description value="Abklärung postoperative Belastung"/><!-- 0..1 Human-readable explanation of task -->
+    <focus/>
+    <for>
+        <reference value="nabu/patients/p-23124"/>
+        <display value="Becker, Julian Alexander, *2013-07-16"/>
+    </for>
+    
+    <context><!-- 0..1 Reference(Encounter|EpisodeOfCare) Healthcare event during which this task originated --></context>
+    
+    <executionPeriod>
+        <start value=""/>
+        <end value=""/>
+    </executionPeriod>
+    <authoredOn value="2017-02-21T16:13:43"/><!-- ?? 0..1 Task Creation Date -->
+    <requester>  <!-- 0..1 Who is asking for task to be done -->
+            <reference value="metis/practitioners/u-duechtingc"/>
+            <display value="Düchting, Christoph"/>
+        <extension url="http://eNahar.org/nabu/extension#onBehalfOf">
+            <reference value="metis/organizations/kikl-spz"/>
+            <display value="SPZ Kinderklinik"/>
+        </extension>
+    </requester>
+    <performerType>    
+        <coding>
+            <system value="http://hl7.org/fhir/task-performer-type"/>
+            <code value="performer"/>
+            <display value="Performer"/>
+        </coding>
+        <text value="Performer"/>
+    </performerType>
+    <owner/>
+    <reasonCode>
+        <text value="spz"/>
+    </reasonCode>
+    <note>
+        <author>
+            <reference value="metis/practitioners/u-duechtingc"/>
+            <display value="Düchting, Christoph"/>
+        </author>
+        <time value="2017-02-21T16:13:43"/><!-- 0..1 When the annotation was made -->
+        <text value="kardio Kind, nach OP, traumatisch belastet, Vorstellung zur psychologischen Abklärung erbeten. Kind ist bereits wieder zuhause. Kommen aus Herne, mgl. nachmittags. Kann das jemand in den nächsten 2 Wochen machen? Danke, LG; C."/>
+    </note>
+    <relevantHistory><!-- 0..* Reference(Provenance) Key events in history of the Task -->
+        
+    </relevantHistory>
+    <restriction>
+        <period>
+            <start value=""/>
+            <end value="2017-02-21"/>
+        </period>
+        <recipient>
+            <extension url="#task-recipient-role">
+                <valueString value="spz-psych"/>
+            </extension>
+            <reference value=""/>
+            <display value=""/>
+        </recipient>
+    </restriction>
+</Task>

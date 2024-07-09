@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-wf-careteams" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance id="i-pat">
+                <data xmlns=""/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-done" level="ephemeral">Subform has loaded Patient</xf:message>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+        
+            <xf:instance id="i-eocs">
+                <data xmlns=""/>
+            </xf:instance>
+            <xf:submission id="s-get-eocs" instance="i-eocs" replace="instance" method="get">
+                <xf:resource value="concat('/exist/restxq/nabu/eocs?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm),'&amp;patient=', instance('i-pat')/*:id/@value,'&amp;status=planned&amp;status=active&amp;status=finished&amp;status=cancelled')"/>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="instance('i-control-center')/*:eocs-id" value="count(instance('i-eocs')/*:EpisodeOfCare[*:status/@value=('planned','active')]/preceding-sibling::EpisodeOfCare)+1"/>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">cannot load EoCs!.</xf:message>
+            </xf:submission>
+            <xf:submission id="s-submit-active-EoC" ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]" method="put" replace="instance" targetref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]">
+                <xf:resource value="concat('/exist/restxq/nabu/eocs?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot submit EoC!</xf:message>
+            </xf:submission>
+
+            <xf:instance id="i-careteams">
+                <data xmlns=""/>
+            </xf:instance>
+            <xf:submission id="s-get-careteams" instance="i-careteams" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/careteams?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm),'&amp;subject=', instance('i-pat')/*:id/@value,'&amp;status=active&amp;status=inactive')"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="instance('i-control-center')/*:cts-id" value="count(instance('i-careteams')/*:CareTeam[*:status/@value=('active')]/preceding-sibling::CareTeam)+1"/>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get careteams!</xf:message>
+            </xf:submission>
+            <xf:submission id="s-submit-active-CT" ref="instance('i-careteams')/*:CareTeam[xs:int(instance('i-control-center')/*:cts-id)]" method="put" replace="instance" targetref="instance('i-careteams')/*:CareTeam[xs:int(instance('i-control-center')/*:cts-id)]">
+                <xf:resource value="concat('/exist/restxq/nabu/careteams?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot submit CareTeam!</xf:message>
+            </xf:submission>
+            
+            <xf:instance id="i-login">
+                <data xmlns=""/>
+            </xf:instance>
+            <xf:submission id="s-load-login-from-master" resource="model:m-patient#instance('i-login')//*:data" instance="i-login" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">login: cannot load from Master!.</xf:message>
+            </xf:submission>
+
+            <xf:instance xmlns="" id="i-eoc-infos" src="FHIR/EpisodeOfCare/episodeofcare-infos.xml"/>            
+            <xf:instance xmlns="" id="i-careteam-infos" src="FHIR/CareTeam/careteam-infos.xml"/>            
+            
+            <xf:instance id="i-control-center">
+                <data xmlns="">
+                    <eocs-id>1</eocs-id>
+                    <eocs-dirty>false</eocs-dirty>
+                    <cts-id>1</cts-id>
+                    <cts-dirty>false</cts-dirty>
+                </data>
+            </xf:instance>
+            <xf:instance id="i-search">
+                <data xmlns="">
+                    <active>true</active>
+                </data>
+            </xf:instance>
+            <xf:instance id="views">
+                <data xmlns="">
+                    <CareTeamsToSelect/>
+                    <noCareTeams/>
+                    <noEoCs/>
+                    <noActiveEoCs/>
+                </data>
+            </xf:instance>
+            
+            <xf:bind id="CareTeamsToSelect" ref="instance('views')/*:CareTeamsToSelect" relevant="count(instance('i-careteams')/*:CareTeam) &gt; 0"/>
+            <xf:bind id="noCareTeams" ref="instance('views')/*:noCareTeams" relevant="count(instance('i-careteams')/*:CareTeam) = 0"/>
+            <xf:bind id="noEoCs" ref="instance('views')/*:noEoCs" relevant="count(instance('i-eocs')/*:EpisodeOfCare) = 0"/>
+            <xf:bind id="noActiveEoCs" ref="instance('views')/*:noActiveEoCs" relevant="count(instance('i-eocs')/*:EpisodeOfCare[*:status/@value=('planned','waitlist','active')]) = 0"/>
+            
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+                <xf:send submission="s-load-login-from-master"/>
+                <xf:send submission="s-get-eocs"/>
+                <xf:send submission="s-get-careteams"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+            </xf:action>
+        </xf:model>
+    </div>
+    <xf:group id="careteamlist" class="bordered">
+        <xf:action ev:event="newEoC">
+            <xf:insert at="last()" nodeset="instance('i-eocs')/*:EpisodeOfCare" context="instance('i-eocs')" origin="instance('i-eoc-infos')/*:bricks/*:EpisodeOfCare"/>
+            <xf:insert at="last()" nodeset="instance('i-eocs')/*:EpisodeOfCare[last()]/*:statusHistory" context="instance('i-eocs')/*:EpisodeOfCare[last()]" origin="instance('i-eoc-infos')/*:bricks/*:statusHistory"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:period/*:start/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:patient/*:reference/@value" value="concat('nabu/patients/',instance('i-pat')/*:id/@value)"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:patient/*:display/@value" value="concat(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-pat')/*:name[*:use/@value='official']/*:given/@value,', *',instance('i-pat')/*:birthDate/@value)"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:statusHistory[1]/*:period/*:start/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:statusHistory[1]/*:status/@value" value="'planned'"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:status/@value" value="'planned'"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:statusHistory[1]/*:extension[@url='http://eNahar.org/nabu/extension#eoc-workflow-change']//*:code/@value" value="'initial'"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:statusHistory[1]/*:extension[@url='http://eNahar.org/nabu/extension#eoc-workflow-change']//*:display/@value" value="'angelegt'"/>
+
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:statusHistory[1]/*:extension[@url='http://eNahar.org/nabu/extension#eoc-workflow-change']//*:text/@value" value="'angelegt'"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:statusHistory[1]/*:extension[@url='http://eNahar.org/nabu/extension#eoc-workflow-change-author']//*:reference/@value" value="'metis/practitioners/u-admin'"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:statusHistory[1]/*:extension[@url='http://eNahar.org/nabu/extension#eoc-workflow-change-author']//*:display/@value" value="'admin'"/>
+            <xf:setvalue ref="instance('i-control-center')/*:eocs-dirty" value="'true'"/>
+            <xf:setvalue ref="instance('i-control-center')/*:eocs-id" value="count(instance('i-eocs')/*:EpisodeOfCare)"/>
+        </xf:action>
+        <xf:action ev:event="newEoCStatusHistory">
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:statusHistory[last()]/*:period/*:end/@value" value="current-dateTime()"/>
+            <xf:insert ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:statusHistory" context="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]" origin="instance('i-eoc-infos')/*:bricks/*:statusHistory"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:statusHistory[last()]/*:status/@value" value="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:status/@value"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:statusHistory[last()]/*:extension[@url='http://eNahar.org/nabu/extension#eoc-workflow-change']/*:valueCodeableConcept/*:coding/*:code/@value" value="'revision'"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:statusHistory[last()]/*:extension[@url='http://eNahar.org/nabu/extension#eoc-workflow-change']/*:valueCodeableConcept/*:coding/*:display/@value" value="'Revision'"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:statusHistory[last()]/*:extension[@url='http://eNahar.org/nabu/extension#eoc-workflow-change']/*:valueCodeableConcept/*:text/@value" value="'Revision'"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:statusHistory[last()]/*:extension[@url='http://eNahar.org/nabu/extension#eoc-workflow-change-author']/*:valueReference/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:statusHistory[last()]/*:extension[@url='http://eNahar.org/nabu/extension#eoc-workflow-change-author']/*:valueReference/*:display/@value" value="instance('i-login')/*:lognam"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:statusHistory[last()]/*:period/*:start/@value" value="current-dateTime()"/>
+            <xf:setvalue ref="instance('i-control-center')/*:eocs-dirty" value="'true'"/>
+        </xf:action>
+        <xf:action ev:event="newCareTeam">
+            <xf:insert at="last()" nodeset="instance('i-careteams')/*:CareTeam" context="instance('i-careteams')" origin="instance('i-careteam-infos')/*:bricks/*:CareTeam"/>
+            <xf:setvalue ref="instance('i-careteams')/*:CareTeam[last()]/*:period/*:start/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+            <xf:setvalue ref="instance('i-careteams')/*:CareTeam[last()]/*:subject/*:reference/@value" value="concat('nabu/patients/',instance('i-pat')/*:id/@value)"/>
+            <xf:setvalue ref="instance('i-careteams')/*:CareTeam[last()]/*:subject/*:display/@value" value="concat(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-pat')/*:name[*:use/@value='official']/*:given/@value,', *',instance('i-pat')/*:birthDate/@value)"/>
+            <xf:setvalue ref="instance('i-control-center')/*:cts-dirty" value="'true'"/>
+            <xf:setvalue ref="instance('i-control-center')/*:cts-id" value="count(instance('i-careteams')/*:CareTeam)"/>
+        </xf:action>
+        <xf:action ev:event="updateEoCCTlinks">
+            <xf:setvalue ref="instance('i-control-center')/*:eocs-id" value="count(instance('i-eocs')/*:EpisodeOfCare)"/>
+            <xf:action if="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:team/*:reference/@value=''">
+                <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:team/*:reference/@value" value="concat('nabu/careteams/',instance('i-careteams')/*:CareTeam[xs:int(instance('i-control-center')/*:cts-id)]/*:id/@value)"/>
+                <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:team/*:display/@value" value="instance('i-careteams')/*:CareTeam[xs:int(instance('i-control-center')/*:cts-id)]/*:name/@value"/>
+                <xf:send submission="s-submit-active-EoC"/>
+            </xf:action>
+        </xf:action>
+        <xf:action ev:event="betterform-index-changed">
+            <xf:action if="instance('i-control-center')/*:cts-dirty='true'">
+                <xf:message level="ephemeral">Achtung EoC/CareTeam nicht gespeichert</xf:message>
+            </xf:action>
+        </xf:action>
+        <xf:label>Behandlungsverlauf (EpisodeOfCare, CareTeam)</xf:label>
+        <xf:repeat id="r-careteams-id" ref="instance('i-careteams')/*:CareTeam" appearance="compact" class="svRepeat">
+                <xf:output value="concat(tokenize(./*:period/*:start/@value,'T')[1],'-',choose(./*:period/*:end/@value='','heute',tokenize(./*:period/*:end/@value,'T')[1]))">
+                    <xf:label class="svRepeatHeader">Zeitraum</xf:label>
+                </xf:output>
+                <xf:output ref="./*:name/@value">
+                    <xf:label class="svRepeatHeader">Name</xf:label>
+                </xf:output>
+                <xf:output value="count(./*:participant)">
+                    <xf:label class="svRepeatHeader">Anzahl Erb.</xf:label>
+                </xf:output>
+                <xf:output ref="./*:status/@value">
+                    <xf:label class="svRepeatHeader">Status</xf:label>
+                </xf:output>
+        </xf:repeat>
+        <xf:group ref="instance('views')/*:noCareTeams">
+            <p>
+                <strong>Kein CareTeam definiert</strong>
+            </p>
+        </xf:group>
+        <xf:group ref="instance('views')/*:noActiveEoCs">
+            <p>
+                <strong>Patient nicht aktiv betreut</strong>
+            </p>
+        </xf:group>
+        <xf:switch id="switch">
+            <xf:case id="listCareTeams">
+                <xf:group class="svTriggerGroup">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svSubTrigger" ref="instance('i-careteams')/*:CareTeam[index('r-careteams-id')]/*:status[@value='active']">
+                                    <xf:label>Edit</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="editCareTeam"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svSubTrigger" ref="instance('i-careteams')/*:CareTeam[index('r-careteams-id')]/*:status[@value='inactive']">
+                                    <xf:label>Zeige</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="showCareTeam"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger ref="instance('views')/*:noActiveEoCs" class="svAddTrigger">
+                                    <xf:label>EpisodeOfCare</xf:label>
+                                    <xf:action ev:event="DOMActivate" if="count(instance('i-eocs')/*:EpisodeOfCare[*:status/@value=('planned','active')])=0">
+                                        <xf:dispatch name="newEoC" targetid="careteamlist"/>
+                                        <xf:send submission="s-submit-active-EoC"/>
+                                        <xf:dispatch name="newCareTeam" targetid="careteamlist"/>
+                                        <xf:send submission="s-submit-active-CT"/>
+                                        <xf:dispatch name="updateEocCTlinks" targetid="careteamlist"/>
+                                        <xf:toggle case="editCareTeam"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger>
+                                    <xf:label>
+                                        <strong>?</strong>
+                                    </xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="showHelp"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                </xf:group>
+            </xf:case>
+            <xf:case id="editCareTeam">
+                <xf:group id="editGroup" ref="instance('i-careteams')/*:CareTeam[xs:int(instance('i-control-center')/*:cts-id)]">
+                    <xf:action ev:event="xforms-value-changed">
+                        <xf:setvalue ref="instance('i-control-center')/*:eocs-dirty" value="'true'"/>
+                    </xf:action>
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger ref="instance('i-control-center')/*:eocs-dirty[.='true']" class="svUpdateMasterTrigger">
+                                    <xf:label>Speichern</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:action if="instance('i-control-center')/*:cts-dirty='true'">
+                                            <xf:send submission="s-submit-active-CT"/>
+                                        </xf:action>
+                                        <xf:send submission="s-submit-active-EoC"/>
+                                        <xf:toggle case="listCareTeams"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Schließen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:send submission="s-get-eocs"/>
+                                        <xf:send submission="s-get-careteams"/>
+                                        <xf:toggle case="listCareTeams"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <xf:group ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]" class="svFullGroup">
+                        <xf:action ev:event="betterform-index-changed">
+                            <xf:action if="instance('i-control-center')/*:eocs-dirty='true'">
+                                <xf:message level="ephemeral">Status History</xf:message>
+                            </xf:action>
+                        </xf:action>
+                        <xf:action ev:event="xforms-value-changed">
+                            <xf:setvalue ref="instance('i-control-center')/*:eocs-dirty" value="'true'"/>
+                        </xf:action>                    
+                        <table>
+                            <tr>
+                                <td>
+                                    <strong>Status</strong>
+                                </td>
+                                <td>
+                                    <xf:select1 ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:status/@value" class="medium-input">
+                                        <xf:itemset nodeset="instance('i-eoc-infos')/*:status">
+                                            <xf:label ref="./@label-de"/>
+                                            <xf:value ref="./@value"/>
+                                        </xf:itemset>
+                                        <xf:action ev:event="xforms-value-changed">
+                                            <xf:setvalue ref="instance('i-control-center')/*:eocs-dirty" value="'true'"/>
+                                            <xf:action if="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:status/@value=('finished','cancelled')">
+                                                <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:period/*:end/@value" value="current-dateTime()"/>
+                                                <xf:dispatch name="newEoCStatusHistory" targetid="careteamlist"/>
+                                                <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:statusHistory[last()]/*:extension[@url='http://eNahar.org/nabu/extension#eoc-workflow-change']/*:valueCodeableConcept/*:text/@value" value="concat('Status auf ',instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:status/@value,' gesetzt. ')"/>
+                                                <xf:action if="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:status/@value=('finished','cancelled')">
+                                                    <xf:setvalue ref="instance('i-control-center')/*:cts-dirty" value="'true'"/>
+                                                    <xf:setvalue ref="instance('i-careteams')/*:CareTeam[xs:int(instance('i-control-center')/*:cts-id)]/*:period/*:end/@value" value="current-dateTime()"/>
+                                                    <xf:setvalue ref="instance('i-careteams')/*:CareTeam[xs:int(instance('i-control-center')/*:cts-id)]/*:status/@value" value="'inactive'"/>
+                                                </xf:action>
+                                            </xf:action>
+                                        </xf:action>
+                                    </xf:select1>
+                                </td>
+<!--
+                                <td>
+                                    <xf:trigger ref="./*:statusHistory[count(//*:code/@value='registration-form')>0]" class="svAddTrigger">
+                                        <xf:label>Anmeldung</xf:label>
+                                        <xf:action ev:event="DOMActivate">
+                                            <xf:dispatch name="newEoCStatusHistory" targetid="careteamlist"/>
+                                            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:statusHistory[last()]/*:extension[@url='http://eNahar.org/nabu/extension#eoc-workflow-change']/*:valueCodeableConcept/*:coding/*:code/@value" value="'registration-form'"/>
+                                            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:statusHistory[last()]/*:extension[@url='http://eNahar.org/nabu/extension#eoc-workflow-change']/*:valueCodeableConcept/*:coding/*:display/@value" value="'Anmeldebogen'"/>
+                                            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:statusHistory[last()]/*:extension[@url='http://eNahar.org/nabu/extension#eoc-workflow-change']/*:valueCodeableConcept/*:text/@value" value="current-date()"/>
+                                        </xf:action>
+                                    </xf:trigger>
+                                </td>
+-->
+                                <td>
+                                    <xf:trigger class="svAddTrigger">
+                                        <xf:label>Revision</xf:label>
+                                        <xf:action ev:event="DOMActivate">
+                                            <xf:dispatch name="newEoCStatusHistory" targetid="careteamlist"/>
+                                        </xf:action>
+                                    </xf:trigger>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Fallführer</strong>
+                                </td>
+                                <td>
+                                    <xf:output value="choose(./*:careManager/*:display/@value='','n.d.',./*:careManager/*:display/@value)"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <xf:group ref="./*:statusHistory[*:period/*:end/@value!='']">
+                                        <strong>StatusHistory</strong>
+                                    </xf:group>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <xf:repeat id="r-statusHistorys-id" ref="./*:statusHistory[*:period/*:end/@value!='']" appearance="compact" class="svRepeatBlank">
+                                        <xf:textarea ref=".//*:text/@value" class="fullarea xfReadOnly">
+                                        </xf:textarea>
+                                        <xf:output value="tokenize(./*:period/*:start/@value,'T')[1]"/>
+                                        <xf:output ref=".//*:display/@value"/>
+                                    </xf:repeat>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                        <strong>Aktueller Status</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <xf:textarea ref="./*:statusHistory[*:period/*:end/@value='']//*:text/@value" class="fullarea">
+                                    </xf:textarea>
+                                </td>
+                                <td>
+                                    <xf:group>
+                                        <xf:output value="tokenize(./*:statusHistory[*:period/*:end/@value='']/*:period/*:start/@value,'T')[1]"/>
+                                    </xf:group>
+                                    <xf:group>
+                                        <xf:output ref="./*:statusHistory[*:period/*:end/@value='']//*:display/@value"/>
+                                    </xf:group>
+                                </td>
+                            </tr>
+                        </table>
+                    </xf:group>
+                    <xf:group ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)][*:status/@value='finished']" class="svFullGroup">
+                        <strong>Patient nicht mehr aktiv betreut</strong>
+                    </xf:group>
+                    <xf:group ref="instance('i-careteams')/*:CareTeam[*:status/@value='active']" class="svFullGroup">
+                        <xf:action ev:event="betterform-index-changed">
+                                <xf:message level="ephemeral">Participant index</xf:message>
+                        </xf:action>
+                        <table>
+                            <tr>
+                                <td>
+                                    <strong>Alle bisherigen Erbringer</strong>
+                                </td>
+                                <td>
+                                    <xf:trigger ref="instance('i-careteams')/*:CareTeam[*:status/@value='active'][count(*:participant)&gt;0]" class="svAddTrigger">
+                                        <xf:label>neuer FaFue</xf:label>
+                                        <xf:action ev:event="DOMActivate">
+                                            <xf:setvalue ref="instance('i-control-center')/*:eocs-dirty" value="'true'"/>
+                                            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:careManager/*:reference/@value" value="instance('i-careteams')/*:CareTeam[*:status/@value='active']/*:participant[index('r-participants-id')]/*:member/*:reference/@value"/>
+                                            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)]/*:careManager/*:display/@value" value="instance('i-careteams')/*:CareTeam[*:status/@value='active']/*:participant[index('r-participants-id')]/*:member/*:display/@value"/>
+                                        </xf:action>
+                                    </xf:trigger>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <xf:repeat id="r-participants-id" ref="./*:participant" appearance="compact" class="svRepeat">
+                                        <xf:output ref="./*:role/*:text/@value">
+                                            <xf:label class="svRepeatHeader">Role</xf:label>
+                                        </xf:output>
+                                        <xf:output ref="./*:member/*:display/@value">
+                                            <xf:label class="svRepeatHeader">Name</xf:label>
+                                        </xf:output>
+                                        <xf:output value="choose((tokenize(./*:period/*:start/@value,'T')[1]=tokenize(./*:period/*:end/@value,'T')[1]),tokenize(./*:period/*:start/@value,'T')[1],concat(tokenize(./*:period/*:start/@value,'T')[1],'::',tokenize(./*:period/*:end/@value,'T')[1]))">
+                                            <xf:label class="svRepeatHeader">Zeitraum</xf:label>
+                                        </xf:output>
+                                    </xf:repeat>
+                                    <xf:group ref="instance('i-careteams')/*:CareTeam[*:status/@value='active'][count(*:participant)=0]">
+                                        <strong>Bisher keine (bekannt)</strong>
+                                    </xf:group>
+                                </td>
+                            </tr>
+                        </table>
+                    </xf:group>
+                </xf:group>
+            </xf:case>
+            <xf:case id="showCareTeam">
+                <xf:group id="editGroup" ref="instance('i-careteams')/*:CareTeam[index('r-careteams-id')]">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Schließen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="listCareTeams"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <xf:group ref="instance('i-eocs')/*:EpisodeOfCare[*:team/*:reference/@value=concat('nabu/careteams/',instance('i-careteams')/*:CareTeam[index('r-careteams-id')]/*:id/@value)]" class="svFullGroup">
+                        <xf:action ev:event="betterform-index-changed">
+                                <xf:message level="ephemeral">Status History2</xf:message>
+                        </xf:action>
+                        <table>
+                            <tr>
+                                <td>
+                                    <strong>Status</strong>
+                                </td>
+                                <td>
+                                    <xf:output ref="./*:status/@value" class=""/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Fallführer</strong>
+                                </td>
+                                <td>
+                                    <xf:output value="choose(./*:careManager/*:display/@value='','n.d.',./*:careManager/*:display/@value)"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                        <strong>StatusHistory</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <xf:repeat id="r-statusHistorys-id2" ref="./*:statusHistory" appearance="compact" class="svRepeatBlank">
+                                        <xf:textarea ref=".//*:text/@value" class="fullarea xfReadOnly">
+                                        </xf:textarea>
+                                        <xf:output value="tokenize(./*:period/*:start/@value,'T')[1]"/>
+                                        <xf:output ref=".//*:display/@value"/>
+                                    </xf:repeat>
+                                </td>
+                            </tr>
+                        </table>
+                    </xf:group>
+                    <xf:group ref="instance('i-eocs')/*:EpisodeOfCare[xs:int(instance('i-control-center')/*:eocs-id)][*:status/@value='finished']" class="svFullGroup">
+                        <strong>Patient nicht mehr aktiv betreut</strong>
+                    </xf:group>
+                    <xf:group ref="instance('i-careteams')/*:CareTeam[index('r-careteams-id')]" class="svFullGroup">
+                        <xf:action ev:event="betterform-index-changed">
+                                <xf:message level="ephemeral">Participant2</xf:message>
+                        </xf:action>
+                        <table>
+                            <tr>
+                                <td>
+                                    <strong>Alle bisherigen Erbringer</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <xf:repeat id="r-participants-id2" ref="./*:participant" appearance="compact" class="svRepeat">
+                                        <xf:output ref="./*:role/*:text/@value">
+                                            <xf:label class="svRepeatHeader">Role</xf:label>
+                                        </xf:output>
+                                        <xf:output ref="./*:member/*:display/@value">
+                                            <xf:label class="svRepeatHeader">Name</xf:label>
+                                        </xf:output>
+                                        <xf:output value="choose((tokenize(./*:period/*:start/@value,'T')[1]=tokenize(./*:period/*:end/@value,'T')[1]),tokenize(./*:period/*:start/@value,'T')[1],concat(tokenize(./*:period/*:start/@value,'T')[1],'::',tokenize(./*:period/*:end/@value,'T')[1]))">
+                                            <xf:label class="svRepeatHeader">Zeitraum</xf:label>
+                                        </xf:output>
+                                    </xf:repeat>
+                                    <xf:group ref="instance('i-careteams')/*:CareTeam[index('r-careteams-id')][count(*:participant)=0]">
+                                        <strong>Bisher keine (bekannt)</strong>
+                                    </xf:group>
+                                </td>
+                            </tr>
+                        </table>
+                    </xf:group>
+                </xf:group>
+            </xf:case>
+            <xf:case id="showHelp">
+                <xf:group>
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Schließen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="listCareTeams"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                    <strong>Hilfe</strong>
+                    <p>Jeder Patient wird über einen bestimmen Zeitraum (EpisodeOfCare) von einem Erbringerteam (CareTeam) aktiv betreut.</p>
+                    <p>Die EpisodeOfCare (EoC) zeichnet zudem die Problemstellung, evtl. Revisionen und den Fallführer aus dem CareTeam (CT) auf.
+                       Das CT zeichnet die beteiligten Erbringer auf und wird mit jedem erfolgten Termin auf neuen Stand gebracht.</p>
+                    <p>Nach Anmeldung ist der EoC-Status zunächst 'planned' und wird erst mit dem ersten realisierten Termin auf 'active' gesetzt.
+                       Mit Ende der Betreuung werden EoC und CT beendet bzw. inaktiviert. Die Daten können weiterhin eingesehen werden.
+                       Wenn keine aktive Betreeung mehr besteht, kann ein neues EoC/CT Duo generiert werden.</p>
+                    <p>Patienten, deren letzter Termin schon 1000 Tage zurücklag, sind beim Update v0.9 auf beendet gesetzt worden.</p>
+                </xf:group>
+            </xf:case>
+        </xf:switch>
+    </xf:group>
+</div>

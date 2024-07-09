@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<careteam-infos>
+    <!-- CareTeam participant incongruent to other participant properties e.g. Encounter -->
+    <!-- FHIR 5.0 
+        - no context property
+    -->
+    <status>
+        <code label-de="vorgeschlagen" value="proposed"/>
+        <code label-de="aktiv" value="active"/>
+        <code label-de="suspendiert" value="suspended"/>
+        <code label-de="inaktiv" value="inactive"/>
+        <code label-de="Fehler" value="entered-in-error"/>
+    </status>
+    <category>
+        <code value="event" label-de="Event" label-en="Event" comment="This type of team focuses on one specific type of incident, which is non-patient specific. The incident is determined by the context of use. For example, code team (code red, code blue, medical emergency treatment) or the PICC line team."/>
+        <code value="encounter" label-de="Besuch" label-en="Encounter" comment="This type of team focuses on one specific encounter. The encounter is determined by the context of use. For example, during an inpatient encounter, the nutrition support care team"/>
+        <code value="episode" label-de="Phase" label-en="Episode" comment="This type of team focuses on one specific episode of care with a defined time period or self-limiting process (e.g. 10 visits). The episode of care is determined by the context of use. For example, a maternity care team over 9 months."/>
+        <code value="longitudinal" label-de="Care Coordination" label-en="Care Coordination" comment="Care Coordination This type of team focuses on overall care coordination managing one or more conditions across the continuum of care ensuring there are smooth transitions of care. The members of the team are determined or selected by an individual or organization. When determined by an organization, the team may be assigned or based on the person's enrollment in a particular program. For example, disease management team or patient centered medical home team."/>
+        <code value="condition" label-de="Condition" label-en="Condition" comment="This type of team focuses on one specific condition. The condition is determined by the context of use. For example, a disease management team focused on one condition (e.g. diabetes)."/>
+        <code value="clinical-research" label-de="Klin. Forschung" label-en="Clinical Research" comment="This type of team is responsible for establishing, conducting, coordinating and monitoring the outcomes of clinical trials. The team focuses on research, clinical care and education."/>
+    </category>
+    <bricks xmlns="http://hl7.org/fhir" comp="4.0.1">
+        <CareTeam>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+            <status value="active"/>
+            <category>
+                <coding>
+                    <system value="http://hl7.org/fhir/ValueSet/care-team-category"/>
+                    <code value="longitudinal"/>
+                </coding>
+                <text value="Care Coordination"/>
+            </category>
+            <name value="nSPZ"/>
+            <context> <!-- episodeOfCare  -->
+                <reference value=""/>
+            </context>
+            <subject>
+                <reference value=""/>
+                <display value=""/>
+            </subject>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <managingOrganization>
+                <reference value="metis/organizations/kikl-spzn"/>
+                <display value="nSPZ Kinderklinik"/>                
+            </managingOrganization>
+        </CareTeam>
+        <participant>  <!-- 0..* Members of the team -->
+            <role>
+                <coding>
+                    <system value="http://eNahar.org/nabu/system#careteam-participant-role"/>
+                    <code value=""/>
+                </coding>
+                <text value=""/>
+            </role>
+            <member>
+                <reference value=""/>
+                <display value=""/>
+            </member>
+            <onBehalfOf>
+                <reference value=""/>
+                <display value=""/>                
+            </onBehalfOf>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+        </participant>
+        <reasonCode>
+            <coding>
+                <system value=""/>
+                <code value=""/>
+            </coding>
+            <text value=""/>
+        </reasonCode>
+        <reasonReference>
+            <reference value=""/>
+            <display value=""/>            
+        </reasonReference>
+        <managingOrganization>
+            <reference value=""/>
+            <display value=""/>                
+        </managingOrganization>
+        <note>
+            <authorReference>
+                <reference value=""/>
+                <display value=""/>                  
+            </authorReference>
+            <time value=""/>
+            <text value=""/>
+        </note>
+    </bricks>
+</careteam-infos>

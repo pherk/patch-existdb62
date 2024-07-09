@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<patient-infos>
+    <active value="true" label="aktiv"/>
+    <active value="false" label="inaktiv"/>
+    <honorific-prefix value="drmed" label="Dr.med."/>
+    <honorific-prefix value="diplpsych" label="Dipl.psych."/>
+    <honorific-prefix value="dr" label="Dr."/>
+    <honorific-prefix value="pd" label="PD Dr."/>
+    <honorific-prefix value="prof" label="Prof.Dr."/>
+    <gender value="male" label="männlich"/>
+    <gender value="female" label="weiblich"/>
+    <gender value="other" label="anderes"/>
+    <gender value="unknown" label="unbekannt"/>
+    <address>
+        <use value="home" label="Privat"/>
+        <use value="work" label="Arbeit"/>
+    </address>
+    <telecom>
+        <use value="home" label="Privat"/>
+        <use value="work" label="Arbeit"/>
+        <use value="tmp" label="temporär"/>
+        <use value="old" label="Alt"/>
+        <use value="mobile" label="Mobil"/>
+        <system value="phone" label="Phone"/>
+        <system value="fax" label="Fax"/>
+        <system value="email" label="Email"/>
+        <system value="url" label="Internet"/>
+        <system value="sms" label="SMS"/>
+        <system value="pager" label="Funker"/>
+        <system value="other" label="Andere"/>
+    </telecom>
+    <relations>
+        <relation value="mother" label="Mutter"/>
+        <relation value="father" label="Vater"/>
+        <relation value="caregiver" label="Pflege">(Non)professional caregiver</relation>
+        <relation value="insurant" label="Versicherter"/>
+        <relation value="emergency" label="Notfall">Contact for use in case of emergency</relation>
+        <relation value="family" label="Family"/>
+        <relation value="guardian" label="Betreuer"/>
+        <relation value="friend" label="Freund"/>
+        <relation value="partner" label="Partner"/>
+        <relation value="work" label="Arbeitsstelle">Contact for matters related to the patients occupation/employment</relation>
+        <relation value="agent" label="Agent">Contact that acts on behalf of the patient</relation>
+        <relation value="guarantor" label="Bürge">Contact for financial matters</relation>
+        <relation value="parent" label="Eltern">Parent of the patient</relation>
+    </relations>
+    <medium>
+        <code label="schriftlich" value="byletter"/>
+        <code label="Phone" value="phone"/>
+        <code label="mündlich" value="orally"/>
+        <code label="Email" value="email"/>
+        <code label="SMS" value="sms"/>
+        <code value="no-info" label="keine Info"/>
+    </medium>
+    <confidentiality>
+        <code value="auth" label="SPE liegt vor"/>
+        <code value="no-auth" label="SPE widersprochen"/>
+        <code value="unclear" label="SPE liegt nicht vor"/>
+    </confidentiality>
+    <oe value="metis/organizations/ukk-oe0734" label="SPZ KiKl"/>
+    <oe value="metis/organizations/ukk-oe0739" label="SPZ PsychSom"/>
+    <oe value="metis/organizations/ukk-oe0754" label="SPZ EEG-EP"/>
+    <nachsorge>
+        <fg value="keine" label="keine"/>
+        <fg value="std" label="Standard"/>
+        <fg value="gba" label="GBA"/>
+        <fg value="late" label="Late Preterm"/>
+    </nachsorge>
+    <insurance-type>
+        <code value="gkv" label-de="GKV"/>
+        <code value="pkv" label-de="PKV"/>
+        <code value="sa" label-de="SA"/>
+        <code value="unknown" label-de="unklar"/>
+    </insurance-type>
+    <over-18>
+        <code value="over-18-granted" label-de="bewilligt"/>
+        <code value="not-granted" label-de="abgelehnt"/>
+        <code value="mzeb" label-de="in MZEB"/>
+        <code value="other" label-de="auswärts"/>
+        <code value="poli" label-de="über Poliklinik"/>
+        <code value="unknown" label-de="unklar"/>
+    </over-18>
+    <cave-class>
+        <code value="consent" label-de="Vereinbarung"/>
+        <code value="confidentiality" label-de="Vertraulichkeit"/>
+        <code value="allergy" label-de="Allergie"/>
+        <code value="infectious" label-de="Infektion"/>
+        <code value="other" label-de="Sonstiges"/>
+        <code value="unknown" label-de="unbekannt"/>
+    </cave-class>
+    <cave-status>
+        <code value="active" label-de="aktiv"/>
+        <code value="finished" label-de="beendet"/>
+        <code value="unknown" label-de="unbekannt"/>
+        <code value="cancelled" label-de="cancelled"/>
+        <code value="entered-in-error" label-de="Fehler"/>
+    </cave-status>
+    <ssw>
+        <week value="22" label="22"/>
+        <week value="23" label="23"/>
+        <week value="24" label="24"/>
+        <week value="25" label="25"/>
+        <week value="26" label="26"/>
+        <week value="27" label="27"/>
+        <week value="28" label="28"/>
+        <week value="29" label="29"/>
+        <week value="30" label="30"/>
+        <week value="31" label="31"/>
+        <week value="32" label="32"/>
+        <week value="33" label="33"/>
+        <week value="34" label="34"/>
+        <week value="35" label="35"/>
+        <week value="36" label="36"/>
+        <week value="37" label="37"/>
+        <week value="38" label="38"/>
+        <week value="39" label="39"/>
+        <week value="40" label="40"/>
+        <week value="41" label="41"/>
+        <week value="42" label="42"/>
+    </ssw>
+    <dow>
+        <day value="0" label="Sonntag"/>
+        <day value="1" label="Montag"/>
+        <day value="2" label="Dienstag"/>
+        <day value="3" label="Mittwoch"/>
+        <day value="4" label="Donnerstag"/>
+        <day value="5" label="Freitag"/>
+        <day value="6" label="Samstag"/>
+    </dow>
+    <docStatus>
+        <item value="preliminary" label="vorläufig">This is a preliminary composition or document (also known as initial or interim). The content may be incomplete or unverified.</item>
+        <item value="final" label="fertig">The composition or document is complete and verified by an appropriate person, and no further work is planned.</item>
+        <item value="appended" label="ergänzt">The composition or document has been modified subsequent to being released as "final", and is complete and verified by an authorized person.
+        The modifications added new information to the composition or document, but did not revise existing content.</item>
+        <item value="amended" label="ediert">The composition or document has been modified subsequent to being released as "final", and is complete and verified by an authorized person.</item>
+        <item value="nullified" label="gelöscht">The composition or document was originally created/issued in error,
+        and this is an amendment that marks that the entire series should not be considered as valid.</item>
+    </docStatus>
+    <doctypes>
+        <item value="all" label="-----"/>
+        <item value="note" label="Notiz"/>
+        <item value="letter" label="Brief"/>
+        <item value="report" label="Bericht"/>
+        <item value="referral" label="Bescheinigung"/>
+        <item value="pheno" label="Phänotyp"/>
+        <item value="image" label="Bild"/>
+    </doctypes>
+    <docranges>
+        <item value="all" label="Alle Dokumente"/>
+        <item value="note" label="letzte 3 Mo."/>
+        <item value="letter" label="letzte 6 Mo."/>
+        <item value="report" label="letztes Jahr"/>
+    </docranges>
+    <phenotype>
+        <modifier>
+            <item value="observed" label="beobachtet"/>
+            <item value="mandatory" label="zwingend"/>
+            <item value="negative" label="negativ"/>
+        </modifier>
+    </phenotype>
+    <bricks xmlns="http://hl7.org/fhir">
+        <Patient>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+            <identifier>
+                <use value="usual"/>
+                <type value="ORBIS-PNR"/>
+                <system value="http://uk-koeln.de/#patient-orbis-pnr"/>
+                <value value=""/>
+                <assigner>
+                    <reference value="metis/organizations/ukk"/>
+                    <display value="Unikliniken Köln"/>
+                </assigner>
+            </identifier>
+            <active value="true"/>
+            <name>
+                <use value="official"/>
+                <text value=""/>
+                <family value=""/>
+                <given value=""/>
+                <prefix value=""/>
+                <suffix value=""/>
+                <period>
+                    <start value=""/>
+                    <end value=""/>
+                </period>
+            </name>
+            <telecom>
+                <use value="home"/>
+                <system value="phone"/>
+                <value value=""/>
+                <rank value="1"/>
+            </telecom>
+            <gender value=""/>
+            <birthDate value=""/>
+            <deceasedBoolean value="false"/>
+            <address>
+                <use value="home"/>
+                <line value=""/>
+                <line value=""/>
+                <city value=""/>
+                <state value="NW"/>
+                <postalCode value=""/>
+                <country value="DEU"/>
+                <period>
+                    <start value=""/>
+                    <end value=""/>
+                </period>
+                <extension url="#patient-address-preferred">
+                    <valueBoolean value="true"/>
+                </extension>
+            </address>
+            <multipleBirthBoolean value="false"/>
+            <multipleBirthInteger value="0"/>
+            <communication>
+                <language>
+                    <coding>
+                        <system value="urn:ietf:bcp:47"/><!--   IETF language tag   -->
+                        <code value="de-DE"/>
+                        <display value="Deutsch"/>
+                    </coding>
+                    <text value="Deutsch"/>
+                </language>
+                <preferred value="true"/>
+            </communication>
+            <extension url="#patient-presenting-problem">
+                <valueAnnotation>
+                    <authorReference>
+                        <reference value=""/>
+                        <display value=""/>
+                    </authorReference>
+                    <time value=""/>
+                    <text value=""/>
+                </valueAnnotation>
+            </extension>
+            <extension url="#patient-medical-insurance">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="#patient-medical-insurance"/>
+                        <code value="gkv"/>
+                        <display value=""/>
+                    </coding>
+                </valueCodeableConcept>
+            </extension>
+            <managingOrganization>
+                <reference value="metis/organizations/ukk-oe0734"/>
+                <display value="SPZ OE0734"/>
+            </managingOrganization>
+        </Patient>
+        <tag>
+            <coding>
+                <code value=""/>
+                <display value=""/>
+            </coding>
+            <text value=""/>
+        </tag>
+        <period>
+            <start value=""/>
+            <end value=""/>
+        </period>
+        <name>
+            <use value="official"/>
+            <text value=""/>
+            <family value=""/>
+            <given value=""/>
+            <prefix value=""/>
+            <suffix value=""/>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+        </name>
+        <telecom>
+            <use value="home"/>
+            <system value="phone"/>
+            <value value="+49 221 "/>
+            <rank value="1"/>
+        </telecom>
+        <telecom>
+            <use value="work"/>
+            <system value="phone"/>
+            <value value="+49 221 "/>
+            <rank value="1"/>
+        </telecom>
+        <deceasedDateTime value=""/>
+        <address>
+            <use value="work"/>
+            <line value=""/>
+            <line value=""/>
+            <city value="Köln"/>
+            <state value="NW"/>
+            <postalCode value=""/>
+            <country value="DEU"/>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <extension url="#patient-address-preferred">
+                    <valueBoolean value="true"/>
+            </extension>
+        </address>
+        <contact>
+            <relationship>
+                <coding>
+                    <system value="http://hl7.org/fhir/vs/patient-contact-relationship"/>
+                    <code value=""/>
+                    <display value="???"/>
+                </coding>
+                <text value="???"/>
+            </relationship>
+            <extension url="confidentiality">
+                <coding>
+                    <system value="#nabu-confidentiality"/>
+                    <code value="auth"/>
+                    <display value="SPE liegt vor"/>
+                </coding>
+            </extension>
+            <extension url="#patient-contact-preferred">
+                <valueBoolean value="true"/>
+            </extension>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <gender value="unknown"/>
+            <name>
+                <use value="official"/>
+                <text value=""/>
+                <family value=""/>
+                <given value=""/>
+                <prefix value=""/>
+                <suffix value=""/>
+                <period>
+                    <start value=""/>
+                    <end value=""/>
+                </period>
+            </name>
+            <address>
+                <use value="work"/>
+                <line value=""/>
+                <line value=""/>
+                <city value="Köln"/>
+                <state value="NW"/>
+                <postalCode value=""/>
+                <country value="DEU"/>
+                <period>
+                    <start value=""/>
+                    <end value=""/>
+                </period>
+                <extension url="#patient-address-preferred">
+                    <valueBoolean value="true"/>
+                </extension>
+            </address>
+            <extension url="#contact-note">
+                <note value=""/>
+            </extension>
+        </contact>
+        <communication>
+            <language>
+                <coding>
+                    <system value="urn:ietf:bcp:47"/><!--   IETF language tag   -->
+                    <code value="de-DE"/>
+                    <display value="Deutsch"/>
+                </coding>
+                <text value="Deutsch"/>
+            </language>
+            <preferred value="true"/>
+        </communication>
+        <generalPractitioner>
+            <reference value=""/>
+            <display value="Dr. House"/>
+            <extension url="#patient-gp-preferred">
+                <valueBoolean value="true"/>
+            </extension>
+            <extension url="#patient-gp-specialty">
+                <valueString value=""/>
+            </extension>
+            <extension url="#patient-gp-period">
+                <valuePeriod>
+                    <start value=""/>
+                    <end value=""/>
+                </valuePeriod>
+            </extension>
+        </generalPractitioner>
+        <link>
+            <other>
+                <reference value=""/>
+                <display value="Dr. House"/>
+            </other>
+            <type value="refer"/>
+        </link>
+        <extension url="#patient-over-18">
+            <valueCodeableConcept>
+                <coding>
+                    <system value="#patient-over-18-class"/>
+                    <code value="over-18-granted"/>
+                    <display value="bewilligt"/>
+                </coding>
+            </valueCodeableConcept>
+        </extension>
+        <extension url="#patient-over-18-limit">
+            <valueDate value=""/>
+        </extension>
+        <extension url="#patient-cave">
+            <extension url="#patient-cave-class">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="#patient-cave-class"/>
+                        <code value="unknown"/>
+                        <display value="unbekannt"/>
+                    </coding>
+                </valueCodeableConcept>
+            </extension>
+            <extension url="#patient-cave-status">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="#patient-cave-status"/>
+                        <code value="active"/>
+                        <display value="aktiv"/>
+                    </coding>
+                </valueCodeableConcept>
+            </extension>
+            <valueString value=""/>
+        </extension>
+    </bricks>
+</patient-infos>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<body xmlns="http://www.tei-c.org/ns/1.0" id="tei-arzt" type="letter">
+    <p class="header">Direktor: Univ.-Prof. Dr. med. Dötsch</p>
+    <opener>
+        <address>
+            <retourline>SPZ der Kinderklinik, Kerpener Str. 62, 50937 Köln</retourline>
+            <addrLine>Dr.med. Fritz Otten</addrLine>
+            <addrLine>Venloerstr. 425a</addrLine>
+            <addrLine>50825 Köln</addrLine>
+        </address>
+        <dateline>
+            <name type="place">Köln, </name>
+            <date when="2015-05-20">20.05.2015</date>/wo</dateline>
+        <subject>Akin, Cemre Eftelya, geboren 24.08.2005</subject>
+        <salute>Sehr geehrter Herr Dr.med. Otten,</salute>
+    </opener>
+    <div class="letter-body">
+        <p>ich berichte über die Verlaufskontrolle vom <date when="2015-01-29">29.01.2015.</date>
+        </p>
+        <p>
+            <list type="gloss">
+                <label>
+                    <hi rend="bold">Diagnosen:</hi>
+                </label>
+                <item>
+                    <list rend="bulleted">
+                        <item>
+                            <name nymRef="#icd-P01.0">Ehem. Frühgeborenes der 23. SSW, 470 g</name>
+                        </item>
+                        <item>Pulmonaler Hypertonus, Sauerstofftherapie, Sildenafil-Therapie</item>
+                        <item>
+                            <name nymRef="#icd-P93.8">Emotionale Störung</name>
+                        </item>
+                        <item>Kleinwuchs, Dystrophie</item>
+                    </list>
+                </item><!--
+                <label><hi rend="bold">Medikamente:</hi></label>
+                <item>
+                    <list rend="bulleted">
+                        <item><name nymRef="#s-sultiam">Sultiam (Ospolot)</name> 3 x 200mg</item>
+                    </list>
+                </item>
+                <label><hi rend="bold">Therapie:</hi></label>
+                <item>
+                    <list rend="bulleted">
+                        <item>Logopädie</item>
+                    </list>
+                </item>
+-->
+            </list>
+        </p>
+        <div class="letter-text">
+            <p>Es erfolgen regelmäßige
+kardiologische Kontrollen. Unter der o. g. Therapie mit Sauerstoff
+und Sildenafil sowie antiasthmatischer Therapie mit Atrovent und
+Kortison war das Mädchen in den Wintermonaten stabil. Auf Bitten
+der Mutter hatten wir ausgehend vom letzten Kontakt im Juni 2014
+Termine in der Sehschule, HNO-Klinik, Dermatologie, Pulmonologie
+und bei uns zur psychologischen Testung vereinbart. Aufgrund der
+familiären Probleme wurden diese z. T. abgesagt, z. T. verschoben.
+Die psychologische Testung hat daher bisher nicht
+stattgefunden.</p>
+            <p>Die Mutter berichtet über
+die familiäre Situation, die aufgrund ihrer Erkrankung sowie der
+Trennung vom Vater weiterhin problematisch ist. Es besteht eine
+erhebliche Interaktionsstörung, das Kind schläft weiterhin bei der
+Mutter im Bett. Ein Schulbesuch erfolgt nicht. Die Mutter gibt an,
+Stunden die Woche privat zu finanzieren. Sie möchte auch nicht,
+dass das Mädchen in die Schule geht, sondern will, dass eine
+schulische Förderung zu Hause erfolgt. Die Kontakte im Rahmen des
+AOSF-Verfahrens sind von Seiten der Mutter beendet (Schule
+Kolkrabenweg). Auf telefonische Nachfrage hin beim Schulamt war der
+Verbleib des Verfahrens nicht zu klären, ich habe mich daraufhin an
+den ASD in Ehrenfeld gewandt, um den Sachstand zu klären. Auf
+Schulamtsseite war die Auffassung entstanden, dass das Mädchen in
+einer palliativen Situation sei und daher eine Beschulung nicht
+sinnhaft erschien. Abgesehen davon ruhte das Verfahren aber bereits
+wieder seit vielen Monaten.</p>
+            <p>Inzwischen hat mir die
+Mutter telefonisch jeden weiteren Kontakt untersagt. Sie würde
+jetzt mit einem Rechtsanwalt gegen das Schulamt
+vorgehen.</p>
+            <p>Abgesehen von diesen
+Problemen gedeiht das Kind recht gut, es bewegt sich mit
+Körperlänge und Gewicht im Bereich der 3. Perzentile unverändert.
+Während der Untersuchung hier war sie gut gelaunt und wirkte
+stabil. Keine Infektzeichen, Lungen seitengleich belüftet.
+Alltagsaktivitäten wie Gehen und AN- und Ausziehen
+unproblematisch.</p>
+            <p>Der für den 02.03.2015
+erneut vereinbarte Termin zur psychologischen Testung wurde von der
+Mutter abgesagt.</p>
+        </div>
+    </div>
+    <closer>
+        <salute>mit freundlichen Grüßen</salute>
+        <signed>
+            <p>
+                <name nymRef="#u-pmh">Peter Herkenrath</name>
+            </p>
+            <p>Leiter der Neuro- und Sozialpädiatrie</p>
+        </signed>
+    </closer>
+    <postscript>
+        <p>D/ Familie Akin, Peter-Michels-Str. 65, 50827 Köln</p>
+    </postscript>
+</body>

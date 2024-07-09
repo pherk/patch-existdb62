@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<body id="logo" class="letter-body">
+    <div title="header">
+        <p>
+            <span>Patient</span>
+            <span>3</span>
+        </p>
+        <p>
+            <br/>
+        </p>
+        <p>
+            <br/>
+        </p>
+    </div>
+    <p lang="de-DE" xml:lang="de-DE">
+        <img src="" name="Bild1" align="left" hspace="12" width="744" height="113" border="0" id="Bild1"/>
+        <br/>
+    </p>
+    <p>
+        <br/>
+    </p>
+    <p>
+        <br/>
+    </p>
+    <p>
+        <br/>
+    </p>
+    <p>
+        <br/>
+    </p>
+    <p>
+        <br/>
+    </p>
+    <p>
+        <span lang="en-GB" xml:lang="en-GB">Direktor: Univ.-Prof. Dr. med. J.</span>
+        <span>Dötsch</span>
+    </p>
+    <table width="657" cellpadding="5" cellspacing="0">
+        <col width="467"/>
+        <col width="170"/>
+        <tr valign="top">
+            <td width="467">
+                <p class="western c5">
+                    <br/>
+                </p>
+                <p class="western c5">
+                    <br/>
+                </p>
+                <p class="western c5">
+                    <br/>
+                </p>
+                <h3 class="western c6">SPZ der Kinderklinik, Kerpener Str. 62, 50937 Köln</h3>
+                <p class="western c5">
+                    <br/>
+                </p>
+                <p class="western c8">
+                    <span>Dr. Platzbecker</span>
+                </p>
+                <p class="western c8">
+                    <span>Sachsenstraße 1</span>
+                </p>
+                <p class="western c8">
+                    <span>52351 Düren</span>
+                </p>
+                <p class="western">
+                    <br/>
+                </p>
+            </td>
+            <td width="170">
+                <p class="western c5">
+                    <a name="_1109402488"/>
+                    <img src="" name="Objekt1" align="bottom" width="145" height="145" id="Objekt1"/>
+                </p>
+                <p class="western c5">
+                    <br/>
+                </p>
+                <p class="western c11">
+                    <span>Sozialpädiatrisches Zentrum</span>
+                </p>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td width="467" height="112">
+                <p class="western c12">
+                    <br/>
+                </p>
+            </td>
+            <td width="170">
+                <p class="western c8">
+                    <span>Leiter: OA Dr. P. Herkenrath</span>
+                </p>
+                <p class="western c5">
+                    <br/>
+                </p>
+                <p class="western c8">
+                    <span>Kerpener Str. 62, Gebäude 26</span>
+                </p>
+                <p class="western c8">
+                    <span>50937 Köln</span>
+                </p>
+                <p class="western c8">
+                    <span>Sekretariat: (0221) 478-6580</span>
+                </p>
+                <p class="western c8">
+                    <span>Anmeldung: (0221) 478-5900</span>
+                </p>
+                <p lang="fr-FR" class="western c8" xml:lang="fr-FR">
+                    <span>Fax : (0221) 478-5189</span>
+                </p>
+                <p class="western c5">
+                    <span lang="fr-FR" xml:lang="fr-FR">Email:</span>
+                    <span>
+                        <a href="mailto:SPZ@medizin.uni-koeln.de">
+                            <span lang="fr-FR" xml:lang="fr-FR">SPZ@uk-koeln.de</span>
+                        </a>
+                    </span>
+                </p>
+                <p lang="fr-FR" class="western c5" xml:lang="fr-FR">
+                    <br/>
+                </p>
+                <p class="western c11">
+                    <span>Köln, den 24.08.2015</span>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <p class="western c16"/>
+    <p class="western c16">
+        <a name="korr" id="korr"/>
+        <br/>
+    </p>
+    <p class="western c17">
+        <br/>
+    </p>
+    <p class="western c19">
+        <span>Logopädischer Befund</span>
+    </p>
+    <p class="western c17">
+        <br/>
+    </p>
+    <table width="610" cellpadding="5" cellspacing="0">
+        <col width="589"/>
+        <col width="1"/>
+        <tr valign="top">
+            <td width="589">
+                <p class="western c12">
+                    <span>Name:</span>
+                    <span>Noah Akgün</span>
+                </p>
+            </td>
+            <td width="1">
+                <p class="western c12"/>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td width="589">
+                <p class="western c12">
+                    <span>geb. am:</span>
+                    <span>28.09.2011</span>
+                </p>
+            </td>
+            <td width="1">
+                <p class="western c12"/>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td width="589">
+                <p class="western c12"/>
+            </td>
+            <td width="1">
+                <p class="western c12"/>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td width="589">
+                <p class="western c12">
+                    <span>Vorstellungsdatum:</span>
+                    <span>24.08.2015</span>
+                </p>
+            </td>
+            <td width="1">
+                <p class="western c12"/>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td width="589">
+                <p class="western c12">
+                    <span>Alter am Untersuchungstag:</span>
+                    <span>3;10 Jahre</span>
+                </p>
+            </td>
+            <td width="1">
+                <p class="western c12">
+                    <br/>
+                </p>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td width="589">
+                <p class="western c12">
+                    <br/>
+                </p>
+            </td>
+            <td width="1">
+                <p class="western c12">
+                    <br/>
+                </p>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td width="589">
+                <p class="western c12">
+                    <span>Vorstellungsanlass:</span>
+                    <span>Verlaufsbeobachtung der Sprachentwicklung</span>
+                </p>
+            </td>
+            <td width="1">
+                <p class="western c12">
+                    <br/>
+                </p>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td width="589">
+                <p class="western c12">
+                    <br/>
+                </p>
+            </td>
+            <td width="1">
+                <p class="western c12">
+                    <br/>
+                </p>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td width="589">
+                <p class="western c12">
+                    <span>Diagnose:</span>
+                    <span>Sprachentwicklungsstörung</span>
+                </p>
+            </td>
+            <td width="1">
+                <p class="western c12">
+                    <br/>
+                </p>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td width="589">
+                <p class="western c12">
+                    <br/>
+                </p>
+            </td>
+            <td width="1">
+                <p class="western c12">
+                    <br/>
+                </p>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td width="589">
+                <p class="western c12">
+                    <span>Derzeitige Therapien:</span>
+                    <span>Sprachtherapie 2/Woche und Ergotherapie 1/Woche im Frühförderzentrum Jülich</span>
+                </p>
+            </td>
+            <td width="1">
+                <p class="western c12">
+                    <br/>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <p class="western c2">
+        <br/>
+    </p>
+    <table width="614" cellpadding="5" cellspacing="0">
+        <col width="604"/>
+        <tr>
+            <td width="604" valign="top">
+                <p class="western c22">
+                    <span>Verlauf der Sprachentwicklung:</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="604" valign="top">
+                <p class="western c23">
+                    <span>Ehem. Late-Talker – bei der Erstvorstellung 07/14 zeigte N. altersgemäßes Sprachverstehen und Einstieg in den Wortschatzspurt, wobei der Umfang nicht ganz dem Alter entsprach; die Grammatikentwicklung war verzögert und die Aussprache zeigte Auffälligkeiten.</span>
+                </p>
+                <p class="western c23">
+                    <span>Die Aufnahme logopädischer Therapie wurde empfohlen; trotz der Aussprache-Auffälligkeiten sollte zunächst die Grammatik in den Vordergrund rücken.</span>
+                </p>
+                <p class="western c22">
+                    <span>N. erhält inzwischen Sprachtherapie im FFZ Jülich. Ein Befund liegt uns aktuell nicht vor.</span>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <p class="western c17">
+        <br/>
+    </p>
+    <table width="614" cellpadding="5" cellspacing="0">
+        <col width="604"/>
+        <tr>
+            <td width="604" valign="top">
+                <p class="western c22">
+                    <span>Hörvermögen:</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="604" valign="top">
+                <p class="western c22">
+                    <span>Die Mutter berichtet, dass N. wohl als Säugling und Kleinkind Probleme der Schalleitung gehabt habe.</span>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <p class="western c17">
+        <br/>
+    </p>
+    <table width="614" cellpadding="5" cellspacing="0">
+        <col width="604"/>
+        <tr>
+            <td width="604" valign="top">
+                <p class="western c22">
+                    <span>Verhaltensbeobachtung:</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="604" valign="top">
+                <p class="western c22">
+                    <span>N. kommt in Begleitung seiner Eltern zur Untersuchung. Er lässt sich zunächst zur Mitarbeit bewegen, zeigt sich dann aber zunehmend eigen bestimmt; Grenzen durch die Eltern ignoriert er meist; evtl. glaubt er nicht ganz an wirkliche Konsequenzen. Er ist motorisch ein wenig unruhig, zeigt dennoch aber weitgehend angemessene Ausdauer.</span>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <p class="western c17">
+        <br/>
+    </p>
+    <table width="614" cellpadding="5" cellspacing="0">
+        <col width="14"/>
+        <col width="580"/>
+        <tr>
+            <td colspan="2" width="604" valign="top">
+                <p class="western c22">
+                    <span>Sprachverstehen:</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" width="604" valign="top">
+                <ul>
+                    <li>
+                        <p class="western c23">
+                            <span>N. reagiert angemessen auf Fragen/Aufforderungen in der Untersuchung; kleine wechselseitige Gespräche sind möglich.</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="western c23">
+                            <span>Wortverständnis: altersgemäß</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="western c23">
+                            <span>Satzverstehen: Bei der Überprüfung mit dem SETK 3-5 erreicht N. mit T-Wert 51 altersgemäße Werte.</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="western c22">
+                            <span>Textverstehen: Die Eltern berichten, dass es möglich sei, gemeinsam mit N. kleine Bilderbuchgeschichten anzuschauen bzw. vorzulesen.</span>
+                        </p>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td width="14">
+                <p class="western">
+                    <br/>
+                </p>
+            </td>
+            <td width="580">
+                <p class="western c12"> <span>altersgemäßes Sprachverstehen</span>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <p class="western c17">
+        <br/>
+    </p>
+    <table width="614" cellpadding="5" cellspacing="0">
+        <col width="14"/>
+        <col width="580"/>
+        <tr>
+            <td colspan="2" width="604" valign="top">
+                <p class="western c22">
+                    <span>Sprachproduktion</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" width="604" valign="top">
+                <div>
+                    <p class="western c12">
+                        <span>Semantik/Lexikon</span>
+                        <span>:</span>
+                        <span>Beim Wortproduktionstest erreicht N. mit T-Wert 46 für Nomen und T-Wert 47 für Adjektive altersgemäße Werte; er spricht etliche Verben, darunter etliche transitive Alltagsverben, die für den Aufbau der Grammatik von Bedeutung sind (z.B. spielen, kaufen, holen, geben, schenken…).</span>
+                    </p>
+                </div>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td width="14">
+                <p class="western">
+                    <br/>
+                </p>
+            </td>
+            <td width="580">
+                <p class="western c12"><span>altersgemäßer Wortschatzumfang</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" width="604" valign="top">
+                <div>
+                    <p class="western c12">
+                        <span>Syntax/Morphologie</span>
+                        <span>:</span>
+                        <span>N. bildet Mehrwortkombinationen; dabei ist die Argumentstruktur nicht immer vollständig („Ich auch nicht kennen“ – was? Objekt fehlt; „Kind ein Bonbon“ – was macht es damit? Verb fehlt); bei vollständigen Äußerungen zeigt N. noch keine sicher erworbene Verbzweitstellung mit flexiblem Vorfeld („Frau Bild malen“). Entsprechend der Syntaxprobleme noch keine Analyse der Morphologie.</span>
+                    </p>
+                </div>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td width="14">
+                <p class="western">
+                    <br/>
+                </p>
+            </td>
+            <td width="580">
+                <p class="western c12"> <span>Dysgrammatismus (v.a. Syntax: unvollständige Argumentstruktur; noch keine Verbzweitstellung – Alterswert 2;6 Jahre)</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" width="604" valign="top">
+                <div>
+                    <p class="western c12">
+                        <span>Aussprache</span>
+                        <span>:</span>
+                        <span>Ohne Bildunterstützung oder Spielzusammenhang spricht N. kaum verständlich für Außenstehende. Die Auswertung der Spontansprache und der benannten Bilder bestätigen eine ausgeprägte phonologische Störung mit mehreren auffälligen Prozessen, davon im Vordergrund die Anlaut-Ersetzung durch interdentales /s/ (manchmal auch nach interdentalem /d/ klingend); zudem ersetzt N. die Plosive untereinander und auch die Frikative. N. ist beim Benenntest ausgestiegen, so dass keine vollständige Auswertung möglich ist. Es war möglich, alle Laute isoliert hervorzurufen bzw. imitieren zu lassen; dabei sind diese zwar manchmal artikulatorisch leicht entstellt (z.B. interdental), dennoch aber voneinander zu unterscheiden.</span>
+                    </p>
+                </div>
+            </td>
+        </tr>
+        <tr valign="top">
+            <td width="14">
+                <p class="western">
+                    <br/>
+                </p>
+            </td>
+            <td width="580">
+                <p class="western c12"> <span>ausgeprägte phonologische Störung (und zusätzlich artikulatorische Lautfehlbildung, die aber zunächst zu vernachlässigen ist)</span>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <p class="western c17">
+        <br/>
+    </p>
+    <p class="western c17">
+        <br/>
+    </p>
+    <table width="615" cellpadding="5" cellspacing="0">
+        <col width="603"/>
+        <tr>
+            <td width="603" valign="top">
+                <p class="western c22">
+                    <span>Zusammenfassung / Befund:</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="603" valign="top">
+                <p class="western c23">
+                    <span>Ausgeprägte Sprachentwicklungsstörung mit:</span>
+                </p>
+                <ul>
+                    <li>
+                        <p class="western c23">
+                            <span>Deutlichem Dysgrammatismus</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="western c23">
+                            <span>Ausgeprägter phonologischer Störung</span>
+                        </p>
+                    </li>
+                </ul>
+                <p class="western c28">
+                    <span>bei altersgemäßem Wortschatzumfang und Sprachverstehen.</span>
+                </p>
+                <p class="western c29">
+                    <br/>
+                </p>
+                <p class="western c22">
+                    <span>Therapiebedürftigkeit:</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="603" valign="top">
+                <p class="western c22">
+                    <span>JA</span>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <p class="western c17">
+        <br/>
+    </p>
+    <table width="614" cellpadding="5" cellspacing="0">
+        <col width="604"/>
+        <tr>
+            <td width="604" valign="top">
+                <p class="western c22">
+                    <span>Empfehlung / Procedere:</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td width="604" valign="top">
+                <ul>
+                    <li>
+                        <p class="western c8">
+                            <span>Der Befund wurde mit den Eltern besprochen und deckt sich mit ihren Beobachtungen.</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="western c8">
+                            <span>Die Eltern sind aus familiärer Erfahrung besorgt, ob N. zusätzliche Probleme, vor allem im Bereich der Kognition hat; Hinweise darauf zeigten sich bei der heutigen Untersuchung nicht; angesichts des altersgemäßen Wortschatzes und Verstehens zeigt er eher das Profil einer „klassischen“, spezifischen Sprachentwicklungsstörung; zur Entlastung der Eltern wurde heute veranlasst, dass N. auf die Warteliste für eine kinderpsychologische Untersuchung gesetzt wird, um Einschränkungen im Bereich der Kognition auszuschließen.</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="western c8">
+                            <span>Bezüglich der schweren Sprachstörung ist die Fortsetzung der Therapie in der Frequenz 2/Woche indiziert – dazwischen dann ruhig mehrwöchige Pausen. Es hat sich in der Praxis als effektiv erwiesen, jeweils in Phasen den Schwerpunkt für mehrere Wochen auf einen Störungsbereich zu lenken. Für die Grammatik spräche das physiologische Erwerbsfenster für Grammatikstrukturen, dass mit dem Alter abnimmt. Für die Aussprache spräche die deutlich herabgesetzte Verständlichkeit und das Störungsbewusstsein. Im Bereich der Grammatik lässt sich recht indirekt über Inputspezifizierung arbeiten. In der Aussprache bietet sich eine systematische phonologische Therapie an, hier könnte im Vordergrund die Anlautersetzung stehen. Angesichts der guten Evozierbarkeit der Laute scheinen mundmotorische Übungen nicht indiziert.</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="western c8">
+                            <span>Den Eltern wurde erläutert, dass sich zwar stetig Fortschritte in der Sprachentwicklung zeigen, diese Störungsbereiche (v.a. die phonologische Störung) aber eher zäh in der Therapie seien, die Therapie also wohl noch eine längere Zeit fortgesetzt werden müsse. Es sei verfrüht, zu diesem Zeitpunkt Aussagen über die Schulform zu treffen, zumal Noahs allgemeine Entwicklung zunächst noch kinderpsychologsich untersucht werden soll.</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="western c8">
+                            <span>Ein Termin zur kinderpsychologischen Untersuchung in einigen Monaten wird den Eltern zugeschickt.</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="western c11">
+                            <span>Eine logopädische Wiedervorstellung ist in ca. 1 Jahr, bei Bedarf auch früher, indiziert.</span>
+                        </p>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+    <p class="western c2">
+        <br/>
+    </p>
+    <p class="western c17">
+        <br/>
+    </p>
+    <p class="western c17">
+        <br/>
+    </p>
+    <p class="western c17">
+        <br/>
+    </p>
+    <p class="western c17">
+        <br/>
+    </p>
+    <p class="western c17">
+        <br/>
+    </p>
+    <p class="western c17">
+        <br/>
+    </p>
+    <p class="western c17">
+        <br/>
+    </p>
+    <p class="western c17">
+        <br/>
+    </p>
+    <p class="western c19">
+        <span>L. Spee (Logopädin)</span>
+    </p>
+    <p class="western c17">
+        <br/>
+    </p>
+    <p class="western c17">
+        <br/>
+    </p>
+    <p class="western c2"/>
+    <p class="western c2">
+        <br/>
+    </p>
+    <p class="western c2">
+        <br/>
+    </p>
+    <p class="western c2">
+        <br/>
+    </p>
+    <div title="footer">
+        <p>
+            <br/>
+        </p>
+    </div>
+</body>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-syn-orders" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-done" level="ephemeral">Subform has updated itself.</xf:message>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:instance id="i-orders">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-orders" instance="i-orders" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/orders?subject=', instance('i-pat')/*:id/@value,'&amp;status=active')"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get orders!</xf:message>
+            </xf:submission>
+            <xf:instance id="views">
+                <data xmlns="">
+                    <OrdersToSelect/>
+                    <noOrders/>
+                </data>
+            </xf:instance>
+            <xf:bind id="OrdersToSelect" ref="instance('views')/*:OrdersToSelect" relevant="count(instance('i-orders')/*:Order) &gt; 0"/>
+            <xf:bind id="noOrders" ref="instance('views')/*:noOrders" relevant="count(instance('i-orders')/*:Order) = 0"/>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+                <xf:send submission="s-get-orders"/>
+            </xf:action>
+        </xf:model>
+    </div>
+    <div>
+        <xf:group ref="instance('views')/*:OrdersToSelect" class="bordered">
+            <xf:label>Offene Anforderungen</xf:label>
+            <xf:repeat ref="instance('i-orders')/*:Order" appearance="compact" class="svRepeatBlank">
+                <xf:output value="tokenize(./*:date/@value, 'T')[1]">
+                    <xf:label class="svRepeatHeader">Datum</xf:label>
+                </xf:output>
+                <xf:group>
+                    <xf:label class="svRepeatHeader">Anlass/CarePlan</xf:label>
+                    <xf:output ref="./*:description/@value">
+                    </xf:output>
+                    <xf:output value="./*:basedOn/*:display/@value">
+                    </xf:output>
+                </xf:group>
+                <xf:group>
+                    <xf:label>Erbringer/Wunsch/Info</xf:label>
+                    <xf:repeat ref="./*:detail[*:status/@value='active']" appearance="compact" class="svRepeatBlank">
+                        <xf:group>
+                        <xf:output value="choose(./*:actor/*:reference/@value='',./*:actor/*:role/@value,./*:actor/*:display/@value)">
+                        </xf:output>
+                        <xf:output value="./*:spec/*:begin/@value">
+                        </xf:output>
+                        </xf:group>
+                        <xf:output value="./*:info/@value">
+                        </xf:output>
+                    </xf:repeat>
+                </xf:group>
+            </xf:repeat>
+        </xf:group>
+        <xf:group ref="instance('views')/*:noOrders">
+            <xf:label>Keine offenen Anforderungen</xf:label>
+        </xf:group>
+    </div>
+</div>

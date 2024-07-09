@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="q-hilfsmittel-v2018-04-08" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-qr">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-qr-from-master" resource="model:m-qrmaster#instance('i-qrs-user')//*:QuestionnaireResponse[index('r-qrs-id')]" instance="i-qr" replace="instance" method="get">
+                <xf:action ev:event="xforms-submit-done"/>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:submission id="s-update-qr-master" resource="model:m-qrmaster#instance('i-qrs-user')//*:QuestionnaireResponse[index('r-qrs-id')]" instance="i-qr" model="q-hilfsmittel--v2018-04-08" replace="none" method="post">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:message level="ephemeral">QR updated</xf:message>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot update Master!.</xf:message>
+            </xf:submission>
+            <xf:submission id="s-submit-qr" ref="instance('i-qr')" method="put" replace="none">
+                <xf:resource value="concat('/exist/restxq/nabu/questionnaireresponses?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done"/>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot submit QuestionnaireResponse!</xf:message>
+            </xf:submission>
+            <xf:instance xmlns="" id="i-control-center">
+                <data>
+                    <qr-dirty>false</qr-dirty>
+                    <qr-wf>false</qr-wf>
+                    <qr-xform>0.2</qr-xform>
+                    <qr-itemid/>
+                    <qr-itemval/>
+                    <qr-iter/>
+                </data>
+            </xf:instance>
+            <xf:instance xmlns="" id="tabset-instance">
+                <tabset value="editQR">
+                    <item value="1-hm-item">hmgroup</item>
+                </tabset>
+            </xf:instance>
+            <xf:instance xmlns="" id="i-bricks">
+                <bricks xmlns="http://hl7.org/fhir">
+                    <item>
+                        <linkId value="hm-item"/>
+                        <text value="hmgroup"/>
+                        <type value="group"/>
+                        <item>
+                            <linkId value="hm-hmnr"/>
+                            <text value="HM#"/>
+                            <answer>
+                                <valueInteger value=""/>
+                            </answer>
+                        </item>
+                        <item>
+                            <linkId value="hm-hmdesc"/>
+                            <text value="Bezeichnung"/>
+                            <answer>
+                                <valueString value=""/>
+                            </answer>
+                        </item>
+                        <item>
+                            <linkId value="hm-indication"/>
+                            <text value="Indikation"/>
+                            <answer>
+                                <valueString value=""/>
+                            </answer>
+                        </item>
+                        <item>
+                            <linkId value="hm-use"/>
+                            <text value="Gebrauch"/>
+                            <answer>
+                                <valueCoding>
+                                    <code value=""/>
+                                    <display value=""/>
+                                </valueCoding>
+                            </answer>
+                        </item>
+                        <item>
+                            <linkId value="hm-effective"/>
+                            <text value="effektiv"/>
+                            <answer>
+                                <valueCoding>
+                                    <code value=""/>
+                                    <display value=""/>
+                                </valueCoding>
+                            </answer>
+                        </item>
+                        <item>
+                            <linkId value="hm-supplier"/>
+                            <text value="Firma"/>
+                            <answer>
+                                <valueString value=""/>
+                            </answer>
+                        </item>
+                        <item>
+                            <linkId value="hm-status"/>
+                            <text value="Status"/>
+                            <answer>
+                                <valueCoding>
+                                    <code value=""/>
+                                    <display value=""/>
+                                </valueCoding>
+                            </answer>
+                        </item>
+                        <item>
+                            <linkId value="hm-note"/>
+                            <text value="Notiz"/>
+                            <answer>
+                                <valueString value=""/>
+                            </answer>
+                        </item>
+                        <item>
+                            <linkId value="hm-vo-date"/>
+                            <text value="Verordnung"/>
+                            <answer>
+                                <valueDate value=""/>
+                            </answer>
+                        </item>
+                        <item>
+                            <linkId value="hm-inuse-date"/>
+                            <text value="Auslieferung"/>
+                            <answer>
+                                <valueDate value=""/>
+                            </answer>
+                        </item>
+                    </item>
+                </bricks>
+            </xf:instance>
+            <xf:action ev:event="xforms-ready">
+                <xf:send submission="s-load-qr-from-master"/>
+            </xf:action>
+        </xf:model>
+    </div>
+    <xf:group id="0-hm-list" class="svFullGroup">
+        <xf:action ev:event="xforms-value-changed">
+            <xf:setvalue ref="instance('i-control-center')/*:qr-dirty" value="'true'"/>
+        </xf:action>
+        <xf:label>Hilfsmittel-Liste</xf:label>
+        <xf:group id="1-hm-item">
+            <table>
+                <thead>
+                    <tr>
+                        <th>HM#</th>
+                        <th>Bezeichnung</th>
+                        <th>Indikation</th>
+                        <th>Gebrauch</th>
+                        <th>effektiv</th>
+                    </tr>
+                    <tr>
+                        <th>Firma</th>
+                        <th>Status</th>
+                        <th>Notiz</th>
+                        <th>Verordnung</th>
+                        <th>Auslieferung</th>
+                    </tr>
+                </thead>
+                <tbody id="r-2hm-itemitems-id" xf:repeat-nodeset=".//*:item[*:linkId/@value='hm-item']">
+                    <tr>
+                        <td>
+                            <xf:input id="2-hm-hmnr" ref=".//*:item[*:linkId/@value='hm-hmnr']/*:answer/*:valueInteger/@value" class="short-input">
+                                <xf:hint>[2-3][0-9]|4[0-3]</xf:hint>
+                            </xf:input>
+                        </td>
+                        <td>
+                            <xf:input id="2-hm-hmdesc" ref=".//*:item[*:linkId/@value='hm-hmdesc']/*:answer/*:valueString/@value" class="medium-input"/>
+                        </td>
+                        <td>
+                            <xf:input id="2-hm-indication" ref=".//*:item[*:linkId/@value='hm-indication']/*:answer/*:valueString/@value" class="medium-input"/>
+                        </td>
+                        <td>
+                            <xf:select1 id="2-hm-use" ref=".//*:item[*:linkId/@value='hm-use']/*:answer//*:code/@value" class="short-input">
+                                <xf:item>
+                                    <xf:label>regelmäßig</xf:label>
+                                    <xf:value>regular</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>unregelmäßig</xf:label>
+                                    <xf:value>sporadic</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>kein</xf:label>
+                                    <xf:value>nouse</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>unklar</xf:label>
+                                    <xf:value>unknown</xf:value>
+                                </xf:item><!--
+            <xf:itemset ref="bf:instanceOfModel('m-qrmaster','i-questionnaire')//*:item[*:linkId/@value='{$linkId}']/*:option/*:valueCoding">
+                <xf:label ref=".//*:display/@value"/>
+                <xf:value ref=".//*:code/@value"/>                                        
+            </xf:itemset>
+            -->
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-qr')//*:item[*:linkId/@value='hm-use']/*:answer//*:display/@value" value="bf:instanceOfModel('m-qrmaster','i-questionnaire')//*:item[*:linkId/@value='hm-use']/*:option[.//*:code/@value=instance('i-qr')//*:item[*:linkId/@value='hm-use']/*:answer//*:code/@value]/*:display/@value"/>
+                                </xf:action>
+                            </xf:select1>
+                        </td>
+                        <td>
+                            <xf:select1 id="2-hm-effective" ref=".//*:item[*:linkId/@value='hm-effective']/*:answer//*:code/@value" class="short-input">
+                                <xf:item>
+                                    <xf:label>gut</xf:label>
+                                    <xf:value>good</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>mittel</xf:label>
+                                    <xf:value>medium</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>schlecht</xf:label>
+                                    <xf:value>bad</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>unklar</xf:label>
+                                    <xf:value>unknown</xf:value>
+                                </xf:item><!--
+            <xf:itemset ref="bf:instanceOfModel('m-qrmaster','i-questionnaire')//*:item[*:linkId/@value='{$linkId}']/*:option/*:valueCoding">
+                <xf:label ref=".//*:display/@value"/>
+                <xf:value ref=".//*:code/@value"/>                                        
+            </xf:itemset>
+            -->
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-qr')//*:item[*:linkId/@value='hm-effective']/*:answer//*:display/@value" value="bf:instanceOfModel('m-qrmaster','i-questionnaire')//*:item[*:linkId/@value='hm-effective']/*:option[.//*:code/@value=instance('i-qr')//*:item[*:linkId/@value='hm-effective']/*:answer//*:code/@value]/*:display/@value"/>
+                                </xf:action>
+                            </xf:select1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <xf:input id="2-hm-supplier" ref=".//*:item[*:linkId/@value='hm-supplier']/*:answer/*:valueString/@value" class="medium-input"/>
+                        </td>
+                        <td>
+                            <xf:select1 id="2-hm-status" ref=".//*:item[*:linkId/@value='hm-status']/*:answer//*:code/@value" class="short-input">
+                                <xf:item>
+                                    <xf:label>geplant</xf:label>
+                                    <xf:value>planned</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>verordned</xf:label>
+                                    <xf:value>prescribed</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>ausgeliefert</xf:label>
+                                    <xf:value>delivered</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>unklar</xf:label>
+                                    <xf:value>unknown</xf:value>
+                                </xf:item><!--
+            <xf:itemset ref="bf:instanceOfModel('m-qrmaster','i-questionnaire')//*:item[*:linkId/@value='{$linkId}']/*:option/*:valueCoding">
+                <xf:label ref=".//*:display/@value"/>
+                <xf:value ref=".//*:code/@value"/>                                        
+            </xf:itemset>
+            -->
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-qr')//*:item[*:linkId/@value='hm-status']/*:answer//*:display/@value" value="bf:instanceOfModel('m-qrmaster','i-questionnaire')//*:item[*:linkId/@value='hm-status']/*:option[.//*:code/@value=instance('i-qr')//*:item[*:linkId/@value='hm-status']/*:answer//*:code/@value]/*:display/@value"/>
+                                </xf:action>
+                            </xf:select1>
+                        </td>
+                        <td>
+                            <xf:input id="2-hm-note" ref=".//*:item[*:linkId/@value='hm-note']/*:answer/*:valueString/@value" class="medium-input"/>
+                        </td>
+                        <td>
+                            <xf:input id="2-hm-vo-date" ref=".//*:item[*:linkId/@value='hm-vo-date']/*:answer/*:valueDate/@value" class="short-input">
+                                <xf:hint>iso-date</xf:hint>
+                            </xf:input>
+                        </td>
+                        <td>
+                            <xf:input id="2-hm-inuse-date" ref=".//*:item[*:linkId/@value='hm-inuse-date']/*:answer/*:valueDate/@value" class="short-input">
+                                <xf:hint>iso-date</xf:hint>
+                            </xf:input>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <xf:group class="svTriggerGroup">
+                <table>
+                    <tr>
+                        <td>
+                            <xf:trigger class="svAddTrigger" ref="./*:status[@value=('in-progress','stopped','completed','amended')]">
+                                <xf:label>Neu</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:insert ref="instance('i-qr')//*:item[*:linkId/@value='hm-item']" context="instance('i-qr')//*:item[*:linkId/@value='hm-item']/.." origin="instance('i-bricks')/*:item[*:linkId/@value='hm-item']"/>
+                                </xf:action>
+                            </xf:trigger>
+                        </td>
+                        <td>
+                            <xf:trigger class="svDelTrigger" ref="./*:status[@value=('in-progress','stopped','completed','amended')]">
+                                <xf:label>Löschen</xf:label>
+                                <xf:action ev:event="DOMActivate" if="count(instance('i-qr')//*:item[*:linkId/@value='hm-item'])&gt; 0">
+                                    <xf:delete ref="instance('i-qr')//*:item[*:linkId/@value='hm-item'][index('r-2hm-itemitems-id')]"/>
+                                </xf:action>
+                            </xf:trigger>
+                        </td>
+                    </tr>
+                </table>
+            </xf:group>
+        </xf:group>
+    </xf:group>
+</div>

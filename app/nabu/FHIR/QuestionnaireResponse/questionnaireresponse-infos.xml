@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questionnaireresponse-infos>
+    <status>
+        <code label-de="in Arbeit" value="in-progress"/>
+        <code label-de="fertig" value="completed"/>
+        <code label-de="ergänzt" value="amended"/>
+        <code label-de="gestoppt" value="stopped"/>
+        <code label-de="Fehler" value="entered-in-error"/>
+    </status>
+    <bricks xmlns="http://hl7.org/fhir">
+        <QuestionnaireResponse>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+            <identifier/>
+            <basedOn>
+                <reference value=""/>
+                <display value=""/>                
+            </basedOn>
+            <questionnaire>
+                <reference value=""/>
+                <display value=""/>                
+            </questionnaire>
+            <status value="in-progress"/>
+            <subject>
+                <reference value=""/>
+                <display value=""/>
+            </subject>
+            <context>
+                <reference value=""/>
+                <display value=""/>                
+            </context>
+            <authored value=""/>
+            <author>
+                <reference value=""/>
+                <display value=""/>                
+            </author>
+            <source>
+                <reference value=""/>
+                <display value=""/>
+            </source>
+        </QuestionnaireResponse>
+            <parent>
+                <reference value=""/>
+                <display value=""/>
+            </parent>
+        <item>  <!-- 0..* Groups and questions -->
+            <linkId value="[string]"/>
+            <definition value="[uri]"/>
+            <text value="[string]"/>
+            <answer>
+                <valueString value=""/>
+            </answer>
+        </item>
+        <subject>
+            <reference value=""/>
+            <display value=""/>
+        </subject>
+        <answer>
+            <valueString value=""/>
+        </answer>
+        <answer>
+            <valueDecimal value=""/>
+        </answer>
+        <answer>
+            <valueInteger value=""/>
+        </answer>
+        <answer>
+            <valueDate value=""/>
+        </answer>
+        <answer>
+            <valueDateTime value=""/>
+        </answer>
+        <answer>
+            <valueBoolean value=""/>
+        </answer>
+        <answer>
+            <valueCoding value=""/>
+        </answer>
+    </bricks>
+</questionnaireresponse-infos>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<activitydef-infos>
+    <status>
+        <code label="Entwurf" value="draft"/>
+        <code label="aktiv" value="active"/>
+        <code label="abgelegt" value="retired"/>
+    </status>
+    <category>
+        <code label="Kommunikation" value="communication"/>        
+        <code label="Gerät" value="device"/>        
+        <code label="Diagnostik" vaesuchlue="diagnostic"/>
+        <code label="Diät" value="diet"/>
+        <code label="Medikation" value="drug"/>
+        <code label="Besuch" value="encounter"/>
+        <code label="Impfung" value="immunization"/>
+        <code label="Observation" value="observation"/>
+        <code label="Prozedur" value="procedure"/>
+        <code label="Überweisung" value="referral"/>
+        <code label="Unterstützung" value="supply"/>
+        <code label="Augen" value="vision"/>
+        <code label="Entwurf" value="other"/>"
+    </category>
+    <participantType>
+        <code label="Patient" value="patient"/>
+        <code label="Erbringer" value="practitioner"/>
+        <code label="Person" value="related-person"/>
+    </participantType>
+    <bricks xmlns="http://hl7.org/fhir" version="4.0.1">
+        <ActivityDefinition>
+            <id value=""/>
+            <url value="[uri]"/><!-- 0..1 Logical uri to reference this activity definition (globally unique) -->
+            <identifier><!-- 0..* Identifier Additional identifier for the activity definition --></identifier>
+            <version value="[string]"/><!-- 0..1 Business version of the activity definition -->
+            <name value="[string]"/><!-- 0..1 Name for this activity definition (Computer friendly) -->
+            <title value="[string]"/><!-- 0..1 Name for this activity definition (Human friendly) -->
+            <subtitle value=""/>
+            <status value="[code]"/><!-- 1..1 draft | active | retired -->
+            <experimental value="[boolean]"/><!-- 0..1 If for testing purposes, not real usage -->
+            <subject/>
+            <date value="[dateTime]"/><!-- 0..1 Date this was last changed -->
+            <publisher value="[string]"/><!-- 0..1 Name of the publisher (Organization or individual) -->
+            <contact><!-- 0..* ContactDetail Contact details for the publisher --></contact>
+            <description value="[markdown]"/><!-- 0..1 Natural language description of the activity definition -->
+            <useContext><!-- 0..* UsageContext Content intends to support these contexts --></useContext>
+            <jurisdiction><!-- 0..* CodeableConcept Intended jurisdiction for activity definition (if applicable) --></jurisdiction>
+            <purpose value="[markdown]"/><!-- 0..1 Why this activity definition is defined -->
+            <usage value="[string]"/><!-- 0..1 Describes the clinical usage of the asset -->
+            <copyright value="[markdown]"/><!-- 0..1 Use and/or publishing restrictions -->
+            <approvalDate value="[date]"/><!-- 0..1 When activity definition approved by publisher -->
+            <lastReviewDate value="[date]"/><!-- 0..1 Last review date for the activity definition -->
+            <effectivePeriod><!-- 0..1 Period The effective date range for the activity definition --></effectivePeriod>
+            <topic><!-- 0..* CodeableConcept Descriptional topics for the asset --></topic>
+            <author><!-- 0..* Contributor A content contributor --></author>
+            <editor/>
+            <reviewer/>
+            <endorser/>
+            <relatedArtifact><!-- 0..* RelatedArtifact Related artifacts for the asset --></relatedArtifact>
+            <library><!-- 0..* Reference(Library) Logic used by the asset --></library>
+            <kind value="[code]"/><!-- 0..1 communication | device | diagnostic | diet | drug | encounter | immunization | observation | procedure | referral | supply | vision | other -->
+            <profile/>
+            <code><!-- 0..1 CodeableConcept Detail type of activity --></code>
+            <intent/>
+            <priority/>
+            <timing><!-- 0..1 CodeableConcept|Timing When activity is to occur --></timing>
+            <location><!-- 0..1 Reference(Location) Where it should happen --></location>
+            <participant>
+               <type value="[code]"/><!-- 0..* patient | practitioner | related-person -->
+               <role value=""/>
+            </participant>
+            <product><!-- 0..1 Reference(Medication|Substance)|CodeableConcept What's administered/supplied --></product>
+            <quantity><!-- 0..1 Quantity(SimpleQuantity) How much is administered/consumed/supplied --></quantity>
+            <dosageInstruction><!-- 0..* DosageInstruction Detailed dosage instructions --></dosageInstruction>
+            <bodySite><!-- 0..* CodeableConcept What part of body to perform on --></bodySite>
+            <transform><!-- 0..1 Reference(StructureMap) Transform to apply the template --></transform>
+            <dynamicValue>  <!-- 0..* Dynamic aspects of the definition -->
+                <description value="[string]"/><!-- 0..1 Natural language description of the dynamic value -->
+                <path value="[string]"/><!-- 0..1 The path to the element to be set dynamically -->
+                <language value="[string]"/><!-- 0..1 Language of the expression -->
+                <expression value="[string]"/><!-- 0..1 An expression that provides the dynamic value for the customization -->
+            </dynamicValue>
+        </ActivityDefinition>
+        <dynamicValue>  <!-- 0..* Dynamic aspects of the definition -->
+            <description value="[string]"/><!-- 0..1 Natural language description of the dynamic value -->
+            <path value="[string]"/><!-- 0..1 The path to the element to be set dynamically -->
+            <language value="[string]"/><!-- 0..1 Language of the expression -->
+            <expression value="[string]"/><!-- 0..1 An expression that provides the dynamic value for the customization -->
+        </dynamicValue>
+    </bricks>
+</activitydef-infos>

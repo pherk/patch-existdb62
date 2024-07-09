@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<referralRequest-infos>
+    <bricks xmlns="http://hl7.org/fhir" comp="4.0.1">
+        <ReferralRequest>
+            <id value=""/>
+            <meta>
+                <versionId value=""/>
+            </meta>
+            <identifier/>
+            <definition><!-- 0..* Reference(ActivityDefinition|PlanDefinition) Instantiates protocol or definition --></definition>
+            <basedOn><!-- 0..* Reference(ReferralRequest|CarePlan|ProcedureRequest) Request fulfilled by this request --></basedOn>
+            <replaces/>
+            <groupIdentifier/>
+            <status value="[code]"/><!-- 1..1 draft | active | suspended | cancelled | completed | entered-in-error | unknown -->
+            <intent value="[code]"/><!-- 1..1 proposal | plan | order -->
+            <type><!-- 0..1 CodeableConcept Referral/Transition of care request type --></type>
+            <priority value="[code]"/><!-- 0..1 Urgency of referral / transfer of care request -->
+            <serviceRequested><!-- 0..* CodeableConcept Actions requested as part of the referral --></serviceRequested>
+            <subject><!-- 1..1 Reference(Patient|Group) Patient referred to care or transfer --></subject>
+            <context><!-- 0..1 Reference(Encounter|EpisodeOfCare) Originating encounter --></context>
+            <authoredOn value="[dateTime]"/><!-- 0..1 Date of creation/activation -->
+            <requester>  <!-- 0..1 Who/what is requesting service -->
+                <agent><!-- 1..1 Reference(Practitioner|Organization|Patient|RelatedPerson|
+    Device) Individual making the request --></agent>
+                <onBehalfOf><!-- ?? 0..1 Reference(Organization) Organization agent is acting for --></onBehalfOf>
+            </requester>
+            <specialty><!-- 0..1 CodeableConcept The clinical specialty (discipline) that the referral is requested for --></specialty>
+            <recipient><!-- 0..* Reference(Practitioner|Organization|HealthcareService) Receiver of referral / transfer of care request --></recipient>
+            <reasonCode><!-- 0..* CodeableConcept Reason for referral / transfer of care request --></reasonCode>
+            <reasonReference><!-- 0..* Reference(Condition|Observation) Why is service needed? --></reasonReference>
+            <description value="[string]"/><!-- 0..1 A textual description of the referral -->
+            <supportingInfo><!-- 0..* Reference(Any) Additonal information to support referral or transfer of care request --></supportingInfo>
+            <note><!-- 0..* Annotation Comments made about referral request --></note>
+            <relevantHistory><!-- 0..* Reference(Provenance) Key events in history of request --></relevantHistory>
+        </ReferralRequest>
+        <occurrenceDateTime/>
+        <occurrencePeriod/>
+    </bricks>
+</referralRequest-infos>

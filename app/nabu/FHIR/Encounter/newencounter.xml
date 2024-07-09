@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="enc" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" xmlns:fhir="http://hl7.org/fhir" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-login">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-login-from-master" resource="model:m-patient#instance('i-login')//*:data" instance="i-login" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">login: cannot load from Master!.</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-cps">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-careplans" instance="i-cps" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/careplans?subject=', instance('i-pat')/*:id/@value,'&amp;loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="instance('i-control-center')/*:rcpsid" value="choose(count(instance('i-cps')/*:CarePlan)&gt;0,'1','0')"/>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get cps!</xf:message>
+            </xf:submission>
+            <xf:submission id="s-submit-careplan" ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]" targetref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]" method="put" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/careplans?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'false'"/>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot submit careplan!</xf:message>
+            </xf:submission>
+            
+            <xf:instance id="i-control-center">
+                <data xmlns="">
+                    <cp-dirty>false</cp-dirty>
+                </data>
+            </xf:instance>
+            <xf:bind ref="instance('i-control-center')/*:cpselected" type="xs:boolean"/>            
+            <xf:instance xmlns="" id="i-encounter">
+                <Encounter xmlns="http://hl7.org/fhir">
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+            <basedOn>
+                <reference value=""/>
+                <display value="spontan"/>
+            </basedOn>
+            <status value="finished"/>
+            <class>
+                <value value="AMB"/>
+            </class>
+            <type>
+                <coding>
+                    <system value="http://hl7.org/fhir/encounter-type"/>
+                    <code value="amb"/>
+                    <display value="ambulant"/>
+                </coding>
+                <text value="ambulant"/>
+            </type>
+            <subject>
+                <reference value=""/>
+                <display value=""/>
+            </subject>
+            <participant>
+                <type>
+                    <coding>
+                        <system value=""/>
+                        <code value=""/>
+                        <display value=""/>
+                    </coding>
+                    <text value=""/>
+                </type>
+                <individual>
+                    <reference value=""/>
+                    <display value=""/>
+                </individual>
+                <period>
+                    <start value=""/>
+                    <end value=""/>
+                </period>
+            </participant>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <reasonCode>
+                <coding>
+                    <system value="#encounter-reason"/>
+                    <code value="amb"/>
+                    <display value="Ambulanter Besuch"/>
+                </coding>
+                <text value="Ambulanter Spontanbesuch"/>
+            </reasonCode>
+        <diagnosis>
+            <condition>
+                <reference value=""/>
+                <display value=""/>
+            </condition>
+            <use>
+                <coding>
+                    <system value="http://hl7.org/fhir/diagnosis-role"/>
+                    <code value="AD"/>
+                    <display value="Aufnahmediagnose"/>
+                </coding>
+                <text value="Behandlungsdiagnose"/>
+            </use>
+            <rank value="1"/>
+        </diagnosis>
+            <serviceProvider>
+                <reference value="metis/organizations/kikl-spz"/>
+                <display value="SPZ Kinderklinik"/>
+            </serviceProvider>
+            <location>
+                <location>
+                    <reference value="metis/locations/kikl-spz"/>
+                    <display value="SPZ KiKl"/>
+                </location>
+                <status value="finished"/>
+                <period>
+                    <start value=""/>
+                    <end value=""/>
+                </period>
+            </location>
+        </Encounter>
+            </xf:instance>
+            <xf:submission id="s-submit-encounter" ref="instance('i-encounter')" method="put" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/encounters?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+            <xf:action ev:event="xforms-submit-done">
+                    <xf:send submission="s-update-careteam"/>
+            </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot submit! Validation? Other error?</xf:message>
+            </xf:submission>
+
+        <xf:submission id="s-update-careteam" method="post" ref="instance('i-encounter')/*:participant" replace="none">
+                <xf:resource value="concat('/exist/restxq/nabu/careteams?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm),'&amp;subject=',substring-after(instance('i-encounter')/*:subject/*:reference/@value,'nabu/patients/'))"/>
+			<xf:header>
+                <xf:name>Content-Type</xf:name>
+                <xf:value>application/xml</xf:value>
+            </xf:header>
+            <xf:message ev:event="xforms-submit-error" level="modal">cannot update careteam!</xf:message>
+        </xf:submission>
+        
+            <xf:instance id="i-dateTime">
+                <data xmlns="">
+                    <date/>
+                    <startTime/>
+                    <endTime/>
+                </data>
+            </xf:instance><!--
+            <xf:bind ref="instance('i-dateTime')/*:date" type="xs:date"/>
+            -->
+            <xf:bind ref="instance('i-dateTime')/*:startTime" type="xs:time"/>
+            <xf:bind ref="instance('i-dateTime')/*:endTime" type="xs:time"/>
+            <xf:instance xmlns="" id="i-cp-infos" src="FHIR/CarePlan/careplan-infos.xml"/>            
+            <xf:instance xmlns="" id="i-encounter-infos" src="FHIR/Encounter/encounter-infos.xml"/>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+                <xf:send submission="s-load-login-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+                <xf:setvalue ref="instance('i-encounter')/*:subject/*:reference/@value" value="concat('nabu/patients/',instance('i-pat')/*:id/@value)"/>
+                <xf:setvalue ref="instance('i-encounter')/*:subject/*:display/@value" value="concat(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-pat')/*:name[*:use/@value='official']/*:given/@value,', *',instance('i-pat')/*:birthDate/@value)"/>
+                <xf:setvalue ref="instance('i-encounter')/*:participant/*:individual/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-encounter')/*:participant/*:individual/*:display/@value" value="instance('i-login')/*:lognam"/>
+                <xf:setvalue ref="instance('i-dateTime')/*:date" value="tokenize(current-dateTime(),'T')[1]"/>
+                <xf:setvalue ref="instance('i-dateTime')/*:startTime" value="'08:00:00'"/>
+                <xf:setvalue ref="instance('i-dateTime')/*:endTime" value="'08:30:00'"/>
+                <xf:setvalue ref="instance('i-encounter')/*:period/*:start/@value" value="concat(instance('i-dateTime')/*:date,'T',instance('i-dateTime')/*:startTime)"/>
+                <xf:setvalue ref="instance('i-encounter')/*:period/*:end/@value" value="concat(instance('i-dateTime')/*:date,'T',instance('i-dateTime')/*:endTime)"/>
+                <xf:setvalue ref="instance('i-encounter')/*:participant/*:period/*:start/@value" value="concat(instance('i-dateTime')/*:date,'T',instance('i-dateTime')/*:startTime)"/>
+                <xf:setvalue ref="instance('i-encounter')/*:participant/*:period/*:end/@value" value="concat(instance('i-dateTime')/*:date,'T',instance('i-dateTime')/*:endTime)"/>
+                <xf:send submission="s-get-careplans"/>
+            </xf:action>
+        </xf:model>
+    </div>
+    <xf:group ref="instance('i-encounter')" class="svFullGroup">
+        <xf:label>Besuch für <xf:output ref="*:subject/*:display/@value"/>
+        </xf:label>
+        <xf:switch>
+            <xf:case id="noCPselected">
+                <xf:group ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')]" class="svFullGroup bordered">
+                    <xf:repeat id="r-cps-id" ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')]" appearance="compact" class="svRepeat">
+                        <xf:output value="tokenize(./*:period/*:start/@value,'T')[1]">
+                            <xf:label class="svRepeatHeader">Start</xf:label>
+                        </xf:output>
+                        <xf:output ref="./*:title/@value">
+                            <xf:label class="svRepeatHeader">CarePlan</xf:label>
+                        </xf:output>
+                        <xf:output ref="*:author/*:display/@value">
+                            <xf:label class="svRepeatHeader">Author</xf:label>
+                        </xf:output>
+                        <xf:output value="count(./*:activity)">
+                            <xf:label class="svRepeatHeader">Anzahl</xf:label>
+                        </xf:output>
+                    </xf:repeat>
+                    <table>
+                        <tr>
+                            <td>
+            <xf:trigger class="svSubTrigger">
+                <xf:label>Select CP</xf:label>
+                <xf:action ev:event="DOMActivate">
+                <xf:message level="ephemeral">CP selected</xf:message>
+                <xf:setvalue ref="instance('i-encounter')/*:basedOn/*:reference/@value" value="concat('nabu/careplans/',instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:id/@value)"/>
+                <xf:insert at="last()" ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity" context="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]" origin="instance('i-cp-infos')/*:bricks/*:activity"/>
+                <xf:insert nodeset="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:detail" context="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]" origin="instance('i-cp-infos')/*:bricks/*:detail"/>
+                <xf:insert at="last()" nodeset="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:progress" context="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]" origin="instance('i-cp-infos')/*:bricks/*:progress"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:progress[last()]/*:authorReference/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:progress[last()]/*:authorReference/*:display/@value" value="instance('i-login')/*:lognam"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:progress[last()]/*:time/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:progress[last()]/*:text/@value" value="'Spontanbesuch'"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:detail/*:category/*:coding[*:system/@value='http://hl7.org/fhir/careplan-activity-category']/*:code/@value" value="'encounter'"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:detail/*:category/*:text/@value" value="'Spontanbesuch'"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:detail/*:status/@value" value="'completed'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'true'"/>
+                <xf:toggle case="editEncounter"/>
+            </xf:action>
+            </xf:trigger>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                                <xf:output value="'Bitte zunächst CarePlan selektieren'"/>
+                            </td>
+                        </tr>
+                    </table>
+                </xf:group>
+                <xf:group ref="instance('i-cps')/count[.=0]" class="svFullGroup bordered">
+                        <xf:output value="'Kein CarePlan. Bitte zunächst CarePlan anlegen'"/>
+                </xf:group>
+                <xf:group ref="instance('i-cps')/*:CarePlan[count(*:status/@value=('draft','active'))=0]" class="svFullGroup bordered">
+                    <xf:output value="'Kein aktiver CarePlan. Bitte zunächst neuen CarePlan anlegen'"/>
+                </xf:group>
+            </xf:case>
+            <xf:case id="editEncounter">
+                <xf:group ref="instance('i-encounter')">
+        <xf:textarea ref="*:reasonCode/*:text/@value" class="halfarea">
+            <xf:label>Ergebnis:</xf:label>
+        </xf:textarea>
+        <xf:group class="svFullGroup bordered">
+            <xf:output ref="instance('i-dateTime')/*:date">
+                <xf:label>Datum:</xf:label>
+            </xf:output><!--        problem with unloading of subform, see bind above
+            <xf:input ref="instance('i-dateTime')/*:date" appearance="bf:iso8601" data-bf-params="date:'dd.MM.yyyy'" incremental="true">
+                <xf:label>Datum:</xf:label>
+                <xf:hint>dd.mm.yyyy</xf:hint>
+                <xf:action ev:event="xforms-value-changed">
+                    <xf:setvalue ref="*:period/*:start/@value" value="concat(instance('i-dateTime')/*:date,'T',instance('i-dateTime')/*:startTime)"/>
+                    <xf:setvalue ref="*:period/*:end/@value" value="concat(instance('i-dateTime')/*:date,'T',instance('i-dateTime')/*:endTime)"/>
+                </xf:action>
+            </xf:input>
+-->
+            <br/>
+            <xf:select1 ref="instance('i-dateTime')/*:startTime" incremental="true">
+                <xf:label>Beginn:</xf:label>
+                <xf:itemset ref="instance('i-encounter-infos')/*:time/*:code">
+                    <xf:label ref="./@label"/>
+                    <xf:value ref="./@value"/>
+                </xf:itemset>
+                <xf:action ev:event="xforms-value-changed">
+                    <xf:action if="instance('i-dateTime')/*:startTime =''">
+                        <xf:setvalue ref="instance('i-dateTime')/*:startTime" value="'08:00:00'"/>
+                    </xf:action>
+                    <xf:setvalue ref="instance('i-encounter')/*:period/*:start/@value" value="concat(instance('i-dateTime')/*:date,'T',instance('i-dateTime')/*:startTime)"/>
+                    <xf:setvalue ref="instance('i-encounter')/*:participant/*:period/*:start/@value" value="concat(instance('i-dateTime')/*:date,'T',instance('i-dateTime')/*:startTime)"/>
+                </xf:action>
+            </xf:select1>
+            <br/>
+            <xf:select1 ref="instance('i-dateTime')/*:endTime" incremental="true">
+                <xf:label>Ende:</xf:label>
+                <xf:itemset ref="instance('i-encounter-infos')/*:time/*:code">
+                    <xf:label ref="./@label"/>
+                    <xf:value ref="./@value"/>
+                </xf:itemset>
+                <xf:action ev:event="xforms-value-changed">
+                    <xf:action if="instance('i-dateTime')/*:endTime =''">
+                        <xf:setvalue ref="instance('i-dateTime')/*:endTime" value="'17:00:00'"/>
+                    </xf:action>
+                    <xf:setvalue ref="instance('i-encounter')/*:period/*:end/@value" value="concat(instance('i-dateTime')/*:date,'T',instance('i-dateTime')/*:endTime)"/>
+                    <xf:setvalue ref="instance('i-encounter')/*:participant/*:period/*:end/@value" value="concat(instance('i-dateTime')/*:date,'T',instance('i-dateTime')/*:endTime)"/>
+                </xf:action>
+            </xf:select1>
+        </xf:group>
+        <br/>
+        <xf:group class="svFullGroup bordered">
+            <xf:label>Behandlungsdiagnose</xf:label>
+            <br/>
+            <xf:input ref="*:diagnosis/*:condition/*:reference/@value" class="">
+                <xf:label>ICD10:</xf:label>
+            </xf:input>
+            <xf:textarea ref="*:diagnosis/*:condition/*:display/@value" class="fullarea">
+                <xf:label>Freitext:</xf:label>
+            </xf:textarea>
+        </xf:group>
+                </xf:group>
+                <table>
+                    <tr>
+                        <td>
+                            <xf:trigger class="svSaveTrigger">
+                                <xf:label>Speichern</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:send submission="s-submit-encounter"/>
+                                    <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:outcomeReference/*:reference/@value" value="concat('nabu/encounters/',instance('i-encounter')/*:id/@value)"/>
+                                    <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:outcomeReference/*:display/@value" value="concat(adjust-date-to-timezone(current-date()),': finished')"/>
+                                    <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:outcomeCodeableConcept/*:text/@value" value="instance('i-encounter')/*:reasonCode/*:text/@value"/>
+                                    <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:detail/*:description/@value" value="instance('i-encounter')/*:reasonCode/*:text/@value"/>
+                                    <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:detail/*:scheduledPeriod/*:start/@value" value="instance('i-encounter')/*:period/*:start/@value"/>
+                                    <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:detail/*:scheduledPeriod/*:end/@value" value="instance('i-encounter')/*:period/*:end/@value"/>
+                                    <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:detail/*:performer/*:reference/@value" value="instance('i-encounter')/*:participant/*:individual/*:reference/@value"/>
+                                    <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:activity[last()]/*:detail/*:performer/*:display/@value" value="instance('i-encounter')/*:participant/*:individual/*:display/@value"/>
+                                    <xf:setvalue ref="instance('i-cps')/*:CarePlan[*:status/@value=('active','draft')][index('r-cps-id')]/*:status/@value" value="'active'"/>
+                                    <xf:send submission="s-submit-careplan"/>
+                                    <xf:dispatch name="unload-subform" targetid="controlCenter"/>
+                                </xf:action>
+                            </xf:trigger>
+                        </td>
+                        <td>
+                            <xf:trigger class="svUpdateMasterTrigger">
+                                <xf:label>Abbrechen</xf:label>
+                                <xf:dispatch name="unload-subform" targetid="controlCenter"/>
+                            </xf:trigger>
+                        </td>
+                    </tr>
+                </table>
+            </xf:case>
+        </xf:switch>
+    </xf:group>
+</div>

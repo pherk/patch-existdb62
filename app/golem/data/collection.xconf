@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://exist-db.org/collection-config/1.0">
+    <index xmlns:fhir="http://hl7.org/fhir" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <fulltext default="none" attributes="false"/>
+        <range>
+            <create qname="age">
+                <field name="low" match="low/@value" type="xs:int"/>
+                <field name="high" match="high/@value" type="xs:int"/>
+            </create>
+            <create qname="raw">
+                <field name="low" match="low/@value" type="xs:int"/>
+                <field name="high" match="high/@value" type="xs:int"/>
+                <field name="id" match="id/@value" type="xs:string"/>
+            </create>
+        </range>
+    </index>
+</collection>

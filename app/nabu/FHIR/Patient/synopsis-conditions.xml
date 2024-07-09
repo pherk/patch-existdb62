@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-syn-conditions" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-done" level="ephemeral">Subform has updated itself.</xf:message>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:instance id="i-conditions">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-conditions" instance="i-conditions" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/conditions?subject=', instance('i-pat')/*:id/@value,'&amp;verification=active&amp;category=diagnosis&amp;category=finding')"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get conditions!</xf:message>
+            </xf:submission>
+            <xf:instance id="views">
+                <data xmlns="">
+                    <FindingsToSelect/>
+                    <noFindings/>
+                    <DiagnosisToSelect/>
+                    <noDiagnosis/>
+                </data>
+            </xf:instance>
+            <xf:bind id="FindingsToSelect" ref="instance('views')/*:FindingsToSelect" relevant="count(instance('i-conditions')/*:Condition[*:category/*:coding/*:code/@value='finding']) &gt; 0"/>
+            <xf:bind id="noFindings" ref="instance('views')/*:noFindings" relevant="count(instance('i-conditions')/*:Condition[*:category/*:coding/*:code/@value='finding']) = 0"/>
+            <xf:bind id="DiagnosisToSelect" ref="instance('views')/*:DiagnosisToSelect" relevant="count(instance('i-conditions')/*:Condition[*:category/*:coding/*:code/@value='diagnosis']) &gt; 0"/>
+            <xf:bind id="noDiagnosis" ref="instance('views')/*:noDiagnosis" relevant="count(instance('i-conditions')/*:Condition[*:category/*:coding/*:code/@value='diagnosis']) = 0"/>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+                <xf:send submission="s-get-conditions"/>
+            </xf:action>
+        </xf:model>
+    </div>
+    <xf:group class="bordered">
+        <xf:group ref="instance('i-conditions')/*:Condition[*:category/*:coding/*:code/@value='finding']">
+            <xf:label>Patientengruppen - Diagnosen</xf:label>
+            <xf:repeat ref="instance('i-conditions')/*:Condition[*:category/*:coding/*:code/@value='finding'][*:verificationStatus/*:coding/*:code/@value!='entered-in-error']" appearance="compact" class="svRepeat">
+                <xf:output ref="./*:code/*:coding[./*:system/@value='#nabu-finding']/*:display/@value" class="">
+                    <xf:label class="svRepeatHeader">Gruppe</xf:label>
+                </xf:output>
+                <xf:output ref="./*:code[./*:coding/*:system/@value='#nabu-finding']/*:text/@value" class="">
+                    <xf:label class="svRepeatHeader">Text</xf:label>
+                </xf:output>
+                <xf:output value="tokenize(./*:assertedDate/@value,'T')[1]">
+                    <xf:label class="svRepeatHeader">Erfasst</xf:label>
+                </xf:output>
+                <xf:group>
+                    <xf:label class="svRepeatHeader">Status</xf:label>
+                    <xf:output value="string-join((./*:asserter/*:display/@value,./*:verificationStatus/*:coding/*:code/@value),' - ')"/>
+                    <xf:output ref="./*:note/*:text/@value"/>
+                </xf:group>
+            </xf:repeat>
+        </xf:group>
+        <xf:group ref="instance('views')/*:noFindings">
+            <xf:label>Keine Patientengruppe zugeordnet</xf:label>
+        </xf:group>
+        <br/>
+        <xf:group ref="instance('i-conditions')/*:Condition[*:category/*:coding/*:code/@value='diagnosis']">
+            <xf:repeat ref="instance('i-conditions')/*:Condition[*:category/*:coding/*:code/@value='diagnosis']" appearance="compact" class="svRepeat">
+                <xf:output ref="./*:code/*:coding[./*:system/@value='#nabu-diagnosis-category']/*:code/@value" class="tiny-output">
+                </xf:output>
+                <xf:output ref="./*:code/*:coding[./*:system/@value='#terminology-mas']/*:code/@value" class="tiny-output">
+                </xf:output>
+                <xf:output ref="./*:code//*:code/@value"/>
+                <xf:output ref="./*:code/*:text/@value">
+                   <xf:label class="svRepeatHeader">Diagnose</xf:label>
+                </xf:output>
+                <xf:output value="tokenize(./*:assertedDate/@value,'T')[1]">
+                    <xf:label class="svRepeatHeader">Erfasst</xf:label>
+                </xf:output>
+                <xf:group>
+                    <xf:label class="svRepeatHeader">Status</xf:label>
+                    <xf:output value="string-join((./*:asserter/*:display/@value,./*:verificationStatus/*:coding/*:code/@value),' - ')"/>
+                    <xf:output ref="./*:note/*:text/@value"/>
+                </xf:group>
+            </xf:repeat>
+        </xf:group>
+        <xf:group ref="instance('views')/*:noDiagnosis">
+            <xf:label>Keine Diagnosen</xf:label>
+        </xf:group>
+    </xf:group>
+</div>

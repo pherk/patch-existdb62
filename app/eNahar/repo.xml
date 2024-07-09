@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<meta xmlns="http://exist-db.org/xquery/repo">
+    <description>Scheduler for Nabu</description>
+    <author>Peter Herkenrath</author>
+    <website>http://www.enahar.org</website>
+    <status>unstable</status>
+    <changelog>
+        <change version="0.9.0">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>Many improvements, better dating flexibility</li>
+            </ul>
+        </change>
+        <repo:change xmlns:repo="http://exist-db.org/xquery/repo" version="0.8.0">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>Production version 2016-18</li>
+            </ul>
+        </repo:change>
+        <repo:change xmlns:repo="http://exist-db.org/xquery/repo" version="0.7.0">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>Initial version</li>
+            </ul>
+        </repo:change>
+    </changelog>
+    <repo:license xmlns:repo="http://exist-db.org/xquery/repo">CC-BY-NC-ND</repo:license>
+    <repo:copyright xmlns:repo="http://exist-db.org/xquery/repo">true</repo:copyright>
+    <repo:type xmlns:repo="http://exist-db.org/xquery/repo">application</repo:type>
+    <repo:target xmlns:repo="http://exist-db.org/xquery/repo">eNahar</repo:target>
+    <repo:prepare xmlns:repo="http://exist-db.org/xquery/repo">pre-install.xql</repo:prepare>
+
+<deployed>2018-12-01T08:36:54.351+01:00</deployed></meta>

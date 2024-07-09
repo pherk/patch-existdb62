@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<compartmentdefinition-infos>
+  <bricks version="4.3">
+    <CompartmentDefinition xmlns="http://hl7.org/fhir">
+        <meta>
+            <versionId value="0"/>
+        </meta>
+        <url value="[uri]"/><!-- 1..1 Canonical identifier for this compartment definition, represented as a URI (globally unique) -->
+        <version value="[string]"/><!-- 0..1 Business version of the compartment definition -->
+        <versionAlgorithmString value="natural"/>
+        <name value="[string]"/><!-- I 1..1 Name for this compartment definition (computer friendly) -->
+        <title value="[string]"/><!-- 0..1 Name for this compartment definition (human friendly) -->
+        <status value="[code]"/><!-- 1..1 draft | active | retired | unknown -->
+        <experimental value="[boolean]"/><!-- 0..1 For testing purposes, not real usage -->
+        <date value="[dateTime]"/><!-- 0..1 Date last changed -->
+        <publisher value="[string]"/><!-- 0..1 Name of the publisher/steward (organization or individual) -->
+        <contact><!-- 0..* ContactDetail Contact details for the publisher --></contact>
+        <description value="[markdown]"/><!-- 0..1 Natural language description of the compartment definition -->
+        <useContext><!-- 0..* UsageContext The context that the content is intended to support --></useContext>
+        <purpose value="[markdown]"/><!-- 0..1 Why this compartment definition is defined -->
+        <code value="[code]"/><!-- 1..1 Patient | Encounter | RelatedPerson | Practitioner | Device | EpisodeOfCare -->
+        <search value="[boolean]"/><!-- 1..1 Whether the search syntax is supported -->
+    </CompartmentDefinition>
+    <resource>  <!-- 0..* How a resource is related to the compartment -->
+        <code value="[code]"/><!-- 1..1 Name of resource type -->
+        <param value="[string]"/><!-- 0..* Search Parameter Name, or chained parameters -->
+        <documentation value="[string]"/><!-- 0..1 Additional documentation about the resource and compartment -->
+        <startParam value="[uri]"/><!-- 0..1 Search Param for interpreting $everything.start -->
+        <endParam value="[uri]"/><!-- 0..1 Search Param for interpreting $everything.end -->
+    </resource>
+  </bricks>
+</compartmentdefinition-infos>

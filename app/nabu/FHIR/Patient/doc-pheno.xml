@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-doc-pheno" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:bind ref="*:name[*:use/@value='official']/*:given/@value" type="xs:string" required="true()"/>
+            <xf:bind ref="*:name[*:use/@value='official']/*:family/@value" type="xs:string" required="true()"/><!--
+            <xf:bind ref="*:birthDate/@value" type="xs:date" required="true()"/>
+-->
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:submission id="s-update-patient-master" resource="model:m-patient#instance('i-patient')//*:Patient" replace="none" method="post">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="bf:instanceOfModel('m-patient','i-control-center')/*:isDirty" value="'true'"/>
+                    <xf:message level="ephemeral">Subform has updated Master.</xf:message>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot update Master!.</xf:message>
+            </xf:submission><!--            
+            <xf:instance id="views">
+                <data xmlns="">
+                    <isDirty/>
+                    <PatientDirty/>
+                </data>
+            </xf:instance>
+            <xf:bind id="PatientDirty"
+                ref="bf:instanceOfModel('m-demo-name','views')/*:PatientDirty"
+                relevant="bf:instanceOfModel('m-demo-name','views')/*:isDirty = 'true'"/>   
+-->
+            <xf:instance id="i-pheno">
+                <data xmlns=""/>
+            </xf:instance>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready"/>
+        </xf:model>
+    </div>
+    <xf:group ref="bf:instanceOfModel('m-doc-pheno','i-pheno')" class="svFullGroup bordered">
+        <xf:action ev:event="xforms-value-changed">
+            <xf:setvalue ref="bf:instanceOfModel('m-patient','i-control-center')/*:isDirty" value="'true'"/>
+        </xf:action>
+        <xf:label>Phänotyp</xf:label>
+        <br/>
+        <xf:group class="bordered">
+            <xf:label>Ausschlusskriterien</xf:label>
+        </xf:group>
+        <xf:group class="bordered">
+            <xf:label>Phenotyp</xf:label><!--
+                    <xf:repeat id="r-pheno-ids" ref="sign" appearance="compact" class="svRepeat">
+                        <xf:output value="name">
+                            <xf:label class="svListHeader">Merkmal:</xf:label>
+                        </xf:output>
+                        <xf:output value="hpo-id">
+                            <xf:label class="svListHeader">HPO-ID:</xf:label>
+                        </xf:output>
+                        <xf:output value="instance('i-pinfos')/phenotype/modifier/item[@value=modifier]/@label">
+                            <xf:label class="svListHeader">Modifier:</xf:label>
+                        </xf:output>
+                    </xf:repeat>
+-->
+        </xf:group>
+        <xf:group class="bordered">
+            <xf:label>Stammbaum</xf:label>
+        </xf:group>
+        <xf:group class="bordered">
+            <xf:label>Zusätzliche Befunde</xf:label>
+        </xf:group>
+    </xf:group>
+</div>

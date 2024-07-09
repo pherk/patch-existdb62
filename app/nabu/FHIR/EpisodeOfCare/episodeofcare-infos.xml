@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<episodeofcare-infos>
+    <status value="planned" label-de="in Planung" label-en="planned"/>
+
+    <status value="active" label-de="aktiv" label-en="active"/>
+    <status value="finished" label-de="fertig" label-en="finished"/>
+    <status value="cancelled" label-de="cancelled" label-en="cancelled"/>
+    <status value="entered-in-error" label-de="???" label-en="entered-in-error"/>
+    <!--
+    <status value="waitlist" label-de="Warteliste" label-en="waitlist"/>
+    <status value="onhold" label-de="angehalten" label-en="onhold"/>
+    -->
+	<type value="hacc" label-en="Home and Community Care"/>
+    <type value="pac" label-en="Post Acute Care"/>
+    <type value="diab" label-en="Post co-ordinated diabetes program"/>
+    <type value="da" label-en="Drug and alcohol rehabilitation"/>	
+    <type value="cacp" label-en="Community-based aged care"/>
+    <type value="spz" label-de="SPZ Kinderklinik"/>
+    <diagnosis>
+        <role value="AD" label-en="Admission diagnosis"/>	
+        <role value="DD" label-en="Discharge diagnosis"/>	
+        <role value="CC" label-en="Chief complaint"/>
+        <role value="CM" label-en="Comorbidity diagnosis"/>
+        <role value="pre-op" label-en="pre-op diagnosis"/>
+        <role value="post-op" label-en="post-op diagnosis"/>
+        <role value="billing" label-en="Billing"/>
+    </diagnosis>
+    <workflow-change>
+        <code value="first-contact" label-de="Erstkontakt"/>
+        <code value="registration-form" label-de="Anmeldebogen angekommen -&gt; Revision"/>
+        <code value="revision" label-de="Revision"/>
+    </workflow-change>
+    <bricks xmlns="http://hl7.org/fhir" comp="4.0.1">
+        <EpisodeOfCare>
+            <id value=""/>
+            <meta>
+                <versionId value=""/>
+            </meta>
+            <status value="planned"/>
+            <type>
+                <coding>
+                    <system value="http://hl7.org/fhir/episode-of-care-type"/>
+                    <code value="spz"/>
+                    <display value="SPZ"/>
+                </coding>
+                <text value="SPZ"/>
+            </type>
+            <patient>
+                <reference value=""/>
+                <display value=""/>                
+            </patient>
+            <managingOrganization>
+                <reference value="metis/organizations/kikl-spzn"/>
+                <display value="nSPZ Kinderklinik UKK"/>
+            </managingOrganization>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <careManager>
+                <reference value=""/>
+                <display value=""/>
+            </careManager>
+            <team>
+                <reference value=""/>
+                <display value=""/>
+            </team>
+        </EpisodeOfCare>
+        <referralRequest>
+            <reference value=""/>
+            <display value=""/>                
+        </referralRequest>
+        <statusHistory>
+            <status value=""/>
+            <extension url="http://eNahar.org/nabu/extension#eoc-workflow-change">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="http://eNahar.org/nabu/system#eoc-workflow-change-reason"/>
+                        <code value=""/>
+                        <display value=""/>
+                    </coding>
+                    <text value=""/>
+                </valueCodeableConcept>
+            </extension>
+            <extension url="http://eNahar.org/nabu/extension#eoc-workflow-change-author">
+                <valueReference>
+                    <reference value=""/>
+                    <display value=""/>
+                </valueReference>
+            </extension>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+        </statusHistory>
+        <diagnosis>
+            <condition>
+                <reference value=""/>
+                <display value=""/>
+            </condition>
+            <role>
+                <coding>
+                    <system value="http://hl7.org/fhir/ValueSet/diagnosis-role"/>
+                    <code value="AD"/>
+                    <display value="Aufnahmediagnose"/>
+                </coding>
+                <text value="Aufnahmediagnose"/>
+            </role>
+            <rank value="1"/>
+        </diagnosis>
+        <team>
+            <reference value=""/>
+            <display value=""/>            
+        </team>
+        <account>
+            <reference value=""/>
+            <display value=""/>            
+        </account>
+    </bricks>
+</episodeofcare-infos>

@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Questionnaire xmlns="http://hl7.org/fhir">
+  <id value="q-soziales-v2019-09-30"/>
+  <url value="http://hl7.org/fhir/Questionnaire/soziales"/>
+  <title value="SPZ Nabu Sozialdaten"/>
+  <status value="draft"/>
+  <date value="2019-09-30"/>
+  <publisher value="SPZ Nabu Group"/>
+  <jurisdiction>
+    <coding>
+      <system value="urn:iso:std:iso:3166"/>
+      <code value="DE"/>
+    </coding>
+  </jurisdiction>
+  <subjectType value="Patient"/>
+  <item>
+    <linkId value="soziales"/>
+    <text value="Sozialdaten"/>
+    <type value="group"/>
+    <readOnly value="false"/>
+    <item>
+      <linkId value="context"/>
+      <text value="Familienkontext"/>
+      <type value="group"/>
+      <item>
+        <linkId value="context-how"/>
+        <text value="Konstellation"/>
+        <type value="choice"/>
+        <option>
+          <valueCoding>
+            <code value="married"/>
+            <display value="verheirated"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="not-married"/>
+            <display value="n. verheirated"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="separated"/>
+            <display value="getrennt"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="unknown"/>
+            <display value="Unklar"/>
+          </valueCoding>
+        </option>
+      </item>
+      <item>
+        <linkId value="context-info"/>
+        <text value="Weitere Infos"/>
+        <type value="string"/>
+      </item>
+    </item>
+    <item>
+      <linkId value="status"/>
+      <text value="Status Eltern"/>
+      <type value="group"/>
+      <item>
+        <linkId value="status-sa-mutter"/>
+        <text value="Staatsangeh. Mutter"/>
+        <type value="string"/>
+      </item>
+      <item>
+        <linkId value="status-as-mutter"/>
+        <text value="Aufenthaltsstatus Mutter"/>
+        <type value="string"/>
+      </item>
+      <item>
+        <linkId value="status-sa-vater"/>
+        <text value="Staatsangeh. Vater"/>
+        <type value="string"/>
+      </item>
+      <item>
+        <linkId value="status-as-vater"/>
+        <text value="Aufenthaltsstatus Vater"/>
+        <type value="string"/>
+      </item>
+    </item>
+    <item>
+      <linkId value="status"/>
+      <text value="Patient"/>
+      <type value="group"/>
+      <item>
+        <linkId value="status-sa-patient"/>
+        <text value="Staatsangeh."/>
+        <type value="string"/>
+      </item>
+      <item>
+        <linkId value="status-as-patient"/>
+        <text value="Aufenthaltsstatus"/>
+        <type value="string"/>
+      </item>
+      <item>
+        <linkId value="status-begl-patient"/>
+        <text value="Unbegleitet?"/>
+        <type value="boolean"/>
+      </item>
+    </item>
+    <item>
+      <linkId value="lang"/>
+      <text value="Sprache"/>
+      <type value="group"/>
+      <item>
+        <linkId value="lang-mutter"/>
+        <text value="Mutter"/>
+        <type value="string"/>
+      </item>
+      <item>
+        <linkId value="lang-vater"/>
+        <text value="Vater"/>
+        <type value="string"/>
+      </item>
+      <item>
+        <linkId value="lang-patient"/>
+        <text value="Patient"/>
+        <type value="string"/>
+      </item>
+    </item>
+    <item>
+      <linkId value="na"/>
+      <text value="Nachteilsausgleich"/>
+      <type value="group"/>
+      <item>
+        <linkId value="na-info"/>
+        <text value="Info erfolgt?"/>
+        <type value="choice"/>
+        <option>
+          <valueCoding>
+            <code value="true"/>
+            <display value="Ja"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="false"/>
+            <display value="Nein"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="unknown"/>
+            <display value="Unklar"/>
+          </valueCoding>
+        </option>
+      </item>
+      <item>
+        <linkId value="na-info-am"/>
+        <text value="Info am"/>
+        <type value="date"/>
+      </item>
+      <item>
+        <linkId value="na-info-by"/>
+        <text value="Info durch"/>
+        <type value="string"/>
+      </item>
+      <item>
+        <linkId value="na-sba-exists"/>
+        <text value="SBA vorhanden?"/>
+        <type value="choice"/>
+        <option>
+          <valueCoding>
+            <code value="existing"/>
+            <display value="Ja"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="not-existing"/>
+            <display value="Nein"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="in-process"/>
+            <display value="Beantragt"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="rejected"/>
+            <display value="abgelehnt"/>
+          </valueCoding>
+        </option> 
+        <option>
+          <valueCoding>
+            <code value="not-wanted"/>
+            <display value="n. erwünscht"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="unknown"/>
+            <display value="Unklar"/>
+          </valueCoding>
+        </option>
+      </item>
+      <item>
+        <linkId value="na-gdb"/>
+        <text value="GdB"/>
+        <type value="integer"/>
+            <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-unit">
+                <valueCoding>
+                    <system value="questionnaire-unit-rexexp"/>
+                    <code value="\d\d\\d"/>
+                    <display value="\d\d\\d"/>
+                </valueCoding>
+            </extension>
+      </item>
+      <item>
+        <linkId value="na-mz"/>
+        <text value="Merkzeichen"/>
+        <type value="string"/>
+      </item>
+    </item>
+    <item>
+      <linkId value="pv"/>
+      <text value="Pflege-Versicherung"/>
+      <type value="group"/>
+      <item>
+        <linkId value="pv-grad"/>
+        <text value="Pflegegrad?"/>
+        <type value="choice"/>
+        <option>
+          <valueCoding>
+            <code value="existing"/>
+            <display value="Ja"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="not-existing"/>
+            <display value="Nein"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="in-process"/>
+            <display value="Beantragt"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="rejected"/>
+            <display value="abgelehnt"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="not-wanted"/>
+            <display value="n. erwünscht"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="unknown"/>
+            <display value="Unklar"/>
+          </valueCoding>
+        </option>
+      </item>
+      <item>
+        <linkId value="pv-grad-number"/>
+        <text value="Pflegegrad"/>
+        <type value="choice"/>
+        <option>
+          <valueCoding>
+            <code value="1"/>
+            <display value="1"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="2"/>
+            <display value="2"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="3"/>
+            <display value="3"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="4"/>
+            <display value="4"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="5"/>
+            <display value="5"/>
+          </valueCoding>
+        </option>
+        </item>
+    </item>
+    <item>
+        <linkId value="ks"/>
+        <text value="Kita/Schule"/>
+        <type value="group"/>
+        <item>
+          <linkId value="ks-visit"/>
+          <text value="Besuch"/>
+        <type value="choice"/>
+        <option>
+          <valueCoding>
+            <code value="existing"/>
+            <display value="Ja"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="not-existing"/>
+            <display value="Nein"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="in-process"/>
+            <display value="Beantragt"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="rejected"/>
+            <display value="abgelehnt"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="not-wanted"/>
+            <display value="n. erwünscht"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="unknown"/>
+            <display value="Unklar"/>
+          </valueCoding>
+        </option>
+        </item>
+        <item>
+          <linkId value="ks-53"/>
+          <text value="Eingliederungshilfe"/>
+          <type value="choice"/>
+        <option>
+          <valueCoding>
+            <code value="existing"/>
+            <display value="Ja"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="not-existing"/>
+            <display value="Nein"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="in-process"/>
+            <display value="Beantragt"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="rejected"/>
+            <display value="abgelehnt"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="not-wanted"/>
+            <display value="n. erwünscht"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="unknown"/>
+            <display value="Unklar"/>
+          </valueCoding>
+        </option>
+        </item>
+        <item>
+          <linkId value="ks-53-exists"/>
+          <text value="Assistenz vorh."/>
+          <type value="choice"/>
+        <option>
+          <valueCoding>
+            <code value="existing"/>
+            <display value="Ja"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="not-existing"/>
+            <display value="Nein"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="in-process"/>
+            <display value="Beantragt"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="rejected"/>
+            <display value="abgelehnt"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="not-wanted"/>
+            <display value="n. erwünscht"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="unknown"/>
+            <display value="Unklar"/>
+          </valueCoding>
+        </option>
+        </item>
+        <item>
+          <linkId value="ks-institution"/>
+          <text value="Einrichtung"/>
+          <type value="string"/>
+        </item>
+        <item>
+          <linkId value="ks-date"/>
+          <text value="Beantragt am"/>
+          <type value="date"/>
+        </item>
+    </item>
+    <item>
+        <linkId value="note"/>
+        <text value="Zusätzliche Infos"/>
+        <type value="string"/>
+    </item>
+  </item>
+</Questionnaire>

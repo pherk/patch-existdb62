@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<careplan-infos>
+    <status>
+        <code label="entwurf" value="draft"/>
+        <code label="aktiv" value="completed"/>
+        <code label="fehler" value="entered-in-error"/>
+    </status>
+    <code>
+        <code label="Untersuchung" value="271336007"/>
+        <code label="Anamnese" value="160237006"/>
+    </code>
+    <prognosis>
+            <code-ger label="Abhängige Prognose" value="60484009"/>
+            <code-ger label="Mäßige Prognose" value="65872000"/>
+            <code-ger label="Eingeschränkte Prognose" value="67334001"/>
+            <code-ger label="gut" value="170968001"/>
+            <code-ger label="schlecht" value="170969009"/>
+            <code-ger label="unsicher" value="170970005"/>
+    </prognosis>
+    <bricks xmlns="http://hl7.org/fhir">
+        <ClinicalImpression>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+        	<identifier/>
+        	<status value="completed"/>
+    	    <code>
+            	    <coding>
+            	        <system value="http://snomed.info/sct"/>
+            	        <code value=""/>
+        	            <display value=""/>
+        	        </coding>
+            	    <text value=""/>        		    
+    	    </code>
+        	<description value=""/>
+        	<subject>
+        	    <reference value=""/>
+        	    <display value=""/>
+        	</subject>
+    	    <context>
+    	        <reference value=""/>
+    	    </context>
+        	<effectiveDateTime value=""/>
+    	    <date value=""/>
+        	<assessor>
+        	    <reference value=""/>
+        	    <display value=""/>
+        	</assessor>
+        	<previous><!-- 0..1 Reference(ClinicalImpression) Reference to last assessment --></previous>
+    	    <problem/>
+        	<investigation>  <!-- 0..* One or more sets of investigations (signs, symptions, etc.) -->
+        		<code>
+            	    <coding>
+            	        <system value="http://snomed.info/sct"/>
+            	        <code value=""/>
+        	            <display value=""/>
+        	        </coding>
+            	    <text value=""/>        		    
+        		</code>
+    		    <item><!-- 0..* Reference(Observation|QuestionnaireResponse|FamilyMemberHistory|
+    DiagnosticReport|RiskAssessment|ImagingStudy) Record of a specific investigation -->
+                    <display value=""/>
+                </item>
+    	    </investigation>
+	        <protocol value=""/><!-- 0..* Clinical Protocol followed -->
+        	<summary value=""/><!-- 0..1 Summary of the assessment -->
+	        <finding>  <!-- 0..* Possible or likely findings and diagnoses -->
+		        <itemCodeableConcept><!-- 1..1 CodeableConcept|Reference(Condition|Observation) What was found -->
+		            <display value=""/>
+		        </itemCodeableConcept>
+    		    <basis value="[string]"/><!-- 0..1 Which investigations support finding -->
+	        </finding>
+        	<prognosisCodeableConcept>
+        	    <coding>
+        	        <system value="http://snomed.info/sct"/>
+        	        <code value=""/>
+        	        <display value=""/>
+        	    </coding>
+        	    <text value=""/>
+        	</prognosisCodeableConcept>
+	        <prognosisReference>
+	            <reference value=""/>
+	        </prognosisReference>
+        </ClinicalImpression>
+    	<investigation>  <!-- 0..* One or more sets of investigations (signs, symptions, etc.) -->
+    		<code>
+        	    <coding>
+        	        <system value="http://snomed.info/sct"/>
+        	        <code value=""/>
+    	            <display value=""/>
+    	        </coding>
+        	    <text value=""/>        		    
+    		</code>
+		    <item>
+                <display value=""/>
+            </item>
+	    </investigation>
+		<item><!-- 0..* Reference(Observation|QuestionnaireResponse|FamilyMemberHistory|
+    DiagnosticReport|RiskAssessment|ImagingStudy) Record of a specific investigation -->
+            <display value=""/>
+        </item>
+	    <protocol value=""/><!-- 0..* Clinical Protocol followed -->
+        <finding>
+		  <itemCodeableConcept><!-- 1..1 CodeableConcept|Reference(Condition|Observation) What was found -->
+		    <display value=""/>
+		  </itemCodeableConcept>
+		    <basis value="[string]"/><!-- 0..1 Which investigations support finding -->
+        </finding>
+        <action>
+            <reference value=""/>
+            <display value=""/>
+        </action>
+        <note>
+            <author>
+                <reference value=""/>
+                <display value=""/>
+            </author>
+            <time value="[dateTime]"/><!-- 0..1 When the annotation was made -->
+            <text value="[string]"/><!-- 1..1 The annotation  - text content -->
+        </note>
+    </bricks>
+</careplan-infos>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<meta xmlns="http://exist-db.org/xquery/repo">
+    <description>Docs for Nabu</description>
+    <author>Peter Herkenrath</author>
+    <website>http://www.enahar.org</website>
+    <status>unstable</status>
+    <changelog>
+        <change version="0.7.0">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>Initial version</li>
+            </ul>
+        </change>
+    </changelog>
+    <license>CC-BY-NC-ND</license>
+    <copyright>true</copyright>
+    <type>application</type>
+    <target>nabudocs</target>
+    <prepare>pre-install.xql</prepare>
+
+<deployed>2018-12-01T08:32:35.625+01:00</deployed></meta>

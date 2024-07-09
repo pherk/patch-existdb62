@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<order-infos>
+    <state value="draft" label-de="neu"/>
+    <state value="requested" label-de="zugewiesen"/>
+    <state value="received" label-de="erhalten"/>
+    <state value="accepted" label-de="terminiert"/>
+    <state value="completed" label-de="erledigt"/>
+    <state value="cancelled" label-de="cancelled"/>
+<!-- FHRI 3.0.1 Request status  
+    <state value="draft" label-de="Entwurf" label-en="Draft" comment="The request has been created but is not yet complete or ready for action" canon="draft"/>
+    <state value="active" label-de="aktiv" label-en="Active" comment="The request is ready to be acted upon" canon="active"/>
+    <state value="suspended" label-de="angehalten" label-en="Suspended" comment="The authorization/request to act has been temporarily withdrawn but is expected to resume in the future	~suspended"/>
+    <state value="cancelled" label-de="cancelled" label-en="Cancelled" comment="The authorization/request to act has been terminated prior to the full completion of the intended actions. No further activity should occur." canon="abandoned"/>
+    <state value="completed" label-de="beendet" label-en="Completed" comment="Activity against the request has been sufficiently completed to the satisfaction of the requester" canon="complete"/>
+    <state value="entered-in-error" label-de="Fehler" label-en="Entered in Error" comment="This electronic record should never have existed, though it is possible that real-world decisions were based on it. (If real-world activity has occurred, the status should be 'cancelled' rather than 'entered-in-error'.)" canon="error"/>
+    <state value="unknown" label-de="???" label-en="Unknown" comment="The authoring system does not know which of the status values currently applies for this request. Note: This concept is not to be used for 'other'. One of the listed statuses is presumed to apply, but the system creating the request doesn't know." canon="unknown"/>
+-->
+    <event value="open" label-de="eintragen"/>
+    <event value="confirm" label-de="bestätigen"/>
+    <event value="accept" label-de="annehmen"/>
+    <event value="leave" label-de="cancel"/>
+    <scxml version="1.0" initial="new">
+        <state id="new">
+            <transition target="assigned" event="reassign"/>
+        </state>
+        <state id="assigned">
+            <transition target="assigned" event="reassign"/>
+            <transition target="accepted" event="accept"/>
+            <transition target="assigned" event="leave"/>
+        </state>
+        <state id="accepted">
+            <transition target="resolved" if="all-details-closed()" event="resolve"/>
+            <transition target="assigned" event="reassign"/>
+            <transition target="accepted" event="accept"/>
+            <transition target="accepted" event="leave"/>
+        </state>
+        <state id="resolved">
+            <transition target="reopened" event="reopen"/>
+            <transition target="resolved" event="leave"/>
+        </state>
+        <state id="reopened">
+            <transition target="resolved" event="resolve"/>
+            <transition target="assigned" event="reassign"/>
+            <transition target="accepted" event="accept"/>
+            <transition target="reopened" event="leave"/>
+        </state>
+    </scxml>
+    <when>
+        <code value="urgent" label-de="sehr dringend"/>
+        <code value="high" label-de="dringend"/>
+        <code value="normal" label-de="normal"/>
+        <code value="low" label-de="niedrig"/>
+    </when>
+    <schedule>
+        <code value="h" label-de="heute"/>
+        <code value="nW" label-de="nW"/>
+        <code value="nM" label-de="nM"/>
+        <code value="3M" label-de="3M"/>
+        <code value="6M" label-de="6M"/>
+        <code value="12M" label-de="12M"/>
+    </schedule>
+    <duration>
+        <code value="15" label-de="15min"/>
+        <code value="30" label-de="30min"/>
+        <code value="60" label-de="60min"/>
+        <code value="90" label-de="90min"/>
+        <code value="120" label-de="120m"/>
+    </duration>
+    <type>
+        <code value="ROUTINE" label-de="Routine"/>
+        <code value="FOLLOWUP" label-de="WV"/>
+        <code value="FIRST" label-de="NeuV"/>
+        <code value="NOCM" label-de="kein FaFue"/>
+    </type>
+    <reason>
+        <code value="appointment" label-de="Amb. Besuch"/>
+    </reason>
+    <sort>
+        <code value="date:asc" label-de="Datum &gt;"/>
+        <code value="date:desc" label-de="Datum &lt;"/>
+        <code value="when-schedule" label-de="Fälligkeit"/>
+        <code value="when-code-1" label-de="Prio sehr dri."/>
+        <code value="when-code-2" label-de="Prio dringend"/>
+        <code value="when-code-3" label-de="Prio normal"/>
+        <code value="when-code-4" label-de="Prio niedrig"/>
+    </sort>
+    <acq>
+        <code value="open" label-de="offen"/>
+        <code value="tentative" label-de="provisorisch"/>
+        <code value="accepted" label-de="angenommen"/>
+        <code value="closed" label-de="vereinbart"/>
+        <code value="cancelled" label-de="cancelled"/>
+    </acq>
+    <bricks xmlns="http://hl7.org/fhir">
+        <Order>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+            <definition>
+                <reference value=""/>
+                <display value=""/>
+            </definition>
+            <basedOn>
+                <reference value=""/>
+                <display value=""/>                
+            </basedOn>
+            <date value=""/>
+            <subject>
+                <reference value=""/>
+                <display value=""/>
+            </subject>
+            <source>
+                <reference value=""/>
+                <display value=""/>
+            </source>
+            <target>
+                <role value=""/>
+                <reference value=""/>
+                <display value=""/>
+            </target>
+        <serviceCategory>
+            <coding>
+                <system value="http://hl7.org/fhir/service-category"/>
+                <code value="34"/>
+                <display value="KiKl-SPZn"/>
+            </coding>
+            <text value="KiKl-SPZn"/>
+        </serviceCategory>
+        <serviceType>
+            <coding>
+                <system value="http://hl7.org/fhir/service-type"/>
+                <code value="202"/>
+                <display value="Neuropädiatrie"/>
+            </coding>
+            <text value="Neuropädiatrie"/>            
+        </serviceType>
+        <appointmentType>
+            <coding>
+                <system value="http://hl7.org/fhir/v2/0276"/>
+                <code value="ROUTINE"/>
+                <display value="Routine"/>
+            </coding>
+            <text value="Routine"/>
+        </appointmentType>
+            <reason>
+                <coding>
+                    <system value="#order-reason"/>
+                    <code value="appointment"/>
+                    <display value="Amb. Besuch"/>
+                </coding>
+                <text value="Amb. Besuch"/>
+            </reason>
+            <description value=""/>
+            <comment value=""/>
+            <authority>
+                <reference value="metis/organizations/kikl-spz"/>
+                <display value="SPZ Kinderklinik"/>
+            </authority>
+            <when>
+                <code>
+                    <coding>
+                        <system value="#order-priority"/>
+                        <code value="normal"/>
+                        <display value="normal"/>
+                    </coding>
+                    <text value="normal"/>
+                </code>
+                <schedule>
+                    <event value=""/>
+                </schedule>
+            </when>
+            <status value="draft"/>
+        </Order>
+        <detail id="1">
+            <process value="true"/>
+            <info value=""/>
+            <actor>
+                <role value="kikl-spz"/>
+                <reference value=""/>
+                <display value=""/>
+                <required value="true"/>
+            </actor>
+            <schedule>
+                <reference value=""/>
+                <display value=""/>
+            </schedule>
+            <spec>
+                <combination value="1"/>
+                <interdisciplinary value="false"/>
+                <begin value="3m"/>
+                <daytime value="any"/>
+                <dow value="any"/>
+                <duration value="30"/>
+            </spec>
+            <proposal>
+                <start value=""/>
+                <end value=""/>
+                <acq value="open"/>
+            </proposal>
+            <status value="active"/>
+        </detail>
+        <reorder value="false"/> <!-- used in order-routes as property of detail -->
+        <identifier>
+            <use value="[code]"/>
+            <system value="[uri]"/>
+            <value value="[string]"/>
+            <type>
+                <coding>
+                    <system value="#ukkoeln"/>
+                    <code value="ORBIS"/>
+                </coding>
+            </type>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <assigner>
+                <reference value=""/>
+                <display value=""/>
+            </assigner>
+        </identifier>
+        <context>
+            <reference value=""/>
+            <display value=""/>        
+        </context>
+        <serviceCategory>
+            <coding>
+                <system value="http://hl7.org/fhir/service-category"/>
+                <code value="34"/>
+                <display value="KiKl-SPZn"/>
+            </coding>
+            <text value="KiKl-SPZn"/>
+        </serviceCategory>
+        <serviceType>
+            <coding>
+                <system value="http://hl7.org/fhir/service-type"/>
+                <code value="202"/>
+                <display value="Neuropädiatrie"/>
+            </coding>
+            <text value="Neuropädiatrie"/>            
+        </serviceType>
+        <specialty>
+            <coding>
+                <system value="http://snomed.info/sct"/>
+                <code value="309334002"/>
+                <display value="Neuropädiater"/>
+            </coding>
+            <text value="Neuropädiater"/>            
+        </specialty>
+        <appointmentType>
+            <coding>
+                <system value="http://hl7.org/fhir/v2/0276"/>
+                <code value="ROUTINE"/>
+                <display value="Routine"/>
+            </coding>
+            <text value="Routine"/>
+        </appointmentType>
+    </bricks>
+</order-infos>

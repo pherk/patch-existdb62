@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<detail-infos>
+    <state value="open" label="offen"/>
+    <state value="tentative" label="provisorisch"/>
+    <state value="accepted" label="angenommen"/>
+    <state value="closed" label="bestätigt"/>
+    <state value="cancelled" label="cancelled"/>
+    <event value="open" label="eintragen"/>
+    <event value="propose" label="vorschlagen"/>
+    <event value="confirm" label="bestätigen"/>
+    <event value="leave" label="cancel"/>
+    <scxml version="1.0" initial="open">
+        <state id="open">
+            <transition target="tentative" event="propose"/>
+            <transition target="confirmed" event="confirm"/>
+            <transition target="open" event="leave"/>
+        </state>
+        <state id="tentative">
+            <transition target="cancelled" event="cancel"/>
+            <transition target="accepted" event="accept"/>
+            <transition target="tentative" event="leave"/>
+        </state>
+        <state id="accepted">
+            <transition target="confirmed" event="resolve"/>
+            <transition target="accepted" event="leave"/>
+        </state>
+        <state id="closed">
+            <transition target="confirmed" event="leave"/>
+        </state>
+    </scxml>
+    <schedule>
+        <code value="h" label="heute"/>
+        <code value="nw" label="nW"/>
+        <code value="nw" label="nM"/>
+        <code value="3m" label="3M"/>
+        <code value="6m" label="6M"/>
+        <code value="12m" label="12M"/>
+    </schedule>
+    <duration>
+        <code value="15" label="15min"/>
+        <code value="30" label="30min"/>
+        <code value="60" label="60min"/>
+        <code value="90" label="90min"/>
+        <code value="120" label="120m"/>
+    </duration>
+</detail-infos>

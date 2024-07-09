@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-syn-goals" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-done" level="ephemeral">Subform has updated itself.</xf:message>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:instance id="i-goals">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-goals" instance="i-goals" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/goals?subject=', instance('i-pat')/*:id/@value)"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get goals!</xf:message>
+            </xf:submission>
+            <xf:instance id="views">
+                <data xmlns="">
+                    <GoalsToSelect/>
+                    <noGoals/>
+                </data>
+            </xf:instance>
+            <xf:bind id="GoalsToSelect" ref="instance('views')/*:GoalsToSelect" relevant="count(instance('i-goals')/*:Goal) &gt; 0"/>
+            <xf:bind id="noGoals" ref="instance('views')/*:noGoals" relevant="count(instance('i-goals')/*:Goal) = 0"/>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+                <xf:send submission="s-get-goals"/>
+            </xf:action>
+        </xf:model>
+    </div>
+    <xf:group class="bordered">
+        <xf:group>
+            <xf:label>Patienten - Ziele</xf:label>
+            <xf:repeat ref="instance('i-goals')/*:Goal" appearance="compact" class="svRepeat">
+                <xf:output ref="./*:category/*:coding[*:system/@value='http://hl7.org/fhir/ValueSet/goal-category']/*:display/@value">
+                    <xf:label class="svListHeader">Kategory</xf:label>
+                </xf:output>
+                <xf:output ref="./*:lifecycleStatus/@value">
+                    <xf:label class="svListHeader">Status</xf:label>
+                </xf:output>
+                <xf:output value="./*:description/*:text/@value">
+                    <xf:label class="svListHeader">Beschreibung</xf:label>                        
+                </xf:output>
+                <xf:output value="substring(./*:startDate/@value,1,10)">
+                    <xf:label class="svListHeader">Erfasst am</xf:label>                        
+                </xf:output>
+                <xf:output value="./*:achievementStatus/*:coding/*:code/@value">
+                    <xf:label class="svListHeader">Progress</xf:label>                        
+                </xf:output>
+                <xf:output value="./*:note/*:text/@value">
+                    <xf:label class="svListHeader">Notiz</xf:label>
+                </xf:output>
+            </xf:repeat>
+        </xf:group>
+        <xf:group ref="instance('views')/*:noGoals">
+            <xf:label>Kein Ziel für Patienten zugeordnet</xf:label>
+        </xf:group>
+    </xf:group>
+</div>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://cxan.org/ns/package" id="xqtime">
+    <abstract>An XQuery library module with functions for handling time periods and calendars</abstract>
+    <author id="pherk">Peter Herkenrath</author>
+    <maintainer id="pherk">Peter Herkenrath</maintainer>
+    <home>http://github.com/pherk/xqtime</home>
+    <category id="libs">Libraries</category>
+    <tag>time</tag>
+    <tag>ical</tag>
+    <tag>xquery</tag>
+</package>

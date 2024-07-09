@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Questionnaire xmlns="http://hl7.org/fhir">
+  <id value="q-medication-v2018-05-08"/>
+  <url value="http://hl7.org/fhir/Questionnaire/q-medication-v2018-05-08"/>
+  <title value="SPZ Nabu Medikamente"/>
+  <status value="draft"/>
+  <date value="2018-05-08"/>
+  <publisher value="SPZ Nabu Group"/>
+    <jurisdiction>
+        <coding>
+            <system value="urn:iso:std:iso:3166"/>
+            <code value="DE"/>
+        </coding>
+    </jurisdiction>
+    <subjectType value="Patient"/>
+    <extension url="http://enahar.org/exist/apps/nabu/questionnaire-cloning">
+        <valueBoolean value="true"/>
+    </extension>
+    <item>
+        <linkId value="md-list"/>
+        <text value="Medikamente"/>
+        <type value="group"/>
+        <readOnly value="false"/>
+        <item>
+            <linkId value="md-item"/>
+            <text value="mdgroup"/>
+            <type value="group"/>
+            <repeats value="true"/>
+            <item>
+                <linkId value="md-substance"/>
+                <text value="Wirkstoff"/>
+                <type value="string"/>
+            </item>
+            <item>
+                <linkId value="md-handelsname"/>
+                <text value="Handelsname"/>
+                <type value="string"/>
+            </item>
+            <item>
+                <linkId value="md-stärke"/>
+                <text value="Stärke"/>
+                <type value="string"/>
+            </item>
+            <item>
+                <linkId value="md-form"/>
+                <text value="Form"/>
+                <type value="choice"/>
+                <option>
+                    <valueCoding>
+                        <code value="regular"/>
+                        <display value="regelmäßig"/>
+                    </valueCoding>
+                </option>
+                <option>
+                    <valueCoding>
+                        <code value="sporadic"/>
+                        <display value="unregelmäßig"/>
+                    </valueCoding>
+                </option>
+                <option>
+                    <valueCoding>
+                        <code value="nouse"/>
+                        <display value="kein"/>
+                    </valueCoding>
+                </option>
+                <option>
+                    <valueCoding>
+                        <code value="unknown"/>
+                        <display value="unklar"/>
+                    </valueCoding>
+                </option>
+            </item>
+            <item>
+                <linkId value="md-einheit"/>
+                <text value="Einheit"/>
+                <type value="choice"/>
+                <option>
+                    <valueCoding>
+                        <code value="tbl"/>
+                        <display value="Tbl"/>
+                    </valueCoding>
+                </option>
+                <option>
+                    <valueCoding>
+                        <code value="tr"/>
+                        <display value="Tr"/>
+                    </valueCoding>
+                </option>
+                <option>
+                    <valueCoding>
+                        <code value="ml"/>
+                        <display value="ml"/>
+                    </valueCoding>
+                </option>
+                <option>
+                    <valueCoding>
+                        <code value="unknown"/>
+                        <display value="unklar"/>
+                    </valueCoding>
+                </option>
+            </item>
+            <item>
+                <linkId value="md-hinweise"/>
+                <text value="Hinweise"/>
+                <type value="string"/>
+            </item>
+
+            <item>
+                <linkId value="md-indikation"/>
+                <text value="Indikation"/>
+                <type value="string"/>
+            </item>
+            <item>
+                <linkId value="md-vo-date"/>
+                <text value="Verordnung"/>
+                <type value="date"/>
+                <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-unit">
+                    <valueCoding>
+                        <system value="questionnaire-unit-rexexp"/>
+                        <code value=""/>
+                        <display value="iso-date"/>
+                    </valueCoding>
+                </extension>
+            </item>
+            <item>
+                <linkId value="md-stop-date"/>
+                <text value="Stop"/>
+                <type value="date"/>
+                <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-unit">
+                    <valueCoding>
+                        <system value="questionnaire-unit-rexexp"/>
+                        <code value=""/>
+                        <display value="iso-date"/>
+                    </valueCoding>
+                </extension>
+            </item>
+        </item>
+    </item>
+</Questionnaire>

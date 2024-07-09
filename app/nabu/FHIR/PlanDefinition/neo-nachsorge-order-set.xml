@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PlanDefinition xmlns="http://hl7.org/fhir">
+    <id value="neo-nachsorge-order-set"/> 
+    <url value="http://enahar.org/exist/apps/nabu/FHIR/PlanDefinition/neo-nachsorge-order-set"/> 
+    <identifier> 
+        <use value="official"/> 
+        <system value="#artifacts"/> 
+        <value value="nabu:neo-nachsorge-order-set"/> 
+    </identifier> 
+    <version value="0.2.0"/> 
+    <name value="NeoNachsorgeOrderSet"/> 
+    <title value="Neo-Nachsorge Order Set"/>
+    <type>
+        <coding>
+            <system value="#nabu-order-sets"/>
+            <code value="order-set"/>
+            <display value="Combi"/>
+        </coding>
+        <text value="Combi"/>
+    </type>
+    <status value="active"/> 
+    <experimental value="true"/> 
+    <date value="2018-03-25"/> 
+    <publisher value="Nabu SPZ Partner"/> 
+    <description value="Orders to be applied to a preterm or newborn characterized as neo-nachsorge."/> 
+    <purpose value="This order set helps ensure consistent application of appropriate orders for the care of sick preterms and neonates."/> 
+    <usage value="This order set should be applied after assessing a neonates for developmental risks, when the  findings of that assessment indicate the neonate belong to the GBA-FG or has other risks arising from the perinatal course."/> 
+    <approvalDate value="2018-03-25"/> 
+    <lastReviewDate value="2018-03-25"/> 
+    <effectivePeriod> 
+        <start value="2018-04-01"/> 
+        <end value="2021-04-01"/> 
+    </effectivePeriod> 
+    <useContext> 
+        <code> 
+            <system value="http://hl7.org/fhir/usage-context-type"/> 
+            <code value="age"/> 
+        </code> 
+        <valueCodeableConcept> 
+          <coding> 
+            <system value="http://snomed.info/sct"/> 
+            <code value="133933007"/> 
+            <display value="Neonate"/> 
+          </coding> 
+        </valueCodeableConcept> 
+    </useContext> 
+    <useContext> 
+        <code> 
+            <system value="http://hl7.org/fhir/usage-context-type"/> 
+            <code value="user"/> 
+        </code> 
+        <valueCodeableConcept> 
+            <coding> 
+                <system value="http://snomed.info/sct"/> 
+                <code value="309343006"/> 
+                <display value="Physician"/> 
+            </coding> 
+        </valueCodeableConcept> 
+    </useContext> 
+    <useContext> 
+        <code> 
+            <system value="http://hl7.org/fhir/usage-context-type"/> 
+            <code value="venue"/> 
+        </code> 
+        <valueCodeableConcept> 
+            <coding> 
+                <system value="http://snomed.info/sct"/> 
+                <code value="440655000"/> 
+                <display value="Outpatient environment"/> 
+            </coding> 
+        </valueCodeableConcept> 
+    </useContext> 
+    <jurisdiction> 
+        <coding> 
+            <system value="urn:iso:std:iso:3166"/> 
+            <code value="DE"/> 
+        </coding> 
+    </jurisdiction> 
+    <topic> 
+        <text value="Risiko-Nachsorge"/> 
+    </topic> 
+    <contributor> 
+        <type value="author"/> 
+        <name value="Peter Herkenrath"/> 
+        <contact> 
+            <telecom> 
+                <system value="phone"/> 
+                <value value="+49 221 478 6074"/> 
+                <use value="work"/> 
+            </telecom> 
+            <telecom> 
+                <system value="email"/> 
+                <value value="p.herkenrath@uni-koeln.de"/> 
+                <use value="work"/> 
+            </telecom> 
+        </contact> 
+    </contributor> 
+    <contact> 
+        <telecom> 
+            <system value="phone"/> 
+            <value value="+49 221 478 5900"/> 
+            <use value="work"/> 
+        </telecom> 
+        <telecom> 
+            <system value="email"/> 
+            <value value="spz@uk-koeln.de"/> 
+            <use value="work"/> 
+        </telecom> 
+    </contact> 
+    <copyright value="© Copyright 2018 Nabu SPZ Partner. All rights reserved."/> 
+    <relatedArtifact> 
+        <type value="derived-from"/> 
+        <display value="AWMF LL Nachsorge von Frühgeborenen"/> 
+        <url value="http://awmf.org"/> 
+    </relatedArtifact> 
+    <relatedArtifact> 
+        <type value="composed-of"/> 
+        <resource> 
+            <reference value="ActivityDefinition/referralNeoNachsorge"/> 
+        </resource> 
+    </relatedArtifact> 
+    <library> 
+        <reference value="Library/neo-nachsorge-orderset-logic"/> 
+        <display value="NeoNachsorgeLogic"/> 
+    </library> 
+  <!--   Actions   -->
+    <action> 
+        <title value="Neo-Nachsorge"/>
+        <groupingBehavior value="logical-group"/> 
+        <selectionBehavior value="all"/>
+        <documentation> 
+            <type value="citation"/> 
+            <document> 
+                <extension url="http://hl7.org/fhir/StructureDefinition/cqif-qualityOfEvidence">
+                    <valueCodeableConcept> 
+                        <coding> 
+                            <system value="http://hl7.org/fhir/evidence-quality"/> 
+                            <code value="high"/> 
+                        </coding> 
+                        <text value="High Quality"/> 
+                    </valueCodeableConcept> 
+                </extension> 
+                <contentType value="text/html"/> 
+                <url value="http://www.awmf.org/uploads/tx_szleitlinien/073-003l_S2k_Sozialp%C3%A4diatrische_Nachsorge_extrem_unreifer_Fr%C3%BChgeborener_2013-11.pd f"/>
+                <title value="071/013 – S2k-Leitinie: Sozialpädiatrische Nachsorge extrem unreifer Frühgeborener mit einem Geburtsgewicht unter 1000 Gramm"/> 
+            </document> 
+        </documentation>
+        <condition> 
+            <kind value="applicability"/> 
+            <description value="child younger than two years"/>
+            <language value="text/cql"/>
+            <expression value="correctedAge() &lt; 24 months"/>
+        </condition>
+        <condition> 
+            <kind value="applicability"/> 
+            <description value="child must be younger than two years"/>
+            <language value="application/xquery"/>
+            <expression value="refun:correctedAge($context) &lt; 24 * xs:dayTimeDuration('P30D')"/>
+        </condition>
+        <action> 
+            <title value="Handling Termin"/> 
+            <textEquivalent value="SPZ Handling"/>
+            <definition> 
+                <reference value="nabu/activityDefs/appHandling"/>
+                <display value="SPZ Handling"/>
+            </definition>
+            <condition> 
+                <kind value="applicability"/> 
+                <description value="child younger than 6 weeks"/>
+                <language value="text/cql"/>
+                <expression value="correctedAge() &lt; 6 weeks"/>
+            </condition>
+            <condition> 
+                <kind value="applicability"/> 
+                <description value="child younger than six week"/>
+                <language value="application/xquery"/>
+                <expression value="refun:correctedAge($context) &lt; 6 * xs:dayTimeDuration('P7D')"/>
+            </condition>
+        <!--   These expressions will be evaluated with the library referenced above as an include  -->
+            <dynamicValue> 
+                <path value="timingTiming.event"/>
+                <language value="text/cql"/>
+                <expression value="et() + 6 weeks"/> 
+            </dynamicValue>
+            <dynamicValue> 
+                <path value="timingTiming.event"/>
+                <language value="application/xquery"/>
+                <expression value="refun:et($context) + 6 * xs:dayTimeDuration('P7D')"/> 
+            </dynamicValue>
+            <dynamicValue> 
+                <path value="participant.role"/> 
+          <!--   This expression is code selector syntax in CQL, returning the code from the NPI provider
+           taxonomy   -->
+                <expression value="spz-physio"/>
+            </dynamicValue>
+            <dynamicValue> 
+      <!--   The fulfillmentTime element of the resulting ReferralRequest will be set to the result
+           of the ReferralRequestFulfillmentTime expression defined in the SuicideRiskLogic library
+             -->
+              <path value="occurrenceDateTime"/> 
+              <expression value="NeoNachsorgeLogic.ReferralRequestFulfillmentTime"/> 
+            </dynamicValue> 
+            <dynamicValue> 
+              <path value="subject"/> 
+              <expression value="NeoNachsorgeLogic.Patient"/> 
+            </dynamicValue> 
+            <dynamicValue> 
+              <path value="participant.actor"/> 
+              <expression value="NeoNachsorgeLogic.Practitioner"/> 
+            </dynamicValue> 
+            <dynamicValue> 
+              <path value="reasonCode"/> 
+              <expression value="NeoNachsorgeLogic.RiskAssessmentScore"/> 
+            </dynamicValue> 
+            <dynamicValue> 
+              <path value="reasonReference"/> 
+              <expression value="NeoNachsorgeLogic.RiskAssessment"/> 
+            </dynamicValue> 
+        </action> 
+        <action>
+            <title value="Arzt Termine"/> 
+            <groupingBehavior value="logical-group"/> 
+            <selectionBehavior value="all"/>
+            <action> 
+                <textEquivalent value="Neo-Nachsorge 3 Monate"/>
+                <definition> 
+                    <reference value="nabu/activityDefs/appNeoNachsorge"/>
+                </definition>
+                <condition> 
+                    <kind value="applicability"/> 
+                    <description value="child younger than three months"/>
+                    <language value="text/cql"/>
+                    <expression value="correctedAge() &lt; 3 months"/>
+                </condition>
+                <condition> 
+                    <kind value="applicability"/> 
+                    <description value="child younger than three months"/>
+                    <language value="application/xquery"/>
+                    <expression value="refun:correctedAge($context) &lt; 3 * xs:dayTimeDuration('P30D')"/>
+                </condition>
+                <dynamicValue> 
+                    <path value="timingTiming.event"/>
+                    <language value="text/cql"/>
+                    <expression value="et() + 3 months"/> 
+                </dynamicValue>
+                <dynamicValue> 
+                    <path value="timingTiming.event"/>
+                    <language value="application/xquery"/>
+                    <expression value="refun:et($context) + 3 * xs:dayTimeDuration('P30D')"/> 
+                </dynamicValue>
+                <dynamicValue>
+                  <path value="occurrenceDateTime"/> 
+                  <expression value="NeoNachsorgeLogic.ReferralRequestFulfillmentTime"/> 
+                </dynamicValue> 
+            </action>
+            <action> 
+                <textEquivalent value="Neo-Nachsorge 6 Monate"/>
+                <definition> 
+                    <reference value="nabu/activityDefs/appNeoNachsorge"/>
+                </definition>
+                <condition> 
+                    <kind value="applicability"/> 
+                    <description value="child younger than six months"/>
+                    <language value="text/cql"/>
+                    <expression value="correctedAge() &lt; 6 months"/>
+                </condition>
+                <condition> 
+                    <kind value="applicability"/> 
+                    <description value="child younger than six months"/>
+                    <language value="application/xquery"/>
+                    <expression value="refun:correctedAge($context) &lt; 6 * xs:dayTimeDuration('P30D')"/>
+                </condition>
+                <dynamicValue> 
+                    <path value="timingTiming.event"/>
+                    <language value="text/cql"/>
+                    <expression value="et() + 6 months"/> 
+                </dynamicValue>
+                <dynamicValue> 
+                    <path value="timingTiming.event"/>
+                    <language value="application/xquery"/>
+                    <expression value="refun:et($context) + 6 * xs:dayTimeDuration('P30D')"/> 
+                </dynamicValue>
+                <dynamicValue>
+                  <path value="occurrenceDateTime"/> 
+                  <expression value="NeoNachsorgeLogic.ReferralRequestFulfillmentTime"/> 
+                </dynamicValue> 
+            </action>
+            <action> 
+                <textEquivalent value="Neo-Nachsorge 12 Monate"/>
+                <definition> 
+                    <reference value="nabu/activityDefs/appNeoNachsorge"/>
+                </definition>
+                <condition> 
+                    <kind value="applicability"/> 
+                    <description value="child younger than twelve months"/>
+                    <language value="text/cql"/>
+                    <expression value="correctedAge() &lt; 12 months"/>
+                </condition>
+                <condition> 
+                    <kind value="applicability"/> 
+                    <description value="child younger than twelve months"/>
+                    <language value="application/xquery"/>
+                    <expression value="refun:correctedAge($context) &lt; 12 * xs:dayTimeDuration('P30D')"/>
+                </condition>
+                <dynamicValue> 
+                    <path value="timingTiming.event"/>
+                    <language value="text/cql"/>
+                    <expression value="et() + 12 months"/> 
+                </dynamicValue>
+                <dynamicValue> 
+                    <path value="timingTiming.event"/>
+                    <language value="application/xquery"/>
+                    <expression value="refun:et($context) + 12 * xs:dayTimeDuration('P30D')"/> 
+                </dynamicValue>
+                <dynamicValue>
+                  <path value="occurrenceDateTime"/> 
+                  <expression value="NeoNachsorgeLogic.ReferralRequestFulfillmentTime"/> 
+                </dynamicValue> 
+            </action>
+        </action> 
+        <action> 
+            <title value="GBA QM 24 Monate"/> 
+            <groupingBehavior value="logical-group"/> 
+            <selectionBehavior value="all"/> 
+            <action> 
+                <textEquivalent value="Neo-Nachsorge 24 Monate"/>
+                <definition> 
+                    <reference value="nabu/activityDefs/appNeoNachsorge"/>
+                </definition>
+                <condition> 
+                    <kind value="applicability"/> 
+                    <description value="child younger than 24 months"/>
+                    <language value="text/cql"/>
+                    <expression value="correctedAge() &lt; 24 months"/>
+                </condition>
+                <condition> 
+                    <kind value="applicability"/> 
+                    <description value="child younger than 24 months"/>
+                    <language value="application/xquery"/>
+                    <expression value="refun:correctedAge($context) &lt; 24 * xs:dayTimeDuration('P30D')"/>
+                </condition>
+                <dynamicValue> 
+                    <path value="timingTiming.event"/>
+                    <language value="text/cql"/>
+                    <expression value="et() + 24 months"/> 
+                </dynamicValue>
+                <dynamicValue> 
+                    <path value="timingTiming.event"/>
+                    <language value="application/xquery"/>
+                    <expression value="refun:et($context) + 24 * xs:dayTimeDuration('P30D')"/> 
+                </dynamicValue>
+                <dynamicValue>
+                  <path value="occurrenceDateTime"/> 
+                  <expression value="NeoNachsorgeLogic.ReferralRequestFulfillmentTime"/> 
+                </dynamicValue> 
+            </action>
+            <action> 
+                <textEquivalent value="Bayley III 24 Monate"/>
+                <definition> 
+                    <reference value="nabu/activityDefs/appBayleyIII-24M"/>
+                </definition>
+                <condition> 
+                    <kind value="applicability"/> 
+                    <description value="child younger than 24 months"/>
+                    <language value="text/cql"/>
+                    <expression value="correctedAge() &lt; 24 months"/>
+                </condition>
+                <condition> 
+                    <kind value="applicability"/> 
+                    <description value="child younger than 24 months"/>
+                    <language value="application/xquery"/>
+                    <expression value="refun:correctedAge($context) &lt; 24 * xs:dayTimeDuration('P30D')"/>
+                </condition>
+                <dynamicValue> 
+                    <path value="timingTiming.event"/>
+                    <language value="text/cql"/>
+                    <expression value="et() + 24 months"/> 
+                </dynamicValue>
+                <dynamicValue> 
+                    <path value="timingTiming.event"/>
+                    <language value="application/xquery"/>
+                    <expression value="refun:et($context) + 24 * xs:dayTimeDuration('P30D')"/> 
+                </dynamicValue>
+                <dynamicValue>
+                  <path value="occurrenceDateTime"/> 
+                  <expression value="NeoNachsorgeLogic.ReferralRequestFulfillmentTime"/> 
+                </dynamicValue> 
+            </action> 
+        </action>
+    </action>
+</PlanDefinition>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Questionnaire xmlns="http://hl7.org/fhir">
+    <id value="q-hilfsmittel-v2018-04-08"/>
+    <url value="http://hl7.org/fhir/Questionnaire/q-hilfsmittel-v2018-04-08"/>
+    <title value="SPZ Nabu Hilfsmittel"/>
+    <status value="draft"/>
+    <date value="2018-05-08"/>
+    <publisher value="SPZ Nabu Group"/>
+    <jurisdiction>
+        <coding>
+            <system value="urn:iso:std:iso:3166"/>
+            <code value="DE"/>
+        </coding>
+    </jurisdiction>
+    <subjectType value="Patient"/>
+    <extension url="http://enahar.org/exist/apps/nabu/questionnaire-singleton">
+        <valueBoolean value="true"/>
+    </extension>
+    <item>
+        <linkId value="hm-list"/>
+        <text value="Hilfsmittel-Liste"/>
+        <type value="group"/>
+        <readOnly value="false"/>
+        <item>
+            <linkId value="hm-item"/>
+            <text value="hmgroup"/>
+            <type value="group"/>
+            <repeats value="true"/>
+            <item>
+                <linkId value="hm-hmnr"/>
+                <text value="HM#"/>
+                <type value="integer"/>
+                <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-unit">
+                    <valueCoding>
+                        <system value="questionnaire-unit-rexexp"/>
+                        <code value="[2-3][0-9]|4[0-3]"/>
+                        <display value="[2-3][0-9]|4[0-3]"/>
+                    </valueCoding>
+                </extension>
+            </item>
+            <item>
+                <linkId value="hm-hmdesc"/>
+                <text value="Bezeichnung"/>
+                <type value="string">
+                    <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory">
+                        <valueCodeableConcept>
+                            <coding>
+                                <system value="#nabu-questionnaire-display-class"/>
+                                <code value="long-input"/>
+                            </coding>
+                        </valueCodeableConcept>
+                    </extension>
+                </type>
+            </item>
+            <item>
+                <linkId value="hm-indication"/>
+                <text value="Indikation"/>
+                <type value="string">
+                    <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory">
+                        <valueCodeableConcept>
+                            <coding>
+                                <system value="#nabu-questionnaire-display-class"/>
+                                <code value="long-input"/>
+                            </coding>
+                        </valueCodeableConcept>
+                    </extension>
+                </type>
+            </item>
+            <item>
+                <linkId value="hm-use"/>
+                <text value="Gebrauch"/>
+                <type value="choice"/>
+                <option>
+                    <valueCoding>
+                        <code value="regular"/>
+                        <display value="regelmäßig"/>
+                    </valueCoding>
+                </option>
+                <option>
+                    <valueCoding>
+                        <code value="sporadic"/>
+                        <display value="unregelmäßig"/>
+                    </valueCoding>
+                </option>
+                <option>
+                    <valueCoding>
+                        <code value="no-use"/>
+                        <display value="kein"/>
+                    </valueCoding>
+                </option>
+                <option>
+                    <valueCoding>
+                        <code value="unknown"/>
+                        <display value="unklar"/>
+                    </valueCoding>
+                </option>
+            </item>
+            <item>
+                <linkId value="hm-effective"/>
+                <text value="effektiv"/>
+                <type value="choice"/>
+                <option>
+                    <valueCoding>
+                        <code value="good"/>
+                        <display value="gut"/>
+                    </valueCoding>
+                </option>
+                <option>
+                    <valueCoding>
+                        <code value="medium"/>
+                        <display value="mittel"/>
+                    </valueCoding>
+                </option>
+                <option>
+                    <valueCoding>
+                        <code value="bad"/>
+                        <display value="schlecht"/>
+                    </valueCoding>
+                </option>
+                <option>
+                    <valueCoding>
+                        <code value="unknown"/>
+                        <display value="unklar"/>
+                    </valueCoding>
+                </option>
+            </item>
+            <item>
+                <linkId value="hm-supplier"/>
+                <text value="Firma"/>
+                <type value="string"/>
+            </item>
+            <item>
+                <linkId value="hm-status"/>
+                <text value="Status"/>
+                <type value="choice"/>
+                <option>
+                    <valueCoding>
+                        <code value="planned"/>
+                        <display value="geplant"/>
+                    </valueCoding>
+                </option>
+                <option>
+                    <valueCoding>
+                        <code value="prescribed"/>
+                        <display value="verordned"/>
+                    </valueCoding>
+                </option>
+                <option>
+                    <valueCoding>
+                        <code value="delivered"/>
+                        <display value="ausgeliefert"/>
+                    </valueCoding>
+                </option>
+                <option>
+                    <valueCoding>
+                        <code value="unknown"/>
+                        <display value="unklar"/>
+                    </valueCoding>
+                </option>
+            </item>
+            <item>
+                <linkId value="hm-note"/>
+                <text value="Notiz"/>
+                <type value="string"/>
+            </item>
+            <item>
+                <linkId value="hm-vo-date"/>
+                <text value="Verordnung"/>
+                <type value="date"/>
+                <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-unit">
+                    <valueCoding>
+                        <system value="questionnaire-unit-rexexp"/>
+                        <code value=""/>
+                        <display value="iso-date"/>
+                    </valueCoding>
+                </extension>
+            </item>
+            <item>
+                <linkId value="hm-inuse-date"/>
+                <text value="Auslieferung"/>
+                <type value="date"/>
+                <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-unit">
+                    <valueCoding>
+                        <system value="questionnaire-unit-rexexp"/>
+                        <code value=""/>
+                        <display value="iso-date"/>
+                    </valueCoding>
+                </extension>
+            </item>
+        </item>
+    </item>
+</Questionnaire>

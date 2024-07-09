@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol-infos>
+    <status>
+        <code label="in Arbeit" value="in-progress"/>
+        <code label="angehalten" value="suspended"/>
+        <code label="beended" value="completed"/>
+        <code label="abgebrochen" value="failed"/>
+        <code label="zurückgewiesen" value="rejected"/>
+    </status>
+    <medium>
+        <code label="schriftlich" value="byletter"/>
+        <code label="Phone" value="phone"/>
+        <code label="mündlich" value="orally"/>
+        <code label="Email" value="email"/>
+        <code label="SMS" value="sms"/>
+        <code value="no-info" label="keine Info"/>
+    </medium>
+    <category>
+        <code label="Brief" value="letter"/>
+    </category>
+    <reason>
+        <code label="Info" value="info"/>
+    </reason>
+    <bricks xmlns="http://hl7.org/fhir">
+        <Protocol>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+        </Protocol>
+    </bricks>
+</protocol-infos>

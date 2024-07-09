@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Questionnaire xmlns="http://hl7.org/fhir">
+  <id value="q-bayleyIII-v2017-08-08"/>
+  <text>
+    <status value="generated"/>
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <pre>
+      <b>BayleyTestdaten</b>
+      <ID>567</ID>
+      <PatNr>8236</PatNr>
+      <TestDat>2007-10-23T00:00:00</TestDat>
+      <Untersucher>Hausen</Untersucher>
+      <Cog>9</Cog>
+      <CogAlter>11</CogAlter>
+      <CogZuverl>1</CogZuverl>
+      <RecLang>8</RecLang>
+      <RecLangAlter>10</RecLangAlter>
+      <RecLangZuverl>1</RecLangZuverl>
+      <ExprLang>10</ExprLang>
+      <ExprLangAlter>12</ExprLangAlter>
+      <ExprLangZuverl>1</ExprLangZuverl>
+      <FineMotor>9</FineMotor>
+      <FineMotorAlter>11</FineMotorAlter>
+      <FineMotorZuverl>1</FineMotorZuverl>
+      <GrossMotor>5</GrossMotor>
+      <GrossMotorAlter>9</GrossMotorAlter>
+      <GrossMotorZuverl>1</GrossMotorZuverl>
+      <FG_x0020_Woche>40</FG_x0020_Woche>
+      <FG_Tage>0</FG_Tage>
+      <Testbarkeit>2</Testbarkeit>
+      <Deutsch_x0020_Muttersprache>-1</Deutsch_x0020_Muttersprache>
+      <_x0034_8>0</_x0034_8>
+      <_x0035_3>0</_x0035_3>
+      <_x0036_5>0</_x0036_5>
+      <_x0036_9>0</_x0036_9>
+      <_x0037_1>0</_x0037_1>
+      <KorrAlterBerücks>0</KorrAlterBerücks>
+      <FGAlterkorrberücks>0</FGAlterkorrberücks>
+      <Blind>0</Blind>
+      <Schwerhörig>0</Schwerhörig>
+      <motRet>0</motRet>
+      <MentaleRet>0</MentaleRet>
+      <keinementRet>0</keinementRet>
+      </pre>
+    </div>
+  </text>
+  <url value="http://hl7.org/fhir/Questionnaire/bayleyIII"/>
+  <title value="SPZ Nabu Bayley III Daten (FG-QM n. GBA)"/>
+  <status value="draft"/>
+  <date value="2018-05-08"/>
+  <publisher value="SPZ Nabu Group"/>
+  <jurisdiction>
+    <coding>
+      <system value="urn:iso:std:iso:3166"/>
+      <code value="DE"/>
+    </coding>
+  </jurisdiction>
+  <subjectType value="Patient"/>
+  <item>
+    <linkId value="bayleyIII"/>
+    <text value="Bayley III Daten"/>
+    <type value="group"/>
+    <readOnly value="false"/>
+    <item>
+      <linkId value="ssDetails"/>
+      <text value="SS-Details"/>
+      <type value="group"/>
+        <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory">
+            <valueCodeableConcept>
+                <coding>
+                    <system value="#nabu-questionnaire-displayCategory"/>
+                    <code value="tab"/>
+                </coding>
+            </valueCodeableConcept>
+        </extension>
+      <item>
+        <linkId value="pca"/>
+        <type value="group"/>
+        <text value="SSW"/>
+        <item>
+          <linkId value="pca-weeks"/>
+          <text value="Wochen"/>
+          <type value="integer"/>
+            <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-unit">
+                <valueCoding>
+                    <system value="questionnaire-unit-rexexp"/>
+                    <code value="[2-3][0-9]|4[0-3]"/>
+                    <display value="[2-3][0-9]|4[0-3]"/>
+                </valueCoding>
+            </extension>
+        </item>
+        <item>
+          <linkId value="pca-days"/>
+          <text value="Tage"/>
+          <type value="integer"/>
+            <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-unit">
+                <valueCoding>
+                    <system value="questionnaire-unit-rexexp"/>
+                    <code value="[0-6]"/>
+                    <display value="[0-6]"/>
+                </valueCoding>
+            </extension>
+        </item>
+      </item>
+    </item>
+    <item>
+      <linkId value="context"/>
+      <text value="Context"/>
+      <type value="group"/>
+        <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory">
+            <valueCodeableConcept>
+                <coding>
+                    <system value="#nabu-questionnaire-displayCategory"/>
+                    <code value="tab"/>
+                </coding>
+            </valueCodeableConcept>
+        </extension>
+      <item>
+        <linkId value="language"/>
+        <text value="Sprache"/>
+        <type value="choice"/>
+        <option>
+          <valueCoding>
+            <code value="de-de"/>
+            <display value="Deutsch"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="other"/>
+            <display value="andere"/>
+          </valueCoding>
+        </option>
+      </item>
+      <item>
+        <linkId value="length"/>
+        <text value="Länge"/>
+        <type value="float"/>
+      </item>
+      <item>
+        <linkId value="weight"/>
+        <text value="Gewicht"/>
+        <type value="float"/>
+            <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-unit">
+                <valueCoding>
+                    <system value="questionnaire-unit-rexexp"/>
+                    <code value="\d\d\\d\d"/>
+                    <display value="\d\d\d\d"/>
+                </valueCoding>
+            </extension>
+      </item>
+      <item>
+        <linkId value="head-cf"/>
+        <text value="KU"/>
+        <type value="float"/>
+            <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-unit">
+                <valueCoding>
+                    <system value="questionnaire-unit-rexexp"/>
+                    <code value="\d\d\.\d"/>
+                    <display value="\d\d\.\d"/>
+                </valueCoding>
+            </extension>
+      </item>
+    </item>
+    <item>
+      <linkId value="bayleyIII-test"/>
+      <text value="Bayley III"/>
+      <type value="group"/>
+        <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory">
+            <valueCodeableConcept>
+                <coding>
+                    <system value="#nabu-questionnaire-displayCategory"/>
+                    <code value="tab"/>
+                </coding>
+            </valueCodeableConcept>
+        </extension>
+      <item>
+        <linkId value="bayleyIII-id"/>
+        <text value="Test ID"/>
+        <type value="integer"/>
+      </item>
+      <item>
+        <linkId value="bayleyIII-date"/>
+        <text value="Testdatum"/>
+        <type value="dateTime"/>
+            <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-unit">
+                <valueCoding>
+                    <system value="questionnaire-unit-rexexp"/>
+                    <code value="\d\d\d\d-\d\d-\d\d"/>
+                    <display value="\d\d\d\d-\d\d-\d\d"/>
+                </valueCoding>
+            </extension>
+        <initialDateTime value="h"/>
+      </item>
+      <item>
+        <linkId value="examiner"/>
+        <text value="Untersucher"/>
+        <type value="string"/>
+      </item>
+      <item>
+        <linkId value="testability"/>
+        <text value="Testbarkeit"/>
+        <type value="choice"/>
+        <option>
+          <valueCoding>
+            <code value="1"/>
+            <display value="gut untersuchbar"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="2"/>
+            <display value="benötigt Pausen"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="3"/>
+            <display value="mäßig testbar"/>
+          </valueCoding>
+        </option>
+        <option>
+          <valueCoding>
+            <code value="4"/>
+            <display value="kaum testbar"/>
+          </valueCoding>
+        </option>
+      </item>
+      <item>
+        <linkId value="comment"/>
+        <text value="Kommentar"/>
+        <type value="string"/>
+      </item>
+      <item>
+        <linkId value="corrected"/>
+        <text value="FGAlterskorr"/>
+        <type value="boolean"/>
+      </item>
+      <item>
+        <linkId value="bayleyIII-cog"/>
+        <text value="Cognition"/>
+        <type value="group"/>
+        <item>
+          <linkId value="bayleyIII-cog-raw"/>
+          <text value="CogRaw"/>
+          <type value="integer"/>
+          <extension url="www.enahar.org/exist/apps/nabu/questionnaire-item-mapping">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="www.enahar.org/exist/apps/nabu/questionnaire/raw2subscale"/>
+                        <code value="bayleyII-cog-scale"/>
+                        <display value="bayleyII-cog-scale"/>
+                    </coding>
+                    <coding>
+                        <system value="www.enahar.org/exist/apps/nabu/questionnaire/raw2devage"/>
+                        <code value="bayleyII-cog-age"/>
+                        <display value="bayleyII-cog-age"/>
+                    </coding>
+                </valueCodeableConcept>
+          </extension>
+        </item>
+        <item>
+          <linkId value="bayleyIII-cog-scale"/>
+          <text value="CogScale"/>
+          <type value="integer"/>
+          <readOnly value="true"/>
+        </item>
+        <item>
+          <linkId value="bayleyIII-cog-age"/>
+          <text value="CogAlter"/>
+          <type value="integer"/>
+          <readOnly value="true"/>
+        </item>
+        <item>
+          <linkId value="bayleyIII-cog-valid"/>
+          <text value="CogZuverl"/>
+          <type value="choice"/>
+          <option>
+            <valueCoding>
+              <code value="1"/>
+              <display value="normal"/>
+            </valueCoding>
+          </option>
+          <option>
+            <valueCoding>
+              <code value="2"/>
+              <display value="unsicher"/>
+            </valueCoding>
+          </option>
+          <option>
+            <valueCoding>
+              <code value="3"/>
+              <display value="n.d."/>
+            </valueCoding>
+          </option>
+        </item>
+      </item>
+      <item>
+        <linkId value="bayleyIII-reclang"/>
+        <text value="Rezept.Sprache"/>
+        <type value="group"/>
+        <item>
+          <linkId value="bayleyIII-reclang-raw"/>
+          <text value="RecLangRaw"/>
+          <type value="integer"/>
+          <extension url="www.enahar.org/exist/apps/nabu/questionnaire-item-mapping">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="www.enahar.org/exist/apps/nabu/questionnaire/raw2subscale"/>
+                        <code value="bayleyII-cog-scale"/>
+                        <display value="bayleyII-cog-scale"/>
+                    </coding>
+                    <coding>
+                        <system value="www.enahar.org/exist/apps/nabu/questionnaire/raw2devage"/>
+                        <code value="bayleyII-cog-age"/>
+                        <display value="bayleyII-cog-age"/>
+                    </coding>
+                </valueCodeableConcept>
+          </extension>
+        </item>
+        <item>
+          <linkId value="bayleyIII-reclang-scale"/>
+          <text value="RecLangScale"/>
+          <type value="integer"/>
+          <readOnly value="true"/>
+        </item>
+        <item>
+          <linkId value="bayleyIII-reclang-age"/>
+          <text value="RecLangAlter"/>
+          <type value="integer"/>
+          <readOnly value="true"/>
+        </item>
+        <item>
+          <linkId value="bayleyIII-reclang-valid"/>
+          <text value="RecLangZuverl"/>
+          <type value="choice"/>
+          <option>
+            <valueCoding>
+              <code value="1"/>
+              <display value="normal"/>
+            </valueCoding>
+          </option>
+          <option>
+            <valueCoding>
+              <code value="2"/>
+              <display value="unsicher"/>
+            </valueCoding>
+          </option>
+          <option>
+            <valueCoding>
+              <code value="3"/>
+              <display value="n.d."/>
+            </valueCoding>
+          </option>
+        </item>
+      </item>
+      <item>
+        <linkId value="bayleyIII-exprlang"/>
+        <text value="Expr.Sprache"/>
+        <type value="group"/>
+        <item>
+          <linkId value="bayleyIII-exprlang-raw"/>
+          <text value="ExprLangRaw"/>
+          <type value="integer"/>
+          <extension url="www.enahar.org/exist/apps/nabu/questionnaire-item-mapping">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="www.enahar.org/exist/apps/nabu/questionnaire/raw2subscale"/>
+                        <code value="bayleyII-cog-scale"/>
+                        <display value="bayleyII-cog-scale"/>
+                    </coding>
+                    <coding>
+                        <system value="www.enahar.org/exist/apps/nabu/questionnaire/raw2devage"/>
+                        <code value="bayleyII-cog-age"/>
+                        <display value="bayleyII-cog-age"/>
+                    </coding>
+                </valueCodeableConcept>
+          </extension>
+        </item>
+        <item>
+          <linkId value="bayleyIII-exprlang-scale"/>
+          <text value="ExprLangScale"/>
+          <type value="integer"/>
+          <readOnly value="true"/>
+        </item>
+        <item>
+          <linkId value="bayleyIII-exprlang-age"/>
+          <text value="ExprLangAlter"/>
+          <type value="integer"/>
+          <readOnly value="true"/>
+        </item>
+        <item>
+          <linkId value="bayleyIII-exprlang-valid"/>
+          <text value="ExprLangZuverl"/>
+          <type value="choice"/>
+          <option>
+            <valueCoding>
+              <code value="1"/>
+              <display value="normal"/>
+            </valueCoding>
+          </option>
+          <option>
+            <valueCoding>
+              <code value="2"/>
+              <display value="unsicher"/>
+            </valueCoding>
+          </option>
+          <option>
+            <valueCoding>
+              <code value="3"/>
+              <display value="n.d."/>
+            </valueCoding>
+          </option>
+        </item>
+      </item>
+      <item>
+        <linkId value="bayleyIII-finemotor"/>
+        <text value="Feinmotorik"/>
+        <type value="group"/>
+        <item>
+          <linkId value="bayleyIII-finemotor-raw"/>
+          <text value="FineMotorRaw"/>
+          <type value="integer"/>
+          <extension url="www.enahar.org/exist/apps/nabu/questionnaire-item-mapping">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="www.enahar.org/exist/apps/nabu/questionnaire/raw2subscale"/>
+                        <code value="bayleyII-cog-scale"/>
+                        <display value="bayleyII-cog-scale"/>
+                    </coding>
+                    <coding>
+                        <system value="www.enahar.org/exist/apps/nabu/questionnaire/raw2devage"/>
+                        <code value="bayleyII-cog-age"/>
+                        <display value="bayleyII-cog-age"/>
+                    </coding>
+                </valueCodeableConcept>
+          </extension>
+        </item>
+        <item>
+          <linkId value="bayleyIII-finemotor-scale"/>
+          <text value="FineMotorScale"/>
+          <type value="integer"/>
+          <readOnly value="true"/>
+        </item>
+        <item>
+          <linkId value="bayleyIII-finemotor-age"/>
+          <text value="FineMotorAlter"/>
+          <type value="integer"/>
+          <readOnly value="true"/>
+        </item>
+        <item>
+          <linkId value="bayleyIII-finemotor-valid"/>
+          <text value="FineMotorZuverl"/>
+          <type value="choice"/>
+          <option>
+            <valueCoding>
+              <code value="1"/>
+              <display value="normal"/>
+            </valueCoding>
+          </option>
+          <option>
+            <valueCoding>
+              <code value="2"/>
+              <display value="unsicher"/>
+            </valueCoding>
+          </option>
+          <option>
+            <valueCoding>
+              <code value="3"/>
+              <display value="n.d."/>
+            </valueCoding>
+          </option>
+        </item>
+      </item>
+      <item>
+        <linkId value="bayleyIII-grossmotor"/>
+        <text value="Grobmotorik"/>
+        <type value="group"/>
+        <item>
+          <linkId value="bayleyIII-grossmotor-raw"/>
+          <text value="GrossMotorRaw"/>
+          <type value="integer"/>
+          <extension url="www.enahar.org/exist/apps/nabu/questionnaire-item-mapping">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="www.enahar.org/exist/apps/nabu/questionnaire/raw2subscale"/>
+                        <code value="bayleyII-cog-scale"/>
+                        <display value="bayleyII-cog-scale"/>
+                    </coding>
+                    <coding>
+                        <system value="www.enahar.org/exist/apps/nabu/questionnaire/raw2devage"/>
+                        <code value="bayleyII-cog-age"/>
+                        <display value="bayleyII-cog-age"/>
+                    </coding>
+                </valueCodeableConcept>
+          </extension>
+        </item>
+        <item>
+          <linkId value="bayleyIII-grossmotor-scale"/>
+          <text value="GrossMotorScale"/>
+          <type value="integer"/>
+          <readOnly value="true"/>
+        </item>
+        <item>
+          <linkId value="bayleyIII-grossmotor-age"/>
+          <text value="GrossMotorAlter"/>
+          <type value="integer"/>
+          <readOnly value="true"/>
+        </item>
+        <item>
+          <linkId value="bayleyIII-grossmotor-valid"/>
+          <text value="GrossMotorZuverl"/>
+          <type value="choice"/>
+          <option>
+            <valueCoding>
+              <code value="1"/>
+              <display value="normal"/>
+            </valueCoding>
+          </option>
+          <option>
+            <valueCoding>
+              <code value="2"/>
+              <display value="unsicher"/>
+            </valueCoding>
+          </option>
+          <option>
+            <valueCoding>
+              <code value="3"/>
+              <display value="n.d."/>
+            </valueCoding>
+          </option>
+        </item>
+      </item>
+    </item>
+    <item>
+      <linkId value="outcomeInformation"/>
+      <text value="Outcome"/>
+      <type value="group"/>
+        <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory">
+            <valueCodeableConcept>
+                <coding>
+                    <system value="#nabu-questionnaire-displayCategory"/>
+                    <code value="tab"/>
+                </coding>
+            </valueCodeableConcept>
+        </extension>
+      <item>
+        <linkId value="blindness"/>
+        <text value="Blindheit"/>
+        <type value="boolean"/>
+      </item>
+      <item>
+        <linkId value="deafness"/>
+        <text value="Schwerhörigkeit"/>
+        <type value="boolean"/>
+      </item>
+      <item>
+        <linkId value="severeMotorProblems"/>
+        <text value="schwere motorische Behinderung"/>
+        <type value="boolean"/>
+      </item>
+      <item>
+        <linkId value="severeMentalProblems"/>
+        <text value="schwere Mentale Behinderung"/>
+        <type value="boolean"/>
+      </item>
+      <item>
+        <linkId value="noMentalProblems"/>
+        <text value="keine Mentale Behinderung"/>
+        <type value="boolean"/>
+    </item>
+    </item>
+  </item>
+</Questionnaire>

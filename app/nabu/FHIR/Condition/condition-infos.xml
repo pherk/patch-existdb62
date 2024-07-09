@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<condition-infos>
+    <clinicalStatus>
+        <code label-de="Aktiv" value="active" comment="The subject is currently experiencing the symptoms of the condition."/>
+        <code label-de="Rückfall" value="recurrence" comment="The subject is having a relapse or re-experiencing the condition after a period of remission or presumed resolution."/>
+        <code label-de="Remission" value="remission" comment="The subject is no longer experiencing the symptoms of the condition, but there is a risk of the symptoms returning."/>
+        <code label-de="Inaktiv" value="inactive" comment="The subject is no longer experiencing the symptoms of the condition or there is no longer evidence of the condition."/>
+        <code label-de="Geheilt" value="resolved" comment="The subject is no longer experiencing the symptoms of the condition and there is no perceived risk of the symptoms returning."/>
+    </clinicalStatus>
+    <verificationStatus>
+        <code label-de="Provisorisch" value="provisional" comment="This is a tentative diagnosis - still a candidate that is under consideration."/>
+        <code label-de="Differential" value="differential" comment="One of a set of potential (and typically mutually exclusive) diagnosis asserted to further guide the diagnostic process and preliminary treatment."/>
+        <code label-de="Bestätigt" value="confirmed" comment="There is sufficient diagnostic and/or clinical evidence to treat this as a confirmed condition."/>
+        <code label-de="Ausgeschlossen" value="refuted" comment="This condition has been ruled out by diagnostic and clinical evidence."/>
+        <code label-de="Ungültig" value="entered-in-error" comment="The statement was entered in error and is not valid."/>
+        <code label-de="Unbestätigt" value="unconfirmed" comment="The condition status is unconfirmed. Note that 'unconfirmed' is a value of last resort and every attempt should be made to provide a meaningful value other than 'unconfirmed'."/>
+    </verificationStatus>
+    <category>
+        <code label-de="Beschwerde" value="complaint"/>
+        <code label-de="Symptom" value="symptom"/>
+        <code label-de="Befund" value="finding"/>
+        <code label-de="Diagnose" value="diagnosis"/>
+    </category>
+    <severity>
+        <code label-de="Fatal" value="399166001"/>
+        <code label-de="Schwer" value="24484000"/>
+        <code label-de="Mittelgradig" value="6736007"/>
+        <code label-de="Milde" value="255604002"/>
+    </severity>
+    <terminology-mas-axis>
+        <code label-de="Klin.-Psychiatr. Syndrom" value="1"/>
+        <code label-de="Umschr. Entwicklungsstörung" value="2"/>
+        <code label-de="Intelligenz" value="3"/>
+        <code label-de="Körperl. Symptomatik" value="4"/>
+        <code label-de="Psychosozial. Belastung" value="5"/>
+        <code label-de="Globale Anpassung" value="6"/>
+    </terminology-mas-axis>
+    <finding realm="kikl-spz">
+        <code label-de=":missing" value=":missing"/>
+        <code label-de="ADHS" value="ADHS"/>
+        <code label-de="Adipositas" value="adipositas"/>
+        <code label-de="Autismus" value="autismus"/>
+        <code label-de="Bewegungsstörung" value="MD"/>
+        <code label-de="BoNT" value="BoNT"/>
+        <code label-de="Dystonie" value="dystonie"/>
+        <code label-de="Entwicklung" value="development"/>
+        <code label-de="ICP" value="ICP"/>
+        <code label-de="Epilepsie" value="epilepsie"/>
+        <code label-de="GBA-FG" value="GBA-FG"/>
+        <code label-de="Hörscreening" value="Hörscreening"/>
+        <code label-de="Hörstörung" value="Hörstörung"/>
+        <code label-de="Kognition" value="kognition"/>
+        <code label-de="Kopfschmerzen" value="kopfschmerzen"/>
+        <code label-de="MMC" value="MMC"/>
+        <code label-de="Neo-Nachsorge" value="nachsorge-neo"/>
+        <code label-de="Neurochirurgie" value="NCH"/>
+        <code label-de="Neurogenetik" value="neurogenetik"/>
+        <code label-de="NeuroImmunologie" value="neuroimmunologie"/>
+        <code label-de="Neuromuskuläre Erkr." value="NME"/>
+        <code label-de="Psychosomatik" value="psychsom"/>
+        <code label-de="Regulationsstörung" value="regulation"/>
+        <code label-de="Schule" value="schule"/>
+        <code label-de="Sehstörung" value="Sehstörung"/>
+        <code label-de="SES" value="SES"/>
+        <code label-de="Verhalten/Emotion" value="verhalten"/>
+        <code label-de="ZSEK" value="ZSEK"/>
+        <code label-de="CareFam" value="CareFam"/>
+        <code label-de="CF" value="CF"/>
+        <code label-de="Diabetes" value="diabetes"/>
+        <code label-de="Gastroenterologie" value="gastro"/>
+        <code label-de="Kardioologie" value="kardio"/>
+        <code label-de="OI/Osteologie" value="OI"/>
+        <code label-de="Nephro" value="nephro"/>
+        <code label-de="Onko" value="onko"/>
+        <code label-de="Sonstige" value="text"/>
+    </finding>
+    <diagnosis-category>
+        <code label-de="Hauptdiagnose" value="HD"/>
+        <code label-de="Nebendiagnose" value="ND"/>
+        <code label-de="Behandlungsdiagnose" value="BD"/>
+    </diagnosis-category>
+    <sort>
+        <code label-de="PatientName" value="subject"/>
+        <code label-de="Tags" value="tag"/>
+        <code label-de="Datum EDx" value="date"/>
+    </sort>
+    <bricks xmlns="http://hl7.org/fhir" comp="4.0.1">
+        <Condition>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+            <clinicalStatus>
+                <coding>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>
+            </clinicalStatus>
+            <verificationStatus>
+                <coding>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>
+            </verificationStatus>
+            <category>
+                <coding>
+                    <system value="http://hl7.org/fhir/condition-category"/>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>
+            </category>
+            <severity>
+                <coding>
+                    <system value="http://snomed.info/sct"/>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>                
+            </severity>
+            <code>
+                <coding>
+                    <system value="http://hl7.org/fhir/sid/icd-10-de"/>
+                    <version value="2016"/>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>
+            </code>
+            <subject>
+                <reference value=""/>
+                <display value=""/>
+            </subject>
+            <encounter>
+                <reference value=""/>
+                <display value=""/>
+            </encounter>
+            <onsetDateTime value=""/>
+            <abatementDateTime value=""/>
+            <recordedDate value=""/>
+            <asserter>
+                <reference value=""/>
+                <display value=""/>
+            </asserter>
+            <recorder>
+                <reference value=""/>
+                <display value=""/>
+            </recorder>
+        </Condition>
+        <category>
+            <coding>
+                <system value="http://hl7.org/fhir/condition-category"/>
+                <code value=""/>
+                <display value=""/>
+            </coding>
+            <text value=""/>
+        </category>
+        <coding>
+            <system value="http://eNahar.org/nabu/extension#nabu-finding"/>
+            <version value="2017"/>
+            <code value=""/>
+            <display value=""/>
+        </coding>
+        <coding>
+            <system value="http://eNahar.org/nabu/extension#nabu-diagnosis-category"/>
+            <version value="2016"/>
+            <code value=""/>
+            <display value=""/>
+        </coding>
+        <coding>
+            <system value="http://eNahar.org/nabu/extension#terminology-mas"/>
+            <version value="2016"/>
+            <code value=""/>
+            <display value=""/>
+        </coding>
+        <coding>
+            <system value="http://hl7.org/fhir/sid/orphanet-en"/>
+            <version value="2018"/>
+            <code value=""/>
+            <display value=""/>
+        </coding>
+        <bodySite>
+            <coding>
+                <system value=""/>
+                <code value=""/>
+                <display value=""/>
+            </coding>
+            <text value=""/>
+        </bodySite>
+        <stage>
+            <summary>
+                <coding>
+                    <system value=""/>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>                      
+            </summary>
+        </stage>
+        <evidence>
+            <code>
+                <coding>
+                    <system value=""/>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>  
+            </code>
+            <detail>
+                <reference value=""/>
+            </detail>
+        </evidence>
+        <assessment>
+            <reference value=""/>
+            <display value=""/>
+        </assessment>
+        <note>
+            <authorReference>
+                <reference value=""/>
+                <display value=""/>
+            </authorReference>
+            <time value=""/>
+            <text value=""/>
+        </note>
+    </bricks>
+</condition-infos>

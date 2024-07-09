@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<capabilitystatement-infos>
+  <bricks version="4.3">
+  <CapabilityStatement xmlns="http://hl7.org/fhir">
+ <!-- from Resource: id, meta, implicitRules, and language -->
+ <!-- from DomainResource: text, contained, extension, and modifierExtension -->
+    <url value="[uri]"/><!-- 0..1 Canonical identifier for this capability statement, represented as a URI (globally unique) -->
+    <version value="[string]"/><!-- 0..1 Business version of the capability statement -->
+    <name value="[string]"/><!-- 0..1 Name for this capability statement (computer friendly) -->
+    <title value="[string]"/><!-- 0..1 Name for this capability statement (human friendly) -->
+    <status value="[code]"/><!-- 1..1 draft | active | retired | unknown -->
+ <experimental value="[boolean]"/><!-- 0..1 For testing purposes, not real usage -->
+ <date value="[dateTime]"/><!-- 1..1 Date last changed -->
+ <publisher value="[string]"/><!-- 0..1 Name of the publisher (organization or individual) -->
+ <contact><!-- 0..* ContactDetail Contact details for the publisher --></contact>
+ <description value="[markdown]"/><!-- ?? 0..1 Natural language description of the capability statement -->
+ <useContext><!-- 0..* UsageContext The context that the content is intended to support --></useContext>
+ <jurisdiction><!-- 0..* CodeableConcept Intended jurisdiction for capability statement (if applicable) --></jurisdiction>
+ <purpose value="[markdown]"/><!-- 0..1 Why this capability statement is defined -->
+ <copyright value="[markdown]"/><!-- 0..1 Use and/or publishing restrictions -->
+ <kind value="[code]"/><!-- ?? 1..1 instance | capability | requirements -->
+ <instantiates><!-- 0..* canonical(CapabilityStatement) Canonical URL of another capability statement this implements --></instantiates>
+ <imports><!-- 0..* canonical(CapabilityStatement) Canonical URL of another capability statement this adds to --></imports>
+ <software>  <!-- ?? 0..1 Software that is covered by this capability statement -->
+  <name value="[string]"/><!-- 1..1 A name the software is known by -->
+  <version value="[string]"/><!-- 0..1 Version covered by this statement -->
+  <releaseDate value="[dateTime]"/><!-- 0..1 Date this version was released -->
+ </software>
+ <implementation>  <!-- ?? 0..1 If this describes a specific instance -->
+  <description value="[string]"/><!-- 1..1 Describes this specific instance -->
+  <url value="[url]"/><!-- 0..1 Base URL for the installation -->
+  <custodian><!-- 0..1 Reference(Organization) Organization that manages the data --></custodian>
+ </implementation>
+ <fhirVersion value="[code]"/><!-- 1..1 FHIR Version the system supports -->
+ <format value="[code]"/><!-- 1..* formats supported (xml | json | ttl | mime type) -->
+ <patchFormat value="[code]"/><!-- 0..* Patch formats supported -->
+ <implementationGuide><!-- 0..* canonical(ImplementationGuide) Implementation guides supported --></implementationGuide>
+ <rest>  <!-- ?? 0..* If the endpoint is a RESTful one -->
+  <mode value="[code]"/><!-- 1..1 client | server -->
+  <documentation value="[markdown]"/><!-- 0..1 General description of implementation -->
+  <security>  <!-- 0..1 Information about security of implementation -->
+   <cors value="[boolean]"/><!-- 0..1 Adds CORS Headers (http://enable-cors.org/) -->
+   <service><!-- 0..* CodeableConcept OAuth | SMART-on-FHIR | NTLM | Basic | Kerberos | Certificates --></service>
+   <description value="[markdown]"/><!-- 0..1 General description of how security works -->
+  </security>
+  <resource>  <!-- 0..* Resource served on the REST interface -->
+   <type value="[code]"/><!-- 1..1 A resource type that is supported -->
+   <profile><!-- 0..1 canonical(StructureDefinition) Base System profile for all uses of resource --></profile>
+   <supportedProfile><!-- 0..* canonical(StructureDefinition) Profiles for use cases supported --></supportedProfile>
+   <documentation value="[markdown]"/><!-- 0..1 Additional information about the use of the resource type -->
+   <interaction>  <!-- 0..* What operations are supported? -->
+    <code value="[code]"/><!-- 1..1 read | vread | update | patch | delete | history-instance | history-type | create | search-type -->
+    <documentation value="[markdown]"/><!-- 0..1 Anything special about operation behavior -->
+   </interaction>
+   <versioning value="[code]"/><!-- 0..1 no-version | versioned | versioned-update -->
+   <readHistory value="[boolean]"/><!-- 0..1 Whether vRead can return past versions -->
+   <updateCreate value="[boolean]"/><!-- 0..1 If update can commit to a new identity -->
+   <conditionalCreate value="[boolean]"/><!-- 0..1 If allows/uses conditional create -->
+   <conditionalRead value="[code]"/><!-- 0..1 not-supported | modified-since | not-match | full-support -->
+   <conditionalUpdate value="[boolean]"/><!-- 0..1 If allows/uses conditional update -->
+   <conditionalDelete value="[code]"/><!-- 0..1 not-supported | single | multiple - how conditional delete is supported -->
+   <referencePolicy value="[code]"/><!-- 0..* literal | logical | resolves | enforced | local -->
+   <searchInclude value="[string]"/><!-- 0..* _include values supported by the server -->
+   <searchRevInclude value="[string]"/><!-- 0..* _revinclude values supported by the server -->
+   <searchParam>  <!-- 0..* Search parameters supported by implementation -->
+    <name value="[string]"/><!-- 1..1 Name of search parameter -->
+    <definition><!-- 0..1 canonical(SearchParameter) Source of definition for parameter --></definition>
+    <type value="[code]"/><!-- 1..1 number | date | string | token | reference | composite | quantity | uri | special -->
+    <documentation value="[markdown]"/><!-- 0..1 Server-specific usage -->
+   </searchParam>
+   <operation>  <!-- 0..* Definition of a resource operation -->
+    <name value="[string]"/><!-- 1..1 Name by which the operation/query is invoked -->
+    <definition><!-- 1..1 canonical(OperationDefinition) The defined operation/query --></definition>
+    <documentation value="[markdown]"/><!-- 0..1 Specific details about operation behavior -->
+   </operation>
+  </resource>
+  <interaction>  <!-- 0..* What operations are supported? -->
+   <code value="[code]"/><!-- 1..1 transaction | batch | search-system | history-system -->
+   <documentation value="[markdown]"/><!-- 0..1 Anything special about operation behavior -->
+  </interaction>
+  <searchParam><!-- 0..* Content as for CapabilityStatement.rest.resource.searchParam Search parameters for searching all resources --></searchParam>
+  <operation><!-- 0..* Content as for CapabilityStatement.rest.resource.operation Definition of a system level operation --></operation>
+  <compartment><!-- 0..* canonical(CompartmentDefinition) Compartments served/used by system --></compartment>
+ </rest>
+ <messaging>  <!-- ?? 0..* If messaging is supported -->
+  <endpoint>  <!-- 0..* Where messages should be sent -->
+   <protocol><!-- 1..1 Coding http | ftp | mllp + --></protocol>
+   <address value="[url]"/><!-- 1..1 Network address or identifier of the end-point -->
+  </endpoint>
+  <reliableCache value="[unsignedInt]"/><!-- 0..1 Reliable Message Cache Length (min) -->
+  <documentation value="[markdown]"/><!-- 0..1 Messaging interface behavior details -->
+  <supportedMessage>  <!-- 0..* Messages supported by this system -->
+   <mode value="[code]"/><!-- 1..1 sender | receiver -->
+   <definition><!-- 1..1 canonical(MessageDefinition) Message supported by this system --></definition>
+  </supportedMessage>
+ </messaging>
+ <document>  <!-- ?? 0..* Document definition -->
+  <mode value="[code]"/><!-- 1..1 producer | consumer -->
+  <documentation value="[markdown]"/><!-- 0..1 Description of document support -->
+  <profile><!-- 1..1 canonical(StructureDefinition) Constraint on the resources used in the document --></profile>
+ </document>
+    </CapabilityStatement>
+  </bricks>
+</capabilitystatement-infos>

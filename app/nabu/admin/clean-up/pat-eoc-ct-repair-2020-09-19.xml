@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data><norepair id="p-46bbeb91-dbdc-4a51-b707-76e71a08f0c3" name="Schäfer, Sophie"/><norepair id="p-d474b477-9f6b-46c3-b87b-21c65f40ca16" name="Rekaj, Reina"/><norepair id="p-176c07f0-3454-48d8-b639-c4e08c0e9121" name="Steubing, Paula"/><norepair id="p-f28153fc-e5f9-4bc8-8a92-7c5c95394105" name="Gelhausen, Elias Phil"/><norepair id="p-215d2b74-d73b-42f7-995f-67444155e360" name="De Bruin, Mavi"><CareTeam xmlns="http://hl7.org/fhir" xml:id="c-7dd7c63a-25e7-4643-80ae-95ae3b868878"><id value="c-c7aa4025-a106-4f42-a3cc-165f793cf310"/><meta><versionId value="1"/></meta><lastModifiedBy><reference value="metis/practitioners/u-kuepperk"/><display value="Küpper, Kassia"/></lastModifiedBy><lastModified value="2020-09-17T14:35:33.332+02:00"/><status value="active"/><category>
+                <coding>
+                    <system value="http://hl7.org/fhir/care-team-category"/>
+                    <code value="longitudinal"/>
+                </coding>
+                <text value="Care Coordination"/>
+            </category><name value="nSPZ"/><context> 
+                <reference value="nabu/episodeofcares/c-9758d002-d71e-47de-b938-9bfb87e22fa7"/>
+            </context><subject>
+                <reference value="nabu/patients/p-215d2b74-d73b-42f7-995f-67444155e360"/>
+                <display value="De Bruin, Mavi, *2020-09-03"/>
+            </subject><period>
+                <start value="2020-09-17T13:35:01.835+01:00"/>
+                <end value=""/>
+            </period><managingOrganization>
+                <reference value="metis/organizations/kikl-spzn"/>
+                <display value="nSPZ Kinderklinik"/>                
+            </managingOrganization></CareTeam></norepair></data>

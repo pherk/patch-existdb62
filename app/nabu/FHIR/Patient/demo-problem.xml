@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-demo-name" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:bind ref="*:name[*:use/@value='official']/*:given/@value" type="xs:string" required="true()"/>
+            <xf:bind ref="*:name[*:use/@value='official']/*:family/@value" type="xs:string" required="true()"/>
+            <xf:bind ref="*:birthDate/@value" type="xs:date" required="true()"/>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:submission id="s-update-patient-master" resource="model:m-patient#instance('i-patient')//*:Patient" replace="none" method="post">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="bf:instanceOfModel('m-patient','i-control-center')/*:isDirty" value="'true'"/>
+                    <xf:message level="ephemeral">Subform has updated Master.</xf:message>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot update Master!.</xf:message>
+            </xf:submission><!--            
+            <xf:instance id="views">
+                <data xmlns="">
+                    <isDirty/>
+                    <PatientDirty/>
+                </data>
+            </xf:instance>
+            <xf:bind id="PatientDirty"
+                ref="bf:instanceOfModel('m-demo-name','views')/*:PatientDirty"
+                relevant="bf:instanceOfModel('m-demo-name','views')/*:isDirty = 'true'"/>   
+-->
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready"/>
+        </xf:model>
+    </div>
+    <xf:group ref="bf:instanceOfModel('m-demo-name','i-pat')" class="svFullGroup bordered">
+        <xf:action ev:event="xforms-value-changed">
+            <xf:setvalue ref="bf:instanceOfModel('m-demo-name','views')/*:isDirty" value="'true'"/>
+        </xf:action>
+        <xf:label>Problem</xf:label>
+        <br/>
+        <xf:textarea id="demo-presenting-problem" ref="./*:extension[@url='#patient-presenting-problem']/*:valueAnnotation/*:text/@value" class="fullarea">
+            <xf:label>Problem:</xf:label>
+        </xf:textarea>
+        <xf:output value="tokenize(./*:address/*:period/*:start/@value,'T')[1]">
+            <xf:label>Erstkontakt:</xf:label>
+        </xf:output>
+        <xf:trigger class="svUpdateMasterTrigger">
+            <xf:label>Update</xf:label>
+            <xf:action ev:event="DOMActivate">
+                <xf:send submission="s-update-patient-master"/>
+            </xf:action>
+        </xf:trigger>
+    </xf:group>
+</div>

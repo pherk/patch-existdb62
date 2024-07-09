@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <title>Heat Maps</title>
+        <meta name="description" content="Peter Herkenrath | CalHeatMap Example with csv data source."/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootswatch/2.3.1/cosmo/bootstrap.min.css"/>
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css"/>
+        <link href="../../nabu/resources/scripts/jquery/select2-4.0/select2.css" rel="stylesheet"/>
+        <script data-require="d3@3.5.3" data-semver="3.5.3" src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.js"/>
+        <script data-require="jquery@2.1.4" data-semver="2.1.4" src="https://code.jquery.com/jquery-2.1.4.js"/>
+        <script src="../../nabu/resources/scripts/jquery/select2-4.0/select2.full.js"/>
+        <link rel="stylesheet" href="../resources/scripts/cal-heatmap.css"/>
+        <script type="text/javascript" src="../resources/scripts/cal-heatmap.min.js"/>
+        <script type="text/javascript" src="../resources/scripts/moment-with-locales.js"/>
+    </head>
+    <body>
+        <div class="container">
+            <div id="filter" class="row">
+                <h2>Workload und Freie Termine</h2>
+                <h4>Selektion nach Service und Kalender funktioniert noch nicht</h4>
+                <table>
+                    <tr>
+                        <td>
+                            <label for="group" class="">Gruppe:</label>
+                            <select class="cal-select" type="text" name="group"/>
+                        </td>
+                        <td>
+                            <label for="subject" class="">Mitarbeiter:</label>
+                            <select class="cal-select" type="text" name="subject"/>
+                        </td>
+                        <td>
+                            <label for="schedule" class="">Kalender:</label>
+                            <select class="cal-select" type="text" name="schedule"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="row">
+                <div id="wlcal-heatmap"/>
+            </div>
+            <div class="row">
+                <div id="ftcal-heatmap"/>
+            </div>
+            <div class="row"><!--
+                <button id="minDate-previous" style="margin-bottom: 10px;" class="btn">
+                    <i class="icon icon-chevron-left"/>
+                </button>
+                <button id="minDate-next" style="margin-bottom: 10px;" class="btn">
+                    <i class="icon icon-chevron-right"/>
+                </button>
+--></div>
+        </div>
+        <script type="text/javascript" src="./wlft.js"/>
+    </body>
+</html>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bcp47>
+    <lang value="ar-SA" label="Arabic"/>
+    <lang value="as-IN" label="Assamese"/>
+    <lang value="ast-ES" label="Asturian"/>
+    <lang value="bg-BG" label="Bulgarian"/>
+    <lang value="bn-IN" label="Bengali (India)"/>
+    <lang value="bs-BA" label="Bosnian"/>
+    <lang value="ca-ES" label="Catalan"/>
+    <lang value="cs-CZ" label="Czech"/>
+    <lang value="da-DK" label="Danish"/>
+    <lang value="de-CH" label="German (Switzerland)"/>
+    <lang value="de-DE" label="German (Germany)"/>
+    <lang value="el-GR" label="Greek"/>
+    <lang value="en-US" label="English (USA)"/>
+    <lang value="en-GB" label="English (GB)"/>
+    <lang value="es-ES" label="Spanish"/>
+    <lang value="fa-IR" label="Persian"/>
+    <lang value="fi-FI" label="Finnish"/>
+    <lang value="fr-FR" label="French"/>
+    <lang value="gu-IN" label="Gujarati"/>
+    <lang value="he-IL" label="Hebrew"/>
+    <lang value="hi-IN" label="Hindi"/>
+    <lang value="hr-HR" label="Croatian"/>
+    <lang value="hu-HU" label="Hungarian"/>
+    <lang value="is-IS" label="Icelandic"/>
+    <lang value="it-IT" label="Italian"/>
+    <lang value="ja-JP" label="Japanese"/>
+    <lang value="kn-IN" label="Kannada"/>
+    <lang value="ko-KR" label="Korean"/>
+    <lang value="lv-LV" label="Latvian"/>
+    <lang value="ml-IN" label="Malayalam"/>
+    <lang value="mr-IN" label="Marathi"/>
+    <lang value="nb-NO" label="Norwegian (Bokmål orthography)"/>
+    <lang value="nl-NL" label="Dutch"/>
+    <lang value="or-IN" label="Oriya"/>
+    <lang value="pa-IN" label="Punjabi"/>
+    <lang value="pl-PL" label="Polish"/>
+    <lang value="pt-BR" label="Portuguese (Brazil)"/>
+    <lang value="pt-PT" label="Portuguese (Portugal)"/>
+    <lang value="ru-RU" label="Russian"/>
+    <lang value="si-LK" label="Sinhalese"/>
+    <lang value="sk-SK" label="Slovak"/>
+    <lang value="sr-Cyrl-RS" label="Serbian (Cyrillic script)"/>
+    <lang value="sr-Latn-RS" label="Serbian (Latin script)"/>
+    <lang value="sv-SE" label="Swedish"/>
+    <lang value="ta-IN" label="Tamil"/>
+    <lang value="te-IN" label="Telugu"/>
+    <lang value="th-TH" label="Thai"/>
+    <lang value="uk-UA" label="Ukrainian"/>
+    <lang value="zh-CN" label="Chinese (People's Republic of China, implicitly simplified Han script)"/>
+    <lang value="zh-TW" label="Chinese (Republic of China, implicitly traditional Han script)"/>
+</bcp47>

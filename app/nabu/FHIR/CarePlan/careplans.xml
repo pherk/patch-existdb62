@@ -1,0 +1,1977 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-cps" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" xmlns:fhir="http://hl7.org/fhir" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:instance xmlns="" id="i-eocs">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-eoc-from-master" resource="model:m-patient#instance('i-eocs')//*:EpisodeOfCare" instance="i-eocs" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load EoCs (Master)!.</xf:message>
+            </xf:submission>
+            <xf:instance xmlns="" id="i-login">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-login-from-master" resource="model:m-patient#instance('i-login')//*:data" instance="i-login" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">login: cannot load from Master!.</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-cps">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-careplans" instance="i-cps" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/careplans?subject=', instance('i-pat')/*:id/@value,'&amp;loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:dispatch name="reloadedcps" targetid="cplist"/>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get cps!</xf:message>
+            </xf:submission>
+            <xf:submission id="s-submit-careplan" ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]" targetref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]" method="put" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/careplans?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'false'"/>
+                    <xf:setvalue ref="instance('i-control-center')/*:cp-new" value="'false'"/>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot submit careplan!</xf:message>
+            </xf:submission>
+            <xf:submission id="s-submit-cp-new-activity" ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]" targetref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]" method="put" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/careplans?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="instance('i-control-center')/*:cp-new" value="'false'"/>
+                <xf:insert at="last()" nodeset="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity" context="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]" origin="instance('i-cp-infos')/*:bricks/*:activity"/>
+                <xf:insert nodeset="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]/*:reference" context="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]" origin="instance('i-cp-infos')/*:bricks/*:reference"/>
+                <xf:insert at="last()" nodeset="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]/*:progress" context="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]" origin="instance('i-cp-infos')/*:bricks/*:progress"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]/*:progress[last()]/*:authorReference/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]/*:progress[last()]/*:authorReference/*:display/@value" value="instance('i-login')/*:lognam"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]/*:progress[last()]/*:time/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]/*:progress[last()]/*:text/@value" value="'angelegt'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'true'"/>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot submit cp for new activity!</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-cp-infos" src="FHIR/CarePlan/careplan-infos.xml"/>
+            <xf:instance xmlns="" id="i-pd-infos" src="FHIR/PlanDefinition/plandefinition-infos.xml"/>
+            
+            <xf:instance id="i-golem">
+                <data xmlns=""/>
+            </xf:instance>
+            <xf:submission id="s-get-orders-from-golem" ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]" method="put" targetref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]" replace="instance">
+                <xf:resource value="concat('/exist/restxq/golem/evaluate?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm),'&amp;context=',encode-for-uri(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:subject/*:reference/@value),'&amp;priority=',encode-for-uri(instance('i-goals')/*:Goal[*:category/*:coding/*:code/@value='registration'][*:lifecycleStatus/@value=('proposed','accepted')]/*:priority/*:coding/*:code/@value),'&amp;description=',encode-for-uri(instance('i-goals')/*:Goal[*:category/*:coding/*:code/@value='registration'][*:lifecycleStatus/@value=('proposed','accepted')]/*:description/*:text/@value))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:message level="ephemeral">Golem called</xf:message>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">plan execution failed!</xf:message>
+            </xf:submission>
+            <xf:submission id="s-get-details-from-golem" ref="instance('i-golem')" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/golem/evaluate?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm),'&amp;plan=',encode-for-uri(substring-after(instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:definition/*:reference/@value,'nabu/plandefinitions/')),'&amp;context=',encode-for-uri(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:subject/*:reference/@value))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:message level="ephemeral">
+                        Golem: <xf:output value="count(instance('i-golem')//*:detail)"/> Details für: <xf:output value="instance('i-golem')/*:title/@value"/>
+                    </xf:message>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot call golem!</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-o-infos" src="FHIR/Order/order-infos.xml"/>
+            <xf:instance xmlns="" id="i-t-infos" src="FHIR/Task/task-infos.xml"/>
+            
+            <xf:instance xmlns="" id="i-groups">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-groups" instance="i-groups" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/metis/roles?filter=service&amp;loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get groups!</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-users">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-users" instance="i-users" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/metis/PractitionerRole/users?_format=ref&amp;loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get users!</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-goals">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-goals" instance="i-goals" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/goals?_format=code&amp;loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm),'&amp;subject=', instance('i-pat')/*:id/@value)"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get goals!</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-tags">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-tags" instance="i-tags" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/conditions?_format=code&amp;loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm),'&amp;category=finding&amp;verification=active&amp;subject=', instance('i-pat')/*:id/@value)"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get tags!</xf:message>
+            </xf:submission>     
+            <xf:bind ref="instance('i-tags')/*:Condition/*:selected" type="xs:boolean"/>
+            
+            <xf:instance id="i-actions">
+                <data xmlns="">
+                </data>
+            </xf:instance>
+            <xf:submission id="s-get-actions" instance="i-actions" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/careplans/', instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:id/@value,'/actions?_format=full&amp;loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="instance('i-control-center')/*:rasid" value="choose(count(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity)&gt;0,'1','0')"/>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get actions!</xf:message>
+            </xf:submission>   
+            <xf:submission id="s-submit-action" ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]" targetref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]" method="put" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/',instance('i-control-center')/*:action-type,'s?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:message level="ephemeral">Action submitted!</xf:message>
+                    <xf:setvalue ref="instance('i-control-center')/*:action-dirty" value="'false'"/>
+                    <xf:setvalue ref="instance('i-control-center')/*:action-new" value="'false'"/>
+                    <xf:action if="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:reference/@value=''">
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:reference/@value" value="concat('nabu/',instance('i-control-center')/*:action-type,'s/',instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:id/@value)"/>
+                        <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'true'"/>
+                        <xf:action if="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:status/@value = ('draft','received')">
+                            <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:status/@value" value="'active'"/>
+                        </xf:action>
+                    </xf:action>
+                    <xf:action if="instance('i-control-center')/*:cp-dirty='true'">
+                        <xf:send submission="s-submit-careplan"/>
+                    </xf:action>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot submit action!</xf:message>
+            </xf:submission>
+        
+            <xf:instance id="iiter">
+                <iiter xmlns=""/>
+            </xf:instance>
+            <xf:bind id="biiter" ref="instance('iiter')" type="xs:int"/>
+            
+            <xf:instance id="i-control-center">
+                <data xmlns="">
+                    <rcpsid>0</rcpsid>
+                    <cp-dirty>false</cp-dirty>
+                    <cp-new>false</cp-new>
+                    <rasid>0</rasid>
+                    <action-dirty>false</action-dirty>
+                    <action-new>false</action-new>
+                    <action-type/>
+                </data>
+            </xf:instance>         
+            <xf:bind id="brcpsid" ref="instance('i-control-center')/*:rcpsid" type="xs:int"/>
+            <xf:bind id="brasid" ref="instance('i-control-center')/*:rasid" type="xs:int"/>
+            
+            <xf:instance id="views">
+                <data xmlns="">
+                    <noCP/>
+                    <noGoal/>
+                    <noTag/>
+                </data>
+            </xf:instance>
+            <xf:bind id="noCP" ref="instance('views')/*:noCP" relevant="count(instance('i-cps')/*:CarePlan) = 0"/>
+            <xf:bind id="noGoal" ref="instance('views')/*:noGoal" relevant="count(instance('i-goals')/*:Goal) = 0"/>
+            <xf:bind id="noTag" ref="instance('views')/*:noTag" relevant="count(instance('i-tags')/*:Condition) = 0"/>
+
+            <xf:instance id="i-memo">
+                <data xmlns="">
+                    <lfdno>1</lfdno>
+                    <service-code/>
+                    <subject-uid/>
+                    <subject-display/>
+                    <fafue-uid/>
+                    <fafue-display/>
+                    <schedule/>
+                    <schedule-display/>
+                    <eoc-active/>
+                    <recipient>
+                        <role value=""/>
+                        <reference value=""/>
+                        <display value=""/>
+                    </recipient>
+                </data>
+            </xf:instance>
+            <xf:bind ref="instance('i-memo')/*:lfdno" type="xs:string" constraint="matches(.,'\d')"/>
+            
+            <xf:instance id="i-merged-action-details">
+                <data xmlns=""/>
+            </xf:instance>
+
+            <xf:instance id="i-bricks">
+                <data xmlns="">
+                    <detail>
+                        <index/>
+                        <type/>
+                        <startdate/>
+                        <anlass/>
+                        <lastprogressdate/>
+                        <lastprogress/>
+                        <outcome/>
+                        <encounter/>
+                        <actor/>
+                        <status value=""/>
+                    </detail>
+                </data>
+            </xf:instance>
+            <xf:action ev:event="check-EOC-active">
+                <xf:action if="instance('i-eocs')/*:status/@value=('planned','active')">
+                    <xf:setvalue ref="instance('i-memo')/*:eoc-active" value="'true'"/>
+                    <xf:message level="ephemeral">EOC checked as active</xf:message>
+                </xf:action>
+            </xf:action>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+                <xf:send submission="s-load-login-from-master"/>
+                <xf:send submission="s-load-eoc-from-master"/>
+                <xf:send submission="s-get-groups"/>
+                <xf:send submission="s-get-users"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+                <xf:send submission="s-get-tags"/>
+                <xf:send submission="s-get-goals"/>
+                <xf:send submission="s-get-careplans"/>
+                <script type="text/javascript">
+                    initFaFue();
+                    initSchedule();
+                </script>
+                <xf:setvalue ref="instance('i-memo')/*:subject-uid" value="instance('i-pat')/*:id/@value"/>
+                <xf:setvalue ref="instance('i-memo')/*:subject-display" value="concat(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-pat')/*:name[*:use/@value='official']/*:given/@value,', *',instance('i-pat')/*:birthDate/@value)"/>
+                <!--
+                <xf:dispatch name="resetTags" targetid="cplist"/>
+                <xf:dispatch name="resetGoals" targetid="cplist"/>
+        -->
+                <xf:dispatch name="check-EOC-active" targetid="m-cps"/>
+            </xf:action>
+        </xf:model>
+    <!-- shadowed inputs for select2 hack, to register refs for fluxprocessor -->
+
+        <xf:input id="target-role" ref="instance('i-memo')/*:recipient/*:role/@value">
+            <xf:action ev:event="xforms-value-changed">
+                    <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status/@value" value="'received'"/>
+            </xf:action>
+        </xf:input>
+        <xf:input id="target-ref" ref="instance('i-memo')/*:recipient/*:reference/@value">
+            <xf:action ev:event="xforms-value-changed">
+                    <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status/@value" value="'received'"/>
+            </xf:action>
+        </xf:input>
+        <xf:input id="target-display" ref="instance('i-memo')/*:recipient/*:display/@value"/>
+        <xf:input id="actor-service" ref="instance('i-memo')/*:service-code"/>
+        <xf:input id="fafue-subject" ref="instance('i-memo')/*:subject-uid"/>
+        <xf:input id="fafue-uid" ref="instance('i-memo')/*:fafue-uid">
+            <xf:action ev:event="xforms-value-changed">
+                <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:actor/*:reference/@value" value="choose(instance('i-memo')/*:fafue-uid='','',concat('metis/practitioners/',instance('i-memo')/*:fafue-uid))"/>
+            <!--
+                <xf:setvalue
+                    ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:actor/*:display/@value"
+                    value="instance('i-memo')/*:fafue-display"/>
+                <script type="text/javascript">
+                    $('.order-select[name="fafue-hack"]').val('').trigger('change');
+                </script>
+                <xf:message level="modal">Fafue updated</xf:message>
+-->
+            </xf:action>
+        </xf:input>
+        <xf:input id="fafue-display" ref="instance('i-memo')/*:fafue-display">
+            <xf:action ev:event="xforms-value-changed">
+            <!--
+                <xf:setvalue 
+                    ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:actor/*:reference/@value"
+                    value="choose(instance('i-memo')/*:fafue-uid='','',concat('metis/practitioners/',instance('i-memo')/*:fafue-uid))"/>
+            -->
+                    <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:actor/*:display/@value" value="instance('i-memo')/*:fafue-display"/>
+            </xf:action>
+        </xf:input>
+        <xf:input id="schedule" ref="instance('i-memo')/*:schedule"/>
+        <xf:input id="schedule-display" ref="instance('i-memo')/*:schedule-display">
+            <xf:action ev:event="xforms-value-changed">
+                <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:schedule/*:reference/@value" value="concat('enahar/schedules/',instance('i-memo')/*:schedule)"/>
+                <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:schedule/*:display/@value" value="instance('i-memo')/*:schedule-display"/>
+            </xf:action>
+        </xf:input>
+    </div>
+    <xf:group class="svFullGroup">
+        <xf:group id="cplist" class="svFullGroup bordered">
+            <xf:action ev:event="reloadedcps">
+                    <xf:setvalue ref="instance('i-control-center')/*:rcpsid" value="'0'"/>
+                    <xf:action if="count(instance('i-cps')/*:CarePlan)&gt;0">
+                        <xf:setvalue ref="instance('i-control-center')/*:rcpsid" value="'1'"/>
+                        <xf:dispatch name="setLinkedTags" targetid="cplist"/>
+                        <xf:dispatch name="setLinkedGoals" targetid="cplist"/>
+                    </xf:action>
+            </xf:action>
+            <xf:action ev:event="newCarePlan">
+                <xf:action>
+                    <xf:insert position="after" at="last()" ref="instance('i-cps')/*:CarePlan" context="instance('i-cps')" origin="instance('i-cp-infos')/*:bricks/*:CarePlan"/>
+                </xf:action>
+
+                <xf:action>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[last()]/*:period/*:start/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[last()]/*:author/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[last()]/*:author/*:display/@value" value="instance('i-login')/*:lognam"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[last()]/*:subject/*:reference/@value" value="concat('nabu/patients/',instance('i-pat')/*:id/@value)"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[last()]/*:subject/*:display/@value" value="concat(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-pat')/*:name[*:use/@value='official']/*:given/@value,', *',instance('i-pat')/*:birthDate/@value)"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[last()]/*:note[1]/*:time/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[last()]/*:note[1]/*:authorReference/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[last()]/*:note[1]/*:authorReference/*:display/@value" value="instance('i-login')/*:lognam"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[last()]/*:note[1]/*:text/@value" value="'angelegt'"/>
+                </xf:action>
+                <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'true'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:cp-new" value="'true'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:rcpsid" value="count(instance('i-cps')/*:CarePlan)"/>
+                <xf:setvalue ref="instance('i-cps')/*:count" value="count(instance('i-cps')/*:CarePlan)"/>
+                <xf:setvalue ref="instance('i-cps')/*:length" value="count(instance('i-cps')/*:CarePlan)"/>
+            </xf:action>
+            <xf:action ev:event="insertNPTag">
+                <xf:action if="count(instance('i-tags')/*:Condition[*:code/*:coding[*:system/@value='http://eNahar.org/nabu/extension#nabu-finding']/*:code/@value='NP'])&gt;0">
+                    <xf:insert at="last()" ref="instance('i-cps')/*:CarePlan[1]/*:addresses" context="instance('i-cps')/*:CarePlan[1]" origin="instance('i-cp-infos')/*:bricks/*:addresses"/>
+                    <xf:setvalue ref="instance('i-cps')/*:CarePlan[1]/*:addresses[last()]/*:reference/@value" value="concat('nabu/conditions/',instance('i-tags')/*:Condition[*:code/*:coding[*:system/@value='http://eNahar.org/nabu/extension#nabu-finding']/*:code/@value='NP']/*:id/@value)"/>
+                    <xf:setvalue ref="instance('i-cps')/*:CarePlan[1]/*:addresses[last()]/*:display/@value" value="instance('i-tags')/*:Condition/*:code/*:coding[*:system/@value='http://eNahar.org/nabu/extension#nabu-finding'][*:code/@value='NP']/*:display/@value"/>
+                    <xf:message level="ephemeral">NP Tag verlinkt</xf:message>
+                    <xf:setvalue ref="instance('i-tags')/*:Condition[*:code/*:coding[*:system/@value='http://eNahar.org/nabu/extension#nabu-finding']/*:code/@value='NP']/*:selected" value="'true'"/>
+                </xf:action>
+            </xf:action>
+            <xf:action ev:event="newActivity">
+                <xf:insert at="last()" nodeset="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity" context="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]" origin="instance('i-cp-infos')/*:bricks/*:activity"/>
+                <xf:insert nodeset="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]/*:reference" context="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]" origin="instance('i-cp-infos')/*:bricks/*:reference"/>
+                <xf:insert at="last()" nodeset="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]/*:progress" context="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]" origin="instance('i-cp-infos')/*:bricks/*:progress"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]/*:progress[last()]/*:authorReference/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]/*:progress[last()]/*:authorReference/*:display/@value" value="instance('i-login')/*:lognam"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]/*:progress[last()]/*:time/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]/*:progress[last()]/*:text/@value" value="'angelegt'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'true'"/>
+            </xf:action>
+            <xf:action ev:event="newProgressAnnotation">
+                <xf:insert at="last()" nodeset="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress" context="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]" origin="instance('i-cp-infos')/*:bricks/*:progress"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress[last()]/*:authorReference/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress[last()]/*:authorReference/*:display/@value" value="instance('i-login')/*:lognam"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress[last()]/*:time/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress[last()]/*:text/@value" value="'angelegt'"/>
+            </xf:action>
+            <xf:action ev:event="newOrder">
+                <xf:insert at="last()" nodeset="instance('i-actions')/*[local-name()=('Order','Task','detail')]" context="instance('i-actions')" origin="instance('i-o-infos')/*:bricks/*:Order"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:date/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:source/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:source/*:display/@value" value="instance('i-login')/*:lognam"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:target/*:role/@value" value="'spz-ateam'"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:target/*:display/@value" value="'SPZ ATeam'"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:subject/*:reference/@value" value="concat('nabu/patients/',instance('i-pat')/*:id/@value)"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:subject/*:display/@value" value="concat(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-pat')/*:name[*:use/@value='official']/*:given/@value,', *',instance('i-pat')/*:birthDate/@value)"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:status/@value" value="'active'"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:basedOn/*:reference/@value" value="concat('nabu/careplans/',instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:id/@value)"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:basedOn/*:display/@value" value="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:title/@value"/>
+                <xf:action if="string-length(instance('i-eocs')/*:status[@value=('planned','active')]/../*:caseManager/*:reference/@value)=0">
+                    <xf:setvalue ref="instance('i-actions')/*[last()]/*:appointmentType/*:coding/*:code/@value" value="'NOCM'"/>
+                    <xf:setvalue ref="instance('i-actions')/*[last()]/*:appointmentType/*:coding/*:display/@value" value="'kein FF'"/>
+                </xf:action>
+                <xf:setvalue ref="instance('i-control-center')/*:action-dirty" value="'true'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:action-new" value="'true'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:action-type" value="'order'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:rasid" value="count(instance('i-actions')/*)"/>
+            </xf:action>
+<!--
+            <xf:action ev:event="addOrdersFromGolem">
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:description/@value" value="instance('i-golem')/*:title/@value"/>
+                <xf:setvalue ref="instance('iiter')" value="xs:int(1)"/>
+                <xf:action while="instance('iiter') <= count(instance('i-golem')/*:Order)">
+                    <xf:dispatch name="newActivity" targetid="cplist"/>
+                    <xf:insert at="last()" nodeset="instance('i-actions')/*[local-name()=('Order','Task','detail')]" context="instance('i-actions')" origin="instance('i-golem')/*:Order[xs:int(instance('iiter'))]"/>
+                    <xf:dispatch name="add-action-details" targetid="cplist"/>
+                    <xf:dispatch name="linkOrderWithActivity" targetid="cplist"/>
+                    <xf:setvalue ref="instance('iiter')" value="instance('iiter') + 1"/>
+                </xf:action>
+                <xf:setvalue ref="instance('i-control-center')/*:action-dirty" value="'true'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:action-new" value="'true'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:action-type" value="'order'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:rasid" value="count(instance('i-actions')/*)"/>
+            </xf:action>
+-->
+            <xf:action ev:event="newOrderDetail">
+                <xf:insert ev:event="DOMActivate" position="after" at="index('r-details-id')" nodeset="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail" context="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]" origin="instance('i-o-infos')/*:bricks/*:detail"/>
+                <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/@id" value="generate-id()"/>
+                <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:spec/*:combination/@value" value="index('r-details-id')"/>
+                <xf:setvalue ref="instance('i-memo')/*:lfdno" value="count(instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail)"/>
+            </xf:action>
+            <xf:action ev:event="addDetailsFromGolemOrder">
+                <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:description/@value" value="instance('i-golem')/*:title/@value"/>
+                <xf:setvalue ref="instance('iiter')" value="xs:int(1)"/>
+                <xf:action while="instance('iiter') &lt;= count(instance('i-golem')/*:Order/*:detail)">
+                    <xf:insert ev:event="DOMActivate" position="after" at="index('r-details-id')" nodeset="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail" context="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]" origin="instance('i-golem')/*:Order/*:detail[xs:int(instance('iiter'))]"/>
+                    <xf:setvalue ref="instance('iiter')" value="instance('iiter') + 1"/>
+                </xf:action>
+                <xf:setvalue ref="instance('i-memo')/*:lfdno" value="count(instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail)"/>
+                <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:description/@value" value="instance('i-golem')/*:Order/*:description/@value"/>
+            </xf:action>
+            <xf:action ev:event="newTask">
+                <xf:insert at="last()" nodeset="instance('i-actions')/*[local-name()=('Order','Task','detail')]" context="instance('i-actions')" origin="instance('i-t-infos')/*:bricks/*:Task"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:authoredOn/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:requester/*:agent/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:requester/*:agent/*:display/@value" value="instance('i-login')/*:lognam"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:requester/*:onBehalf/*:reference/@value" value="concat('nabu/organizations/',instance('i-login')/*:realm"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:owner/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:owner/*:display/@value" value="instance('i-login')/*:lognam"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:author/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:author/*:display/@value" value="instance('i-login')/*:lognam"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:note[1]/*:authorReference/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:note[1]/*:authorReference/*:display/@value" value="instance('i-login')/*:lognam"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:note[1]/*:time/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:restriction/*:period/*:end/@value" value="instance('i-login')/*:today"/> 
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:for/*:reference/@value" value="concat('nabu/patients/',instance('i-pat')/*:id/@value)"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:for/*:display/@value" value="concat(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-pat')/*:name[*:use/@value='official']/*:given/@value,', *',instance('i-pat')/*:birthDate/@value)"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:basedOn/*:reference/@value" value="concat('nabu/careplans/',instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:id/@value)"/>
+                <xf:setvalue ref="instance('i-actions')/*[last()]/*:basedOn/*:display/@value" value="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:title/@value"/>
+                <xf:setvalue ref="instance('i-control-center')/*:action-dirty" value="'true'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:action-new" value="'true'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:action-type" value="'task'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:rasid" value="count(instance('i-actions')/*)"/>
+            </xf:action>
+            <xf:action ev:event="insertTaskComment" if="count(instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:note)=1">
+                <xf:insert at="last()" nodeset="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:note" origin="instance('i-t-infos')/*:bricks/*:note"/>
+                <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:note[2]/*:authorReference/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:note[2]/*:authorReference/*:display/@value" value="instance('i-login')/*:lognam"/>
+                <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:note[2]/*:time/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+            </xf:action>
+            <xf:action ev:event="cancelOrder">
+                <xf:setvalue ref="instance('i-control-center')/*:action-dirty" value="'true'"/>
+                <xf:setvalue ref="instance('iiter')" value="'1'"/>
+                <xf:action while="instance('iiter') &lt;= count(instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail)">
+                    <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[xs:int(instance('iiter'))]/*:status/@value" value="'cancelled'"/>
+                    <xf:setvalue ref="instance('iiter')" value="instance('iiter') + 1"/>
+                </xf:action>
+                <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status/@value" value="'cancelled'"/>
+                <xf:message level="ephemeral"><xf:output value="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status/@value"/></xf:message>
+                <xf:action if="count(distinct-values(instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail/*:status/@value)) = 1">
+                    <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status/@value" value="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[1]/*:status/@value"/>
+                </xf:action>
+                <xf:message level="ephemeral">order status set!</xf:message>
+                <xf:dispatch name="newProgressAnnotation" targetid="cplist"/>
+                <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress[last()]/*:text/@value" value="'cancelled via CarePlan'"/>
+            </xf:action>
+            <xf:action ev:event="cancelTask">
+                <xf:setvalue ref="instance('i-control-center')/*:action-dirty" value="'true'"/>
+                <xf:action if="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status/@value=('received','accepted')">
+                    <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status/@value" value="'cancelled'"/>
+                    <xf:dispatch name="newProgressAnnotation" targetid="cplist"/>
+                    <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress[last()]/*:text/@value" value="'cancelled via CarePlan'"/>
+                </xf:action>
+            </xf:action>
+            <xf:action ev:event="completeTask">
+                <xf:setvalue ref="instance('i-control-center')/*:action-dirty" value="'true'"/>
+                <xf:action if="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status/@value=('received','accepted')">
+                    <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status/@value" value="'completed'"/>
+                    <xf:dispatch name="newProgressAnnotation" targetid="cplist"/>
+                    <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress[last()]/*:text/@value" value="'completed via CarePlan'"/>
+                </xf:action>
+            </xf:action>
+            <xf:action ev:event="addTaskRecipient">
+                <xf:insert ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:restriction/*:recipient" context="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:restriction" origin="instance('i-t-infos')/*:bricks/*:recipient"/>
+        <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:restriction/*:recipient[last()]/*:extension/*:valueString/@value" value="instance('i-memo')/*:recipient/*:role/@value"/>
+        <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:restriction/*:recipient[last()]/*:reference/@value" value="instance('i-memo')/*:recipient/*:reference/@value"/>
+        <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:restriction/*:recipient[last()]/*:display/@value" value="instance('i-memo')/*:recipient/*:display/@value"/>
+        <xf:setvalue ref="instance('i-memo')/*:recipient/*:role/@value" value="''"/>
+        <xf:setvalue ref="instance('i-memo')/*:recipient/*:reference/@value" value="''"/>
+        <xf:setvalue ref="instance('i-memo')/*:recipient/*:display/@value" value="''"/>
+                <script type="text/javascript">
+                    console.log('clear filters');
+                    $('.task-select[name="role-hack"]').val('').trigger('change');
+                    $('.task-select[name="target-hack"]').val('').trigger('change');
+                </script>
+            </xf:action>
+            <xf:action ev:event="resetAction">
+                <xf:setvalue ref="instance('i-control-center')/*:action-dirty" value="'false'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:action-new" value="'false'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:action-type" value="''"/>
+                <xf:setvalue ref="instance('i-control-center')/*:rasid" value="index('r-activities-id')"/>
+            </xf:action>
+            <xf:action ev:event="merge-action-details">
+                <xf:delete ref="instance('i-merged-action-details')/*:detail"/>
+                <xf:setvalue ref="instance('iiter')" value="xs:int(1)"/>
+                <xf:action while="instance('iiter') &lt;= count(instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity)">
+                    <xf:dispatch name="insert-action-details" targetid="cplist"/>
+                    <xf:setvalue ref="instance('iiter')" value="instance('iiter') + 1"/>
+                </xf:action>
+            </xf:action>
+            <xf:action ev:event="add-action-details">
+                <xf:setvalue ref="instance('iiter')" value="count(instance('i-actions')/*)"/>
+                <xf:dispatch name="insert-action-details" targetid="cplist"/>
+            </xf:action>
+            <xf:action ev:event="insert-action-details">
+                <xf:insert at="last()" ref="instance('i-merged-action-details')/*:detail" context="instance('i-merged-action-details')" origin="instance('i-bricks')/*:detail"/>
+                <xf:setvalue ref="instance('i-merged-action-details')/*:detail[last()]/*:index" value="xs:int(instance('iiter'))"/>
+                <xf:setvalue ref="instance('i-merged-action-details')/*:detail[last()]/*:type" value="choose(exists(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('iiter'))]/*:reference),substring(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('iiter'))]/*:reference/*:reference/@value,6,1),'i')"/>
+                <xf:setvalue ref="instance('i-merged-action-details')/*:detail[last()]/*:startdate" value="tokenize(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('iiter'))]/*:progress[1]/*:time/@value,'T')[1]"/>
+                <xf:setvalue ref="instance('i-merged-action-details')/*:detail[last()]/*:anlass" value="choose(exists(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('iiter'))]/*:reference),instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('iiter'))]/*:reference/*:display/@value,instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('iiter'))]/*:detail/*:description/@value)"/>
+                <xf:setvalue ref="instance('i-merged-action-details')/*:detail[last()]/*:lastprogress" value="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('iiter'))]/*:progress[last()]/*:text/@value"/>
+                <xf:setvalue ref="instance('i-merged-action-details')/*:detail[last()]/*:lastprogressdate" value="tokenize(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('iiter'))]/*:progress[last()]/*:time/@value,'T')[1]"/>
+                <xf:setvalue ref="instance('i-merged-action-details')/*:detail[last()]/*:outcome" value="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('iiter'))]/*:outcomeCodeableConcept/*:text/@value"/>
+                <xf:setvalue ref="instance('i-merged-action-details')/*:detail[last()]/*:encounter" value="choose(string-length(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('iiter'))]/*:outcomeReference/*:reference/@value)&gt;0,instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('iiter'))]/*:outcomeReference/*:display/@value,'no Info')"/>
+                <xf:setvalue ref="instance('i-merged-action-details')/*:detail[last()]/*:actor" value="'unknown'"/>
+                <xf:setvalue ref="instance('i-merged-action-details')/*:detail[last()]/*:status/@value" value="instance('i-actions')/*[xs:int(instance('iiter'))]/*:status/@value"/>
+            </xf:action>
+            <xf:action ev:event="resetTagSelection">
+                <xf:setvalue ref="instance('iiter')" value="'1'"/>
+                <xf:action while="instance('iiter') &lt;= instance('i-tags')/*:length">
+                    <xf:setvalue ref="instance('i-tags')/*:Condition[xs:int(instance('iiter'))]/*:selected" value="'false'"/>
+                    <xf:setvalue ref="instance('iiter')" value="instance('iiter') + 1"/>
+                </xf:action>
+            </xf:action>
+            <xf:action ev:event="setLinkedTags">
+                <xf:setvalue ref="instance('iiter')" value="'1'"/>
+                <xf:action while="instance('iiter') &lt;= count(instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:addresses)">
+                    <xf:setvalue ref="instance('i-tags')/*:Condition[*:id/@value=substring-after(instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:addresses[xs:int(instance('iiter'))]/*:reference/@value,'nabu/conditions/')]/*:selected" value="'true'"/>
+                    <xf:setvalue ref="instance('iiter')" value="instance('iiter') + 1"/>
+                    <xf:message level="ephemeral">tag checked!</xf:message>
+                </xf:action>
+            </xf:action>
+            <xf:action ev:event="resetGoalSelection">
+                <xf:setvalue ref="instance('iiter')" value="'1'"/>
+                <xf:action while="instance('iiter') &lt;= instance('i-goals')/*:length">
+                <!--
+                    <xf:setvalue ref="instance('i-goals')/*:Goal[xs:int(instance('iiter'))]/*:selected" value="'false'"/>
+                -->
+                    <xf:setvalue ref="instance('iiter')" value="instance('iiter') + 1"/>
+                </xf:action>
+            </xf:action>
+            <xf:action ev:event="setLinkedGoals">
+                    <xf:setvalue ref="instance('iiter')" value="'1'"/>
+                    <xf:action while="instance('iiter') &lt;= count(instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:goal)">
+                        <xf:setvalue ref="instance('i-goals')/*:Goal[*:id/@value=substring-after(instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:goal[xs:int(instance('iiter'))]/*:reference/@value,'nabu/goals/')]/*:selected" value="'true'"/>
+                            <xf:setvalue ref="instance('iiter')" value="instance('iiter') + 1"/>
+                        <xf:message level="ephemeral">Goal checked</xf:message>
+                    </xf:action>
+            </xf:action>
+            <xf:label>CarePlans</xf:label>
+            <xf:group>
+            <xf:action ev:event="betterform-index-changed">
+                <xf:action if="instance('i-control-center')/*:cp-dirty='true'">
+                    <xf:delete ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[*:reference/*:reference/@value='']"/>
+                    <xf:send submission="s-submit-careplan"/>
+                </xf:action>
+                <xf:setvalue ref="instance('i-control-center')/*:rcpsid" value="xs:int(index('r-careplans-id'))"/>
+                <xf:dispatch name="resetTagSelection" targetid="cplist"/>
+                <xf:dispatch name="resetGoalSelection" targetid="cplist"/>
+                <xf:dispatch name="setLinkedTags" targetid="cplist"/>
+                <xf:dispatch name="setLinkedGoals" targetid="cplist"/>
+                <xf:delete ref="instance('i-actions')/*"/>
+                <xf:delete ref="instance('i-merged-action-details')/*"/>
+                <xf:setvalue ref="instance('i-control-center')/*:rasid" value="'0'"/>
+                <xf:dispatch name="check-EOC-active" targetid="cplist"/>
+                <xf:toggle case="listCarePlans"/>
+            </xf:action>
+            <xf:repeat id="r-careplans-id" ref="instance('i-cps')/*:CarePlan" appearance="compact" class="svRepeat">
+                <xf:output value="tokenize(./*:period/*:start/@value,'T')[1]">
+                    <xf:label class="svListHeader">Start</xf:label>
+                </xf:output>
+                <xf:output ref="./*:title/@value">
+                    <xf:label class="svListHeader">Title</xf:label>
+                </xf:output>
+                <xf:output value="substring-after(./*:definition/*:reference/@value,'nabu/plandefinitions/')">
+                    <xf:label class="svListHeader">Plan</xf:label>
+                </xf:output>
+                <xf:output ref="*:author/*:display/@value">
+                    <xf:label class="svListHeader">Author</xf:label>
+                </xf:output>
+                <xf:output value="count(./*:activity)">
+                    <xf:label class="svListHeader">Anzahl</xf:label>
+                </xf:output>
+                <xf:output ref="./*:status/@value">
+                    <xf:label class="svListHeader">Status</xf:label>
+                </xf:output>
+            </xf:repeat>
+            </xf:group>
+            <xf:group ref="instance('views')/*:noCP">
+                <p>
+                    <strong>Kein CarePlan angelegt</strong>
+                </p>
+            </xf:group>
+        </xf:group>
+
+        <xf:switch id="cp-switch">
+            <xf:case id="listCarePlans">
+                <xf:group class="svTriggerGroup">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:status[@value=('active','draft','suspended','unknown')]" class="svSubTrigger">
+                                    <xf:label>CP Edit</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="editCarePlan"/>
+                                    </xf:action>
+                                </xf:trigger>
+                                <xf:trigger ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:status[@value=('completed','cancelled')]" class="svSubTrigger">
+                                    <xf:label>Zeige CP</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="showCarePlan"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svAddTrigger">
+                                    <xf:label>CP Neu</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:dispatch name="newCarePlan" targetid="cplist"/>
+                                        <xf:dispatch name="insertNPTag" targetid="cplist" if="count(instance('i-cps')/*:CarePlan)=1"/>
+                                        <xf:toggle case="editCarePlan"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger>
+                                    <xf:label>
+                                        <strong>?</strong>
+                                    </xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="showHelp"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:status[@value=('active','completed','draft','suspended','unknown')]" class="svSubTrigger">
+                                    <xf:label>
+                                        <span class="glyphicon glyphicon-list"/>
+                                        Aktivitäten</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:action if="instance('i-control-center')/*:cp-new='false'">
+                                            <xf:send submission="s-get-actions"/>
+                                            <xf:message level="ephemeral">merge actions</xf:message>
+                                            <xf:action if="count(instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity)&gt;0">
+                                                <xf:dispatch name="merge-action-details" targetid="cplist"/>
+                                            </xf:action>
+                                        </xf:action>
+                                        <!--
+                                        <xf:dispatch name="resetAction" targetid="cplist"/>
+                                        -->
+                                        <xf:toggle case="listActivities"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                <strong>Beschreibung</strong>
+                            </td>
+                            <td align="left">
+                                <xf:output ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:description/@value"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                <strong>Fallführer</strong>
+                            </td>
+                            <td align="left">
+                                <xf:output ref="instance('i-eocs')/*:status[@value=('planned','active')]/../*:careManager/*:display/@value"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <xf:group>
+
+                                    <xf:repeat id="r-activities-id0" ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity" appearance="compact" class="svRepeatBlank">
+                                        <xf:output value="tokenize(./*:progress[1]/*:time/@value,'T')[1]">
+                                            <xf:label class="svRepeatHeader">Datum</xf:label>
+                                        </xf:output>
+                                        <xf:output value="choose(exists(./*:reference),substring(./*:reference/*:reference/@value,6,1),'i')"/>
+                                        <xf:textarea ref="choose(exists(./*:reference),./*:reference/*:display/@value,./*:detail/*:description/@value)" class="quartarea xfReadOnly">
+                                            <xf:label class="svRepeatHeader">Anlass</xf:label>
+                                        </xf:textarea>
+                                        <xf:textarea ref="./*:progress[last()]/*:text/@value" class="quartarea xfReadOnly"> 
+                                            <xf:label class="svRepeatHeader">Progress</xf:label>
+                                        </xf:textarea>
+                                        <xf:output ref="./*:outcomeCodeableConcept/*:text/@value">
+                                            <xf:label class="svRepeatHeader">Outcome</xf:label>
+                                        </xf:output>
+                                        <xf:output value="choose(string-length(./*:outcomeReference/*:reference/@value)&gt;0,./*:outcomeReference/*:display/@value,'no Info')">
+                                            <xf:label class="svRepeatHeader">Encounter</xf:label>
+                                        </xf:output>
+                                    </xf:repeat>
+                                </xf:group>
+                            </td>
+                        </tr>
+                    </table>
+                </xf:group>
+            </xf:case>
+            <xf:case id="showCarePlan">
+                <xf:group id="showCPGroup" ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Schließen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="listCarePlans"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <xf:group ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:goal">
+                                    <xf:label>Ziele</xf:label>
+                                    <xf:repeat id="r-goals1-id" ref="." appearance="compact" class="svRepeatBlank">
+                                        <xf:output value="./*:display/@value" class="long-input"/>
+                                    </xf:repeat>
+                                </xf:group>
+                                <xf:group ref="instance('views')/*:noGoal">
+                                    <xf:label>Keine Ziele zugeordnet</xf:label>
+                                </xf:group>
+                                </td>
+                                <td>
+                                <xf:group ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:addresses">
+                                    <xf:label>Tags</xf:label>
+                                    <xf:repeat id="r-tags1-id" ref="." appearance="compact" class="svRepeatBlank">
+                                        <xf:output ref="./*:display/@value"/>
+                                    </xf:repeat>
+                                </xf:group>
+                                <xf:group ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')][count(./*:addresses)=0]">
+                                    <xf:label>Keine Tags zugeordnet</xf:label>
+                                </xf:group>
+                            </td>
+                        </tr>
+                    </table>
+                    <xf:output ref="./*:definition/*:display/@value" class="">
+                                <xf:label>Plan:</xf:label>
+                    </xf:output>
+                    <xf:output value="./*:title/@value" class="long-input">
+                                <xf:label>Titel:</xf:label>
+                    </xf:output>
+                    <xf:textarea ref="./*:description/@value" class="fullareashort">
+                        <xf:label>Beschreibung:</xf:label>
+                    </xf:textarea>
+                </xf:group>
+            </xf:case>
+            <xf:case id="editCarePlan">
+                <xf:group id="editCPGroup" ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger ref="instance('i-control-center')/*:cp-dirty[.='true']" class="svUpdateMasterTrigger">
+                                    <xf:label>Speichern</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:delete ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[*:reference/*:reference/@value='']"/>
+                                        <xf:send submission="s-submit-careplan"/>
+                                        <xf:toggle case="listCarePlans"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Schließen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:action if="instance('i-control-center')/*:cp-dirty='true'">
+                                            <xf:message level="modal">CarePlan noch nicht gespeichert!</xf:message>
+                                        </xf:action>
+                                        <xf:toggle case="listCarePlans"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr style="border: none; height: 1px; color: blue; background: blue;"/>
+                    <table>
+                        <tr>
+                            <td>
+                            <xf:group ref="instance('i-goals')/*:Goal">
+                                <xf:label>Ziele</xf:label>
+                                <xf:repeat id="r-goals2-id" ref="instance('i-goals')/*:Goal" appearance="compact" class="svRepeat">
+                                    <xf:input ref="./*:selected" class="xsdBoolean svRepeatBool">
+                                        <xf:action ev:event="xforms-value-changed">
+                                            <xf:action if="instance('i-goals')/*:Goal[index('r-goals2-id')]/*:selected">
+                                                <xf:insert at="last()" ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:goal" context="instance('i-cps')/*:CarePlan[index('r-careplans-id')]" origin="instance('i-cp-infos')/*:bricks/*:goal"/>
+                                                <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:goal[last()]/*:reference/@value" value="concat('nabu/goals/',instance('i-goals')/*:Goal[index('r-goals2-id')]/*:id/@value)"/>
+                                                <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:goal[last()]/*:display/@value" value="instance('i-goals')/*:Goal[index('r-goals2-id')]/*:description/*:text/@value"/>
+                                                <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:title/@value" value="instance('i-goals')/*:Goal[index('r-goals2-id')]/*:description/*:coding[*:system/@value='http://eNahar.org/nabu/extension#nabu-finding']/*:display/@value"/>
+                                                <xf:action if="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:description/@value=''">
+                                                    <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:description/@value" value="instance('i-goals')/*:Goal[index('r-goals2-id')]/*:description/*:text/@value"/>
+                                                </xf:action>
+                                                <xf:message level="ephemeral">Ziel verlinkt</xf:message>
+                                            </xf:action>
+                                            <xf:action if="instance('i-goals')/*:Goal[index('r-goals2-id')]/*:selected = 'false'">
+                                                <xf:delete ref="instance('i-cps')/*:CarePlan[index('r-careplans-id']/*:goal[index('r-goals2-id')]"/>
+                                                <xf:message level="ephemeral">Goal-Link gelöscht</xf:message>
+                                            </xf:action>
+                                            <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'true'"/>
+                                        </xf:action>
+                                    </xf:input>
+                                    <xf:output ref="./*:description/*:text/@value"/>
+                                </xf:repeat>
+                            </xf:group>
+                            <xf:group ref="instance('views')/*:noGoal">
+                                <xf:label>Keine Ziele definiert</xf:label>
+                            </xf:group>
+                            </td>
+                            <td>
+                            <xf:group ref="instance('i-tags')/*:Condition">
+                                <xf:label>Tags</xf:label>
+                                <xf:repeat id="r-tags2-id" ref="instance('i-tags')/*:Condition" appearance="compact" class="svRepeat">
+                                    <xf:input ref="./*:selected" class="xsdBoolean svRepeatBool">
+                                        <xf:action ev:event="xforms-value-changed">
+                                            <xf:action if="instance('i-tags')/*:Condition[index('r-tags2-id')]/*:selected">
+                                                <xf:insert at="last()" ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:addresses" context="instance('i-cps')/*:CarePlan[index('r-careplans-id')]" origin="instance('i-cp-infos')/*:bricks/*:addresses"/>
+                                                <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:addresses[last()]/*:reference/@value" value="concat('nabu/conditions/',instance('i-tags')/*:Condition[index('r-tags2-id')]/*:id/@value)"/>
+                                                <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:addresses[last()]/*:display/@value" value="instance('i-tags')/*:Condition[index('r-tags2-id')]/*:code/*:coding[*:system/@value='http://eNahar.org/nabu/extension#nabu-finding']/*:display/@value"/>
+                                                <xf:message level="ephemeral">Tag verlinkt</xf:message>
+                                            </xf:action>
+                                            <xf:action if="instance('i-tags')/*:Condition[index('r-tags2-id')]/*:selected = 'false'">
+                                                <xf:delete ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:addresses[index('r-tags2-id')]"/>
+                                                <xf:message level="ephemeral">Tag-Link gelöscht</xf:message>
+                                            </xf:action>
+                                            <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'true'"/>
+                                        </xf:action>
+                                    </xf:input>
+                                    <xf:output ref="./*:code/*:coding[*:system/@value='http://eNahar.org/nabu/extension#nabu-finding']/*:display/@value"/>
+                                </xf:repeat>
+                            </xf:group>
+                            <xf:group ref="instance('views')/*:noTag">
+                                <xf:label>Keine Tags definiert</xf:label>
+                            </xf:group>
+                            </td>
+                        </tr>
+                    </table>
+                    <xf:group ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]">
+                        <xf:action ev:event="xforms-value-changed">
+                            <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'true'"/>
+                        </xf:action>
+                        <table>
+                        <tr>
+                        <td>
+                        <xf:select1 ref="./*:definition/*:reference/@value" incremental="true" class="">
+                                <xf:label>Plan:</xf:label>
+                                <xf:itemset nodeset="instance('i-pd-infos')/*:implemented/*:careplan/*:code">
+                                    <xf:label ref="./@label-de"/>
+                                    <xf:value ref="./@value"/>
+                                </xf:itemset>
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:definition/*:display/@value" value="instance('i-pd-infos')/*:implemented/*:careplan/*:code[@value=instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:definition/*:reference/@value]/@label-de"/>
+                                </xf:action>
+                        </xf:select1>
+                        </td>
+                        <td>
+                        <xf:group ref="./*:title[starts-with(@value,'error')]">
+                            <xf:output ref="./@value" style="margin: 10px 0; padding: 10px; border-radius: 3px 3px 3px 3px; color: #D8000C; background-color: #FFBABA;"/>
+                        </xf:group>
+                        </td>
+                        </tr>
+                        </table>
+                        <xf:group ref="./*:title[string-length(@value)=0 or not(starts-with(@value,'error'))]">
+                            <xf:input ref="./@value" class="long-input">
+                                <xf:label>Titel:</xf:label>
+                            </xf:input>
+                        </xf:group>
+                        <xf:textarea ref="./*:description/@value" class="fullareashort">
+                            <xf:label>Beschreibung:</xf:label>
+                        </xf:textarea>
+                    </xf:group>
+                    <hr style="border: none; height: 1px; color: blue; background: blue;"/> 
+
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')][count(./*:activity)=0][*:definition/*:reference/@value[string-length(.) &gt; 0]]" class="svAddTrigger">
+                                    <xf:label>Plan starten</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:action if="string-length(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:definition/*:reference/@value) &gt; 0">
+                                            <xf:message level="ephemeral">Plan starten</xf:message>
+                                            <xf:send submission="s-get-orders-from-golem"/>
+                                    <!--
+                                            <xf:send submission="s-get-actions"/>
+                                            <xf:message level="ephemeral">merge actions</xf:message>
+                                            <xf:action if="count(instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity)>0">
+                                                <xf:dispatch name="merge-action-details" targetid="cplist"/>
+                                            </xf:action>
+                                            <xf:toggle case="listActivities"/>
+                                    -->
+                                        </xf:action>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                           <td>
+                                <xf:trigger ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')][count(./*:activity)=0][*:definition/*:reference/@value[string-length(.)=0]]" class="svSubTrigger">
+                                    <xf:label>
+                                        <span class="glyphicon glyphicon-list"/>
+                                        Aktivitäten</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:action if="instance('i-control-center')/*:cp-new='false'">
+                                            <xf:send submission="s-get-actions"/>
+                                            <xf:dispatch name="merge-action-details" targetid="cplist"/>
+                                        </xf:action>
+                                        <!--
+                                        <xf:dispatch name="resetAction" targetid="cplist"/>
+                                        -->
+                                        <xf:toggle case="listActivities"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svSubTrigger">
+                                    <xf:label>CP Status</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="status"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+        
+                </xf:group>
+            </xf:case>
+            <xf:case id="status">
+                <xf:group>
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger ref="instance('i-control-center')/*:cp-dirty[.='true']" class="svUpdateMasterTrigger">
+                                    <xf:label>Speichern</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:delete ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[*:reference/*:reference/@value='']"/>
+                                        <xf:send submission="s-submit-careplan"/>
+                                        <xf:toggle case="listCarePlans"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Schließen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="listCarePlans"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <h4>CarePlan Status</h4>
+                                <ul>
+                                    <li>Ein CarePlan ist normalerweise 'active' und kann so für weitere Aktionen wiederverendet werden.</li>
+                                    <li>'Beenden' und 'Canceln' sind unwiderruflich.</li>
+                                    <li>'Beenden' ist nur sinnvoll, wenn inhaltlich keine weiteren Aktionen mehr erwartet werden.</li>
+                                    <li>'Canceln' ist nur sinnvoll, wenn der CarePlan abgebrochen werden soll.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <xf:trigger ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:status[@value=('active','draft','suspended','unknown')]" class="svDelTrigger">
+                                    <xf:label>CP Beenden</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:action if="instance('i-control-center')/*:cp-new='false' and instance('i-control-center')/*:rasid=0">
+                                            <xf:send submission="s-get-actions"/>
+                                            <xf:dispatch name="merge-action-details" targetid="cplist"/>
+                                            <xf:message level="ephemeral">Actions loaded</xf:message>
+                                        </xf:action>
+                                        <xf:action if="count(instance('i-actions')/*[local-name()=('Order','Task','detail')]/*:status[@value='active'])=0">
+                                            <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:period/*:end/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                                            <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:status/@value" value="'completed'"/>
+                                            <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'true'"/>
+                                        </xf:action>
+                                        <xf:action if="count(instance('i-actions')/*[local-name()=('Order','Task','detail')]/*:status[@value='active'])!=0">
+                                            <xf:message level="modal">Requests aktiv! Beenden nicht möglich!</xf:message> 
+                                        </xf:action>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')][*:status/@value=('active','draft','suspended','unknown')]" class="svDelTrigger">
+                                    <xf:label>CP Canceln</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:action if="instance('i-control-center')/*:cp-new='false' and instance('i-control-center')/*:rasid=0">
+                                            <xf:send submission="s-get-actions"/>
+                                            <xf:dispatch name="merge-action-details" targetid="cplist"/>
+                                            <xf:message level="ephemeral">Actions loaded</xf:message>
+                                        </xf:action>
+                                        <xf:action if="count(instance('i-actions')/*[local-name()=('Order','Task','detail')]/*:status[@value=('active','completed')])=0">
+                                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:period/*:end/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:status/@value" value="'cancelled'"/>
+                                        <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'true'"/>
+                                        </xf:action>
+                                        <xf:action if="count(instance('i-actions')/*[local-name()=('Order','Task','detail')]/*:status[@value=('active','completed')])!=0">
+                                            <xf:message level="modal">Requests aktiv oder completed! Canceln nicht möglich!</xf:message> 
+                                        </xf:action>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                </xf:group>
+            </xf:case>
+            <xf:case id="listActivities">
+                <xf:group>
+                        <xf:action ev:event="betterform-index-changed" if="count(instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity)&gt;0">
+                            <xf:action if="instance('i-control-center')/*:rasid!=index('r-activities-id')">
+                                <xf:action if="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:reference/@value=''">
+                                    <xf:message level="ephemeral">
+                                        <xf:output value="concat('Action ', instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:display/@value,' verworfen!')"/>
+                                    </xf:message>
+                                    <xf:delete ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[xs:int(instance('i-control-center')/*:rasid)]"/>
+                                    <xf:delete ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]"/>
+                                    <xf:delete ref="instance('i-merged-action-details')/*[xs:int(instance('i-control-center')/*:rasid)]"/>
+
+                                </xf:action>
+                                <xf:dispatch name="resetAction" targetid="cplist"/> 
+                                <xf:toggle case="empty"/>
+                            </xf:action>
+                        </xf:action> 
+                    <bf/>
+                    <xf:group id="actions" ref="instance('i-merged-action-details')/*:detail" class="svFullGroup bordered">
+
+                        <xf:label>Aktivitäten</xf:label>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="svListHeader">Start</th>
+                                    <th class="svListHeader">*</th>
+                                    <th class="svListHeader">Outcome</th>
+                                    <th class="svListHeader">Progress</th>
+                                    <th class="svListHeader">Notizen</th>
+                                    <th class="svListHeader">Encounter</th>
+                                </tr>
+                            </thead>
+                            <tbody id="r-activities-id" xf:repeat-nodeset="instance('i-merged-action-details')/*:detail">
+                                <tr>
+                                    <td>
+                                        <xf:output ref="./*:startdate" class=""/>
+                                    </td>
+                                    <td>
+                                        <xf:output ref="./*:status[@value=('active','received','draft')]/../*:type" class="active"/>
+                                        <xf:output ref="./*:status[@value='accepted']/../*:type" class="inprogress"/>
+                                        <xf:output ref="./*:status[@value='failed']/../*:type" class="failed"/>
+                                        <xf:output ref="./*:status[@value=('completed','cancelled')]/../*:type" class="inactive"/>
+                                    </td>
+                                    <td colspan="2">
+                                        <xf:output ref="./*:anlass" class=""/>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <xf:output value="./*:lastprogressdate" class=""/>
+                                                </td>
+                                                <td>
+                                                    <xf:output value="./*:lastprogress" class="long-input"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                        <xf:trigger>
+                                            <xf:label>
+                                                <span class="glyphicon glyphicon-paperclip"/>
+                                            </xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:dispatch name="newProgressAnnotation" targetid="cplist"/>
+                                                <xf:toggle case="editProgress"/>
+                                            </xf:action>
+                                        </xf:trigger>
+                                                </td>
+                                                <td>
+                                        <xf:trigger>
+                                            <xf:label>
+                                                <span class="glyphicon glyphicon-folder-open" data-toggle="tooltip" data-original-title="zeige Notizen" title="Zeige Notizen"/>
+                                            </xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:toggle case="showProgress"/>
+                                            </xf:action>
+                                        </xf:trigger>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <xf:output value="./*:encounter"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>
+                                        <b>Legende:</b>
+                                    </td>
+                                    <td class="input-color">
+                                            <span>active</span>
+                                            <div class="color-box" style="background-color: #ffff33;"/>
+                                    </td>
+                                    <td class="input-color">
+                                            <span>in-progress</span>
+                                            <div class="color-box" style="background-color: #9ACD32;"/>
+                                    </td>
+                                    <td class="input-color">
+                                            <span>inactive</span>
+                                            <div class="color-box" style="background-color: #ffffff;"/>
+                                    </td>
+                                    <td class="input-color">
+                                            <span>failed</span>
+                                            <div class="color-box" style="background-color: #cc0000"/>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </xf:group>
+                    <xf:group ref="instance('i-merged-action-details')/*:detail[count(.)=0]" class="svFullGroup bordered">
+                        <xf:label>Aktivitäten</xf:label>
+                        <p>Keine vorhanden!</p>
+                    </xf:group>
+                    <hr style="border: none; height: 1px; color: blue; background: blue;"/>
+                    <xf:switch id="action-switch">
+                        <xf:case id="empty">
+                            <xf:group class="svTriggerGroup">
+                            <table>
+                            <tr>
+                                <td>
+                                    <xf:trigger ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status[@value=('draft','requested','received','active')]" class="svSubTrigger">
+                                        <xf:label>Edit</xf:label>
+                                        <xf:action ev:event="DOMActivate" if="exists(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:detail)">
+                                            <xf:setvalue ref="instance('i-control-center')/*:action-type" value="'inline'"/>
+                                            <xf:toggle case="editInline"/>
+                                        </xf:action>
+                                        <xf:action ev:event="DOMActivate" if="exists(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference)">
+                                            <xf:action ev:event="DOMActivate" if="matches(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:reference/@value,'orders')">
+                                                <xf:setvalue ref="instance('i-control-center')/*:action-type" value="'order'"/>
+                                                <xf:toggle case="editOrder"/>
+                                            </xf:action>
+                                            <xf:action ev:event="DOMActivate" if="matches(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:reference/@value,'tasks')">
+                                                <xf:setvalue ref="instance('i-control-center')/*:action-type" value="'task'"/>
+                                                <xf:dispatch name="insertTaskComment" targetid="cplist"/>
+                                                <xf:toggle case="editTask"/>
+                                            </xf:action>
+                                        </xf:action>
+                                        --&gt;
+                                    </xf:trigger>
+                                    <xf:trigger ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status[@value=('accepted','completed','cancelled')]" class="svSubTrigger">
+                                        <xf:label>Zeige</xf:label>
+                                        <xf:action ev:event="DOMActivate" if="exists(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:detail)">
+                                            <xf:setvalue ref="instance('i-control-center')/*:action-type" value="'inline'"/>
+                                            <xf:toggle case="showInline"/>
+                                        </xf:action>
+                                        <xf:action ev:event="DOMActivate" if="exists(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference)">
+                                            <xf:action ev:event="DOMActivate" if="matches(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:reference/@value,'orders')">
+                                                <xf:setvalue ref="instance('i-control-center')/*:action-type" value="'order'"/>
+                                                <xf:toggle case="showOrder"/>
+                                            </xf:action>
+                                            <xf:action ev:event="DOMActivate" if="matches(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:reference/@value,'tasks')">
+                                                <xf:setvalue ref="instance('i-control-center')/*:action-type" value="'task'"/>
+                                                <xf:toggle case="showTask"/>
+                                            </xf:action>
+                                        </xf:action>
+                                        --&gt;
+                                    </xf:trigger>
+                                </td> 
+                                <td>
+                                    <xf:trigger ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:status[@value=('active','draft','suspended','unknown')]" class="svAddTrigger">
+                                        <xf:label>Anforderung</xf:label>
+                                        <xf:action ev:event="DOMActivate">
+                                            <xf:action if="instance('i-control-center')/*:cp-new='false'">
+                                                <xf:dispatch name="newActivity" targetid="cplist"/>
+                                            </xf:action>
+                                            <xf:action if="instance('i-control-center')/*:cp-new='true'">
+                                                <xf:send submission="s-submit-cp-new-activity"/>
+                                            </xf:action>
+                                            <xf:setvalue ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]/*:reference/*:display/@value" value="'NewOrder'"/>
+                                            <xf:message level="ephemeral">Order activity angelegt.</xf:message>
+                                            <xf:action>
+                                                <xf:dispatch name="newOrder" targetid="cplist"/>
+                                                <xf:dispatch name="add-action-details" targetid="cplist"/>
+                                            </xf:action>
+                                            <xf:action>
+                                                <xf:toggle case="editOrder"/>
+                                            </xf:action>
+                                        </xf:action>
+                                    </xf:trigger>
+                                </td>
+                                <td>
+                                    <xf:trigger ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:status[@value=('active','draft','suspended','unknown')]" class="svAddTrigger">
+                                        <xf:label>Task</xf:label>
+                                        <xf:action ev:event="DOMActivate">
+                                            <xf:action if="instance('i-control-center')/*:cp-new='false'">
+                                                <xf:dispatch name="newActivity" targetid="cplist"/>
+                                            </xf:action>
+                                            <xf:action if="instance('i-control-center')/*:cp-new='true'">
+                                                <xf:send submission="s-submit-cp-new-activity"/>
+                                            </xf:action>
+                                            <xf:setvalue ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[last()]/*:reference/*:display/@value" value="'NewTask'"/>
+                                            <xf:message level="ephemeral">Task activity angelegt.</xf:message>
+                                            <xf:action>
+                                                <xf:dispatch name="newTask" targetid="cplist"/>
+                                                <xf:dispatch name="add-action-details" targetid="cplist"/>
+                                            </xf:action>
+                                            <xf:action>
+                                                <xf:toggle case="editTask"/>
+                                            </xf:action>
+                                        </xf:action>
+                                    </xf:trigger>
+                                </td>
+                                <td>
+                                    <xf:trigger class="svUpdateMasterTrigger">
+                                        <xf:label>./. Plan</xf:label>
+                                        <xf:action ev:event="DOMActivate">
+                                            <xf:toggle case="editCarePlan"/>
+                                        </xf:action>
+                                    </xf:trigger>
+                                </td>
+                            </tr>
+                            </table>
+                            </xf:group>
+                        </xf:case>
+                        <xf:case id="editProgress">
+                            <xf:group class="svTriggerGroup">
+                                <table>
+                                    <tr>
+                                        <td>
+                                             <xf:trigger class="svUpdateMasterTrigger">
+                                                <xf:label>Schließen</xf:label>
+                                                <xf:action ev:event="DOMActivate">
+                                                    <xf:action if="string-length(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress[last()]/*:text/@value)&gt;0">
+                                                        <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'true'"/>
+                                                    </xf:action>
+                                                    <xf:action if="string-length(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress[last()]/*:text/@value)=0">
+                                                        <xf:delete ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress[last()]"/>
+                                                    </xf:action>
+                                                    <xf:toggle case="empty"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                        </td> 
+                                    </tr>
+                                </table>
+                            </xf:group>
+                            <br/>
+                            <xf:group ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress[last()]">
+                                <xf:label>Neue Notiz</xf:label>
+                                <xf:textarea ref="./*:text/@value" class="fullareashort">
+                                </xf:textarea>
+                            </xf:group>
+                        </xf:case>
+                        <xf:case id="showProgress">
+                            <xf:group class="svTriggerGroup">
+                                <table>
+                                    <tr>
+                                        <td>
+                                             <xf:trigger class="svUpdateMasterTrigger">
+                                                <xf:label>Schließen</xf:label>
+                                                <xf:action ev:event="DOMActivate">
+                                                    <xf:toggle case="empty"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                        </td> 
+                                    </tr>
+                                </table>
+                            </xf:group>
+                            <br/>
+                            <xf:group ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]">
+                                <xf:label>Progress-Notizliste</xf:label>
+                                        <xf:repeat ref="./*:progress" appearance="compact" class="svRepeatBlank">
+                                            <xf:output value="tokenize(./*:time/@value,'T')[1]" class=""/>
+                                            <xf:output value="./*:authorReference/*:display/@value"/>
+                                            <xf:output value="./*:text/@value" class="long-input"/>
+                                        </xf:repeat>
+                            </xf:group>
+                        </xf:case>
+                        <xf:case id="editInline">
+                            <xf:group id="editInlineGroup" ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]">
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'true'"/>
+                                </xf:action>
+                                <xf:label>nyi</xf:label>
+                            </xf:group>
+                        </xf:case>
+                        <xf:case id="showInline">
+                            <xf:group id="showInlineGroup" ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <xf:trigger class="svUpdateMasterTrigger">
+                                                <xf:label>Schließen</xf:label>
+                                                <xf:action ev:event="DOMActivate">
+                                                    <xf:toggle case="empty"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <xf:label>nyi</xf:label>
+                            </xf:group>
+                        </xf:case>
+                        <xf:case id="editOrder">
+                            <xf:group id="editOrderGroup" ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]">
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-control-center')/*:action-dirty" value="'true'"/>
+                                </xf:action>
+                                <table>
+                                <tr>
+                                    <td>
+                                        <xf:trigger class="svUpdateMasterTrigger">
+                                            <xf:label>Speichern</xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:action if="instance('i-control-center')/*:action-dirty='true'">
+                                                    <xf:send submission="s-submit-action"/>
+                                                </xf:action>
+                                                <xf:toggle case="empty"/>
+                                            </xf:action>
+                                        </xf:trigger>
+                                    </td>
+                                    <td>
+                                        <xf:trigger ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:reference[@value!='']" class="svUpdateMasterTrigger">
+                                            <xf:label>Schließen</xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:message level="ephemeral">Änderungen verworfen!</xf:message>
+                                                <xf:dispatch name="resetAction" targetid="cplist"/>
+                                                <xf:toggle case="empty"/>
+                                            </xf:action>
+                                        </xf:trigger>
+                                    </td>
+                                    <td>
+                                        <xf:trigger ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:reference[@value='']" class="svUpdateMasterTrigger">
+                                            <xf:label>Verwerfen</xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:message level="ephemeral">
+                                                    <xf:output ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:display/@value"/> verworfen!</xf:message>
+                                                <xf:delete ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[xs:int(instance('i-control-center')/*:rasid)]"/>
+                                                <xf:delete ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]"/>
+                                                <xf:delete ref="instance('i-merged-action-details')/*[xs:int(instance('i-control-center')/*:rasid)]"/>
+                                                <xf:dispatch name="resetAction" targetid="cplist"/>                                
+                                                <xf:toggle case="empty"/>
+                                            </xf:action>
+                                        </xf:trigger>
+                                        <xf:trigger ref="instance('i-cps')/*:CarePlan[xs:int(instance('i-control-center')/*:rcpsid)]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:reference[@value!='']" class="svDelTrigger">
+                                            <xf:label>Löschen</xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:message level="ephemeral">Anforderung gelöscht!</xf:message>
+                                                <xf:dispatch name="cancelOrder" targetid="cplist"/>
+                                                <xf:send submission="s-submit-action"/>
+                                                <xf:toggle case="empty"/>
+                                            </xf:action>
+                                        </xf:trigger>
+                                    </td>
+                                    <td>
+                                        <xf:group ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)][count(./*:detail)=0]">
+                                            <xf:label>Order?</xf:label>
+                                        </xf:group>
+                                    </td>
+                                    <td>
+                                        <xf:group ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)][count(./*:detail)=0]">
+                                            <xf:select1 ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:definition/*:reference/@value" incremental="true" class="">
+                                                <xf:itemset nodeset="instance('i-pd-infos')/*:implemented/*:requestgroup/*:code">
+                                                    <xf:label ref="./@label-de"/>
+                                                    <xf:value ref="./@value"/>
+                                                </xf:itemset>
+                                                <xf:action ev:event="xforms-value-changed">
+                                                    <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:definition/*:display/@value" value="instance('i-pd-infos')/*:implemented/*:requestgroup/*:code[@value=instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:definition/*:reference/@value]/@label-de"/>
+                                                </xf:action>
+                                            </xf:select1>
+                                        </xf:group>
+                                    </td>
+                                    <td>
+                                        <xf:trigger ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)][count(./*:detail)=0][*:definition/*:reference/@value[string-length(.) &gt; 0]]" class="svAddTrigger">
+                                            <xf:label>Starten</xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:action if="string-length(instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:definition/*:reference/@value) &gt; 0">
+                                                    <xf:message level="ephemeral">Plan starten</xf:message>
+                                                    <xf:send submission="s-get-details-from-golem"/>
+                                                    <xf:dispatch name="addDetailsFromGolemOrder" targetid="cplist"/>
+                                <!--
+                                                    <xf:dispatch name="merge-action-details" targetid="cplist"/>
+                                                    <xf:message level="ephemeral">merged <xf:output value="xs:int(instance('i-control-center')/*:rasid)"/>
+                                                        </xf:message>
+                                                    <xf:dispatch name="resetAction" targetid="cplist"/>
+                                                    <xf:toggle case="listActivities"/>
+                                -->
+                                                </xf:action>
+                                            </xf:action>
+                                        </xf:trigger>
+                                    </td>
+                                </tr>
+                                </table>
+                                <br/>
+                                <xf:select1 ref="./*:when/*:code/*:coding/*:code/@value" class="medium-input">
+                                    <xf:label>Wichtigkeit:</xf:label>
+                                    <xf:itemset nodeset="instance('i-o-infos')/*:when/*:code">
+                                        <xf:label ref="./@label-de"/>
+                                        <xf:value ref="./@value"/>
+                                    </xf:itemset>
+                                    <xf:action ev:event="xforms-value-changed">
+                                        <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:when/*:code/*:coding/*:display/@value" value="instance('i-o-infos')/*:when/*:code[@value=instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:when/*:code/*:coding/*:code/@value]/@label-de"/>
+                                        <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:when/*:code/*:text/@value" value="instance('i-o-infos')/*:when/*:code[@value=instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:when/*:code/*:coding/*:code/@value]/@label-de"/>
+                                    </xf:action>
+                                </xf:select1>
+                                <br/>
+                                <xf:textarea ref="./*:description/@value" class="fullareashort">
+                                    <xf:label>Anlass:</xf:label>
+                                    <xf:action ev:event="xforms-value-changed">
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:display/@value" value="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:description/@value"/>
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress[last()]/*:text/@value" value="concat(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress[last()]/*:text/@value,'+++ ',instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:display/@value)"/>
+                        <xf:setvalue ref="instance('i-merged-action-details')/*:detail[xs:int(instance('i-control-center')/*:rasid)]/*:anlass" value="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:description/@value"/>
+                        <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'true'"/>
+                                    </xf:action>
+                                </xf:textarea>
+                                <br/>
+                                <xf:group id="closeddetails" ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value='completed']" class="svFullGroup">
+                                    <xf:label>Bereits vereinbarte Leistungen</xf:label>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th class="svListHeader">LfdNo </th>
+                                                <th class="svListHeader">Leistung</th>
+                                                <th class="svListHeader">Erbringer</th>
+                                                <th class="svListHeader">Datum</th>
+                                                <th class="svListHeader">Dauer</th>
+                                                <th class="svListHeader">Notiz</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="r-closed-id" xf:repeat-nodeset="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value='completed']">
+                                            <tr>
+                                                <td>
+                                                    <xf:output ref="./*:spec/*:combination/@value" class="medium-input"/>
+                                                </td>
+                                                <td>
+                                                    <xf:output ref="./*:actor/*:role/@value" class="medium-input"/>
+                                                </td>
+                                                <td>
+                                                    <xf:output ref="./*:actor/*:display/@value" class=""/>
+                                                </td>
+                                                <td>
+                                                    <xf:output ref="./*:spec/*:begin/@value" class="medium-input"/>
+                                                </td>
+                                                <td>
+                                                    <xf:output ref="./*:spec/*:duration/@value" class="medium-input"/>
+                                                </td>
+                                                <td>
+                                                    <xf:textarea ref="./*:info/@value" class="area-input"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </xf:group>
+                                <br/>
+                                <xf:group id="services" class="svFullGroup bordered">
+                                    <xf:action ev:event="betterform-index-changed">
+            <xf:message level="ephemeral">updateFaFue</xf:message>
+            <xf:action if="count(instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed']) &gt; 0">
+                <xf:setvalue ref="instance('i-memo')/*:service-code" value="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:actor/*:role/@value"/>
+                <xf:setvalue ref="instance('i-memo')/*:fafue-uid" value="substring-after(instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:actor/*:reference/@value,'metis/practitioners/')"/>
+                <xf:setvalue ref="instance('i-memo')/*:fafue-display" value="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:actor/*:display/@value"/>
+                <xf:setvalue ref="instance('i-memo')/*:lfdno" value="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:spec/*:combination/@value"/>
+            </xf:action>
+                                    </xf:action>
+                                    <xf:label>Einzel-Leistungen</xf:label>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th class="svListHeader">LfdNo </th>
+                                                <th class="svListHeader">
+                                                    <img src="resources/images/link.png" alt="Kombi"/>
+                                                </th>
+                                                <th class="svListHeader">Leistung</th>
+                                                <th class="svListHeader">Erbringer/Kal</th>
+                                                <th class="svListHeader">Wann/Dauer</th>
+                                                <th class="svListHeader">Notiz</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="r-details-id" xf:repeat-nodeset="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed']">
+                                            <tr>
+                                                <td>
+                                                    <xf:output ref="./*:spec/*:combination/@value"/>
+                                                </td>
+                                                <td>
+                                                    <xf:input ref="./*:spec/*:interdisciplinary/@value" class="xsdBoolean svRepeatBool"/>
+                                                </td>
+                                                <td>
+                                                    <xf:select1 ref="./*:actor/*:role/@value" class="medium-select" incremental="true">
+                                                        <xf:itemset nodeset="instance('i-groups')/*:Group">
+                                                            <xf:label ref="./*:name/@value"/>
+                                                            <xf:value ref="./*:code/*:text/@value"/>
+                                                        </xf:itemset>
+                                                        <xf:hint>Bitte eine Funktion auswählen</xf:hint>
+                                                        <xf:action ev:event="xforms-value-changed">
+                    <xf:setvalue ref="instance('i-memo')/*:service-code" value="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:actor/*:role/@value"/>
+                                                        </xf:action>
+                                                    </xf:select1>
+                                                </td>
+
+                                                <td>
+                                                    <xf:group>
+                                                    <xf:select1 ref="./*:actor/*:reference/@value" class="medium-select" incremental="true">
+                                                        <xf:itemset nodeset="instance('i-users')/*:user">
+                                                            <xf:label ref="./*:display/@value"/>
+                                                            <xf:value ref="./*:reference/@value"/>
+                                                        </xf:itemset>
+                                                        <xf:action ev:event="xforms-value-changed">
+                                                            <xf:action>
+               <xf:setvalue ref="instance('i-memo')/*:fafue-uid" value="''"/>
+                                                            <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:actor/*:display/@value" value="instance('i-users')/*:user[./*:reference/@value=instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:actor/*:reference/@value]/*:display/@value"/>
+                        
+                <xf:setvalue ref="instance('i-memo')/*:fafue-uid" value="substring-after(instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:actor/*:reference/@value,'metis/practitioners/')"/>
+                <xf:setvalue ref="instance('i-memo')/*:fafue-display" value="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:actor/*:display/@value"/>
+                                                            </xf:action>
+
+                                                            <xf:action>
+                <script type="text/javascript">
+                    initSchedule();
+                </script>
+                                                            </xf:action>
+                                                        </xf:action>
+                                                    </xf:select1>
+        <xf:output id="det-ical" ref="./*:schedule/*:display/@value" class="medium-input"/>
+        </xf:group>
+                                                </td>
+                                                <td>
+                                                  <xf:group>
+                                                    <xf:input ref="./*:spec/*:begin/@value" class="medium-input">
+                                                        <xf:hint>Zeitraum nach dem Muster '(|h|m|nW|\dw|\dm|\d{{2}}-\d{{2}}-\d{{2}})([|Mo|Di|Mi|Do|Fr|]*)([|:vm|:nm|]*)'</xf:hint>
+                                                    </xf:input>
+                                                    <xf:select1 ref="./*:spec/*:duration/@value" class="short-input">
+                                                        <xf:itemset nodeset="instance('i-o-infos')/*:duration/*:code">
+                                                            <xf:label ref="./@label-de"/>
+                                                            <xf:value ref="./@value"/>
+                                                        </xf:itemset>
+                                                        <xf:hint>Dauer ändern?</xf:hint>
+                                                    </xf:select1>
+                                                    </xf:group>
+                                                </td>
+                                                <td>
+                                                    <xf:textarea ref="./*:info/@value" class="area-input"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table appearance="minimal" class="svTriggerGroup">
+                                        <tr>
+                                            <td>
+                                                <xf:trigger class="svAddTrigger">
+                                                    <xf:label>Neu</xf:label>
+                                                    <xf:action ev:event="DOMActivate">
+                                                        <xf:dispatch name="newOrderDetail" targetid="cplist"/>
+                                                    </xf:action>
+                                                </xf:trigger>
+                                            </td>
+                                            <td>
+                                                <xf:trigger class="svDelTrigger">
+                                                    <xf:label>Entfernen</xf:label>
+                                                    <xf:action ev:event="DOMActivate">
+                                                        <xf:delete ev:event="DOMActivate" if="count(instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'])&gt;0" ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]"/>
+                                                        </xf:action>
+                                                </xf:trigger>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <xf:input ref="instance('i-memo')/*:lfdno" class="tiny-input">
+                                                    <xf:label>LfdNo</xf:label>
+                                                    <xf:action ev:event="xforms-value-changed">
+                                                        <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail[*:status/@value!='completed'][index('r-details-id')]/*:spec/*:combination/@value" value="instance('i-memo')/*:lfdno"/>
+                                                    </xf:action>
+                                                </xf:input>
+                                            </td>
+                <td colspan="1">
+                    <label for="fafue-hack" class="xfLabel aDefault xfEnabled">Fafü:</label>
+                    <select class="order-select" name="fafue-hack">
+                        <option/>
+                    </select>
+                </td>
+                <td colspan="1">
+                    <label for="schedule-hack" class="xfLabel aDefault xfEnabled">Kalender:</label>
+                    <select class="order-select" name="schedule-hack">
+                        <option/>
+                    </select>
+                </td>
+                                        </tr>
+                                    </table>
+                                </xf:group>
+                            </xf:group>
+                        </xf:case>
+                        <xf:case id="showOrder">
+                            <xf:group ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]">
+                                <table>
+                                <tr>
+                                    <td>
+                                        <xf:trigger class="svUpdateMasterTrigger">
+                                            <xf:label>Schließen</xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:toggle case="empty"/>
+                                            </xf:action>
+                                        </xf:trigger>
+                                    </td>
+                                </tr>
+                                </table>
+<!--
+                                                <th class="svListHeader">LfdNo </th>
+                                                <th class="svListHeader">
+                                                    <img src="resources/images/link.png" alt="Kombi"/>
+                                                </th>
+                                                <th class="svListHeader">Leistung</th>
+                                                <th class="svListHeader">Erbringer/Kal</th>
+                                                <th class="svListHeader">Wann/Dauer</th>
+                                                <th class="svListHeader">Notiz</th>
+-->
+                                <xf:repeat ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:detail" appearance="compact" class="svRepeat">
+                                    <xf:output ref="./*:spec/*:combination/@value"/>
+                                    <xf:input ref="./*:spec/*:interdisciplinary/@value" class="xsdBoolean svRepeatBool"/>
+                                    <xf:output ref="./*:actor/*:role/@value"/>
+                                    <xf:group>
+                                        <xf:output ref="./*:actor/*:display/@value"/>
+                                        <xf:output id="det-ical" ref="./*:schedule/*:display/@value" class=""/>
+                                    </xf:group>
+                                    <xf:group>
+                                        <xf:output ref="./*:spec/*:begin/@value" class="medium-input"/>
+                                            <xf:output ref="./*:spec/*:duration/@value" class=""/>
+                                    </xf:group>
+                                    <xf:textarea ref="./*:info/@value" class="area-input"/>
+                                </xf:repeat>
+                            </xf:group>
+                        </xf:case>
+                        <xf:case id="editTask">
+                            <xf:group id="editTaskGroup" ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]" class="svFullgroup">
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-control-center')/*:action-dirty" value="'true'"/>
+                                </xf:action>
+                                <xf:label>
+                                    <xf:output ref="instance('i-t-infos')/types/option[@value=instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:code/*:coding/*:code/@value]/@label-de">
+                                    </xf:output>: <xf:output ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:description/@value"/>
+                                </xf:label>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <xf:trigger class="svSaveTrigger">
+                                                <xf:label>Speichern</xf:label>
+                                                <xf:action ev:event="DOMActivate">
+                                                    <xf:action if="instance('i-control-center')/*:action-dirty='true'">
+                                                        <xf:send submission="s-submit-action"/>
+                                                    </xf:action>
+                                                    <xf:toggle case="empty"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                        </td>
+                                        <td>
+                                            <xf:trigger ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:reference[@value!='']" class="svUpdateMasterTrigger">
+                                                <xf:label>Zurück</xf:label>
+                                                <xf:action ev:event="DOMActivate">
+                                                    <xf:message level="ephemeral">Änderungen verworfen!</xf:message>
+                                                    <xf:dispatch name="resetAction" targetid="cplist"/>
+                                                    <xf:toggle case="empty"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                        </td>
+                                        <td>
+                                            <xf:trigger ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:reference[@value='']" class="svUpdateMasterTrigger">
+                                                <xf:label>Verwerfen</xf:label>
+                                                <xf:action ev:event="DOMActivate">
+                                                    <xf:message level="ephemeral">
+                                                        <xf:output ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:display/@value"/> verworfen!</xf:message>
+                                                    <xf:delete ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity" at="xs:int(instance('i-control-center')/*:rasid)"/>
+                                                    <xf:delete ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]"/>
+                                                    <xf:delete ref="instance('i-merged-action-details')/*[xs:int(instance('i-control-center')/*:rasid)]"/>
+                                                    <xf:dispatch name="resetAction" targetid="cplist"/>
+                                                    <xf:toggle case="empty"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                        </td>
+                                        <td>
+                                            <xf:trigger ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status[@value='accepted']" class="svDelTrigger">
+                                                <xf:label>Löschen</xf:label>
+                                                <xf:action ev:event="DOMActivate">
+                                                    <xf:action if="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:reference[@value!='']">
+                                                        <xf:message level="ephemeral">Task gelöscht!</xf:message>
+                                                        <xf:dispatch name="cancelTask" targetid="cplist"/>
+                                                         <xf:send submission="s-submit-action"/>
+                                                    </xf:action>
+                                                    <xf:toggle case="empty"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                        </td>
+                                        <td>
+                                            <xf:trigger ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status[@value='accepted']" class="svDelTrigger">
+                                                <xf:label>Abschließen</xf:label>
+                                                <xf:action ev:event="DOMActivate">
+                                                    <xf:action if="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:reference[@value!='']">
+                                                        <xf:message level="ephemeral">Task beendet!</xf:message>
+                                                        <xf:dispatch name="completeTask" targetid="cplist"/>
+                                                         <xf:send submission="s-submit-action"/>
+                                                    </xf:action>
+                                                    <xf:toggle case="empty"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <xf:group ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]" class="svFullGroup bordered">
+                                    <xf:select1 ref="./*:code/*:coding/*:code/@value" class="medium-input" incremental="true">
+                                        <xf:label>Type:</xf:label>
+                                        <xf:itemset nodeset="instance('i-t-infos')/*:types/*:option">
+                                            <xf:label ref="./@label-de"/>
+                                            <xf:value ref="./@value"/>
+                                        </xf:itemset>
+                                        <xf:action ev:event="xforms-value-changed">
+                                            <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:code/*:text/@value" value="instance('i-t-infos')/types/option[@value= instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:code/*:coding/*:code/@value]/@label-de"/>
+                                            <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:code/*:coding/*:display/@value" value="instance('i-t-infos')/types/option[@value=   instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:code/*:coding/*:code/@value]/@label-de"/>
+                                        </xf:action>
+                                    </xf:select1>
+                                    <xf:select1 ref="./*:priority/@value" class="short-input">
+                                        <xf:label>Priorität:</xf:label>
+                                        <xf:itemset nodeset="instance('i-t-infos')/*:priorities/*:option">
+                                            <xf:label ref="./@label-de"/>
+                                            <xf:value ref="./@value"/>
+                                        </xf:itemset>
+                                    </xf:select1>
+                                    <xf:input ref="./*:requester/*:agent/*:display/@value" class="long-input">
+                                        <xf:label>Ext. Anfrage?</xf:label>
+                                        <xf:hint>Initiator des Tickets</xf:hint>
+                                    </xf:input>
+                                <table>
+                                    <tr>
+                                        <td rowspan="3">
+                                            <strong>Zugewiesen</strong>
+                                        </td>
+                                        <td rowspan="3" colspan="2">
+                                        <xf:repeat id="r-recipients-id" ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:restriction/*:recipient" appearance="compact" class="svRepeat">
+                                            <xf:output ref="./*:extension/*:valueString/@value"/>
+                                            <xf:output ref="./*:display/@value"/>
+                                        </xf:repeat>
+                                        </td>
+                                        <td>
+                                            <strong>Queue</strong>
+                                        </td>
+                                        <td colspan="2">
+                                            <select class="task-select" name="role-hack">
+                                                <option/>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Erbringer</strong>
+                                        </td>
+                                        <td colspan="2">
+                                            <select class="task-select" name="target-hack">
+                                                <option/>
+                                           </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        <xf:trigger>
+                                            <xf:label>
+                                                <img src="resources/images/myself16x16.png" alt="MySelf"/>
+                                            </xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:setvalue ref="instance('i-memo')/*:recipient/*:role/@value" value="instance('i-login')/*:loggrp"/>
+                                                <xf:setvalue ref="instance('i-memo')/*:recipient/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                                                <xf:setvalue ref="instance('i-memo')/*:recipient/*:display/@value" value="instance('i-login')/*:lognam"/>
+                                                <xf:dispatch name="addTaskRecipient" targetid="cplist"/>
+                                                <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status/@value" value="'accepted'"/>
+                                            </xf:action>
+                                        </xf:trigger>
+                                        </td>
+                                        <td>
+                                            <xf:trigger class="svAddTrigger">
+                                                <xf:label>Zuweisen</xf:label>
+                                                <xf:action ev:event="DOMActivate">
+                                                    <xf:action if="string-length(instance('i-memo')/*:recipient/*:role/@value)=0 and string-length(substring-after(instance('i-memo')/*:recipient/*:reference/@value,'metis/practitioners/'))=0">
+                                                        <xf:message level="ephemeral">Kein Erbringer ausgewählt!</xf:message>
+                                                    </xf:action>
+                                                    <xf:action if="string-length(instance('i-memo')/*:recipient/*:role/@value)&gt;0 or string-length(substring-after(instance('i-memo')/*:recipient/*:reference/@value,'metis/practitioners/'))&gt;0">
+                                                        <xf:dispatch name="addTaskRecipient" targetid="cplist"/>
+                                                   </xf:action>
+                                                </xf:action>
+                                            </xf:trigger>
+                                        </td>
+                                        <td colspan="2">
+                                            <xf:trigger ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:restriction/*:recipient[count(.)&gt;0]" class="svDelTrigger">
+                                            <xf:label>Löschen</xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:delete ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:restriction/*:recipient[index('r-recipients-id')]"/>
+                                            </xf:action>
+                                            </xf:trigger>
+                        </td>
+                        </tr>
+                        </table>
+
+                                    <script type="text/javascript" defer="defer" src="../nabu/FHIR/Task/task.js"/>
+                                    <br/>
+                                   <xf:group ref="./*:status[@value=('accepted','completed','cancelled')]">
+                                    <xf:output ref="../*:description/@value" class="xfReadOnly">
+                                        <xf:label>Betreff:</xf:label>
+                                    </xf:output>
+                                    </xf:group>
+                                   <xf:group ref="./*:status[@value=('draft','received')]">
+                                    <xf:input ref="../*:description/@value" class="long-input">
+                                        <xf:label>Betreff:</xf:label>
+                                        <xf:action ev:event="xforms-value-changed">
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:display/@value" value="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:description/@value"/>
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress[last()]/*:text/@value" value="concat(instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:progress[last()]/*:text/@value,'+++ ',instance('i-cps')/*:CarePlan[index('r-careplans-id')]/*:activity[xs:int(instance('i-control-center')/*:rasid)]/*:reference/*:display/@value)"/>
+                        <xf:setvalue ref="instance('i-merged-action-details')/*:detail[xs:int(instance('i-control-center')/*:rasid)]/*:anlass" value="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:description/@value"/>
+                        <xf:setvalue ref="instance('i-control-center')/*:cp-dirty" value="'true'"/>
+                                        </xf:action>
+                                    </xf:input>
+                                    </xf:group>
+                                    <xf:group ref="./*:status[@value=('accepted','completed','cancelled')]">
+                                        <xf:textarea ref="../*:note[1]/*:text/@value" class="bigarea xfReadOnly">
+                                            <xf:label>Text:</xf:label>
+                                        </xf:textarea>
+                                    </xf:group>
+                                    <xf:group ref="./*:status[@value=('draft','received')]">
+                                        <xf:textarea ref="../*:note[1]/*:text/@value" mediatype="dojo" class="bigarea">
+                                            <xf:label>Text:</xf:label>
+                                        </xf:textarea>
+                                    </xf:group>
+                                    <xf:textarea ref="./*:note[2]/*:text/@value" mediatype="dojo" class="bigarea">
+                                        <xf:label>Kommentar:</xf:label>
+                                        <xf:action ev:event="xforms-value-changed" if="concat('metis/practitioners/',instance('i-login')/*:loguid)=instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:restriction/*:recipient/*:reference/@value">
+                                            <xf:setvalue ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status/@value" value="'accepted'"/>
+                                        </xf:action>
+                                    </xf:textarea>
+                                    <xf:input ref="./*:restriction/*:period/*:end/@value" class="">
+                                        <xf:label>Fällig am:</xf:label>
+                                        <xf:hint>(h|m|nw|\dw|\mM|dd.mm.yy|yy-mm-dd)</xf:hint>
+                                    </xf:input>
+                                    <xf:input ref="./*:input[*:type/*:coding/*:system[@value='#task-input-types']]/*:valueString/@value" class="">
+                                        <xf:label>Tags:</xf:label>
+                                        <xf:hint>Tags erlauben Filtern und Sortieren von Tickets</xf:hint>
+                                    </xf:input>
+                                    <xf:output value="instance('i-t-infos')/*:status[@value=instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status/@value]/@label-de">
+                                        <xf:label>Status:</xf:label>
+                                    </xf:output>
+                                </xf:group>
+                            </xf:group>
+                        </xf:case>
+                        <xf:case id="showTask">
+                            <xf:group ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]">
+                                <table>
+                                <tr>
+                                    <td>
+                                        <xf:trigger class="svUpdateMasterTrigger">
+                                            <xf:label>Schließen</xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:toggle case="empty"/>
+                                            </xf:action>
+                                        </xf:trigger>
+                                    </td>
+                                </tr>
+                                </table>
+                                <xf:group ref="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]" class="svFullGroup bordered">
+                                    <xf:output ref="./*:code/*:coding/*:display/@value" class="">
+                                        <xf:label>Type:</xf:label>
+                                    </xf:output>
+                                    <xf:output ref="./*:priority/@value" class="short-input">
+                                        <xf:label>Priorität:</xf:label>
+                                    </xf:output>
+                                    <xf:output ref="./*:requester/*:agent/*:display/@value" class="long-input">
+                                        <xf:label>Ext. Anfrage?</xf:label>
+                                    </xf:output>
+                                    <br/>
+                                    <xf:output value="instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:restriction/*:recipient/*:display/@value">
+                                        <xf:label>Zugewiesen an:</xf:label>
+                                    </xf:output>
+                                    <br/>
+                                    <xf:output ref="./*:description/@value">
+                                        <xf:label>Betreff:</xf:label>
+                                    </xf:output>
+                                    <xf:textarea ref="./*:note[1]/*:text/@value" class="bigarea">
+                                        <xf:label>Text:</xf:label>
+                                    </xf:textarea>
+                                    <xf:output ref="./*:restriction/*:period/*:end/@value" class="">
+                                        <xf:label>Fällig am:</xf:label>
+                                    </xf:output>
+                                    <xf:output ref="./*:input[*:type/*:coding/*:system[@value='#task-input-types']]/*:valueString/@value" class="">
+                                        <xf:label>Tags:</xf:label>
+                                    </xf:output>
+                                    <xf:output value="instance('i-t-infos')/*:status[@value=instance('i-actions')/*[xs:int(instance('i-control-center')/*:rasid)]/*:status/@value]/@label-de">
+                                        <xf:label>Status:</xf:label>
+                                    </xf:output>
+                                </xf:group>
+                            </xf:group>
+                        </xf:case>
+                    </xf:switch>
+                </xf:group>
+            </xf:case>
+            <xf:case id="showHelp">
+                <xf:group>
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Schließen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="listCarePlans"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                    <h4>Hilfe</h4>
+                    <p>Der Careplan (CP) koordiniert alle Aktivitäten zur Patienten-Betreuung.</p>
+                    <p>Lebenszyklus des CP: Anlage -&gt; (Entwurf) -&gt; (Stop) -&gt; Fertig</p>
+                    <ol>
+                        <li>Bei der <strong>Anlage</strong> kann ein vorgefertigter Plan, zB. NeoNachsorge, zugrunde gelegt werden.
+                            Dann werden die vorgesehenen Aktionen (Anforderungen) automatisch angelegt und mit dem CP verlinkt.
+                        </li>
+                        <li>Beim <strong>Entwurf</strong> werden, falls dies nicht direkt bei Anlage geschieht, Anforderungen oder Inline-Aktionen angelegt:
+                            <ul>
+                                <li>Anforderung: Terminwünsche, ...</li>
+                                <li>Task: alles, was in Nabu nicht abbildbar ist, zB. Telefonkontakte</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Stop</strong>: damit kann der Plan vorübergehend ausser Funktion gesetzt werden.</li>
+                        <li>
+                            <strong>Fertig</strong>: der Plan ist beendet</li>
+                    </ol>
+                    <p>Aus Platzgründen kann jeweils nur ein Teil des Plan gezeigt werden:
+                        <ul>
+                            <li>die allgemeinen Plan-Infos</li>
+                            <li>Anforderungen (Requests)</li>
+                            <li>Tasks</li>
+                        </ul>
+                        Buttons erlauben ein Navigieren zwischen den einzelnen Infopanels
+                    </p>
+                </xf:group>
+            </xf:case>
+        </xf:switch>
+    </xf:group>
+</div>

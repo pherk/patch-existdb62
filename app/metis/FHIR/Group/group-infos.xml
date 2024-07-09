@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<group-infos>
+  <bricks xmlns="http://hl7.org/fhir" version="5.0.0">
+    <Group>
+        <id value=""/>
+        <meta>
+            <versionId value="0"/>
+        </meta>
+        <identifier>
+            <use value="usual"/>
+            <type value="MetisGroup"/>
+            <system value="http://eNahar.org/nabu/system#metis-group"/>
+            <value value=""/>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <assigner>
+                <reference value="metis/organizations/ukk-kikl-spzn"/>
+                <display value="nSPZ UKK"/>
+            </assigner>
+        </identifier>
+        <type value="role"/> <!--  healthcareservice -->
+        <!-- 5.0.0 membership value="definitional"/> -->
+        <actual value="false"/> <!-- 4.x -->
+        <code>
+            <text value="spz-arzt"/>
+        </code>
+        <name value=""/>
+        <description value=""/>
+        <quantity value="0"/>
+        <characteristics>
+            <code>
+                <text value="service"/>
+            </code>
+            <valueCode value="true"/>
+            <exclude value="false"/>
+        </characteristics>
+    </Group>
+    <managingEntity>
+        <reference value="metis/organizations/ukk-kikl-spzn"/>
+        <display value="nSPZ UKK"/>
+    </managingEntity>
+    <characteristic>  <!-- 0..* Include / Exclude group members by Trait -->
+        <code>
+            <text value="service"/>
+        </code>
+        <valueCode value="true"/>
+        <exclude value="false"/>
+        <!-- 0..1 Period Period over which characteristic is tested -->
+    </characteristic>
+    <member>  <!-- 0..* Who or what is in group -->
+        <entity><!-- 1..1 Reference(CareTeam|Device|Group|HealthcareService|Location|
+    Organization|Patient|Practitioner|PractitionerRole|RelatedPerson|Specimen) Reference to the group member --></entity>
+        <period><!-- 0..1 Period Period member belonged to the group --></period>
+        <inactive value="[boolean]"/><!-- 0..1 If member is no longer in group -->
+    </member>
+  </bricks>
+</group-infos>

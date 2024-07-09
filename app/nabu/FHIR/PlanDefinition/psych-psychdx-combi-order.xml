@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PlanDefinition xmlns="http://hl7.org/fhir">
+    <id value="psych-psychdx-combi-order"/> 
+    <url value="http://enahar.org/exist/apps/nabu/FHIR/PlanDefinition/psych-psychdx-combi-order"/> 
+    <identifier> 
+        <use value="official"/> 
+        <system value="#artifacts"/> 
+        <value value="nabu:psych-psychdx-combi-order"/> 
+    </identifier> 
+    <version value="0.1.0"/> 
+    <name value="Psych-PsychDx CombiOrder"/> 
+    <title value="Psych-PsychDx CombiOrder"/> 
+    <type>
+        <coding>
+            <system value="#nabu-order-sets"/>
+            <code value="combi"/>
+            <display value="Combi"/>
+        </coding>
+        <text value="Combi"/>
+    </type>
+    <status value="active"/> 
+    <experimental value="true"/> 
+    <date value="2019-03-06"/> 
+    <publisher value="Nabu SPZ Partner"/> 
+    <description value="Order to be applied for two 'psych' appointments (psych-psychdx)."/> 
+    <purpose value="This order set helps ensure consistent application of appropriate orders for the care of sick childs with developtmental problems."/> 
+    <usage value="This order set should be applied after assessing a registration, when the findings of that assessment indicate the child belong to the developmental delay group or has clues for epileptic problems."/> 
+    <approvalDate value="2019-03-06"/> 
+    <lastReviewDate value="2019-03-06"/> 
+    <effectivePeriod> 
+        <start value="2019-04-01"/> 
+        <end value="2020-12-31"/> 
+    </effectivePeriod> 
+    <useContext> 
+        <code> 
+            <system value="http://hl7.org/fhir/usage-context-type"/> 
+            <code value="user"/> 
+        </code> 
+        <valueCodeableConcept> 
+            <coding> 
+                <system value="http://snomed.info/sct"/> 
+                <code value="309627007"/> 
+                <display value="Psychologist"/> 
+            </coding> 
+        </valueCodeableConcept> 
+    </useContext>
+    <useContext> 
+        <code> 
+            <system value="http://hl7.org/fhir/usage-context-type"/> 
+            <code value="venue"/> 
+        </code> 
+        <valueCodeableConcept> 
+            <coding> 
+                <system value="http://snomed.info/sct"/> 
+                <code value="440655000"/> 
+                <display value="Outpatient environment"/> 
+            </coding> 
+        </valueCodeableConcept> 
+    </useContext> 
+    <jurisdiction> 
+        <coding> 
+            <system value="urn:iso:std:iso:3166"/> 
+            <code value="DE"/> 
+        </coding> 
+    </jurisdiction> 
+    <topic> 
+        <text value="Interdisciplinary SPZ Ambulance"/> 
+    </topic> 
+    <contributor> 
+        <type value="author"/> 
+        <name value="Peter Herkenrath"/> 
+        <contact> 
+            <telecom> 
+                <system value="phone"/> 
+                <value value="0221 478 6074"/> 
+                <use value="work"/> 
+            </telecom> 
+            <telecom> 
+                <system value="email"/> 
+                <value value="p.herkenrath@uni-koeln.de"/> 
+                <use value="work"/> 
+            </telecom> 
+        </contact> 
+    </contributor> 
+    <contributor> 
+        <type value="author"/> 
+        <name value="Christoph Düchting"/> 
+        <contact> 
+            <telecom> 
+                <system value="phone"/> 
+                <value value="0221 478 5900"/> 
+                <use value="work"/> 
+            </telecom> 
+            <telecom> 
+                <system value="email"/> 
+                <value value="christoph.duechting@uk-koeln.de"/> 
+                <use value="work"/> 
+            </telecom> 
+        </contact> 
+    </contributor> 
+    <contact> 
+        <telecom> 
+            <system value="phone"/> 
+            <value value="0221 478 5900"/> 
+            <use value="work"/> 
+        </telecom> 
+        <telecom> 
+            <system value="email"/> 
+            <value value="spz@uk-koeln.de"/> 
+            <use value="work"/> 
+        </telecom> 
+    </contact> 
+    <copyright value="© Copyright 2018 Nabu SPZ Partner. All rights reserved."/> 
+    <relatedArtifact> 
+        <type value="derived-from"/> 
+        <display value=""/> 
+        <url value=""/> 
+    </relatedArtifact> 
+  <!--   Actions   -->
+    <action> 
+        <title value="Psych-PsychDx Evaluation"/>
+        <selectionBehavior value="all"/>
+        <action>
+            <title value="Psych Termin"/> 
+            <textEquivalent value="Psych"/>
+            <definition> 
+                <reference value="nabu/activityDefs/appPsych"/>
+            </definition>
+            <dynamicValue> 
+                <path value="timingTiming.event"/>
+                <language value="text/cql"/>
+                <expression value="3 months"/> 
+            </dynamicValue>
+            <dynamicValue> 
+                <path value="timingTiming.event"/>
+                <language value="application/xquery"/>
+                <expression value="current-date() + 3 * xs:dayTimeDuration('P30D')"/> 
+            </dynamicValue>
+            <dynamicValue> 
+                <path value="schedule.reference"/>
+                <language value="application/xquery"/>
+                <expression value="'nabu/schedules/amb-spz-psych'"/> 
+            </dynamicValue>
+            <dynamicValue> 
+                <path value="schedule.display"/>
+                <language value="application/xquery"/>
+                <expression value="'Psychologie'"/> 
+            </dynamicValue>
+        </action> 
+        <action>
+            <title value="PsychDx Termin"/> 
+            <textEquivalent value="PsychDx"/>
+            <definition> 
+                <reference value="nabu/activityDefs/appPsychDx"/>
+            </definition>
+            <dynamicValue> 
+                <path value="timingTiming.event"/>
+                <language value="text/cql"/>
+                <expression value="3 months"/> 
+            </dynamicValue>
+            <dynamicValue> 
+                <path value="timingTiming.event"/>
+                <language value="application/xquery"/>
+                <expression value="current-date() + 3 * xs:dayTimeDuration('P30D')"/> 
+            </dynamicValue>
+            <dynamicValue> 
+                <path value="schedule.reference"/>
+                <language value="application/xquery"/>
+                <expression value="'nabu/schedules/amb-spz-psychDX'"/> 
+            </dynamicValue>
+            <dynamicValue> 
+                <path value="schedule.display"/>
+                <language value="application/xquery"/>
+                <expression value="'Psych Diagnostik'"/> 
+            </dynamicValue>
+        </action> 
+    </action>
+</PlanDefinition>

@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Questionnaire xmlns="http://hl7.org/fhir">
+  <id value="q-neodat-v2017-08-08"/>
+  <text>
+    <status value="generated"/>
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <pre>
+      <b>NeoDat Import</b>
+      PAT_NR
+      SPZ	
+      Bayley
+      FAM_NAME
+      VORNAME
+      GEB
+      GESCHLECHT
+      WunschTestDat
+      GEBGEW
+      GEST_ALT
+      GEST_ALTD
+      ERR_TERMIN
+      mehrlz
+      MEHRLNR
+      ICH_GRADMA
+      ICH_PARENA
+      PVL
+      BPD_STAT
+      NEC
+      NGB_KRAMPF
+      HIE
+      VERSTORB
+      AUFN_DAT
+      ENTL_DAT
+      PAT_ID
+      </pre>
+    </div>
+  </text>
+  <url value="http://hl7.org/fhir/Questionnaire/neodat"/>
+  <title value="SPZ Nabu NeoDat Import"/>
+  <status value="draft"/>
+  <date value="2017-04-19"/>
+  <publisher value="SPZ Nabu Group"/>
+  <jurisdiction>
+    <coding>
+      <system value="urn:iso:std:iso:3166"/>
+      <code value="DE"/>
+    </coding>
+  </jurisdiction>
+  <subjectType value="Patient"/>
+    <extension url="http://enahar.org/exist/apps/nabu/questionnaire-singleton">
+        <valueBoolean value="true"/>
+    </extension>
+  <item>
+    <linkId value="neodat"/>
+    <text value="NeoDat Importdaten"/>
+    <type value="group"/>
+    <readOnly value="true"/>
+    <item>
+      <linkId value="demography"/>
+      <text value="Demographie"/>
+      <type value="group"/>
+      <item>
+        <linkId value="orbis-pid"/>
+        <text value="ORBIS PID"/>
+        <type value="integer"/>
+      </item>
+      <item>
+        <linkId value="neodat-pid"/>
+        <text value="NeoDat PID"/>
+        <type value="integer"/>
+      </item>
+      <item>
+        <linkId value="patient"/>
+        <type value="group"/>
+        <text value="Patient"/>
+        <item>
+          <linkId value="pat-family"/>
+          <text value="Name"/>
+          <type value="string"/>
+        </item>
+        <item>
+          <linkId value="pat-given"/>
+          <text value="Vorname"/>
+          <type value="string"/>
+        </item>
+        <item>
+          <linkId value="pat-birthdate"/>
+          <text value="GebDat"/>
+          <type value="dateTime"/>
+        </item>
+        <item>
+          <linkId value="pat-sex"/>
+          <text value="Geschlecht"/>
+          <type value="choice"/>
+          <option>
+            <valueCoding>
+              <code value="male"/>
+              <display value="ml."/>
+            </valueCoding>
+          </option>
+          <option>
+            <valueCoding>
+              <code value="female"/>
+              <display value="wbl."/>
+            </valueCoding>
+          </option>
+          <option>
+            <valueCoding>
+              <code value="other"/>
+              <display value="anderes"/>
+            </valueCoding>
+          </option>
+        </item>
+      </item>
+    </item>
+    <item>
+      <linkId value="perinatalInfo"/>
+      <text value="Perinataldaten"/>
+      <type value="group"/>
+      <item>
+        <linkId value="pca"/>
+        <type value="group"/>
+        <text value="SSW"/>
+        <item>
+          <linkId value="pca-weeks"/>
+          <text value="Wochen"/>
+          <type value="integer"/>
+        </item>
+        <item>
+          <linkId value="pca-days"/>
+          <text value="Tage"/>
+          <type value="integer"/>
+        </item>
+      </item>
+      <item>
+        <linkId value="et"/>
+        <text value="ET"/>
+        <type value="date"/>
+      </item>
+      <item>
+        <linkId value="birth-multiple"/>
+        <text value="Mehrling"/>
+        <type value="boolean"/>
+      </item>
+      <item>
+        <linkId value="birth-multiple-n"/>
+        <text value="Anzahl"/>
+        <type value="integer"/>
+      </item>
+      <item>
+        <linkId value="birth-multiple-nth"/>
+        <text value="Nth"/>
+        <type value="integer"/>
+      </item>
+      <item>
+        <linkId value="birth-weight"/>
+        <text value="Gewicht"/>
+        <type value="float"/>
+      </item>
+      <item>
+        <linkId value="birth-length"/>
+        <text value="Länge"/>
+        <type value="integer"/>
+      </item>
+      <item>
+        <linkId value="birth-head-cf"/>
+        <text value="KU"/>
+        <type value="float"/>
+      </item>
+    </item>
+    <item>
+      <linkId value="encounter"/>
+      <text value="stat.Aufenthalt"/>
+      <type value="group"/>
+      <item>
+        <linkId value="enc-admission"/>
+        <text value="Aufnahmedatum"/>
+        <type value="dateTime"/>
+      </item>
+      <item>
+        <linkId value="enc-dismissal"/>
+        <text value="Entlassung"/>
+        <type value="dateTime"/>
+      </item>
+      <item>
+        <linkId value="enc-death"/>
+        <text value="Verstorben"/>
+        <type value="boolean"/>
+      </item>
+    </item>
+    <item>
+      <linkId value="outcome"/>
+      <text value="Verlauf"/>
+      <type value="group"/>
+      <item>
+        <linkId value="outcome-ichgradma"/>
+        <text value="ICH-GradMax"/>
+        <type value="choice"/>
+          <option>
+            <valueCoding>
+              <code value="0"/>
+              <display value="normal"/>
+            </valueCoding>
+          </option>
+          <option>
+            <valueCoding>
+              <code value="1"/>
+              <display value="Grad I"/>
+            </valueCoding>
+          </option>
+          <option>
+            <valueCoding>
+              <code value="2"/>
+              <display value="Grad II"/>
+            </valueCoding>
+          </option>
+          <option>
+            <valueCoding>
+              <code value="3"/>
+              <display value="Grad III"/>
+            </valueCoding>
+          </option>
+      </item>
+      <item>
+        <linkId value="outcome-ichparena"/>
+        <text value="ICH-ParenA"/>
+        <type value="boolean"/>
+      </item>
+      <item>
+        <linkId value="outcome-pvl"/>
+        <text value="PVL"/>
+        <type value="boolean"/>
+      </item>
+      <item>
+        <linkId value="outcome-bpd"/>
+        <text value="BPD"/>
+        <type value="integer"/>
+      </item>
+      <item>
+        <linkId value="outcome-nec"/>
+        <text value="NEC"/>
+        <type value="integer"/>
+      </item>
+      <item>
+        <linkId value="outcome-ngka"/>
+        <text value="NG-Krämpfe"/>
+        <type value="boolean"/>
+      </item>
+      <item>
+        <linkId value="outcome-hie"/>
+        <text value="HIE"/>
+        <type value="integer"/>
+      </item> 
+    </item>
+  </item>
+</Questionnaire>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<device-infos>
+    <bricks xmlns="http://hl7.org/fhir">
+        <Device>
+            <id value=""/>
+            <meta>
+                <versionID value=""/>
+            </meta>
+            <identifier>
+                <use value="official"/>
+                <label value=""/>
+                <value value=""/>
+            </identifier>
+            <type>
+                <coding>
+                    <system value="http://enahar.org/exist/apps/metis#device-type"/>
+                    <code value="pc"/>
+                    <display value="PC"/>
+                </coding>
+                <text value="PC"/>
+            </type>
+            <status value="active"/><!-- 0..1 active | inactive | entered-in-error | unknown -->
+            <owner>
+                <reference value="metis/organizations/kikl-spz"/>
+                <display value="SPZ Kinderklinik"/>                
+            </owner>
+            <contact>
+                <reference value="metis/organizations/kikl-spz"/>
+                <display value="SPZ Kinderklinik"/>
+            </contact>
+            <location>
+                <reference value=""/>
+                <display value=""/>
+            </location>
+            <url value=""/><!-- 0..1 Network address to contact device -->
+            <note>
+                <text value=""/>
+            </note>
+            <safety>
+                <coding>
+                    <system value="#device-safety"/>
+                    <code value="not-applicable"/>
+                    <display value="keine Sicherheitsvorgaben"/>
+                </coding>
+                <text value="keine Sicherheitsvorgaben"/>
+            </safety>
+        </Device>
+        <extension url="#device-os">
+            <valueCode value="W7"/>
+        </extension>
+        <extension url="#device-apps">
+            <valueCode value="Harmonie"/>
+        </extension>
+        <patient><!-- 0..1 Reference(Patient) Patient to whom Device is affixed --></patient>
+        <lotNumber value="[string]"/><!-- 0..1 Lot number of manufacture -->
+        <manufacturer value="[string]"/><!-- 0..1 Name of device manufacturer -->
+        <manufactureDate value="[dateTime]"/><!-- 0..1 Date when the device was made -->
+        <expirationDate value="[dateTime]"/><!-- 0..1 Date and time of expiry of this device (if applicable) -->
+        <model value="[string]"/><!-- 0..1 Model id assigned by the manufacturer -->
+        <version value="[string]"/><!-- 0..1 Version number (i.e. software) -->
+        <udi>  <!-- 0..1 Unique Device Identifier (UDI) Barcode string -->
+            <deviceIdentifier value="[string]"/><!-- 0..1 Mandatory fixed portion of UDI -->
+            <name value="[string]"/><!-- 0..1 Device Name as appears on UDI label -->
+            <jurisdiction value="[uri]"/><!-- 0..1 Regional UDI authority -->
+            <carrierHRF value="[string]"/><!-- 0..1 UDI Human Readable Barcode String -->
+            <carrierAIDC value="[base64Binary]"/><!-- 0..1 UDI Machine Readable Barcode String -->
+            <issuer value="[uri]"/><!-- 0..1 UDI Issuing Organization -->
+            <entryType value="[code]"/><!-- 0..1 barcode | rfid | manual + -->
+        </udi>
+    </bricks>
+</device-infos>

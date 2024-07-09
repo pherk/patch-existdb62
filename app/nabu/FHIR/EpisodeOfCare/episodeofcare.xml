@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-wf-eocs" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance id="i-pat">
+                <data xmlns=""/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-done" level="ephemeral">Subform has updated itself.</xf:message>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+
+            <xf:instance id="i-eocs">
+                <data xmlns=""/>
+            </xf:instance>
+            <xf:submission id="s-get-eocs" instance="i-eocs" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/eocs?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm),'&amp;patient=', instance('i-pat')/*:id/@value,'&amp;status=planned&amp;status=waitlist&amp;status=active')"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+<!--
+                    <xf:toggle case="listEpisodeOfCares"/>
+-->
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get eocs!</xf:message>
+            </xf:submission>
+            <xf:submission id="s-submit-eoc" ref="instance('i-eocs')/*:EpisodeOfCare[index('r-eocs-id')]" method="put" replace="none">
+                <xf:resource value="concat('/exist/restxq/nabu/eocs?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">Beschreibung leer? cannot submit eoc!</xf:message>
+            </xf:submission>
+            
+            <xf:instance id="i-login">
+                <data xmlns=""/>
+            </xf:instance>
+            <xf:submission id="s-load-login-from-master" resource="model:m-patient#instance('i-login')//*:data" instance="i-login" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">login: cannot load from Master!.</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-eoc-infos" src="FHIR/EpisodeOfCare/episodeofcare-infos.xml"/>            
+            
+            <xf:instance id="i-bricks">
+                <bricks xmlns="">
+                </bricks>
+            </xf:instance>
+            <xf:instance id="i-search">
+                <data xmlns="">
+                    <active>true</active>
+                </data>
+            </xf:instance>
+            <xf:instance id="views">
+                <data xmlns="">
+                    <EpisodeOfCaresToSelect/>
+                    <noEpisodeOfCares/>
+                </data>
+            </xf:instance>
+            
+            <xf:bind id="EpisodeOfCaresToSelect" ref="instance('views')/*:EpisodeOfCaresToSelect" relevant="count(instance('i-eocs')/*:EpisodeOfCare) &gt; 0"/>
+            <xf:bind id="noEpisodeOfCares" ref="instance('views')/*:noEpisodeOfCares" relevant="count(instance('i-eocs')/*:EpisodeOfCare) = 0"/>
+            
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+                <xf:send submission="s-load-login-from-master"/>
+                <xf:send submission="s-get-eocs"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+                <script type="text/javascript">
+                    setOnsetDateTime();
+                </script>
+            </xf:action>
+        </xf:model>
+        <xf:input id="onset" ref="instance('i-eocs')/*:EpisodeOfCare[index('r-eocs-id')]/*:target/*:dueDate/@value" appearance="bf:iso8601" data-bf-params="date:'dd.MM.yyyy'">
+            <xf:label>Fälligkeit:</xf:label>
+            <xf:alert>a valid date is required</xf:alert>
+        </xf:input>
+    </div>
+    <xf:group id="eoclist" class="bordered">
+        <xf:action ev:event="newEoC">
+            <xf:insert at="last()" nodeset="instance('i-eocs')/*:EpisodeOfCare" context="instance('i-eocs')" origin="instance('i-eoc-infos')/*:bricks/*:EpisodeOfCare"/>
+            <xf:insert at="last()" nodeset="instance('i-eocs')/*:EpisodeOfCare[last()]/*:statusHistory" context="instance('i-eocs')/*:EpisodeOfCare[last()]" origin="instance('i-eoc-infos')/*:bricks/*:statusHistory"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:period/*:start/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:patient/*:reference/@value" value="concat('nabu/patients/',instance('i-pat')/*:id/@value)"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:patient/*:display/@value" value="concat(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-pat')/*:name[*:use/@value='official']/*:given/@value,', *',instance('i-pat')/*:birthDate/@value)"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:statusHistory[1]/*:period/*:start/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:statusHistory[1]/*:status/@value" value="'planned'"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:statusHistory[1]/*:extension[@url='http://eNahar.org/nabu/extension#eoc-workflow-change']/*:text/@value" value="'angelegt'"/>
+        </xf:action>
+        <xf:action ev:event="insertDefaultConsent">
+            <xf:insert at="last()" nodeset="instance('i-eocs')/*:EpisodeOfCare[last()]/*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-eoc-consent']" context="instance('i-eocs')/*:EpisodeOfCare[last()]" origin="instance('i-eoc-infos')/*:bricks/*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-eoc-consent']"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-eoc-consent'][last()]//*:coding[*:system/@value='#nabu-eoc-consent-code']/*:code/@value" value="'opt-in'"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-eoc-consent'][last()]//*:coding[*:system/@value='#nabu-eoc-consent-code']/*:display/@value" value="'zugestimmt'"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-eoc-consent'][last()]//*:coding[*:system/@value='#nabu-eoc-consent-actor']/*:code/@value" value="'family'"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-eoc-consent'][last()]//*:coding[*:system/@value='#nabu-eoc-consent-actor']/*:display/@value" value="'Familie'"/>
+            <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[last()]/*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-eoc-consent'][last()]//*:text/@value" value="'zugestimmt von Familie'"/>
+        </xf:action>
+        <xf:action ev:event="betterform-index-changed">
+        </xf:action>
+        <xf:label>Behandlungsphasen (EpisodeOfCare)</xf:label>
+        <xf:repeat id="r-eocs-id" ref="instance('i-eocs')/*:EpisodeOfCare" appearance="compact" class="svRepeat">
+                <xf:output value="substring(./*:period/*:start/@value,1,10)">
+                    <xf:label class="svRepeatHeader">Start</xf:label>
+                </xf:output>
+                <xf:output value="./*:status/@value"/>
+        </xf:repeat>
+        <xf:group ref="instance('views')/*:noEpisodeOfCares">
+            <p>
+                <strong>Keine Behandlungsphasen definiert</strong>
+            </p>
+        </xf:group>
+        <xf:switch id="switch">
+            <xf:case id="listEpisodeOfCares">
+                <xf:group class="svTriggerGroup">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svSubTrigger" ref="instance('i-eocs')/*:EpisodeOfCare">
+                                    <xf:label>Edit</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="editEpisodeOfCare"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svAddTrigger">
+                                    <xf:label>Neu</xf:label>
+                                    <xf:action ev:event="DOMActivate" if="count(instance('i-eocs')/*:EpisodeOfCare[*:status/@value='active']=0)">
+                                        <xf:dispatch name="newEoC" targetid="eoclist"/>
+                                        <xf:toggle case="editEpisodeOfCare"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+<!--
+                            <td>
+                                <xf:trigger ref="instance('i-eocs')/*:EpisodeOfCare[index('r-eocs-id')]/*:status[@value=('active','draft','suspended','unknown')]">
+                                    <xf:label>
+                                        <span class="glyphicon glyphicon-trash"/>
+                                    </xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[index('r-eocs-id')]/*:period/*:end/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                                        <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[index('r-eocs-id')]/*:status/@value" value="'cancelled'"/>
+                                        <xf:setvalue ref="instance('views')/*:dirty" value="'true'"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger ref="instance('i-eocs')/*:EpisodeOfCare[index('r-eocs-id')]/*:status[@value=('active','draft','suspended','unknown')]">
+                                    <xf:label>
+                                        <span class="glyphicon glyphicon-ok"/>
+                                    </xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[index('r-eocs-id')]/*:period/*:end/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                                        <xf:setvalue ref="instance('i-eocs')/*:EpisodeOfCare[index('r-eocs-id')]/*:status/@value" value="'completed'"/>
+                                        <xf:setvalue ref="instance('views')/*:dirty" value="'true'"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+-->
+                            <td>
+                                <xf:trigger>
+                                    <xf:label>
+                                        <strong>?</strong>
+                                    </xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="showHelp"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                </xf:group>
+            </xf:case>
+            <xf:case id="editEpisodeOfCare">
+                <xf:group id="editGroup" ref="instance('i-eocs')/*:EpisodeOfCare[index('r-eocs-id')]">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger ref="instance('i-eocs')/*:EpisodeOfCare[index('r-eocs-id')]/*:status[@value!='unknown']" class="svUpdateMasterTrigger">
+                                    <xf:label>Speichern</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:send submission="s-submit-eoc"/>
+                                        <xf:toggle case="listEpisodeOfCares"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Schließen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:send submission="s-get-eocs"/>
+                                        <xf:toggle case="listEpisodeOfCares"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <xf:group class="svFullGroup">
+                        <xf:label>Edit EpisodeOfCares</xf:label>
+                        <br/>
+                        <xf:select1 ref="./*:status/@value" class="medium-input">
+                            <xf:label>Status:</xf:label>
+                            <xf:itemset nodeset="instance('i-eoc-infos')/*:status/*:code">
+                                <xf:label ref="./@label-de"/>
+                                <xf:value ref="./@value"/>
+                            </xf:itemset>
+                        </xf:select1>
+                            <xf:group class="svFullGroup">
+                                <xf:label class="svRepeatHeader">Notizen</xf:label>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <xf:trigger>
+                                                <xf:label>+</xf:label>
+                                                <xf:action ev:event="DOMActivate">
+                                                    <xf:insert nodeset="./*:statusHistory" context="." origin="instance('i-eoc-infos')/*:bricks/*:statusHistory"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                        </td>
+                                        <td>
+                                            <xf:trigger>
+                                                <xf:label>-</xf:label>
+                                                <xf:action ev:event="DOMActivate">
+                                                    <xf:delete nodeset="./*:statusHistory" at="index('r-statusHistorys-id')"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                        </td>
+                                        <td>
+                                <xf:repeat id="r-statusHistorys-id" ref="./*:statusHistory" appearance="compact" class="svRepeat">
+                                    <xf:textarea ref=".//*:text/@value" class="full-textarea">
+                                        <xf:label class="svRepeatHeader">Notiz</xf:label>
+                                    </xf:textarea>
+                                </xf:repeat>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </xf:group>
+                    </xf:group>
+                </xf:group>
+            </xf:case>
+            <xf:case id="showHelp">
+                <xf:group>
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Schließen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="listEpisodeOfCares"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                    <h4>Hilfe</h4>
+                    <p>demnächst hier ...</p>
+                </xf:group>
+            </xf:case>
+        </xf:switch>
+    </xf:group>
+</div>

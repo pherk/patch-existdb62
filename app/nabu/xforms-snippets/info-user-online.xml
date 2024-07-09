@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-user-online" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-users">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-users" instance="i-users" method="get" replace="instance">
+                    <xf:resource value="'/exist/restxq/metis/users?_format=compact&amp;realm=kikl-spz'"/>
+			    <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                </xf:action>
+                <xf:action ev:event="xforms-submit-error">
+                </xf:action>
+            </xf:submission>
+            <xf:instance id="i-dateTime">
+                <data>
+                    <startdate/>
+                    <enddate/>
+                    <nofd>1</nofd>
+                </data>
+            </xf:instance>
+            <xf:bind ref="instance('i-dateTime')/*:startdate" type="xs:date"/>
+            <xf:bind ref="instance('i-dateTime')/*:enddate" type="xs:date"/>
+            <xf:bind ref="instance('i-dateTime')/*:nofd" type="xs:integer" constraint=". &gt; 0"/>
+            <xf:action ev:event="xforms-ready">
+                <xf:setvalue ref="instance('i-dateTime')/*:startdate" value="adjust-date-to-timezone(current-date(),())"/>
+                <xf:setvalue ref="instance('i-dateTime')/*:enddate" value="instance('i-dateTime')/*:startdate"/>
+                <xf:send submission="s-get-users"/>
+            </xf:action>
+        </xf:model>
+    </div>
+    <xf:group id="userinfo" class="svFullGroup bordered">
+        <xf:label>An- und Abwesehenheiten</xf:label>
+        <br/>
+        <table>
+            <tr>
+                <td>
+        <xf:input ref="instance('i-dateTime')/*:startdate" appearance="bf:iso8601" data-bf-params="date:'dd.MM.yyyy'">
+            <xf:label class="svListHeader">Start:</xf:label>
+            <xf:action ev:event="xforms-value-changed">
+                <xf:setvalue ref="instance('i-dateTime')/*:nofd" value="(xs:date(instance('i-dateTime')/*:enddate) - xs:date(instance('i-dateTime')/*:startdate)) div xs:dayTimeDuration('P1D') + 1"/>
+                </xf:action>
+        </xf:input>
+        <xf:input ref="instance('i-dateTime')/*:enddate" appearance="bf:iso8601" data-bf-params="date:'dd.MM.yyyy'">
+            <xf:label class="svListHeader">Ende:</xf:label>
+            <xf:action ev:event="xforms-value-changed">
+                <xf:setvalue ref="instance('i-dateTime')/*:nofd" value="(xs:date(instance('i-dateTime')/*:enddate) - xs:date(instance('i-dateTime')/*:startdate)) div xs:dayTimeDuration('P1D') + 1"/>
+                </xf:action>
+        </xf:input>
+        <xf:output ref="instance('i-dateTime')/*:nofd">
+            <xf:label>Anzahl Tage</xf:label>
+        </xf:output>
+                </td>
+            </tr>
+        <tr>
+            <td colspan="6">
+                    <hr style="border: none; height: 1px; color: blue; background: blue;"/>
+                </td>
+        </tr>
+        <tr>
+            <td>
+                <xf:repeat ref="instance('i-users')/*:user" appearance="compact" class="svRepeat">
+                    <xf:output ref="./*:display/@value">
+                        <xf:label class="svRepeatHeader">Name</xf:label>
+                    </xf:output>
+                    <xf:output ref="./*:roles/@value">
+                        <xf:label class="svRepeatHeader">Rollen</xf:label>
+                    </xf:output>
+                </xf:repeat>
+            </td>
+        </tr>
+        </table>
+    </xf:group>
+</div>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schedule>
+    <id value=""/>
+    <meta>
+        <versionID value="0"/>
+    </meta>
+    <identifier>
+        <use value="official"/>
+        <system value="#enahar-id"/>
+        <value value=""/>
+    </identifier>
+    <type value=""/>
+    <name value=""/>
+    <description value=""/>
+    <appletter>
+        <alt-name value=""/>
+        <type>
+            <coding>
+                <code value="note"/>
+                <display value="Hinweis"/>
+            </coding>
+        </type>
+        <template>
+            <reference value=""/>
+            <display value=""/>
+        </template>
+    </appletter>
+    <timing>
+        <pre value="15"/>
+        <exam value="30"/>
+        <post value="15"/>
+        <overbookable value="false"/>
+        <parallel-per-hour value="3+2"/>
+        <blocking value="true"/>        
+        <query value="post"/>
+    </timing>
+    <fc>
+        <className value=""/>
+        <backgroundColor value="#ffffff"/>
+        <textColor value="#ffffff"/>
+        <editable value="false"/>
+    </fc>
+    <isSpecial value="false"/>
+    <ff value="true"/>
+    <location>
+        <reference value="metis/locations/kikl-spz"/>
+        <display value="SPZ Kinderklinik"/>
+    </location>
+<!-- e.g. for meetings
+    <agenda>
+    </agenda>
+-->
+    <active value="true"/>
+</schedule>

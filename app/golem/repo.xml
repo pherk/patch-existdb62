@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<meta xmlns="http://exist-db.org/xquery/repo">
+    <description>Nabu Engine</description>
+    <author>Peter Herkenrath</author>
+    <website>www.enahar.org</website>
+    <status>production</status>
+    <license>MAAT</license>
+    <copyright>true</copyright>
+    <type>application</type>
+    <target>golem</target>
+    <prepare>pre-install.xql</prepare>
+    <finish/>
+    <changelog>
+        <repo:change xmlns:repo="http://exist-db.org/xquery/repo" version="0.1.0">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>first (working) version</li>
+            </ul>
+        </repo:change>
+    </changelog>
+<deployed>2018-12-02T08:23:01.059+01:00</deployed></meta>

@@ -1,0 +1,1289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    EN 14463
+    November 2007
+    Supersedes CEN/TS 14463:2003
+    
+    English Version
+    Health informatics - A syntax to represent the content of medical classification systems - ClaML
+    
+    Informatique de la santé - Syntaxe permettant de            Medizinische Informatik - Syntax zur Darstellung des 
+    représenter le contenu des systèmes de classification       Inhalts medizinischer Klassifikationssysteme (ClaML)
+    médicaux - ClaML
+    
+    This European Standard was approved by CEN on 7 October 2007.
+    CEN members are bound to comply with the CEN/CENELEC Internal Regulations which stipulate the conditions for giving this European 
+    Standard the status of a national standard without any alteration. Up-to-date lists and bibliographical references concerning such 
+    national standards may be obtained on application to the CEN Management Centre or to any CEN member.
+    
+    This European Standard exists in three official versions (English, French, German). A version in any other language made by 
+    translation under the responsibility of a CEN member into its own language and notified to the CEN Management Centre has the same 
+    status as the official versions.
+    
+    CEN members are the national standards bodies of Austria, Belgium, Bulgaria, Cyprus, Czech Republic, Denmark, Estonia, Finland, 
+    France, Germany, Greece, Hungary, Iceland, Ireland, Italy, Latvia, Lithuania, Luxembourg, Malta, Netherlands, Norway, Poland, 
+    Portugal, Romania, Slovakia, Slovenia, Spain, Sweden, Switzerland and United Kingdom.
+    
+    Foreword
+    This document (EN 14463:2007) has been prepared by Technical Committee CEN/TC251 “Health informatics”, the secretariat of which is 
+    held by NEN.
+    This European Standard shall be given the status of a national standard, either by publication of an identical text or by 
+    endorsement, at the latest by May 2008, and conflicting national standards shall be withdrawn at the latest by May 2008.
+    
+    This document supersedes CEN/TS 14463:2003.
+    According to the CEN/CENELEC Internal Regulations, the national standards organizations of the following countries are bound to 
+    implement this European Standard: Austria, Belgium, Bulgaria, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, 
+    Greece, Hungary, Iceland, Ireland, Italy, Latvia, Lithuania, Luxembourg, Malta, Netherlands, Norway, Poland, Portugal, Romania, 
+    Slovakia, Slovenia, Spain, Sweden, Switzerland and United Kingdom.
+    
+    
+    Transition from DTD to XSD done by The Art-Decor Expert Group, 2014
+    
+--><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+    <xs:group name="rubric.simple">
+        <xs:sequence>
+            <xs:choice minOccurs="0">
+                <xs:element ref="Reference"/>
+                <xs:element ref="Term"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:group>
+    <xs:group name="rubric.complex">
+        <xs:choice>
+            <xs:group ref="rubric.simple"/>
+            <xs:element ref="Para"/>
+            <xs:element ref="Include"/>
+            <xs:element ref="IncludeDescendants"/>
+            <xs:element ref="Fragment"/>
+            <xs:element ref="List"/>
+            <xs:element ref="Table"/>
+        </xs:choice>
+    </xs:group>
+    <xs:element name="ClaML">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element ClaML identifies a Classification Markup Language file.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="Meta"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="Identifier"/>
+                <xs:element ref="Title"/>
+                <xs:element minOccurs="0" ref="Authors"/>
+                <xs:element minOccurs="0" ref="Variants"/>
+                <xs:element ref="ClassKinds"/>
+                <xs:element minOccurs="0" ref="UsageKinds"/>
+                <xs:element ref="RubricKinds"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="Modifier"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="ModifierClass"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="Class"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="attlist.ClaML"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.ClaML">
+        <xs:attribute name="version" use="required">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute version shall specify the version of ClaML used in the remaining document. The value to indicate the current version must be “2.0.0”.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Variants">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">Optionally, this standard supports multiple variants of a classification in the same ClaML file. The element Variants defines the variants that are contained within the ClaML file.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="Variant"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Variant">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Variant uniquely identifies a variant within the ClaML file. One instance of a collection of related documents. EXAMPLE The ICD10-CM is a variant of the WHO ICD10 classification.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:attributeGroup ref="attlist.Variant"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Variant">
+        <xs:attribute name="name" use="required" type="xs:ID">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute name uniquely identifies the variant in the remainder of the ClaML file. EXAMPLE
+                    <Variants>
+                        <Variant name="cm">Clinical Modification</Variant>
+                        <Variant name="am">Australian Modification</Variant>
+                    </Variants>
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Meta">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Meta shall be used to define meta information about a class or the classification. The element Meta has no contents. EXAMPLE
+                <Meta name="CSS" value="icd10.css"/>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attributeGroup ref="attlist.Meta"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Meta">
+        <xs:attribute name="name" use="required">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute name defines the name for the meta information.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="value" use="required">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute value defines the contents of the meta information.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="variants" type="xs:IDREFS">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute variants defines the variants in which this Meta element is valid. When the attribute is absent the Meta element is valid in all variants.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Identifier">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The optional element Identifier may occur multiple times. It defines an issuing authority and the unique identifier for the coding scheme defined by that authority. The element Identifier has no contents. EXAMPLE
+                <Identifier authority="HL7" uid="2.16.840.1.113883.6.3"/>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attributeGroup ref="attlist.Identifier"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Identifier">
+        <xs:attribute name="authority" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The optional attribute authority identifies the authority that issued the uid.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="uid" use="required">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute uid is required and defines the unique identifier for the coding scheme.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Title">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Title defines the title for the coding scheme. The contents of the element Title is limited to plain text.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:attributeGroup ref="attlist.Title"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Title">
+        <xs:attribute name="name" use="required" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute name defines a short name for the classification. EXAMPLE
+                    <Title name="ICD10" version="10.2006.13" date="2005-11-15">International Classification of Diseases, version 10</Title>
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="version">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">
+                    The attribute version defines the version of the classification. It is recommended to use the well-known
+                    major.minor.patch version numbering scheme.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="date">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute date defines the date of publication. It is recommended to use the date format as defined by ISO 8601.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Authors">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Authors defines the authors of the ClaML file. The element Authors contains an optional number of the element Author.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="Author"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Author">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Author represents the name of an author of the classification. The contents of the element Author is limited to plain text. EXAMPLE
+                <Authors>
+                    <Author name="who">World Health Organisation</Author>
+                    <Author name="fic_nl">Dutch WHO-FIC</Author>
+                </Authors>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:attributeGroup ref="attlist.Author"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Author">
+        <xs:attribute name="name" use="required" type="xs:ID">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute name uniquely identifies the author. The first character of the attribute id must be a letter, underscore or colon. This attribute is referenced in the element History.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="ClassKinds">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element ClassKinds lists the kinds of classes, which are present in the coding scheme. The element ClassKinds contains one or more elements ClassKind. EXAMPLE 
+                <ClassKinds>
+                    <Kind name="chapter">
+                        <Display xml:lang="en" prefix="§">Chapter</Display>
+                    </Kind>
+                    <Kind name="block">
+                        <Display xml:lang="en">Section</Display>
+                    </Kind>
+                    <Kind name="category">
+                        <Display xml:lang="en"/>
+                    </Kind>
+                </ClassKinds>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="ClassKind"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="RubricKinds">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element RubricKinds lists the kinds of rubrics, which are present in the coding scheme. The element RubricKinds contains one or more elements RubricKind. EXAMPLE
+                <RubricKinds>
+                    <RubricKind name="inclusion">
+                        <Display xml:lang="de">Inklusiva</Display>
+                    </RubricKind>
+                </RubricKinds>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="RubricKind"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="UsageKinds">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The optional element UsageKinds lists the kinds of usage of classes, which are present in the coding scheme. The element UsageKinds contains one or more elements UsageKind. EXAMPLE
+                <UsageKinds>
+                    <UsageKind name="etiology" mark="†"/>
+                    <UsageKind name="manifestation" mark="*"/>
+                </UsageKinds></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="UsageKind"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ClassKind">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element ClassKind defines the name of a Class. The element ClassKind contains an optional number of the element Display.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="Display"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="attlist.ClassKind"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.ClassKind">
+        <xs:attribute name="name" use="required" type="xs:ID">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">
+                    The attribute name defines the name for the class kind. The first character of the attribute name must be a letter, underscore or colon. Suggested values:
+                    <p>
+                        <span>chapter</span> -
+                        <span>A chapter is a self-contained block of sections dealing with a specific content (e.g. in ICD-10 chapter 1 represents infectious diseases, in OPS chapter 8 represents non-surgical-therapeutic procedures).</span>
+                    </p>
+                    <p>
+                        <span>block</span> -
+                        <span>A block is a self-contained block of codes dealing with a specific sub-content of a chapter (e.g. in ICD-10 section A00-A09 represents intestinal infectious diseases – a specific group of infectious diseases).</span>
+                    </p>
+                    <p>
+                        <span>category</span> - 
+                        <span>A category is a entity that describes a specific concept (e.g. in ICD-10 A00 represents Cholera – a specific infectious disease).</span>
+                    </p>
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="RubricKind">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element RubricKind defines the name of a Rubric. The element RubricKind contains an optional number of the element Display.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="Display"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="attlist.RubricKind"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.RubricKind">
+        <xs:attribute name="name" use="required" type="xs:ID">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">
+                    The attribute name defines the name for the rubric kind. The first character of the attribute name must be a letter, underscore or colon. Suggested values:
+                    <p>
+                        <span>preferred</span> - 
+                        <span>The attribute kind=“preferred” defines a specific unique term that identifies the meaning of a class.</span>
+                    </p>
+                    <p>
+                        <span>inclusion</span> - 
+                        <span>The attribute kind=“inclusion” shall be used for additional terms that can be used within a class.</span>
+                    </p>
+                    <p>
+                        <span>exclusion</span> - 
+                        <span>The attribute kind=“exclusion” shall be used for terms that are excluded from a class.</span>
+                    </p>
+                    <p>
+                        <span>coding-hint</span> - 
+                        <span>Coding instructions</span>
+                    </p>
+                    <p>
+                        <span>definition</span> - 
+                        <span>Otherwise unspecified texts added to rubrics.</span>
+                    </p>
+                    <p>
+                        <span>note</span> - 
+                        <span>General remark</span>
+                    </p>
+                    <p>
+                        <span>text</span> - 
+                        <span>e.g. a text for a Modifier</span>
+                    </p>
+                    <p>
+                        <span>title</span> - 
+                        <span>A title for a text rubric</span>
+                    </p>
+                    <p>
+                        <span>introduction</span> - 
+                        <span>A long text at the beginning of a chapter.</span>
+                    </p>
+                    <p>
+                        <span>footnote</span> - 
+                        <span>As in the printed versions of ICD.</span>
+                    </p>
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="inherited" type="xs:boolean" default="true">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute inherited specifies if rubrics with this rubric kind are inherited by subclasses. The default value for this attribute is false.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="UsageKind">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element UsageKind defines the name of a usage. The element UsageKind is empty.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attributeGroup ref="attlist.UsageKind"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.UsageKind">
+        <xs:attribute name="name" use="required" type="xs:ID">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">
+                    The attribute name defines the name for a UsageKind. The first character of the attribute name must be a letter, underscore or colon. Suggested values:
+                    <p>
+                        <span>etiology</span> - 
+                        <span>The basic cause or underlying disease process is assigned a code marked with a dagger (†).</span>
+                    </p>
+                    <p>
+                        <span>manifestation</span> - 
+                        <span>The clinical manifestation is marked with an asterisk (*).</span>
+                    </p>
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="mark" use="required">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute mark specifies how the code of a Class with a specific UsageKind shall be marked.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Display">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Display defines how a ClassKind or RubricKind is to be displayed in a specific language. The contents of the element Display is limited to plain text.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:attributeGroup ref="attlist.Display"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Display">
+        <xs:attribute ref="xml:lang" use="required">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute xml:lang defines the language of the content of the element. The attribute values of xml:lang shall follow ISO 639-2 if they are three-letter codes, and EN ISO 3166-1 if they contain two-letter sub codes. Language identifiers registered with the IANA shall contain the prefix "I-" or "i-". Any privately used codes shall contain the prefix "X-" or "x-".</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="variants" type="xs:IDREF">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute variants define the variants in which this Display element is used. When the attribute is absent the Display element is used in all variants.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Modifier">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Modifier defines a modifier within the coding scheme. EXAMPLE
+                <Modifier code="Md1">
+                    <SubClass code="0"/>
+                    <SubClass code="1"/>
+                    <SubClass code="2"/>
+                </Modifier>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="Meta"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="SubClass"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="Rubric"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="History"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="attlist.Modifier"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Modifier">
+        <xs:attribute name="code" use="required" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute code defines the code for the Modifier.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="variants" type="xs:IDREFS">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute variants defines the list of variants in which this Modifier is valid. When the attribute is absent the Modifier is valid in all variants.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="ModifierClass">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element ModifierClass defines a modifier class in the coding scheme. EXAMPLE
+                <ModifierClass modifier="Md1" code="0">
+                    <SuperClass code="Md1"/>
+                    <SubClass code="00"/>
+                    <SubClass code="01"/>
+                    <SubClass code="02"/>
+                </ModifierClass>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="Meta"/>
+                <xs:element ref="SuperClass"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="SubClass"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="Rubric"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="History"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="attlist.ModifierClass"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.ModifierClass">
+        <xs:attribute name="modifier" use="required" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute modifier references the code of the modifier the ModifierClass belongs to.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="code" use="required" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute code defines the code for the ModifierClass.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="usage" type="xs:IDREF">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute usage refers to a UsageKind and specifies the usage of the ModifierClass.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="variants" type="xs:IDREFS">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute variants defines the list of variants in which this ModifierClass is valid. When the attribute is absent the ModifierClass is valid in all variants.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Class">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Class defines a class in the coding scheme. EXAMPLE
+                <Class code="A00" kind="3digit">
+                    <SuperClass code="A00-A09"/>
+                    <SubClass code="A00.0"/>
+                    <SubClass code="A00.1"/>
+                    <SubClass code="A00.9"/>
+                    <Rubric kind="preferred">
+                        <Label xml:lang="en">Cholera</Label>
+                    </Rubric>
+                </Class>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="Meta"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="SuperClass"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="SubClass"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="ModifiedBy"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="ExcludeModifier"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="Rubric"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="History"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="attlist.Class"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Class">
+        <xs:attribute name="code" use="required" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute code defines the code for the class.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="kind" use="required" type="xs:IDREF">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute kind references the ClassKind of the class, e.g. chapter, block, category, etc.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="usage" type="xs:IDREF">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute usage refers to a UsageKind and specifies the usage of the class.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="variants" type="xs:IDREFS">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute variants defines the list of variants in which this Class is valid. When the attribute is absent the Class is valid in all variants.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="ModifiedBy">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element ModifiedBy refers to the code of a Modifier, which modifies the class and its descendants. In case the Modifier shall not modify a descendant of the Class the element ExcludeModifier must be defined at that specific descendant (see ExcludeModifier). EXAMPLE
+                <Class code="C88" kind="category">
+                    ...
+                    <SubClass code="C88.0"/>
+                    <SubClass code="C88.1"/>
+                    <ModifiedBy code="Md1" position="5"/>
+                </Class>
+                <Class code="C88.0" kind="category">
+                    <SuperClass code="C88"/>
+                </Class>
+                <Class code="C88.1" kind="category">
+                    <SuperClass code="C88"/>
+                    <ExcludeModifier code="Md1"/>
+                </Class>
+                In the example both Class C88 and its descendant C88.0 are modified by Modifier Md1. At the descendant Class C88.1 the modifier is excluded, i.e. Class C88.1 is not modified by Modifier Md1.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="Meta"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="ValidModifierClass"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="attlist.ModifiedBy"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.ModifiedBy">
+        <xs:attribute name="code" use="required" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute code references the code of the Modifier.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="all" type="xs:boolean" default="true">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute all may be used to indicate that all ModifierClasses are valid. In such a case, the element ModifiedBy does not contain an element ValidModifierClass. The default value of the attribute all is true.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="position">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute position specifies the position for the code of the ModifierClass when the Modifier is used to generate the subclasses of the modified Class. The first position shall be specified by the number ‘1’.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="variants" type="xs:IDREFS">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute variants defines the list of variants in which this ModifiedBy element is valid. When the attribute is absent this ModifiedBy element is valid in all variants.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="ExcludeModifier">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element ExcludeModifier refers to the code of a Modifier, which is not to be used for this class.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attributeGroup ref="attlist.ExcludeModifier"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.ExcludeModifier">
+        <xs:attribute name="code" use="required" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute code references the code of the excluded Modifier.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="variants" type="xs:IDREFS">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute variants defines the list of variants in which this ExcludeModifier element is valid. When the attribute is absent this ExcludeModifier element is valid in all variants.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="ValidModifierClass">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element ValidModifierClass refers to the code of a ModifierClass that is valid for this class. Only valid ModifierClasses may be used to modify the Class. When the element ModifiedBy contains one or more ValidModifierClass elements the attribute all at ModifiedBy must be set to false. EXAMPLE
+                <Class code="C88" kind="3digit">
+                    <ModifiedBy code="Md1" all="false">
+                        <ValidModifierClass code="0"/>
+                    </ModifiedBy>
+                </Class>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attributeGroup ref="attlist.ValidModifierClass"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.ValidModifierClass">
+        <xs:attribute name="code" use="required" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute code defines the code of the ModifierClass.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="variants" type="xs:IDREFS">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute variants defines the list of variants in which this ValidModifierClass element is valid. When the attribute is absent this ValidModifierClass element is valid in all variants.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Rubric">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Rubric defines the labels that belong to a Class, Modifier, or ModifierClass. NOTE Preferred term is an example of a rubric kind. Other examples are inclusions, exclusions and editorial notes.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="Label"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="History"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="attlist.Rubric"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Rubric">
+        <xs:attribute name="id" type="xs:ID">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute id defines a unique identifier for the rubric. If this is absent, the rubric can not be uniquely identified.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="kind" use="required" type="xs:IDREF">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute kind refers to the RubricKind of rubric, for example preferred, inclusion, exclusion, etc.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="usage" type="xs:IDREF">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The first character of the attribute id must be a letter, underscore or colon. The attribute usage refers to a UsageKind and specifies the usage of the Rubric.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Label">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Label defines a piece of text. EXAMPLE
+                <Rubric id="r1234" kind="preferred">
+                    <Label xml:lang="en">Cholera</Label>
+                </Rubric></xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="rubric.complex"/>
+            <xs:attributeGroup ref="attlist.Label"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Label">
+        <xs:attribute ref="xml:lang" use="required">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute xml:lang defines the language of the content of the element. The attribute values of xml:lang shall follow ISO 639-2 if they are three-letter codes, and EN ISO 3166-1 if they contain two-letter sub codes. Language identifiers registered with the IANA shall contain the prefix "I-" or "i-". Any privately used codes shall contain the prefix "X-" or "x-".</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute ref="xml:space" default="default">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute xml:space can be used to indicate that white space (spaces, carriage returns, line feeds, tabs, etc) shall be preserved within the rubric. The default value for this attribute is default, which indicates that white space may be ignored. The value preserve indicates that white space shall be preserved.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="variants" type="xs:IDREFS">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute variants defines the list of variants in which this Label is valid. When the attribute is absent the Label is valid in all variants.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="History">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element History shall be used to describe what happened to a Modifier, ModifierClass, Class or Rubric. EXAMPLE
+                <Rubric id="r123" kind="preferred">
+                    <Label xml:lang="en">Cholera, unspecified</Label>
+                    <History author="a234" date="2005-11-15">add unspecified</History>
+                </Rubric>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:attributeGroup ref="attlist.History"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.History">
+        <xs:attribute name="author" use="required" type="xs:IDREF">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute author references the unique identifier of the Author.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="date" use="required" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute date gives the date of the change. It is recommended to use the date format as defined by ISO 8601.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="SuperClass">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element SuperClass defines a parent class of a ModifierClass or Class.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attributeGroup ref="attlist.SuperClass"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.SuperClass">
+        <xs:attribute name="code" use="required" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute code refers to the code of the SuperClass.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="variants" type="xs:IDREFS">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute variants defines the list of variants in which this SuperClass is valid. When the attribute is absent the SuperClass is valid in all variants.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="SubClass">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element SubClass defines a child of a Modifier, ModifierClass or Class.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attributeGroup ref="attlist.SubClass"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.SubClass">
+        <xs:attribute name="code" use="required" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute code refers to the code of the SubClass.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="variants" type="xs:IDREFS">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute variants defines the list of variants in which this SubClass is valid. When the attribute is absent the SubClass is valid in all variants.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Reference">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Reference defines a reference within a Rubric to another Class either in the ClaML file or in some external classification. NOTE The reference may be either within or between classifications. A reference does not specify the nature of the pointer. It is not necessarily a mapping. EXAMPLE
+                <Reference>A00.0</Reference>
+                <Reference code="I">A00-B99</Reference>
+                <Reference usage="etiology">A00</Reference>
+                <Reference authority="HL7" uid="2.16.840.1.113883.6.3">A00.0</Reference>
+                <Reference authority="HL7" uid="2.16.840.1.113883.6.3" code="I">A00-B99</Reference>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:attributeGroup ref="attlist.Reference"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Reference">
+        <xs:attribute name="class">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute class may be used to assign a class name to a Reference.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="authority" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">In case of an external reference the attribute authority defines the issuing authority of the unique identifier for the external classification, which is given in the attribute uid.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="uid" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">In case of an external reference the attribute authority defines the issuing authority of the unique identifier for the external classification, which is given in the attribute uid.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="code" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute code defines the code of the referenced Class. In case this attribute is absent the contents of the element Reference define the code of the referenced Class.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="usage" type="xs:IDREF">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute usage defines a UsageKind that overrides the usage of the referenced class.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="variants" type="xs:IDREFS">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute variants defines the list of variants in which this Reference is valid. When the attribute is absent the Reference is valid in all variants.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Para">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Para defines a paragraph within a Rubric. EXAMPLE
+                <Para>some text in a paragraph</Para>
+                <Para>and another paragraph</Para>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="rubric.simple"/>
+            <xs:attributeGroup ref="attlist.Para"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Para">
+        <xs:attribute name="class">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute class may be used to assign a class name to a Para. (Ed. in DTD but not described in EN 14463:2007 (E))</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Fragment">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Fragment defines a fragment of text within a Rubric. EXAMPLE
+                <Rubric kind="inclusion">
+                    <Label xml:lang="de">
+                        <Fragment type="list">tuberculosis</Fragment>
+                        <Fragment type="list">disseminated</Fragment>
+                    </Label>
+                </Rubric>
+                <Rubric kind="inclusion">
+                    <Label xml:lang="de">
+                        <Fragment type="list">tuberculosis</Fragment>
+                        <Fragment type="list">generalized</Fragment>
+                    </Label>
+                </Rubric>
+                
+                displayed as: Tuberculosis:
+                - disseminated
+                - generalized
+                
+                <Rubric kind="inclusion">
+                    <Label xml:lang="de">
+                        <Fragment type="item">Leukorrhoea (vaginalis)</Fragment> <Fragment type="item">due to Trichomonas (vaginalis)</Fragment>
+                    </Label>
+                </Rubric>
+                <Rubric kind="inclusion">
+                    <Label xml:lang="de">
+                        <Fragment type="item" usage="etiology">Prostatitis</Fragment>
+                        <Fragment type="item">due to Trichomonas (vaginalis)</Fragment>
+                    </Label>
+                </Rubric>
+                
+                displayed as:
+                Leukorrhoea (vaginalis)    } due to Trichomonas (vaginalis)
+                Prostatitis†               }</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="rubric.simple"/>
+            <xs:attributeGroup ref="attlist.Fragment"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Fragment">
+        <xs:attribute name="class">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute class may be used to assign a class name to a Fragment. (Ed. in DTD but not described in EN 14463:2007 (E))</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="usage" type="xs:IDREF">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute usage refers to a UsageKind and specifies the usage of the Fragment.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="type" default="item">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute type defines the type of Fragment. Possible values are item and list. The default value is item.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:token">
+                    <xs:enumeration value="item"/>
+                    <xs:enumeration value="list"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Include">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Include references a Rubric, which shall be included in the current Rubric. EXAMPLE
+                <Class code="A00">
+                    <Rubric id="r123" kind="preferred">
+                        <Label xml:lang="en">Incision of ear</Label>
+                    </Rubric>
+                </Class>
+                <Class code="A00.0">
+                    <Rubric kind="preferred">
+                        <Label xml:lang="en"><Include rubric="r123"/>external ear</Label>
+                    </Rubric>
+                </Class>
+                
+                displayed as:
+                A00 Incision of ear
+                A00.0 Incision of ear: external ear
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attributeGroup ref="attlist.Include"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Include">
+        <xs:attribute name="class">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute class may be used to assign a class name to a Include. (Ed. in DTD but not described in EN 14463:2007 (E))</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="rubric" use="required" type="xs:IDREF">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute rubric contains the unique identifier of the Rubric that shall be included.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="IncludeDescendants">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element IncludeDescendants references a Class from which the code and preferred Rubrics of its descendants shall be included in the Rubric. EXAMPLE
+                <Class code="I" kind="chapter">
+                    <Rubric kind="contents">
+                        <Label xml:lang="en">This chapter contains the following blocks:<IncludeDescendants code="I" kind="block"/></Label>
+                    </Rubric>
+                </Class>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attributeGroup ref="attlist.IncludeDescendants"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.IncludeDescendants">
+        <xs:attribute name="code" use="required" type="xs:NMTOKEN">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute code references the code of the Class.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="kind" use="required" type="xs:IDREF">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute kind defines the class kind of the descendants that shall be included.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="List">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element List defines a list of ListItems.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="ListItem"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="attlist.List"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.List">
+        <xs:attribute name="class">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute class may be used to assign a class name to a List.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="ListItem">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element ListItem contains a piece of text that shall be formatted as an item in a list. EXAMPLE
+                <Class code="II" kind="chapter">
+                    <Rubric kind="instruction">
+                        <Label xml:lang="de">
+                            <List class="decimal">
+                                <ListItem>
+                                    <Para>Primary, ill-defined, secondary and unspecified sites of malignant neoplasms </Para>
+                                    <Para>Categories C76-C80 include malignant neoplasms for which there is no clear indication of the original site of the cancer or the cancer is stated to be "disseminated", "scattered" or "spread" without mention of the primary site. In both cases the primary site is considered to be unknown.</Para>
+                                </ListItem>
+                                <ListItem>
+                                    <Para>Functional activity</Para>
+                                </ListItem>
+                            </List>
+                        </Label>
+                    </Rubric>
+                </Class>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:group ref="rubric.simple"/>
+                <xs:element ref="Para"/>
+                <xs:element ref="Include"/>
+                <xs:element ref="List"/>
+                <xs:element ref="Table"/>
+            </xs:choice>
+            <xs:attributeGroup ref="attlist.ListItem"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.ListItem">
+        <xs:attribute name="class">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute class may be used to assign a class name to a ListItem.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Table">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Table defines a table. EXAMPLE The following table from ICD-10 at codes H54
+                            Table 1 — Classification of severity of visual impairment
+                +-----------------------------------------------------------------------------------------------------------------------+
+                | Category of visual                    | Visual acuity with best possible correction                                   |
+                | impairment                            | Maximum less than:                    | Minimum equal to or better than:      |
+                |---------------------------------------+---------------------------------------+---------------------------------------|
+                |                                       | 6/18                                  | 6/60                                  |
+                | 1                                     | 3/10 (0,3)                            | 1/10 (0,1)                            |
+                |                                       | 20/70                                 | 20/200                                |
+                |---------------------------------------+---------------------------------------+---------------------------------------|
+                |                                       | 6/60                                  | 3/60                                  |
+                | 2                                     | 1/10 (0,1)                            | 1/20 (0,05)                           |
+                |                                       | 20/200                                | 20/400                                |
+                |---------------------------------------+---------------------------------------+---------------------------------------|
+                |                                       | 3/60                                  | 1/60 1/60 (finger counting at 1metre) |
+                | 3                                     | 1/20 (0,05)                           | 1/50 (0,02)                           |
+                |                                       | 20/400                                | 5/300 (20/1200)                       |
+                |---------------------------------------+---------------------------------------+---------------------------------------|
+                |                                       | 1/60 (finger counting at 1metre)      |                                       |
+                | 4                                     | 1/50 (0,02)                           | Light perception                      |
+                |                                       | 5/300                                 |                                       |
+                |---------------------------------------+---------------------------------------+---------------------------------------|
+                | 5                                     | No light perception                                                           |
+                | 9                                     | Undetermined or unspecified                                                   |
+                | WHO Technical Report Series No. 518, 1973                                                                             |
+                +-----------------------------------------------------------------------------------------------------------------------+
+                
+                would be represented in this standard as:
+                <Table>
+                    <Caption> Classification of severity of visual impairment</Caption>
+                    <THead>
+                        <Row>
+                            <Cell rowspan="2"> Category of visual impairment </Cell>
+                            <Cell colspan="2"> Visual acuity with best possible correction </Cell>
+                        </Row>
+                        <Row>
+                            <Cell> Maximum less than:</Cell>
+                            <Cell> Minimum equal to or better than:</Cell>
+                        </Row>
+                    </THead>
+                    <TBody>
+                        <Row>
+                            <Cell rowspan="3">1</Cell>
+                            <Cell>6/18</Cell>
+                            <Cell>6/60</Cell>
+                        </Row> <Row>
+                            <Cell>3/10 (0,3)</Cell>
+                            <Cell>1/10 (0,1)</Cell>
+                        </Row>
+                        <Row>
+                            <Cell>20/70</Cell>
+                            <Cell>20/200</Cell>
+                        </Row>
+                        <Row>
+                            <Cell rowspan="3">2</Cell>
+                            <Cell>6/60</Cell>
+                            <Cell>3/60</Cell>
+                            38
+                        </Row>
+                        <Row>
+                            <Cell>1/10 (0,1)</Cell>
+                            <Cell>1/20 (0,05)</Cell>
+                        </Row>
+                        <Row>
+                            <Cell>20/200</Cell>
+                            <Cell>20/400</Cell>
+                        </Row>
+                        <Row>
+                            <Cell rowspan="3">3</Cell>
+                            <Cell>3/60</Cell>
+                            <Cell>1/60 (finger counting at 1metre)</Cell>
+                        </Row>
+                        <Row>
+                            <Cell>1/20 (0,05)</Cell>
+                            <Cell>1/50 (0,02)</Cell>
+                        </Row>
+                        <Row>
+                            <Cell>20/400</Cell>
+                            <Cell>5/300 (20/1200)</Cell>
+                        </Row>
+                        <Row>
+                            <Cell rowspan="3">4</Cell>
+                            <Cell>1/60 (finger counting at 1metre)</Cell>
+                            <Cell rowspan="3"> Light perception </Cell>
+                        </Row>
+                        <Row>
+                            <Cell>1/50 (0,02)</Cell>
+                        </Row>
+                        <Row>
+                            <Cell>5/300</Cell>
+                        </Row>
+                        <Row>
+                            <Cell>9</Cell>
+                            <Cell colspan="2"> Undetermined or unspecified </Cell>
+                        </Row>
+                    </TBody>
+                    <TFoot>
+                        <Row>
+                            <Cell colspan="3">WHO Technical Report Series No. 518, 1973</Cell>
+                        </Row>
+                    </TFoot>
+                </Table>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="Caption"/>
+                <xs:element minOccurs="0" ref="THead"/>
+                <xs:element minOccurs="0" ref="TBody"/>
+                <xs:element minOccurs="0" ref="TFoot"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="attlist.Table"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Table">
+        <xs:attribute name="class">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute class may be used to assign a class name to a Table.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Caption">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Caption defines the caption of a Table.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="rubric.simple"/>
+            <xs:attributeGroup ref="attlist.Caption"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Caption">
+        <xs:attribute name="class">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute class may be used to assign a class name to a Caption.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="THead">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element THead defines the headings of a Table.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="Row"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="attlist.THead"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.THead">
+        <xs:attribute name="class">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute class may be used to assign a class name to a THead.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="TBody">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element TBody defines the body of a Table.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="Row"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="attlist.TBody"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.TBody">
+        <xs:attribute name="class">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute class may be used to assign a class name to a TBody.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="TFoot">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element TFoot defines the footer of a Table.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="Row"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="attlist.TFoot"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.TFoot">
+        <xs:attribute name="class">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute class may be used to assign a class name to a TFoot.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Row">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Row defines a row within a Table.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="Cell"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="attlist.Row"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Row">
+        <xs:attribute name="class">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute class may be used to assign a class name to a Row.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Cell">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Cell defines a cell within a Row of a Table.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:group ref="rubric.simple"/>
+                <xs:element ref="Para"/>
+                <xs:element ref="Include"/>
+                <xs:element ref="List"/>
+                <xs:element ref="Table"/>
+            </xs:choice>
+            <xs:attributeGroup ref="attlist.Cell"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Cell">
+        <xs:attribute name="class">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute class may be used to assign a class name to a Cell.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="rowspan">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute rowspan defines the number of Rows that are spanned by a Cell.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="colspan">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute colspan defines the number of columns that are spanned by a Cell.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:element name="Term">
+        <xs:annotation>
+            <xs:documentation xml:lang="en-US">The element Term contains a piece of text that has a special meaning. EXAMPLE
+                <Class code="B81">
+                    ...
+                    <Rubric kind="exclusion">
+                        <Cell>5</Cell>
+                        <Cell colspan="2"> No light perception </Cell>
+                        <Cell>9</Cell>
+                        <Label xml:lang="en">angiostrongyliasis due to
+                            <Term class="organism">Parastrongylylus cantonensis</Term>
+                            <Reference class="bracket">B83.2</Reference>
+                        </Label>
+                    </Rubric>
+                </Class>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:attributeGroup ref="attlist.Term"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.Term">
+        <xs:attribute name="class">
+            <xs:annotation>
+                <xs:documentation xml:lang="en-US">The attribute class may be used to assign a class name to a Term.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+</xs:schema>

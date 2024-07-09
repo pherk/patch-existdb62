@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="os" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" xmlns:fhir="http://hl7.org/fhir" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:instance xmlns="" xmlns:fhir="http://hl7.org/fhir" id="i-orders">
+                <data/>
+            </xf:instance><!--
+            <xf:submission id="s-update-master" resource="model:patient#instance('i-patient')//*:Patient" replace="none" method="post">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:message level="ephemeral">Subform has updated Master.</xf:message>
+                    <xf:dispatch name="unload-orders-subform" targetid="orders"/>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot update Master!.</xf:message>
+            </xf:submission>
+-->
+            <xf:instance xmlns="" id="i-login">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-login-from-master" resource="model:m-patient#instance('i-login')//*:data" instance="i-login" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">login: cannot load from Master!.</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-cps">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-cps" instance="i-cps" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/careplans?subject=', instance('i-pat')/*:id/@value,'&amp;loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:action if="instance('i-cps')/*:count=0">
+                        <xf:insert nodeset="instance('i-cps')/*:CarePlan" context="instance('i-cps')" origin="instance('i-cp-infos')/*:bricks/*:CarePlan"/>
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[1]/*:detail[1]/@id" value="generate-id()"/>
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[1]/*:date/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[1]/*:source/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[1]/*:source/*:display/@value" value="instance('i-login')/*:lognam"/>
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[1]/*:target/*:role/@value" value="'spz-ateam'"/>
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[1]/*:target/*:display/@value" value="'SPZ ATeam'"/>
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[1]/*:subject/*:reference/@value" value="concat('nabu/patients/',instance('i-pat')/*:id/@value)"/>
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[1]/*:subject/*:display/@value" value="concat(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-pat')/*:name[*:use/@value='official']/*:given/@value,', *',instance('i-pat')/*:birthDate/@value)"/>
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[1]/*:extension[@url='#careplan-status']//*:text/@value" value="'zugewiesen'"/>
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[1]/*:extension[@url='#careplan-status']//*:display/@value" value="'zugewiesen'"/>
+                        <xf:setvalue ref="instance('i-cps')/*:CarePlan[1]/*:extension[@url='#careplan-status']//*:code/@value" value="'assigned'"/>
+                        <xf:setvalue ref="instance('i-cps')/*:count" value="'1'"/>
+                        <xf:setvalue ref="instance('i-cps')/*:length" value="'1'"/>
+                        <xf:message level="modal">Neuer CarePlan! Wird verworfen, wenn keine Bearbeitung! </xf:message>
+                    </xf:action>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get cps!</xf:message>
+            </xf:submission>
+            <xf:submission id="s-submit-careplan" ref="instance('i-cps')/*:CarePlan[index('r-cps-id')]" method="put" replace="none">
+                <xf:resource value="concat('/exist/restxq/nabu/careplans?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done"/>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot submit careplan!</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-cp-infos" src="FHIR/CarePlan/careplan-infos.xml"/>
+            
+            <xf:instance xmlns="" id="i-groups">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-groups" instance="i-groups" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/metis/roles?filter=service&amp;loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get groups!</xf:message>
+            </xf:submission>
+            <xf:instance xmlns="" id="i-users">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-users" instance="i-users" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/metis/users?_format=ref&amp;loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get users!</xf:message>
+            </xf:submission>
+
+            <xf:instance xmlns="" id="i-bricks">
+                <bricks xmlns="http://hl7.org/fhir">
+                </bricks>
+            </xf:instance>
+            <xf:instance id="views">
+                <data xmlns="">
+                    <noCPs/>
+                </data>
+            </xf:instance>
+            <xf:bind id="noCPs" ref="instance('views')/*:noCP" relevant="count(instance('i-cps')/*:CarePlan) = 0"/>
+            <xf:instance id="i-memo">
+                <data xmlns="">
+                    <lfdno>1</lfdno>
+                </data>
+            </xf:instance>
+            <xf:bind ref="instance('i-memo')/*:lfdno" type="xs:string" constraint="matches(.,'\d')"/>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+                <xf:send submission="s-load-login-from-master"/>
+                <xf:send submission="s-get-groups"/>
+                <xf:send submission="s-get-users"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+                <xf:send submission="s-get-careplans"/>
+            </xf:action>
+        </xf:model>
+    </div>
+    <xf:group class="svFullGroup">
+        <xf:group id="cplist" class="svFullGroup bordered">
+            <xf:label>CarePlans</xf:label>
+            <xf:action ev:event="betterform-variable-changed" ev:observer="i-cps">
+                <xf:message>it worked</xf:message>
+            </xf:action>
+            <xf:repeat id="r-actions-id" ref="instance('i-cps')/*:CarePlan" appearance="compact" class="svRepeat">
+                <xf:output value="tokenize(./*:date/@value,'T')[1]">
+                    <xf:label class="svListHeader">Datum</xf:label>
+                </xf:output>
+                <xf:output ref="./*:subject/*:display/@value">
+                    <xf:label class="svListHeader">Patient</xf:label>
+                </xf:output>
+                <xf:output value="choose((./*:reason/*:text/@value='Ambulanter Besuch'),string-join(./*:detail/*:info/@value,', '),./*:reason/*:text/@value)">
+                    <xf:label class="svListHeader">Anlass</xf:label>
+                </xf:output>
+                <xf:output value="tokenize(./*:when/*:schedule/*:event/@value,'T')[1]">
+                    <xf:label class="svListHeader">Fällig</xf:label>
+                </xf:output>
+                <xf:output value="concat(count(./*:detail/*:proposal/*:acq[@value='open']),' (',count(./*:detail),')')">
+                    <xf:label class="svListHeader">Zahl</xf:label>
+                </xf:output>
+                <xf:output ref="*:when/*:code/*:text/@value">
+                    <xf:label class="svListHeader">Wichtigkeit</xf:label>
+                </xf:output>
+            </xf:repeat>
+        </xf:group>
+        <xf:group ref="instance('views')/noActions">
+            <xf:output value="'Keine Aktionen'"/>
+        </xf:group>
+<!--
+        <xf:switch id="switch">
+            <xf:case id="listOrders">
+                <xf:group class="svTriggerGroup">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svSubTrigger" ref="instance('i-orders')/*:Order">
+                                    <xf:label>Edit</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:setvalue ref="instance('i-memo')/*:lfdno" value="instance('i-orders')/*:Order[index('r-orders-id')]/*:detail[*:proposal/*:acq/@value!='closed'][index('r-details-id')]/*:spec/*:combination/@value"/>
+                                        <xf:toggle case="editOrder"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svAddTrigger">
+                                    <xf:label>Neu</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:insert position="after" at="index('r-orders-id')" nodeset="instance('i-orders')/*:Order" context="instance('i-orders')" origin="instance('i-bricks')/*:Order"/>
+                                    </xf:action>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:date/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                                        <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:source/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                                        <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:source/*:display/@value" value="instance('i-login')/*:lognam"/>
+                                        <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:target/*:role/@value" value="'spz-ateam'"/>
+                                        <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:target/*:display/@value" value="'SPZ ATeam'"/>
+                                        <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:subject/*:reference/@value" value="concat('nabu/patients/',instance('i-pat')/*:id/@value)"/>
+                                        <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:subject/*:display/@value" value="concat(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-pat')/*:name[*:use/@value='official']/*:given/@value,', *',instance('i-pat')/*:birthDate/@value)"/>
+                                        <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:extension[@url='#order-status']//*:text/@value" value="'zugewiesen'"/>
+                                        <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:extension[@url='#order-status']//*:display/@value" value="'zugewiesen'"/>
+                                        <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:extension[@url='#order-status']//*:code/@value" value="'assigned'"/>
+                                        <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:detail[1]/@id" value="generate-id()"/>
+                                        <xf:toggle case="editOrder"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svDelTrigger" ref="instance('i-orders')/*:Order">
+                                    <xf:label>Löschen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:extension[@url='#order-status']//*:text/@value" value="'cancelled'"/>
+                                        <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:extension[@url='#order-status']//*:display/@value" value="'cancelled'"/>
+                                        <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:extension[@url='#order-status']//*:code/@value" value="'cancelled'"/>
+                                        <xf:send submission="s-submit-order"/>
+                                        <xf:send submission="s-get-orders"/>
+                                        <xf:toggle case="listOrders"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                </xf:group>
+            </xf:case>
+            <xf:case id="editOrder">
+                <xf:group id="editGroup" ref="instance('i-orders')/*:Order[index('r-orders-id')]">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Speichern</xf:label>
+                                    <xf:send submission="s-submit-order"/>
+                                    <xf:send submission="s-get-orders"/>
+                                    <xf:toggle case="listOrders"/>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Schließen</xf:label>
+                                    <xf:toggle case="listOrders"/>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                    <xf:group>
+                        <br/>
+                        <xf:group>
+                            <xf:label>Edit Details</xf:label>
+                            <xf:select1 ref="./*:when/*:code/*:coding/*:code/@value" class="medium-input">
+                                <xf:label>Wichtigkeit:</xf:label>
+                                <xf:itemset nodeset="instance('i-o-infos')/*:when/*:code">
+                                    <xf:label ref="./@label"/>
+                                    <xf:value ref="./@value"/>
+                                </xf:itemset>
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:when/*:code/*:coding/*:display/@value" value="instance('i-o-infos')/*:when/*:code[@value=instance('i-orders')/*:Order[index('r-orders-id')]/*:when/*:code/*:coding/*:code/@value]/@label"/>
+                                    <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:when/*:code/*:text/@value" value="instance('i-o-infos')/*:when/*:code[@value=instance('i-orders')/*:Order[index('r-orders-id')]/*:when/*:code/*:coding/*:code/@value]/@label"/>
+                                </xf:action>
+                            </xf:select1>
+                            <xf:textarea ref="./*:reason/*:coding/*:display/@value" class="fullareashort">
+                                <xf:label>Anlass:</xf:label>
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:reason/*:text/@value" value="instance('i-orders')/*:Order[index('r-orders-id')]/*:reason/*:coding/*:display/@value"/>
+                                </xf:action>
+                            </xf:textarea>
+                            <br/>
+                            <xf:group id="closeddetails" ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:detail[*:proposal/*:acq/@value='closed']" class="svFullGroup">
+                                <xf:label>Bereits vereinbarte Leistungen</xf:label>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="svListHeader">LfdNo </th>
+                                            <th class="svListHeader">Leistung</th>
+                                            <th class="svListHeader">Erbringer</th>
+                                            <th class="svListHeader">Datum</th>
+                                            <th class="svListHeader">Dauer</th>
+                                            <th class="svListHeader">Notiz</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="r-closed-id" xf:repeat-nodeset="instance('i-orders')/*:Order[index('r-orders-id')]/*:detail[*:proposal/*:acq/@value='closed']">
+                                        <tr>
+                                            <td>
+                                                <xf:output ref="./*:spec/*:combination/@value" class="medium-input"/>
+                                            </td>
+                                            <td>
+                                                <xf:output ref="./*:actor/*:role/@value" class="medium-input"/>
+                                            </td>
+                                            <td>
+                                                <xf:output ref="./*:actor/*:display/@value" class=""/>
+                                            </td>
+                                            <td>
+                                                <xf:output ref="./*:spec/*:begin/@value" class="medium-input"/>
+                                            </td>
+                                            <td>
+                                                <xf:output ref="./*:spec/*:duration/@value" class="medium-input"/>
+                                            </td>
+                                            <td>
+                                                <xf:textarea ref="./*:info/@value" class="area-input"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </xf:group>
+                            <br/>
+                            <xf:group id="services" class="svFullGroup bordered">
+                                <xf:action ev:event="betterform-index-changed">
+                                    <xf:setvalue ref="instance('i-memo')/*:lfdno" value="instance('i-orders')/*:Order[index('r-orders-id')]/*:detail[*:proposal/*:acq/@value!='closed'][index('r-details-id')]/*:spec/*:combination/@value"/>
+                                </xf:action>
+                                <xf:label>Angeforderte Leistungen</xf:label>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="svListHeader">LfdNo </th>
+                                            <th class="svListHeader">
+                                                <img src="resources/images/link.png" alt="Kombi"/>
+                                            </th>
+                                            <th class="svListHeader">Leistung</th>
+                                            <th class="svListHeader">Erbringer</th>
+                                            <th class="svListHeader">Wann?</th>
+                                            <th class="svListHeader">Dauer</th>
+                                            <th class="svListHeader">Notiz</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="r-details-id" xf:repeat-nodeset="./*:detail[*:proposal/*:acq/@value!='closed']">
+                                        <tr>
+                                            <td>
+                                                <xf:output ref="./*:spec/*:combination/@value"/>
+                                            </td>
+                                            <td>
+                                                <xf:input ref="./*:spec/*:interdisciplinary/@value" class="xsdBoolean svRepeatBool"/>
+                                            </td>
+                                            <td>
+                                                <xf:select1 ref="./*:actor/*:role/@value" class="medium-select" incremental="true">
+                                                    <xf:itemset nodeset="instance('i-groups')/*:Group">
+                                                        <xf:label ref="./*:name/@value"/>
+                                                        <xf:value ref="./*:code/*:text/@value"/>
+                                                    </xf:itemset>
+                                                    <xf:hint>Bitte eine Funktion auswählen</xf:hint>
+                                                </xf:select1>
+                                            </td>
+                                            <td>
+                                                <xf:select1 ref="./*:actor/*:reference/@value" class="medium-select" incremental="true">
+                                                    <xf:itemset nodeset="instance('i-users')/*:user">
+                                                        <xf:label ref="./*:display/@value"/>
+                                                        <xf:value ref="./*:reference/@value"/>
+                                                    </xf:itemset>
+                                                    <xf:action ev:event="xforms-value-changed">
+                                                        <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:detail[*:proposal/*:acq/@value!='closed'][index('r-details-id')]/*:actor/*:display/@value" value="instance('i-users')/*:user[./*:reference/@value=instance('i-orders')/*:Order[index('r-orders-id')]/*:detail[*:proposal/*:acq/@value!='closed'][index('r-details-id')]/*:actor/*:reference/@value]/*:display/@value"/>
+                                                    </xf:action>
+                                                </xf:select1>
+                                            </td>
+                                            <td>
+                                                <xf:input ref="./*:spec/*:begin/@value" class="medium-input">
+                                                    <xf:hint>Zeitraum nach dem Muster '(|h|m|nW|\dw|\dm|\d{{2}}-\d{{2}}-\d{{2}})([|Mo|Di|Mi|Do|Fr|]*)([|:vm|:nm|]*)'</xf:hint>
+                                                </xf:input>
+                                            </td>
+                                            <td>
+                                                <xf:select1 ref="./*:spec/*:duration/@value" class="short-input">
+                                                    <xf:itemset nodeset="instance('i-o-infos')/*:duration/*:code">
+                                                        <xf:label ref="./@label"/>
+                                                        <xf:value ref="./@value"/>
+                                                    </xf:itemset>
+                                                    <xf:hint>Dauer ändern?</xf:hint>
+                                                </xf:select1>
+                                            </td>
+                                            <td>
+                                                <xf:textarea ref="./*:info/@value" class="area-input"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table appearance="minimal" class="svTriggerGroup">
+                                    <tr>
+                                        <td>
+                                            <xf:trigger class="svAddTrigger">
+                                                <xf:label>Neu</xf:label>
+                                                <xf:insert ev:event="DOMActivate" position="after" at="index('r-details-id')" nodeset="./*:detail" context="." origin="instance('i-bricks')/*:detail"/>
+                                                <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:detail[*:proposal/*:acq/@value!='closed'][index('r-details-id')]/@id" value="generate-id()"/>
+                                                <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:detail[*:proposal/*:acq/@value!='closed'][index('r-details-id')]/*:spec/*:combination/@value" value="index('r-details-id')"/>
+                                                <xf:setvalue ref="instance('i-memo')/*:lfdno" value="index('r-details-id')"/>
+                                            </xf:trigger>
+                                        </td>
+                                        <td>
+                                            <xf:trigger class="svDelTrigger">
+                                                <xf:label>Entfernen</xf:label>
+                                                <xf:delete ev:event="DOMActivate" if="count(instance('i-orders')/*:Order[index('r-orders-id')]/*:detail[*:proposal/*:acq/@value!='closed'])>1" ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:detail[*:proposal/*:acq/@value!='closed'][index('r-details-id')]"/>
+                                            </xf:trigger>
+                                        </td>
+                                        <td>
+                                            <xf:input ref="instance('i-memo')/*:lfdno" class="tiny-input">
+                                                <xf:label>LfdNo</xf:label>
+                                                <xf:action ev:event="xforms-value-changed">
+                                                    <xf:setvalue ref="instance('i-orders')/*:Order[index('r-orders-id')]/*:detail[*:proposal/*:acq/@value!='closed'][index('r-details-id')]/*:spec/*:combination/@value" value="instance('i-memo')/*:lfdno"/>
+                                                </xf:action>
+                                            </xf:input>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </xf:group>
+                        </xf:group>
+                    </xf:group>
+                </xf:group>
+            </xf:case>
+        </xf:switch>
+-->
+    </xf:group>
+</div>

@@ -1,0 +1,942 @@
+/* Application styles could go here */
+p>span[id="Rahmen2"] {
+    display : none;
+}
+p>span[id="Rahmen3"] {
+    display : block;
+}
+
+p>span[id="Rahmen4"] {
+    display : block;
+}
+letter>table>tbody>tr:nth-child(2) {
+    display : none;
+}
+letter div[title="footer"] {
+    display : none;
+}
+/* === Remove input autofocus webkit === */
+*:focus {outline: none;}
+
+.alert-empty span:empty {
+    background-color: red;
+}
+/* === shapes === */
+.reddot {
+  height: 12px;
+  width: 8px;
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+}
+.greendot {
+  height: 12px;
+  width: 8px;
+  background-color: green;
+  border-radius: 50%;
+  display: inline-block;
+}
+.yellowdot {
+  height: 12px;
+  width: 8px;
+  background-color: yellow;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.curvedarrow { 
+    position: relative; 
+    width: 0; height: 0;
+    border-top: 9px solid transparent; 
+    border-right: 9px solid red;
+    -webkit-transform: rotate(10deg);
+    -moz-transform: rotate(10deg);
+    -ms-transform: rotate(10deg);
+    -o-transform: rotate(10deg);
+}
+.curvedarrow:after {
+    content: ""; 
+    position: absolute;
+    border: 0 solid transparent; 
+    border-top: 3px solid red; 
+    border-radius: 20px 0 0 0;
+    top: -12px; left: -9px; 
+    width: 12px; height: 12px;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+}
+.triangle-up { width: 0; height: 0; border-left: 50px solid transparent; border-right: 50px solid transparent; border-bottom: 100px solid red; }
+.triangle-down { width: 0; height: 0; border-left: 50px solid transparent; border-right: 50px solid transparent; border-top: 100px solid red; }
+.arrow-green {
+	height: 0px; width: 0px;
+	border: 8px solid;
+	border-color: 
+		mediumseagreen
+		mediumseagreen
+		transparent
+		transparent;
+	transform: rotate(45deg);
+}
+
+/* === Form Typography === */
+.edit_form h2, .edit_form label {font-family:Georgia, Times, "Times New Roman", serif;}
+.form_hint, .required_notification {font-size: 11px;}
+
+/* === List Styles === */
+.edit_form ul {
+    width:600px;
+    list-style-type:none;
+    list-style-position:outside;
+    margin:0px;
+	padding:0px;
+}
+.edit_form li{
+	padding:0px; 
+	border-bottom:1px solid #eee;
+	position:relative;
+} 
+.edit_form li:first-child, .edit_form li:last-child {
+	border-bottom:1px solid #777;
+}
+
+/* === Form Header === */
+.edit_form h2 {
+	margin:0;
+	display: inline;
+}
+.required_notification {
+	color:#d45252; 
+	margin:5px 0 0 0; 
+	display:inline;
+	float:right;
+}
+
+/* === Form Elements === */
+.edit_form label {
+	width:150px;
+	margin-top: 3px;
+	display:inline-block;
+	float:inherit; /* left; */
+	padding:3px;
+}
+.edit_form div ul  {
+	height:20px; 
+	width:300px; 
+	padding:5px 8px;
+}
+
+.edit_form div  {
+    margin-bottom: 8px;
+}
+
+
+.edit_form textarea {padding:8px; width:300px;}
+.edit_form button {margin-left:156px;}
+
+/* form element visual styles */
+.edit_form input, .edit_form textarea { 
+		border:1px solid #aaa;
+		box-shadow: 0px 0px 3px #ccc, 0 10px 15px #eee inset;
+		border-radius:2px;
+		padding-right:30px;
+		-moz-transition: padding .25s; 
+		-webkit-transition: padding .25s; 
+		-o-transition: padding .25s;
+		transition: padding .25s;
+}
+.edit_form input:focus, .contact_form textarea:focus {
+		background: #fff; 
+		border:1px solid #555; 
+		box-shadow: 0 0 3px #aaa; 
+		padding-right:70px;
+}
+
+/* === HTML5 validation styles === */	
+.edit_form input:required, .edit_form textarea:required {
+	background: #fff url(../images/red_asterisk.png) no-repeat 98% center;
+}
+.edit_form input:required:valid, .edit_form textarea:required:valid {
+	background: #fff url(../images/valid.png) no-repeat 98% center;
+	box-shadow: 0 0 5px #5cd053;
+	border-color: #28921f;
+}
+.edit_form input:focus:invalid, .edit_form textarea:focus:invalid {
+	background: #fff url(../images/invalid.png) no-repeat 98% center;
+	box-shadow: 0 0 5px #d45252;
+	border-color: #b03535
+}
+
+/* === Form hints === */
+form-inline .form-group{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.form_hint {
+	background: #d45252;
+	border-radius: 3px 3px 3px 3px;
+	color: white;
+	margin-left:8px;
+	padding: 1px 6px;
+	z-index: 999; /* hints stay above all other elements */
+	position: absolute; /* allows proper formatting if hint is two lines */
+	display: none;
+}
+.form_hint::before {
+	content: "\25C0";
+	color:#d45252;
+	position: absolute;
+	top:1px;
+	left:-6px;
+}
+.edit_form input:focus + .form_hint {display: inline;}
+.edit_form input:required:valid + .form_hint {background: #28921f;}
+.edit_form input:required:valid + .form_hint::before {color:#28921f;}
+	
+/* === Button Style === */
+button.submit {
+	background-color: #68b12f;
+	background: -webkit-gradient(linear, left top, left bottom, from(#68b12f), to(#50911e));
+	background: -webkit-linear-gradient(top, #68b12f, #50911e);
+	background: -moz-linear-gradient(top, #68b12f, #50911e);
+	background: -ms-linear-gradient(top, #68b12f, #50911e);
+	background: -o-linear-gradient(top, #68b12f, #50911e);
+	background: linear-gradient(top, #68b12f, #50911e);
+	border: 1px solid #509111;
+	border-bottom: 1px solid #5b992b;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-ms-border-radius: 3px;
+	-o-border-radius: 3px;
+	box-shadow: inset 0 1px 0 0 #9fd574;
+	-webkit-box-shadow: 0 1px 0 0 #9fd574 inset ;
+	-moz-box-shadow: 0 1px 0 0 #9fd574 inset;
+	-ms-box-shadow: 0 1px 0 0 #9fd574 inset;
+	-o-box-shadow: 0 1px 0 0 #9fd574 inset;
+	color: white;
+	font-weight: bold;
+	padding: 6px 20px;
+	text-align: center;
+	text-shadow: 0 -1px 0 #396715;
+}
+button.submit:hover {
+	opacity:.85;
+	cursor: pointer; 
+}
+button.submit:active {
+	border: 1px solid #20911e;
+	box-shadow: 0 0 10px 5px #356b0b inset; 
+	-webkit-box-shadow:0 0 10px 5px #356b0b inset ;
+	-moz-box-shadow: 0 0 10px 5px #356b0b inset;
+	-ms-box-shadow: 0 0 10px 5px #356b0b inset;
+	-o-box-shadow: 0 0 10px 5px #356b0b inset;
+	
+}
+button.reset {
+    background-color: #68b12f;
+	background: -webkit-gradient(linear, left top, left bottom, from(#68b12f), to(#50911e));
+	background: -webkit-linear-gradient(top, #68b12f, #50911e);
+	background: -moz-linear-gradient(top, #68b12f, #50911e);
+	background: -ms-linear-gradient(top, #68b12f, #50911e);
+	background: -o-linear-gradient(top, #68b12f, #50911e);
+	background: linear-gradient(top, #68b12f, #50911e);
+	border: 1px solid #509111;
+	border-bottom: 1px solid #5b992b;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-ms-border-radius: 3px;
+	-o-border-radius: 3px;
+	box-shadow: inset 0 1px 0 0 #9fd574;
+	-webkit-box-shadow: 0 1px 0 0 #9fd574 inset ;
+	-moz-box-shadow: 0 1px 0 0 #9fd574 inset;
+	-ms-box-shadow: 0 1px 0 0 #9fd574 inset;
+	-o-box-shadow: 0 1px 0 0 #9fd574 inset;
+	color: white;
+	font-weight: bold;
+	padding: 6px 20px;
+	text-align: center;
+	text-shadow: 0 -1px 0 #396715;
+}
+button.reset:hover {
+	opacity:.85;
+	cursor: pointer; 
+}
+button.reset:active {
+	border: 1px solid #20911e;
+	box-shadow: 0 0 10px 5px #356b0b inset; 
+	-webkit-box-shadow:0 0 10px 5px #356b0b inset ;
+	-moz-box-shadow: 0 0 10px 5px #356b0b inset;
+	-ms-box-shadow: 0 0 10px 5px #356b0b inset;
+	-o-box-shadow: 0 0 10px 5px #356b0b inset;
+	
+}
+
+.divider {
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #ccc -moz-use-text-color #FFFFFF;
+  border-style: solid none;
+  border-width: 6px 0;
+  margin: 8px 8px 0 0;
+}
+
+
+/* === Table Style === */
+table {
+    max-width: 1000px;
+    font-size: 12px;
+    vertical-align: top;
+    border-collapse: collapse;
+}
+thead tr th {
+    font-size: 12px;
+    font-weight: bold;
+    padding-right: 10px;
+}
+table tr td, table tr td * {
+    vertical-align: top;
+    padding-right : 5px;
+}
+
+.remind > td {
+    color: red;
+}
+
+.active .xfValue {
+    background-color : #ffff33;
+}
+.inprogress .xfValue {
+    background-color : #9ACD32;
+}
+.inactive .xfValue {
+    background-color : #ffffff;
+}
+.failed .xfValue {
+    background-color : #33FFFF;
+}
+/* ==== XForms === */
+.scroll {
+background: #00BFFF;
+height: 150px;
+overflow: auto;
+width: 500px;
+border: 1px solid #000;
+padding: 10px;
+} 
+
+.xfGroup.bordered {
+         border: solid black 2px;
+}
+.xfGroupLabel {
+         position: relative;
+         font-family: Helvetica, sans-serif;
+         font-weight: bold;
+         background-color: white;
+         padding: 0 2px 2px 2px;
+         top: -10px;
+         left: 10px;
+}
+/*
+.xfGroup p {
+         position: relative;
+         top: -30px;
+         padding: 5px;
+}
+*/
+
+.xfLabel {
+    display: inline-block;
+    float: inherit;
+    margin-top: 3px;
+    padding: 3px;
+    width: 100px;
+}
+
+.xfValue {
+    margin-top: 3px;
+    padding: 3px;
+}
+
+.xfRadioLabel {
+    display: inline;
+}
+.radio-horizontal {
+    display:block;
+}
+
+.fullarea .xfValue {
+    height: 5em;
+    width: 490px;
+}
+
+.fullareashort .xfValue {
+    height: 3em;
+    width: 490px;
+}
+
+.fullareawol .xfValue {
+    height: 2em;
+    width: 590px;
+}
+
+.halfarea .xfValue {
+    height: 5em;
+    width: 190px;
+}
+.halfareashort .xfValue {
+    height: 2em;
+    width: 190px;
+}
+
+.area-input .xfValue {
+    height: 3em;
+    width: 240px;
+}
+.bigarea .xfValue {
+    height: 5em;
+    width: 420px;
+}
+.colarea .xfValue {
+    height: 25em;
+    width: 6em;
+}
+.quartarea .xfValue {
+    height : 5em;
+    width: 12em;
+}
+
+#date-value, #nextDate-value {
+    font-size: 1.2em;
+}
+
+/* Supervision */
+.svRepeatHeader {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.svRepeat {
+    /* border: 1px solid black; */
+    padding: 5px;
+    width: 100%;
+    clear: both;
+    display: table;
+    line-height: 16px;
+}
+
+.svRepeat .xfRepeatHeader {
+    padding: 5px;
+}
+.svRepeat .svRepeatOutputTiny {
+    margin-bottom: 5px;
+    font-weight: bold;
+    width : 1em;
+}
+
+.multicol .xfRepeatItem {
+    display: inline-block;
+}
+
+.svRepeat .xfRepeatItem .xfValue {
+    padding: 3px;
+    font-size: 14px;
+}
+
+.svRepeatBool{
+    width: 3em;
+}
+td .xfLabel{
+    width: 3em;
+}
+.svRepeatBlank {
+    padding: 5px;
+    width: 100%;
+    clear: both;
+    display: table;
+    line-height: 16px;
+}
+.svRepeatBlank .xfRepeatIndex {
+    background-color : #ffffff;
+} 
+.svRepeatBlank .xfRepeatItem .xfValue {
+    padding: 3px;
+    font-size: 100%;
+    text-align : left;
+}
+.input-color {
+    position: relative;
+}
+.input-color span {
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+.input-color .color-box {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    background-color: #ccc;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    border: 1px solid #000;
+}
+.svSubForm {
+    display: block;
+    width : 540px;
+}
+.svSubForm .xfContainer{
+    border: thin dotted #eeeeee;
+    background: #ffffff;
+}
+
+.svSubForm .xfGroupLabel {
+    padding: 0px;
+    font-weight: bold;
+    font-size: 1.2em;
+    top : 0px;
+}
+
+.svSubForm .xfLabel {
+    padding: 3px 3px 3px 8px;
+    width: 7em;
+}
+
+.svHalfGroup {
+    width: 40%;
+}
+
+.svFullGroup .xfLabel {
+    width: 7em;
+}
+.svSpacerLeft {
+    width:20px;
+}
+
+.svTriggerGroup {
+    display: block;
+    text-align: center;
+    padding: 5px;
+}
+
+.svMasterTrigger {
+    display: inline;
+    text-align: center;
+    width: 150px;
+    padding-right: 15px;
+}
+
+.svMasterTrigger .xfValue {
+    background: url(../images/001_22.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 150px;
+    text-indent: 15px;
+}
+
+.svSubTrigger {
+    display: block;
+    width: 140px;
+    padding-right: 15px;
+}
+
+.svSubTrigger .xfValue {
+    background: url(../images/001_22.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 140px;
+    text-indent: 15px;
+}
+
+.svAddTrigger {
+    display: block;
+    width: 140px;
+    padding-right: 15px;
+}
+.svAddTrigger .xfValue {
+    background: url(../images/001_03.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 140px;
+    text-indent: 15px;
+
+}
+
+.svDelTrigger {
+    display: block;
+    width: 140px;
+    padding-right: 15px;
+}
+.svDelTrigger .xfValue {
+    background: url(../images/001_04.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 140px;
+    text-indent: 15px;
+
+}
+
+.svSaveTrigger {
+    display: block;
+    width: 140px;
+    padding-right: 15px;
+}
+.svSaveTrigger .xfValue {
+    background: url(../images/001_60.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 140px;
+    text-indent: 15px;
+
+}
+
+.svSearchTrigger {
+    display: block;
+    width: 140px;
+    padding-right: 15px;
+}
+.svSearchTrigger .xfValue {
+    background: url(../images/001_06.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 140px;
+    text-indent: 15px;
+
+}
+
+.svUpdateMasterTrigger {
+    display: block;
+    width: 140px;
+    padding-right: 15px;
+}
+
+.svUpdateMasterTrigger .xfValue {
+    background: url(../images/001_24.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 140px;
+    text-indent: 15px;
+}
+
+.svCalTrigger {
+    display: inline;
+    text-align: center;
+    width: 36px;
+    padding-right: 15px;
+    margin-left: 10px;
+}
+
+.svCalTrigger .xfValue {
+    background: url(../images/calendar.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    width: 36px;
+}
+
+.svFilterTrigger {
+    display: block;
+    text-align: left;
+    width: 140px;
+    padding-right: 15px;
+}
+
+.svFilterTrigger .xfValue {
+    background: url(../images/filter16x16.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 140px;
+    text-indent: 15px;
+}
+
+.svEnterTrigger {
+    display: block;
+    text-align: left;
+    width: 140px;
+    padding-right: 15px;
+}
+
+.svEnterTrigger .xfValue {
+    background: url(../images/enter16x16.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 140px;
+    text-indent: 15px;
+}
+
+.svListHeader {
+    margin-bottom : 5px;
+    font-weight: bold;
+}
+
+.svListHeaderShort {
+    margin-bottom : 5px;
+    font-weight: bold;
+    width:3em;
+}
+
+.search .xfValue {
+    width: 8em;
+}
+.search-short .xfValue {
+    width: 6em;
+}
+
+.tiny-input .xfValue{
+    width: 3em;
+}
+
+.short-input .xfValue {
+    width: 6em;
+}
+.medium-input .xfValue {
+    width: 10em;
+}
+.long-input .xfValue {
+    width: 27em;
+}
+.tel-input .xfValue {
+    width: 10em;
+}
+.short-select .xfValue {
+    width: 3em;
+}
+.medium-select .xfValue {
+    width: 10em;
+}
+.long-select .xfValue {
+    width: 15em;
+}
+
+div.tabs .xfRepeatItem  {
+    display:inline-block;
+    font-size:12pt;
+    font-family:Arial;
+    text-align:center;
+    padding:5px;
+    border:solid 1px black;
+    background-color:lightGray;
+    -moz-border-radius-topleft:10px;
+    -webkit-border-top-left-radius:10px;
+    -moz-border-radius-topright:10px;
+    -webkit-border-top-right-radius:10px;    
+}
+ 
+.suggestions {
+    height: 100px;
+    overflow: auto;
+    margin-top: 2px;
+    z-index: 1000;
+    float: left;
+    min-width: 160px;
+    _width: 160px;
+    padding: 4px 0;
+    margin: 2px 0 0 0;
+    list-style: none;
+    background-color: #ffffff;
+    border-color: #ccc;
+    border-color: rgba(0, 0, 0, 0.2);
+    border-style: solid;
+    border-width: 1px;
+    -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+    -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    -webkit-background-clip: padding-box;
+     -moz-background-clip: padding;
+          background-clip: padding-box;
+}
+.suggestions .xfRepeatItem {
+    margin: 0;
+    padding: 0;
+}
+.suggestions .xfRepeatIndex {
+    background-color: #ffffff;
+}
+div.suggestions button {
+    margin: 0;
+    padding: 0;
+    background-color: hsl(145, 62%, 68%) !important;
+    background-repeat: repeat-x; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#cdf3dd", endColorstr="#7adfa4");
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#cdf3dd), to(#7adfa4));
+    background-image: -moz-linear-gradient(top, #cdf3dd, #7adfa4); background-image: -ms-linear-gradient(top, #cdf3dd, #7adfa4);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #cdf3dd), color-stop(100%, #7adfa4));
+    background-image: -webkit-linear-gradient(top, #cdf3dd, #7adfa4); background-image: -o-linear-gradient(top, #cdf3dd, #7adfa4); 
+    background-image: linear-gradient(#cdf3dd, #7adfa4); border-color: #7adfa4 #7adfa4 hsl(145, 62%, 63%); color: #333 !important; 
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.33); -webkit-font-smoothing: antialiased;
+}
+div.suggestions span:hover {
+  color: #ffffff;
+  background-color: #f5a77d;
+  *background-color: #f39766;
+}
+
+/* this formats the selected tab differently so that you can tell what tab you are using */
+div.tabs .xfRepeatIndex {
+    border-bottom:solid 3px white;
+    background-color:white;
+}
+
+.tabframe {
+    position:relative;
+    }
+ 
+.tabs {
+/*    position:absolute;
+    z-index:2; */
+    margin-left:15px;
+    }
+ 
+.tabpane {
+    width:600px;
+    height:500px;
+    border:solid 1px black;
+    z-index:1;
+/*    position:absolute; */
+    margin-top:-2px;
+    padding:10px;
+    box-shadow: 7px 7px 8px #818181;
+    -webkit-box-shadow: 7px 7px 8px #818181;
+    -moz-box-shadow: 7px 7px 8px #818181;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;    
+}
+.tabpane-large {
+    width:800px;
+    height:500px;
+    border:solid 1px black;
+    z-index:1;
+/*    position:absolute; */
+    margin-top:-2px;
+    padding:10px;
+    box-shadow: 7px 7px 8px #818181;
+    -webkit-box-shadow: 7px 7px 8px #818181;
+    -moz-box-shadow: 7px 7px 8px #818181;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;    
+}
+
+/* --- Document pane ---*/
+#doc-select
+    {
+      width: 220px;
+      float: left;
+    }
+#doc-display
+    {
+      margin-left: 230px; /* Change this to whatever the width of your left column is*/
+    }
+.clear
+    {
+      clear: both;
+    }
+
+.hletter {
+    background: #fffff;
+    padding:0px;
+    margin:0px;
+    overflow: auto;
+    height: 400px;
+}
+.address {
+    border:1px solid #EE0000;
+    padding: 10px;
+    margin: 10px;
+}
+.dt-published {
+    border:1px solid #EE00EE;
+    padding: 10px;
+    margin: 10px 10px 10px 255px;
+}
+.betreff {
+    border:1px solid #0000EE;
+    padding: 10px;
+    margin: 10px;
+}
+.oe-display {
+  display : block;
+  text-align : right;
+  margin-bottom : 0px;
+}
+.event {
+    
+}
+
+.letter {
+    width: 500px;
+}
+.letter-body {
+    border:1px solid #00EE00;
+}
+.signee {
+    padding: 10px;
+    margin: 10px;
+}
+.hnote {
+    background: #ffffff;
+    padding: 0px;
+    margin: 0px;
+    overflow: auto;
+    height: 400px;
+}
+.note-body {
+    border:1px solid #00EE00;
+    padding: 10px;
+    margin: 10px;
+}
+
+.fulfilled,
+.fc-agenda .holiday .fc-event-time,
+.fulfilled a {
+    background-color : green;
+}
+
+.bf form .hiddenControl {
+  display: none;
+}
+
+.input-group {
+    display: inline-table;
+    vertical-align: middle;
+}
+.input-group .input-group-addon,
+    .input-group-btn,
+    .form-control {
+        width: auto !important;
+    }
+
+.medium-select .xfValue {
+    width: 10em;
+}
+
+ 

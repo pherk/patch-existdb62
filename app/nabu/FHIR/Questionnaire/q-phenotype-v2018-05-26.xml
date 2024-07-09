@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Questionnaire xmlns="http://hl7.org/fhir">
+  <id value="q-phenotype-v2018-05-26"/>
+  <url value="http://hl7.org/fhir/Questionnaire/q-phenotype-v2018-05-26"/>
+  <title value="SPZ Nabu Phänotyp"/>
+  <status value="draft"/>
+  <date value="2018-05-26"/>
+  <publisher value="SPZ Nabu Group"/>
+    <jurisdiction>
+        <coding>
+            <system value="urn:iso:std:iso:3166"/>
+            <code value="DE"/>
+        </coding>
+    </jurisdiction>
+    <subjectType value="Patient"/>
+    <extension url="http://enahar.org/exist/apps/nabu/questionnaire-singleton">
+        <valueBoolean value="true"/>
+    </extension>
+    <item>
+        <linkId value="phenotype"/>
+        <text value="Humangenetik"/>
+        <type value="group"/>
+        <readOnly value="false"/>
+        <item>
+            <linkId value="pt-family"/>
+            <text value="Familie"/>
+            <type value="group"/>
+            <readOnly value="false"/>
+            <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="#nabu-questionnaire-displayCategory"/>
+                        <code value="tab"/>
+                    </coding>
+                </valueCodeableConcept>
+            </extension>
+        </item>
+        <item>
+            <linkId value="pt-perinatal"/>
+            <text value="Prä-Perinatal"/>
+            <type value="group"/>
+            <readOnly value="false"/>
+            <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="#nabu-questionnaire-displayCategory"/>
+                        <code value="tab"/>
+                    </coding>
+                </valueCodeableConcept>
+            </extension>
+        </item>
+        <item>
+            <linkId value="pt-epicrisis"/>
+            <text value="Epikrise"/>
+            <type value="group"/>
+            <readOnly value="false"/>
+            <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="#nabu-questionnaire-displayCategory"/>
+                        <code value="tab"/>
+                    </coding>
+                </valueCodeableConcept>
+            </extension>
+        </item>
+        <item>
+            <linkId value="pt-dx"/>
+            <text value="Untersuchungen"/>
+            <type value="group"/>
+            <readOnly value="false"/>
+            <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="#nabu-questionnaire-displayCategory"/>
+                        <code value="tab"/>
+                    </coding>
+                </valueCodeableConcept>
+            </extension>
+        </item>
+        <item>
+            <linkId value="pt-phenotype"/>
+            <text value="Phänotyp"/>
+            <type value="group"/>
+            <readOnly value="false"/>
+            <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="#nabu-questionnaire-displayCategory"/>
+                        <code value="tab"/>
+                    </coding>
+                </valueCodeableConcept>
+            </extension>
+            <item>
+                <linkId value="pt-ptitem"/>
+                <text value="ptgroup"/>
+                <type value="group"/>
+                <repeats value="true"/>
+                <item>
+                    <linkId value="pt-hponr"/>
+                    <text value="HPO-NR"/>
+                    <type value="string"/>
+                </item>
+                <item>
+                    <linkId value="pt-hpoterm"/>
+                    <text value="HPO-Term"/>
+                    <type value="string"/>
+                    <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-referenceFilter">
+                        <valueString value="hpo.js"/>
+                    </extension>
+                    <extension url="http://enahar.org/exist/apps/nabu/questionnaire-output-item">
+                        <valueString value="pt-hponr"/>
+                    </extension>
+                </item>
+                <item>
+                    <linkId value="pt-name"/>
+                    <text value="Bezeichnung"/>
+                    <type value="string"/>
+                </item>
+                <item>
+                    <linkId value="pt-category"/>
+                    <text value="Kategorie"/>
+                    <type value="choice"/>
+                    <option>
+                        <valueCoding>
+                            <code value="growth"/>
+                            <display value="Wachstum"/>
+                        </valueCoding>
+                    </option>
+                    <option>
+                        <valueCoding>
+                            <code value="craneofacial"/>
+                            <display value="Kraneofazial"/>
+                        </valueCoding>
+                    </option>
+                    <option>
+                        <valueCoding>
+                            <code value="visus"/>
+                            <display value="Visus"/>
+                        </valueCoding>
+                    </option>
+                    <option>
+                        <valueCoding>
+                            <code value="hearing"/>
+                            <display value="Gehör"/>
+                        </valueCoding>
+                    </option>
+                    <option>
+                        <valueCoding>
+                            <code value="cutan"/>
+                            <display value="Haut"/>
+                        </valueCoding>
+                    </option>
+                    <option>
+                        <valueCoding>
+                            <code value="heart"/>
+                            <display value="Herz-KL"/>
+                        </valueCoding>
+                    </option>
+                    <option>
+                        <valueCoding>
+                            <code value="pulmo"/>
+                            <display value="Atemwege"/>
+                        </valueCoding>
+                    </option>
+                    <option>
+                        <valueCoding>
+                            <code value="muscel-skeletal"/>
+                            <display value="Muskel-Skelett"/>
+                        </valueCoding>
+                    </option>
+                    <option>
+                        <valueCoding>
+                            <code value="intestinal"/>
+                            <display value="Intestinal"/>
+                        </valueCoding>
+                    </option>
+                    <option>
+                        <valueCoding>
+                            <code value="urogenital"/>
+                            <display value="Uro-Genital"/>
+                        </valueCoding>
+                    </option>
+                    <option>
+                        <valueCoding>
+                            <code value="development"/>
+                            <display value="Entwicklung"/>
+                        </valueCoding>
+                    </option>
+                    <option>
+                        <valueCoding>
+                            <code value="neurology"/>
+                            <display value="Neurologie"/>
+                        </valueCoding>
+                    </option>
+                </item>
+                <item>
+                    <linkId value="pt-present"/>
+                    <text value="J/N"/>
+                    <type value="choice"/>
+                    <option>
+                        <valueCoding>
+                            <code value="yes"/>
+                            <display value="J"/>
+                        </valueCoding>
+                    </option>
+                    <option>
+                        <valueCoding>
+                            <code value="no"/>
+                            <display value="N"/>
+                        </valueCoding>
+                    </option>
+                </item>
+                <item>
+                    <linkId value="pt-comment"/>
+                    <text value="Notiz"/>
+                    <type value="string"/>
+                </item>
+                <item>
+                    <linkId value="md-present"/>
+                    <text value="Aufgetreten"/>
+                    <type value="date"/>
+                    <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-unit">
+                        <valueCoding>
+                            <system value="questionnaire-unit-rexexp"/>
+                            <code value=""/>
+                            <display value="iso-date"/>
+                        </valueCoding>
+                    </extension>
+                </item>
+                <item>
+                    <linkId value="md-noticed"/>
+                    <text value="Festgestellt"/>
+                    <type value="date"/>
+                    <extension url="http://hl7.org/fhir/StructureDefinition/questionnaire-unit">
+                        <valueCoding>
+                            <system value="questionnaire-unit-rexexp"/>
+                            <code value=""/>
+                            <display value="iso-date"/>
+                        </valueCoding>
+                    </extension>
+                </item>
+            </item>
+        </item>
+    </item>
+</Questionnaire>

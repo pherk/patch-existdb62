@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-wf-conditions" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-done" level="ephemeral">Subform has updated itself.</xf:message>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:instance id="i-conditions">
+                <data/>
+            </xf:instance>
+<!--
+            <xf:bind ref="./*:code/*:text/@value" type="xs:string" constrained="string-length(./*:code/*:text/@value) > 0"/>
+-->
+            <xf:submission id="s-get-conditions" instance="i-conditions" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/conditions?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm),'&amp;subject=', instance('i-pat')/*:id/@value,'&amp;verification=active&amp;category=diagnosis&amp;category=finding')"/>
+<!--
+                <xf:resource value="concat('/exist/restxq/nabu/conditions?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&lognam=',encode-for-uri(instance('i-login')/*:lognam),'&realm=',encode-for-uri(instance('i-login')/*:realm),'&subject=', instance('i-pat')/*:id/@value,'&category=diagnosis&status=active',choose(instance('i-search')/*:active='true','&verification=active',''))"/>
+-->
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+<!--
+                    <xf:toggle case="listConditions"/>
+-->
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get conditions!</xf:message>
+            </xf:submission>
+
+            <xf:submission id="s-submit-condition" ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]" method="put" replace="none">
+                <xf:resource value="concat('/exist/restxq/nabu/conditions?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:send submission="s-get-conditions"/>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">Freitext leer? cannot submit condition!</xf:message>
+            </xf:submission>
+             <xf:submission id="s-update-condition-status" method="post" replace="none">
+                <xf:resource value="concat('/exist/restxq/nabu/conditions/',instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:id/@value,'/status/',instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:verificationStatus/*:coding/*:code/@value,'?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:message ev:event="xforms-submit-done" level="ephemeral">condition status updated!</xf:message>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">cannot submit condition status!</xf:message>
+            </xf:submission>          
+            <xf:instance xmlns="" id="i-login">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-login-from-master" resource="model:m-patient#instance('i-login')//*:data" instance="i-login" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">login: cannot load from Master!.</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-c-infos" src="FHIR/Condition/condition-infos.xml"/>            
+            
+            <xf:instance id="i-search">
+                <data xmlns="">
+                    <active>true</active>
+                </data>
+            </xf:instance>
+            <xf:instance id="views">
+                <data xmlns="">
+                    <ConditionsToSelect/>
+                    <noConditions/>
+                </data>
+            </xf:instance>
+            <xf:bind id="ConditionsToSelect" ref="instance('views')/*:ConditionsToSelect" relevant="count(instance('i-conditions')/*:Condition) &gt; 0"/>
+            <xf:bind id="noConditions" ref="instance('views')/*:noConditions" relevant="count(instance('i-conditions')/*:Condition) = 0"/>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+                <xf:send submission="s-load-login-from-master"/>
+                <xf:send submission="s-get-conditions"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+                <script type="text/javascript">
+                    initICD();
+                    initOrphanet();
+                    setOnsetDateTime();
+                    setAbatementDateTime();
+                </script>
+            </xf:action>
+        </xf:model>
+        <xf:input id="icd10-code" ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[*:system/@value='http://hl7.org/fhir/sid/icd-10-de']/*:code/@value" class="short-input">
+            <xf:label>ICD10-Code</xf:label>
+        </xf:input>
+        <xf:input id="icd10-text" ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[*:system/@value='http://hl7.org/fhir/sid/icd-10-de']/*:display/@value" class="long-input">
+            <xf:label>ICD10-Standardtext</xf:label>
+            <xf:action ev:event="xforms-value-changed" if="string-length(instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:text/@value)=0">
+                <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:text/@value" value="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[*:system/@value='http://hl7.org/fhir/sid/icd-10-de']/*:display/@value"/>
+            </xf:action>
+        </xf:input>
+        <xf:input id="orphanet-code" ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[*:system/@value='http://hl7.org/fhir/sid/orphanet-en']/*:code/@value" class="short-input">
+            <xf:label>Orphanet-Code</xf:label>
+        </xf:input>
+        <xf:input id="orphanet-text" ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[*:system/@value='http://hl7.org/fhir/sid/orphanet-en']/*:display/@value" class="long-input">
+            <xf:label>Orphanet-Standardtext</xf:label>
+            <xf:action ev:event="xforms-value-changed" if="string-length(instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:text/@value)=0">
+                <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:text/@value" value="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[*:system/@value='http://hl7.org/fhir/sid/orphanet-en']/*:display/@value"/>
+            </xf:action>
+        </xf:input>
+        <xf:input id="onset" ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:onsetDateTime/@value" appearance="bf:iso8601" data-bf-params="date:'dd.MM.yyyy'">
+            <xf:label>Beginn:</xf:label>
+            <xf:alert>a valid date is required</xf:alert>
+        </xf:input>
+        <xf:input id="abatement" ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:abatementDateTime/@value" appearance="bf:iso8601" data-bf-params="date:'dd.MM.yyyy'">
+            <xf:label>Beginn:</xf:label>
+            <xf:alert>a valid date is required</xf:alert>
+        </xf:input>
+    </div>
+    <div>
+        <xf:group class="bordered">
+            <xf:action ev:event="betterform-index-changed">
+                <xf:action if="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:category/*:coding/*:code/@value='diagnosis'">
+                    <xf:action if="not(instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#terminology-mas'])">
+                        <xf:insert ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#terminology-mas']" context="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code" origin="instance('i-c-infos')/*:bricks/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#terminology-mas']"/>
+                    </xf:action>
+                    <xf:action if="not(instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-diagnosis-category'])">
+                        <xf:insert ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-diagnosis-category']" context="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code" origin="instance('i-c-infos')/*:bricks/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-diagnosis-category']"/>
+                    </xf:action>
+                </xf:action>
+<!--
+                <xf:action if="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:category/*:coding/*:code/@value='finding'">
+                    <xf:delete ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[*:system/@value='http://eNahar.org/nabu/extension#terminology-mas']"/>
+                    <xf:delete ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[*:system/@value='http://eNahar.org/nabu/extension#nabu-diagnosis-ctegory']"/>
+                    <xf:action if="not(instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-finding'])">
+                        <xf:insert ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-finding']" context="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code" origin="instance('i-c-infos')/*:bricks/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-finding']"/>
+                    </xf:action>
+                </xf:action>
+-->
+            </xf:action>
+
+            <xf:label>Conditions</xf:label>
+            <xf:repeat id="r-conditions-id" ref="instance('i-conditions')/*:Condition" appearance="compact" class="svRepeat">
+                <xf:output value="tokenize(./*:recordedDate/@value,'T')[1]">
+                    <xf:label class="svRepeatHeader">Erfasst</xf:label>
+                </xf:output>
+                <xf:output value="string-join((substring(./*:category/*:text/@value,1,1),./*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-diagnosis-category']/*:code/@value,./*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#terminology-mas']/*:code/@value),':')"/>
+                <xf:output ref="./*:code/*:text/@value">
+                    <xf:label class="svRepeatHeader">Text</xf:label>
+                </xf:output>
+                <xf:output value="string-join((./*:code/*:coding[*:system/@value='http://hl7.org/fhir/sid/icd-10-de']/*:code/@value, ./*:code/*:coding[*:system/@value='http://hl7.org/fhir/sid/orphanet-en']/*:code/@value), ' :: ')">
+                    <xf:label class="svRepeatHeader">ICD10/Orphanet</xf:label>
+                </xf:output>
+                <xf:group>
+                    <xf:label class="svRepeatHeader">Festgestellt</xf:label>
+                    <xf:output ref="./*:asserter/*:display/@value"/>
+                    <xf:output ref="./*:note/@value"/>
+                </xf:group>
+                <xf:group>
+                    <xf:label class="svRepeatHeader">Status</xf:label>
+                    <xf:output ref="./*:verificationStatus/*:coding/*:code/@value"/>
+                    <table>
+                        <tr>
+                        <td>
+                    <xf:trigger ref="./*:verificationStatus/*:coding/*:code[@value=('unconfirmed','imported')]">
+                        <xf:label>
+                            <span class="glyphicon glyphicon-trash"/>
+                        </xf:label>
+                        <xf:action ev:event="DOMActivate">
+                            <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:verificationStatus/*:coding/*:code/@value" value="'entered-in-error'"/>
+                            <xf:send submission="s-update-condition-status"/>
+                            <xf:delete ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]"/>
+                        </xf:action>
+                    </xf:trigger>
+                        </td>
+                        <td>
+                    <xf:trigger ref="./*:verificationStatus/*:coding/*:code[@value=('unconfirmed','imported')]">
+                        <xf:label>
+                            <span class="glyphicon glyphicon-ok"/>
+                        </xf:label>
+                        <xf:action ev:event="DOMActivate">
+                            <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:verificationStatus/*:coding/*:code/@value" value="'confirmed'"/>
+                            <xf:send submission="s-update-condition-status"/>
+                        </xf:action>
+                    </xf:trigger>
+                        </td>
+                    </tr>
+                    </table>
+                </xf:group>
+            </xf:repeat>
+        </xf:group>
+        <xf:switch id="switch">
+            <xf:case id="listConditions">
+                <xf:group class="svTriggerGroup">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svSubTrigger" ref="instance('i-conditions')/*:Condition">
+                                    <xf:label>Edit</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:action if="not(instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#terminology-mas'])">
+                                            <xf:insert ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#terminology-mas']" context="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code" origin="instance('i-c-infos')/*:bricks/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#terminology-mas']"/>
+                                        </xf:action>
+                                        <xf:action if="not(instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-diagnosis-category'])">
+                                            <xf:insert ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-diagnosis-category']" context="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code" origin="instance('i-c-infos')/*:bricks/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-diagnosis-category']"/>
+                                        </xf:action>
+                                        <xf:toggle case="editCondition"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svAddTrigger">
+                                    <xf:label>Diagnose</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:insert at="index('r-conditions-id')" nodeset="instance('i-conditions')/*:Condition" context="instance('i-conditions')" origin="instance('i-c-infos')/*:bricks/*:Condition"/>
+                                    </xf:action>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:insert ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding" context="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code" origin="instance('i-c-infos')/*:bricks/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#terminology-mas']"/>
+                                        <xf:insert ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding" context="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code" origin="instance('i-c-infos')/*:bricks/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-diagnosis-category']"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:recordedDate/@value" value="tokenize(adjust-dateTime-to-timezone(current-dateTime()),'T')[1]"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:subject/*:reference/@value" value="concat('nabu/patients/',instance('i-pat')/*:id/@value)"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:subject/*:display/@value" value="concat(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-pat')/*:name[*:use/@value='official']/*:given/@value,', *',instance('i-pat')/*:birthDate/@value)"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:recorder/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:recorder/*:display/@value" value="instance('i-login')/*:lognam"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:category/*:coding/*:code/@value" value="'diagnosis'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:category/*:coding/*:display/@value" value="'Diagnose'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:category/*:text/@value" value="'Diagnose'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:clinicalStatus/*:coding/*:code/@value" value="'active'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:clinicalStatus/*:coding/*:display/@value" value="'Aktiv'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:clinicalStatus/*:text/@value" value="'Aktiv'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:verificationStatus/*:coding/*:code/@value" value="'confirmed'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:verificationStatus/*:coding/*:display/@value" value="'Bestätigt'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:verificationStatus/*:text/@value" value="'Bestätigt'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:asserter/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:asserter/*:display/@value" value="instance('i-login')/*:lognam"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:severity/*:coding/*:code/@value" value="'255604002'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:severity/*:coding/*:display/@value" value="'Milde'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:severity/*:text/@value" value="'Milde'"/>
+                                        <!--
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[*:system/@value='http://hl7.org/fhir/sid/icd-10-de']/*:code/@value" value="''"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[*:system/@value='http://hl7.org/fhir/sid/icd-10-de']/*:display/@value" value="''"/>
+                                        -->
+                                        <xf:toggle case="editCondition"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svAddTrigger">
+                                    <xf:label>Pat-Gruppe</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:insert position="after" at="index('r-conditions-id')" nodeset="instance('i-conditions')/*:Condition" context="instance('i-conditions')" origin="instance('i-c-infos')/*:bricks/*:Condition"/>
+                                    </xf:action>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:delete ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding"/>
+                                        <xf:insert ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding" context="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code" origin="instance('i-c-infos')/*:bricks/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-finding']"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:recordedDate/@value" value="tokenize(adjust-dateTime-to-timezone(current-dateTime()),'T')[1]"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:subject/*:reference/@value" value="concat('nabu/patients/',instance('i-pat')/*:id/@value)"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:subject/*:display/@value" value="concat(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-pat')/*:name[*:use/@value='official']/*:given/@value,', *',instance('i-pat')/*:birthDate/@value)"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:recorder/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:recorder/*:display/@value" value="instance('i-login')/*:lognam"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:category/*:coding/*:code/@value" value="'finding'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:category/*:coding/*:display/@value" value="'Befund'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:category/*:text/@value" value="'Befund'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:clinicalStatus/*:coding/*:code/@value" value="'active'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:clinicalStatus/*:coding/*:display/@value" value="'Aktiv'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:clinicalStatus/*:text/@value" value="'Aktiv'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:verificationStatus/*:coding/*:code/@value" value="'confirmed'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:verificationStatus/*:coding/*:display/@value" value="'Bestätigt'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:verificationStatus/*:text/@value" value="'Bestätigt'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:asserter/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:asserter/*:display/@value" value="instance('i-login')/*:lognam"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:severity/*:coding/*:code/@value" value="'255604002'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:severity/*:coding/*:display/@value" value="'Milde'"/>
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:severity/*:text/@value" value="'Milde'"/>
+                                        <xf:toggle case="editCondition"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+<!--
+                            <td>
+                                <xf:trigger class="svDelTrigger" ref="instance('i-conditions')/*:Condition">
+                                    <xf:label>Löschen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:verificationStatus/*:coding/*:code/@value" value="'entered-in-error'"/>
+                                        <xf:send submission="s-update-condition-status"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+-->
+                        </tr>
+                    </table>
+                </xf:group>
+            </xf:case>
+            <xf:case id="editCondition">
+                <xf:group id="editGroup" ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Speichern</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:send submission="s-submit-condition"/>
+                                        <xf:toggle case="listConditions"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Schließen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:send submission="s-get-conditions"/>
+                                        <xf:toggle case="listConditions"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <xf:group class="svFullGroup">
+                        <xf:label>Edit Conditions</xf:label>
+                        <table>
+                            <tr>
+                        <!--
+                        <xf:group ref="./*:category/*:coding/*:code[@value='']">
+                            <xf:select1 ref="./*:category/*:coding/*:code/@value" class="medium-input">
+                                <xf:label>Art:</xf:label>
+                                <xf:itemset nodeset="instance('i-c-infos')/*:category/*:code">
+                                    <xf:label ref="./@label-de"/>
+                                    <xf:value ref="./@value"/>
+                                </xf:itemset>
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:category/*:coding/*:display/@value" value="instance('i-c-infos')/*:category/*:coding/*:code[@value=instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:category/*:coding/*:code/@value]/@label-de"/>
+                                    <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:category/*:text/@value" value="instance('i-c-infos')/*:category/*:coding/*:code[@value=instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:category/*:coding/*:code/@value]/@label-de"/>
+                                </xf:action>
+                            </xf:select1>
+                        </xf:group>
+                        -->
+                                <td>
+                                    <strong>Status:</strong>
+                                </td>
+                                <td>
+                        <xf:select1 ref="./*:clinicalStatus/*:coding/*:code/@value" class="medium-input">
+                            <xf:itemset nodeset="instance('i-c-infos')/*:clinicalStatus/*:code">
+                                <xf:label ref="./@label-de"/>
+                                <xf:value ref="./@value"/>
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:clinicalStatus/*:coding/*:display/@value" value="instance('i-c-infos')/*:clinicalStatus/*:code[@value=instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:clinicalStatus/*:coding/*:code/@value]/@label-de"/>
+                                    <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:clinicalStatus/*:text/@value" value="instance('i-c-infos')/*:clinicalStatus/*:code[@value=instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:clinicalStatus/*:coding/*:code/@value]/@label-de"/>
+                                </xf:action>
+                            </xf:itemset>
+                        </xf:select1>
+                                </td>
+                                <td>
+                                    <strong>MAS-Achse:</strong>
+                                </td>
+                                <td>
+                        <xf:group ref="instance('i-conditions')/*:Condition[index('r-conditions-id')][*:category/*:coding/*:code/@value='diagnosis']">
+                            <xf:select1 ref="./*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#terminology-mas']/*:code/@value" class="medium-input">
+                                <xf:itemset nodeset="instance('i-c-infos')/*:terminology-mas-axis/*:code">
+                                    <xf:label ref="./@label-de"/>
+                                    <xf:value ref="./@value"/>
+                                </xf:itemset>
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#terminology-mas']/*:display/@value" value="instance('i-c-infos')/*:terminology-mas-axis/*:code[@value=instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#terminology-mas']/*:code/@value]/@label-de"/>
+                                </xf:action>
+                            </xf:select1>
+                                </xf:group>
+                                </td>
+                                <td>
+                        <xf:group ref="instance('i-conditions')/*:Condition[index('r-conditions-id')][*:category/*:coding/*:code/@value='diagnosis']">
+                            <xf:select1 ref="./*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-diagnosis-category']/*:code/@value" class="medium-input">
+                                <xf:label>DxCat:</xf:label>
+                                <xf:itemset nodeset="instance('i-c-infos')/*:diagnosis-category/*:code">
+                                    <xf:label ref="./@label-de"/>
+                                    <xf:value ref="./@value"/>
+                                </xf:itemset>
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-diagnosis-category']/*:display/@value" value="instance('i-c-infos')/*:diagnosis-category/*:code[@value=instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-diagnosis-category']/*:code/@value]/@label-de"/>
+                                </xf:action>
+                            </xf:select1>
+                        </xf:group>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <xf:group ref="instance('i-conditions')/*:Condition[index('r-conditions-id')][*:category/*:coding/*:code/@value='diagnosis']">
+                            <xf:switch>
+                                <xf:case id="t-icd10-de">
+                                    <table>
+                                        <tr>
+                                        <td>
+                                            <strong>ICD10:</strong>
+                                        </td>
+                                        <td>
+                                        <xf:output value="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[*:system/@value='http://hl7.org/fhir/sid/icd-10-de']/*:code/@value" class=""/>
+                                        </td>
+                                            <td rowspan="2">
+                            <xf:trigger class="svSaveTrigger">
+                                <xf:label>Orphanet</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                    <xf:action if="not(instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://hl7.org/fhir/sid/orphanet-en'])">
+                        <xf:insert ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://hl7.org/fhir/sid/orphanet-en']" context="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code" origin="instance('i-c-infos')/*:bricks/*:coding[./*:system/@value='http://hl7.org/fhir/sid/orphanet-en']"/>
+                    </xf:action>
+                                    <xf:toggle case="t-orphanet-en"/>
+                                </xf:action>
+                            </xf:trigger>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                        <td colspan="2">
+                                            <select class="patient-select long-input" name="icd10-hack">
+                                                <option/>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    </table>
+                                </xf:case>
+                                <xf:case id="t-orphanet-en">
+                                     <table>
+                                        <tr>
+                                        <td>
+                                            <strong>Orphanet:</strong>
+                                        </td>
+                                        <td>
+                                        <xf:output value="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[*:system/@value='http://hl7.org/fhir/sid/orphanet-en']/*:code/@value" class=""/>
+                                        </td>
+                                            <td rowspan="2">
+                            <xf:trigger class="svSaveTrigger">
+                                <xf:label>ICD10</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:toggle case="t-icd10-de"/>
+                                </xf:action>
+                            </xf:trigger>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                        <td colspan="2">
+                                            <select class="patient-select long-input" name="orphanet-hack">
+                                                <option/>
+                                            </select>
+                                        </td>
+                                        </tr>
+                                    </table>
+                                </xf:case>
+                            </xf:switch>
+                                    </xf:group>
+                                </td>
+                            </tr>
+                        </table>
+                        <xf:group ref="instance('i-conditions')/*:Condition[index('r-conditions-id')][*:category/*:coding/*:code/@value='finding']">
+                            <xf:select1 ref="./*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-finding']/*:code/@value" class="medium-input">
+                                <xf:label>Patienten-Gruppe:</xf:label>
+                                <xf:itemset nodeset="instance('i-c-infos')/*:finding/*:code">
+                                    <xf:label ref="./@label-de"/>
+                                    <xf:value ref="./@value"/>
+                                </xf:itemset>
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-finding']/*:display/@value" value="instance('i-c-infos')/*:finding/*:code[@value=instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-finding']/*:code/@value]/@label-de"/>
+                                    <xf:action if="string-length(instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:text/@value)=0">
+                                        <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:text/@value" value="instance('i-c-infos')/*:finding/*:code[@value=instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:code/*:coding[./*:system/@value='http://eNahar.org/nabu/extension#nabu-finding']/*:code/@value]/@label-de"/>
+                                    </xf:action>
+                                </xf:action>
+                            </xf:select1>
+                        </xf:group>
+                        <xf:group class="svFullGroup">
+                            <xf:textarea ref="*:code/*:text/@value" class="fullareashort">
+                                <xf:label>Freitext:</xf:label>
+                            </xf:textarea>
+                        </xf:group>
+                        <xf:select1 ref="./*:severity/*:coding/*:code/@value" class="medium-input">
+                            <xf:label>Grad:</xf:label>
+                            <xf:itemset nodeset="instance('i-c-infos')/*:severity/*:code">
+                                <xf:label ref="./@label-de"/>
+                                <xf:value ref="./@value"/>
+                            </xf:itemset>
+                            <xf:action ev:event="xforms-value-changed">
+                                <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:severity/*:coding/*:display/@value" value="instance('i-c-infos')/*:severity/*:code[@value=instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:severity/*:coding/*:code/@value]/@label-de"/>
+                                <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:severity/*:text/@value" value="instance('i-c-infos')/*:severity/*:code[@value=instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:severity/*:coding/*:code/@value]/@label-de"/>
+                                </xf:action>
+                            </xf:select1>
+                            <xf:select1 ref="./*:verificationStatus/*:coding/*:code/@value" incremental="true" class="medium-input">
+                                <xf:label>Verifikation:</xf:label>
+                                <xf:itemset nodeset="instance('i-c-infos')/*:verificationStatus/*:code">
+                                    <xf:label ref="./@label-de"/>
+                                    <xf:value ref="./@value"/>
+                                </xf:itemset>
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:verificationStatus/*:coding/*:display/@value" value="instance('i-c-infos')/*:verificationStatus/*:code[@value=instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:verificationStatus/*:coding/*:code/@value]/@label-de"/>
+                                    <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:verificationStatus/*:text/@value" value="instance('i-c-infos')/*:verificationStatus/*:code[@value=instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:verificationStatus/*:coding/*:code/@value]/@label-de"/>
+                                    <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:asserter/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                                    <xf:setvalue ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:asserter/*:display/@value" value="instance('i-login')/*:lognam"/>
+                                </xf:action>
+                            </xf:select1>
+                            <hr/>  
+                            <div class="form-horizontal">
+                                <xf:group class="form-group">
+                                    <xf:label>Beginn</xf:label>
+                                        <div class="input-group date col-sm-2" id="cond-onset" data-date-format="yyyy-mm-dd" data-date-language="de">
+                                            <input type="text" class="form-control" id="cond-onset-input"/>
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"/>
+                                            </div>
+                                        </div>
+                                    
+                                </xf:group>
+                                <xf:group ref="instance('i-conditions')/*:Condition[index('r-conditions-id')]/*:clinicalStatus/*:coding/*:code[./@value=('inactive','remission','resolved')]" class="form-group">
+                                    <xf:label>Ende</xf:label>
+                                        <div class="input-group date col-sm-2" id="cond-abatement" data-date-format="yyyy-mm-dd" data-date-language="de">
+                                            <input type="text" class="form-control" id="cond-abatement-input"/>
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"/>
+                                            </div>
+                                        </div>
+                                    
+                                </xf:group>
+                            </div>
+                            <br/>
+                            <xf:group class="svFullGroup">
+                                <xf:label class="svRepeatHeader">Evidenz (zB. Leitsymptome, Befunde)</xf:label>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <xf:trigger>
+                                                <xf:label>+</xf:label>
+                                                <xf:action ev:event="DOMActivate">
+                                                    <xf:insert nodeset="./*:evidence" context="." origin="instance('i-c-infos')/*:bricks/*:Condition/*:evidence"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                        </td>
+                                        <td>
+                                            <xf:trigger>
+                                                <xf:label>-</xf:label>
+                                                <xf:action ev:event="DOMActivate">
+                                                    <xf:delete nodeset="./*:evidence" at="index('r-evidences-id')"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                        </td>
+                                        <td>
+                                <xf:repeat id="r-evidences-id" ref="./*:evidence" appearance="compact" class="svRepeat">
+                                    <xf:input ref="./*:code/*:text/@value" class="long-input">
+                                        <xf:label class="svRepeatHeader">Evidenz (zB. Leitsymptome, Befunde)</xf:label>
+                                    </xf:input>
+                                </xf:repeat>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </xf:group>
+                            <xf:textarea ref="./*:note/*:text/@value" class="fullarea">
+                                <xf:label class="svRepeatHeader">Notizen</xf:label>
+                            </xf:textarea>
+                    </xf:group>
+                </xf:group>
+            </xf:case>
+        </xf:switch>
+    </div>
+</div>

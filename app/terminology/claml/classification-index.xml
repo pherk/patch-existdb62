@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classificationIndex>
+    <group collection="icd10-de-data" name="ICD-10 DE" isGroup="false">
+        <classification id="1.2.276.0.76.5.409" collection="/db/apps/terminologyData/icd10-de-data/de-DE" package="icd10-de-data" language="de-DE" date="2011-09-23" name="ICD-10" version="2012">Internationale statistische Klassifikation der Krankheiten und verwandter Gesundheitsprobleme</classification>
+    </group>
+    <group collection="hpo-data" name="HPO" isGroup="false">
+        <classification id="2.16.840.1.113883.6.339" collection="/db/apps/terminologyData/hpo-data/en-US" package="hpo-data" language="en-US" date="2018-08-11" name="HPO" version="2018"/>
+    </group>
+    <group collection="icf-nl-data" name="ICF NL" isGroup="false">
+        <classification id="2.16.840.1.113883.6.254" collection="/db/apps/terminologyData/icf-nl-data/nl-NL" package="icf-nl-data" language="nl-NL" name="ICF-NL" date="2010-02-02" version="1.000.000.003">ICF-NL</classification>
+    </group>
+    <group collection="orpha-data" name="Orphanet" isGroup="false">
+        <classification id="2.16.840.1.113883.2.4.3.46.10.4.1" collection="/db/apps/terminologyData/orpha-data/en-US" package="orpha-data" language="en-US" name="Orphanet" date="2018-08-15" version="2018"/>
+    </group>
+</classificationIndex>

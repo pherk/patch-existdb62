@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActivityDefinition xmlns="http://hl7.org/fhir">
+    <id value="appArzt-EEG-3m"/> 
+    <url value="http://enahar.org/exist/apps/nabu/FHIR/ActivtyDefinition/appArzt-EEG-3m"/> 
+    <identifier> 
+        <use value="official"/> 
+        <system value="#artifacts"/> 
+        <value value="nabu:appArzt-EEG-3m"/> 
+    </identifier> 
+    <version value="0.1.0"/> 
+    <name value="Arzt-EEG 3m"/> 
+    <title value="Arzt-EEG 3m"/> 
+    <status value="active"/> 
+    <experimental value="true"/> 
+    <date value="2018-08-18"/> 
+    <publisher value="Nabu SPZ Partner"/> 
+    <description value="Orders to be applied to a child which should get a appointment with physician and EEG."/> 
+    <purpose value="This order set helps ensure consistent application of appropriate orders for the care of childs with epilepsy."/> 
+    <usage value="This order set should be applied after assessing a child for risks, when the findings of that assessment indicate the child belong to the epilepsy or has other risks arising from cortical functional problems."/> 
+    <approvalDate value="2018-06-18"/> 
+    <lastReviewDate value="2018-08-18"/> 
+    <effectivePeriod> 
+        <start value="2018-08-18"/> 
+        <end value="2021-04-01"/> 
+    </effectivePeriod> 
+    <useContext> 
+        <code> 
+            <system value="http://hl7.org/fhir/usage-context-type"/> 
+            <code value="user"/> 
+        </code> 
+        <valueCodeableConcept> 
+            <coding> 
+                <system value="http://snomed.info/sct"/> 
+                <code value="309343006"/> 
+                <display value="Physician"/> 
+            </coding> 
+        </valueCodeableConcept> 
+    </useContext> 
+    <useContext> 
+        <code> 
+            <system value="http://hl7.org/fhir/usage-context-type"/> 
+            <code value="user"/> 
+        </code> 
+        <valueCodeableConcept> 
+            <coding> 
+                <system value="http://snomed.info/sct"/> 
+                <code value="159037062"/> 
+                <display value="EEG technician"/> 
+            </coding> 
+        </valueCodeableConcept> 
+    </useContext>
+    <useContext> 
+        <code> 
+            <system value="http://hl7.org/fhir/usage-context-type"/> 
+            <code value="venue"/> 
+        </code> 
+        <valueCodeableConcept> 
+            <coding> 
+                <system value="http://snomed.info/sct"/> 
+                <code value="440655000"/> 
+                <display value="Outpatient environment"/> 
+            </coding> 
+        </valueCodeableConcept> 
+    </useContext> 
+    <jurisdiction> 
+        <coding> 
+            <system value="urn:iso:std:iso:3166"/> 
+            <code value="DE"/> 
+        </coding> 
+    </jurisdiction> 
+    <topic> 
+        <text value="Interdisciplinary neuropediatric Ambulance"/> 
+    </topic> 
+    <contributor> 
+        <type value="author"/> 
+        <name value="Peter Herkenrath"/> 
+        <contact> 
+            <telecom> 
+                <system value="phone"/> 
+                <value value="0221 478 6074"/> 
+                <use value="work"/> 
+            </telecom> 
+            <telecom> 
+                <system value="email"/> 
+                <value value="p.herkenrath@uni-koeln.de"/> 
+                <use value="work"/> 
+            </telecom> 
+        </contact> 
+    </contributor> 
+    <contact> 
+        <telecom> 
+            <system value="phone"/> 
+            <value value="0221 478 5900"/> 
+            <use value="work"/> 
+        </telecom> 
+        <telecom> 
+            <system value="email"/> 
+            <value value="spz@uk-koeln.de"/> 
+            <use value="work"/> 
+        </telecom> 
+    </contact> 
+    <copyright value="© Copyright 2018 Nabu SPZ Partner. All rights reserved."/> 
+    <relatedArtifact> 
+        <type value="derived-from"/> 
+        <display value="LL Diagnostische Prinzipien bei Epilepsien des Kindesalters"/> 
+        <url value="https://www.awmf.org/uploads/tx_szleitlinien/022-007l_S1_Diagnostische-Prinzipien-bei-Epilepsien-des-Kindesalters_2018-03.pdf"/> 
+    </relatedArtifact> 
+    <kind value="ReferralRequest"/>
+    <code> 
+        <coding> 
+            <system value="http://snomed.info/sct"/> 
+            <code value="306206005"/> 
+        </coding>
+        <coding> 
+            <system value="http://hl7.org/fhir/ValueSet/action-relationship-type"/> 
+            <code value="sequential"/> 
+        </coding> 
+        <text value="Referral to interdisciplinary service (procedure)"/> 
+    </code>
+    <participant> 
+        <type value="practitioner"/>
+        <role value="spz-eeg"/>
+        <required value="true"/>
+    </participant>
+    <participant> 
+        <type value="practitioner"/>
+        <role value="spz-arzt"/>
+        <actor>
+            <reference value=""/>
+            <display value=""/>
+        </actor>
+        <required value="true"/>
+    </participant>
+</ActivityDefinition>

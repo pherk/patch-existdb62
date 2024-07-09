@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompartmentDefinition xmlns="http://hl7.org/fhir">
+  <meta>
+    <extension url="http://eNahar.org/nabu/extension/lastUpdatedBy">
+        <valueReference>
+            <reference value="u-admin"/>
+            <display value="admin"/>
+        </valueReference>
+    </extension>
+    <versionId value="0"/>
+    <lastUpdated value="2023-04-09T19:26:00Z"/>
+  </meta>
+  <id value="patient-compartment"/>
+  <url value="http://hl7.org/fhir/CompartmentDefinition/patient"/> 
+  <version value="Nabu 2.0"/>
+  <versionAlgorithmString value="natural"/>
+  <name value="Base FHIR compartment definition for Patient"/> 
+  <status value="draft"/> 
+  <experimental value="true"/> 
+  <date value="2023-04-09T19:23:11+00:00"/> 
+  <publisher value="eNahar Project Team"/> 
+  <contact> 
+    <telecom> 
+      <system value="url"/> 
+      <value value="http://eNahar.org/fhir"/> 
+    </telecom> 
+  </contact> 
+  <description value="There is an instance of the patient compartment for each patient resource, and the identity of the compartment is the same as the patient. When a patient is linked to another patient resource, the records associated with the linked patient resource    will not be returned as part of the compartment search. Those records will be returned only with another compartment search using the &#34;id&#34; for the linked patient resource. In cases where two patients have been merged rather than linked, associated resources should be moved to the target patient as part of the merge process, so the patient compartment for the target patient would include all relevant data, and the patient compartment for the source patient would include only the linked Patient and possibly remnant resources like AuditEvent.. The set of resources associated with a particular patient"/>
+  <useContext> 
+    <code> 
+      <system value="http://terminology.hl7.org/CodeSystem/usage-context-type"/> 
+      <code value="focus"/> 
+    </code> 
+    <valueCodeableConcept> 
+      <coding> 
+        <system value="http://hl7.org/fhir/fhir-types"/> 
+        <code value="Patient"/> 
+      </coding> 
+    </valueCodeableConcept> 
+  </useContext>
+  <purpose value="Provides the FHIR compartment definition based on the Patient resource."/> 
+  <code value="Patient"/> 
+  <search value="true"/> 
+  <resource> 
+    <code value="CarePlan"/> 
+    <param value="patient"/> 
+  </resource> 
+  <resource> 
+    <code value="CareTeam"/> 
+    <param value="patient"/> 
+    <param value="participant"/> 
+  </resource> 
+  <resource> 
+    <code value="ClinicalImpression"/> 
+    <param value="subject"/> 
+  </resource> 
+  <resource> 
+    <code value="Communication"/> 
+    <param value="subject"/> 
+    <param value="sender"/> 
+    <param value="recipient"/> 
+  </resource> 
+  <resource> 
+    <code value="Composition"/> 
+    <param value="subject"/> 
+    <param value="author"/> 
+    <param value="attester"/> 
+  </resource> 
+  <resource> 
+    <code value="Condition"/> 
+    <param value="patient"/> 
+    <param value="participant-actor"/> 
+  </resource> 
+  <resource> 
+    <code value="Consent"/> 
+    <param value="subject"/> 
+  </resource> 
+  <resource> 
+    <code value="DiagnosticReport"/> 
+    <param value="subject"/> 
+  </resource> 
+  <resource> 
+    <code value="Encounter"/> 
+    <param value="patient"/> 
+  </resource> 
+  <resource> 
+    <code value="EncounterHistory"/> 
+    <param value="patient"/>
+  </resource>
+  <resource> 
+    <code value="EpisodeOfCare"/> 
+    <param value="patient"/> 
+  </resource> 
+  <resource> 
+    <code value="Goal"/> 
+    <param value="patient"/> 
+  </resource> 
+  <resource> 
+    <code value="Observation"/> 
+    <param value="subject"/> 
+    <param value="performer"/> 
+  </resource>
+  <resource> 
+    <code value="Patient"/> 
+    <param value="{def}"/> 
+    <param value="link"/> 
+  </resource> 
+  <resource> 
+    <code value="QuestionnaireResponse"/> 
+    <param value="subject"/> 
+    <param value="author"/> 
+  </resource> 
+  <resource> 
+    <code value="Task"/> 
+    <param value="patient"/> 
+    <param value="focus"/> 
+  </resource> 
+  <resource> 
+    <code value="Order"/>
+    <param value="subject"/>
+    <description value="this resource is non standard"/>
+  </resource> 
+</CompartmentDefinition>

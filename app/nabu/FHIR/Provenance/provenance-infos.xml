@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<provenance-infos>
+    <bricks xmlns="http://hl7.org/fhir">
+        <Provenance>
+ <!-- from Resource: id, meta, implicitRules, and language -->
+ <!-- from DomainResource: text, contained, extension, and modifierExtension -->
+            <target><!-- 1..* Reference(Any) Target Reference(s) (usually version specific) --></target>
+            <period><!-- 0..1 Period When the activity occurred --></period>
+            <recorded value="[instant]"/><!-- 1..1 When the activity was recorded / updated -->
+            <policy value="[uri]"/><!-- 0..* Policy or plan the activity was defined by -->
+            <location><!-- 0..1 Reference(Location) Where the activity occurred, if relevant --></location>
+            <reason><!-- 0..* Coding Reason the activity is occurring --></reason>
+            <activity><!-- 0..1 Coding Activity that occurred --></activity>
+            <signature><!-- 0..* Signature Signature on target --></signature>
+        </Provenance>
+        <agent>
+            <role><!-- 0..* CodeableConcept What the agents role was --></role>
+            <whoPractitioner><!-- 1..1 uri|Reference(Practitioner|RelatedPerson|Patient|Device|Organization) Who participated --></whoPractitioner>
+            <onBehalfOfOrganization><!-- 0..1 uri|Reference(Practitioner|RelatedPerson|Patient|Device|Organization) Who the agent is representing --></onBehalfOfOrganization>
+            <relatedAgentType><!-- 0..1 CodeableConcept Type of relationship between agents --></relatedAgentType>
+        </agent>
+        <entity>
+            <role value="[code]"/><!-- 1..1 derivation | revision | quotation | source | removal -->
+            <what><!-- 1..1 uri|Reference(Any)|Identifier Identity of entity --></what>
+            <agent><!-- 0..* Content as for Provenance.agent Entity is attributed to this agent --></agent>
+        </entity>
+    </bricks>
+</provenance-infos>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-syn-encounters" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-done" level="ephemeral">Subform has updated itself.</xf:message>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:instance id="i-encounters">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-encounters" instance="i-encounters" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/encountersBySubject/', instance('i-pat')/*:id/@value,instance('i-qs')/*:query[@type=instance('i-qs')/*:type],'&amp;timeMin=',choose(instance('i-qs')/*:type='planned',current-date(),choose(instance('i-qs')/*:type='short',current-date()-xs:dayTimeDuration('P731D'),instance('i-pat')/*:birthDate/@value)),'&amp;timeMax=',current-date())"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get encounters!</xf:message>
+            </xf:submission>
+            <xf:instance id="i-qs">
+                <data xmlns="">
+                    <type>planned</type>
+                    <query type="planned">?status=planned&amp;status=tentative&amp;status=arrived&amp;status=triaged&amp;status=in-progress</query>
+                    <query type="short">?length=15&amp;status=planned&amp;status=tentative&amp;status=finished&amp;status=cancelled</query>
+                    <query type="all">?status=planned&amp;status=tentative&amp;status=finished</query>
+                </data>
+            </xf:instance>
+            <xf:instance id="views">
+                <data xmlns="">
+                    <EncountersToSelect/>
+                    <noEncounters/>
+                </data>
+            </xf:instance>
+            <xf:bind id="EncountersToSelect" ref="instance('views')/*:EncountersToSelect" relevant="count(instance('i-encounters')/*:Encounter) &gt; 0"/>
+            <xf:bind id="noEncounters" ref="instance('views')/*:noEncounters" relevant="count(instance('i-encounters')/*:Encounter) = 0"/>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+                <xf:send submission="s-get-encounters"/>
+            </xf:action>
+        </xf:model>
+    </div>
+    <div>
+        <xf:group ref="instance('views')/*:EncountersToSelect" class="bordered">
+            <xf:label>
+                    <xf:output value="concat('Termine (',instance('i-encounters')/*:length,'/',instance('i-encounters')/*:count,')')"/>
+            </xf:label>
+            <xf:repeat ref="instance('i-encounters')/*:Encounter[./*:status/@value=('planned','tentative','arrived','triaged','in-progress')]" appearance="compact" class="svRepeat">
+                <xf:output value="format-dateTime(./*:period/*:start/@value, '[D01].[M01].[Y01] - [H01]:[m01]')">
+                    <xf:label class="svRepeatHeader">Datum</xf:label>
+                </xf:output>
+                <xf:output ref="./*:reasonCode/*:text/@value">
+                    <xf:label class="svRepeatHeader">Anlass</xf:label>
+                </xf:output>
+               <xf:output ref="./*:reasonCode/*:display/@value">
+                    <xf:label class="svRepeatHeader">Anlass</xf:label>
+                </xf:output>
+                <xf:output ref="./*:basedOn/*:display/@value">
+                    <xf:label class="svRepeatHeader">CarePlan</xf:label>
+                </xf:output>
+                <xf:output value="string-join(./*:participant/*:individual/*:display/@value,':')">
+                    <xf:label class="svRepeatHeader">Erbringer</xf:label>
+                </xf:output>
+                <xf:output value="substring(./*:status/@value,1,1)" class="tiny-output"/>
+            </xf:repeat>
+        </xf:group>
+        <xf:group ref="instance('views')/*:noEncounters">
+            <xf:label>
+                <xf:output value="choose(instance('i-qs')/*:type='planned','Kein offener Termin', 'Keine Termine/Besuche')"/>
+            </xf:label>
+        </xf:group>
+        <xf:group>
+            <table>
+                <tr>
+                    <td>
+                        <xf:trigger class="svSubTrigger">
+                            <xf:label>2 Jahre</xf:label>
+                            <xf:action ev:event="DOMActivate">
+                                <xf:setvalue ref="instance('i-qs')/*:type" value="'short'"/>
+                                <xf:send submission="s-get-encounters"/>
+                            </xf:action>
+                        </xf:trigger>
+                    </td>
+                    <td>
+                        <xf:trigger class="svSubTrigger">
+                            <xf:label>Alle Besuche</xf:label>
+                            <xf:action ev:event="DOMActivate">
+                                <xf:setvalue ref="instance('i-qs')/*:type" value="'all'"/>
+                                <xf:send submission="s-get-encounters"/>
+                            </xf:action>
+                        </xf:trigger>
+                    </td>
+                </tr>
+            </table>
+            <xf:repeat ref="instance('i-encounters')/*:Encounter[./*:status/@value=('finished','cancelled')]" appearance="compact" class="svRepeat">
+                <xf:output value="format-dateTime(./*:period/*:start/@value, '[D01].[M01].[Y01]')">
+                    <xf:label class="svRepeatHeader">Datum</xf:label>
+                </xf:output>
+                <xf:output ref="./*:reasonCode/*:text/@value">
+                    <xf:label class="svRepeatHeader">Anlass</xf:label>
+                </xf:output>
+               <xf:output ref="./*:indication/*:display/@value">
+                    <xf:label class="svRepeatHeader">Anlass</xf:label>
+                </xf:output>
+                <xf:output ref="./*:basedOn/*:display/@value">
+                    <xf:label class="svRepeatHeader">CarePlan</xf:label>
+                </xf:output>
+                <xf:output value="string-join(./*:participant/*:individual/*:display/@value,':')">
+                    <xf:label class="svRepeatHeader">Erbringer</xf:label>
+                </xf:output>
+                <xf:output value="substring(./*:status/@value,1,1)" class="tiny-output"/>
+                <xf:output value="string-join(./*:statusHistory//*:text/@value,' -&gt; ')"/>
+            </xf:repeat>
+        </xf:group>
+    </div>
+</div>

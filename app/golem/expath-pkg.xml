@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://expath.org/ns/pkg" name="http://enahar.org/exist/apps/golem" abbrev="Golem" version="0.1.13" spec="1.0">
+    <title>Golem</title>
+</package>

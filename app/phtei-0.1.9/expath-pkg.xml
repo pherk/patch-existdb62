@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://expath.org/ns/pkg" name="http://enahar.org/lib/phtei" abbrev="phtei" version="0.1.9" spec="1.0">
+    <title>TEI for XQuery</title>
+    <xquery>
+        <namespace>http://enahar.org/lib/tei2fo</namespace>
+        <file>tei2fo.xqm</file>
+    </xquery>
+    <xquery>
+        <namespace>http://enahar.org/lib/teic</namespace>
+        <file>teic.xqm</file>
+    </xquery>
+</package>

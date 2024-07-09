@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<task-infos>
+    <status value="draft" canon="draft" label-en="Draft" label-de="Entwurf" comment="The task is not yet ready to be acted upon."/>
+    <status value="requested" canon="requested" label-en="Requested" label-de="angefordert" comment="The task is ready to be acted upon and action is sought."/>
+    <status value="received" canon="received" label-en="Received" label-de="erhalten" comment="A potential performer has claimed ownership of the task and is evaluating whether to perform it."/>
+    <status value="accepted" canon="accepted" label-en="Accepted" label-de="angenommen" comment="The potential performer has agreed to execute the task but has not yet started work."/>
+    <status value="rejected" canon="declined" label-en="Rejected" label-de="zurückgewiesen" comment="The potential performer who claimed ownership of the task has decided not to execute it prior to performing any action."/>
+    <status value="ready" canon="on-target" label-en="Ready" label-de="bereit" comment="Task is ready to be performed, but no action has yet been taken. Used in place of requested/received/accepted/rejected when request assignment and acceptance is a given."/>
+    <status value="cancelled" canon="abandoned" label-en="Cancelled" label-de="cancelled" comment="The task was not completed."/>
+    <status value="in-progress" canon="active" label-en="In Progress" label-de="in Arbeit" comment="Task has been started but is not yet complete."/>
+    <status value="on-hold" canon="suspended" label-en="On Hold" label-de="angehalten" comment="Task has been started but work has been paused."/>
+    <status value="failed" canon="failed" label-en="Failed" label-de="gescheitert" comment="The task was attempted but could not be completed due to some error."/>
+    <status value="completed" canon="complete" label-en="Completed" label-de="fertig" comment="The task has been completed."/>
+    <status value="entered-in-error" canon="error" label-en="Entered in Error" label-de="Fehler" comment="The task should never have existed and is retained only because of the possibility it may have used."/>
+    <types>
+        <option value="team" label-de="Team-Besprechung"/>
+        <option value="task" label-de="ToDo"/>
+        <option value="incident" label-de="Beschwerde-Vorfall"/>
+        <option value="action" label-de="Aktion"/>
+    </types>
+    <priorities>
+        <option value="normal" label-de="mittel"/>
+        <option value="low" label-de="niedrig"/>
+        <option value="urgent" label-de="dringend"/>
+        <option value="asap" label-de="asap"/>
+        <option value="stat" label-de="sofort"/>
+    </priorities>
+    <performer value="requester" label-en="Requester" comment="A workflow participant that requests services."/>
+    <performer value="dispatcher" label-en="Dispatcher" comment="A workflow participant that dispatches services (assigns another task to a participant)."/>
+    <performer value="scheduler" label-en="Scheduler" comment="A workflow participant that schedules (dispatches and sets the time or date for performance of) services."/>
+    <performer value="performer" label-en="Performer" comment="A workflow participant that performs services."/>
+    <performer value="monitor" label-en="Monitor" comment="A workflow participant that monitors task activity."/>
+    <performer value="manager" label-en="Manager" comment="A workflow participant that manages task activity."/>
+    <performer value="acquirer" label-en="Acquirer" comment="A workflow participant that acquires resources (specimens, images, etc) necessary to perform the task."/>
+    <performer value="reviewer" label-en="Reviewer" comment="A workflow participant that reviews task inputs or outputs."/>
+    <scxml version="1.0" initial="new">
+        <state id="new">
+            <transition target="closed" event="resolve"/>
+            <transition target="received" event="reassign"/>
+            <transition target="accepted" event="accept"/>
+            <transition target="new" event="leave"/>
+        </state>
+        <state id="received">
+            <transition target="closed" event="resolve" label-de="schließen"/>
+            <transition target="recieved" event="reassign" label-de="zuweisen"/>
+            <transition target="accepted" event="accept" label-de="annehmen"/>
+            <transition target="received" event="leave" label-de="lassen"/>
+        </state>
+        <state id="accepted">
+            <transition target="closed" event="resolve"/>
+            <transition target="received" event="reassign"/>
+            <transition target="accepted" event="accept"/>
+            <transition target="accepted" event="leave"/>
+        </state>
+        <state id="closed">
+            <transition target="reopened" event="reopen"/>
+            <transition target="closed" event="leave"/>
+        </state>
+        <state id="reopened">
+            <transition target="closed" event="resolve"/>
+            <transition target="received" event="reassign"/>
+            <transition target="accepted" event="accept"/>
+            <transition target="reopened" event="leave"/>
+        </state>
+    </scxml>
+    <state value="new" label-de="neu"/>
+    <state value="received" label-de="zugewiesen"/>
+    <state value="accepted" label-de="angenommen"/>
+    <state value="closed" label-de="geschlossen"/>
+    <state value="reopened" label-de="wieder offen"/>
+    <event value="resolve" label-de="schließen"/>
+    <event value="reassign" label-de="zuweisen"/>
+    <event value="accept" label-de="annehmen"/>
+    <event value="reopen" label-de="öffnen"/>
+    <event value="leave" label-de="lassen"/>
+    <bricks xmlns="http://hl7.org/fhir" comp="4.0.1">
+        <Task>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+            <basedOn>
+                <reference value=""/>
+                <display value=""/>                
+            </basedOn>
+            <status value="draft"/>
+            <intent value="order"/>
+            <priority value="normal"/>
+            <code>
+                <coding>
+                    <system value="http://eNahar.org/ValueSet/task-reason"/>
+                    <code value="task"/>
+                    <display value="ToDo"/>
+                </coding>
+                <text value="ToDo"/>
+            </code>
+            <description value=""/>
+            <for>
+                <reference value=""/>
+                <display value=""/>
+            </for>
+            <encounter>
+                <reference value=""/>
+                <display value=""/>
+            </encounter>
+            <executionPeriod>
+                <start value=""/>
+                <end value=""/>
+            </executionPeriod>
+            <authoredOn value=""/>
+            <requester>
+                <reference value=""/>
+                <display value=""/>
+                <extension url="http://eNahar.org/nabu/extensions#onBehalfOf">
+                    <valueReference>
+                        <reference value="metis/organizations/kikl-nspz"/>
+                        <display value="SPZ Kinderklinik Neuropädiatrie"/>
+                    </valueReference>
+                </extension>
+            </requester>
+            <performerType>    
+                <coding>
+                    <system value="http://hl7.org/fhir/ValueSet/performer-role"/>
+                    <code value="performer"/>
+                    <display value="Erbringer"/>
+                </coding>
+                <text value="Erbringer"/>
+            </performerType>
+            <owner>
+                <reference value=""/>
+                <display value=""/>
+            </owner>
+            <reasonCode>
+                <text value="spz"/>
+            </reasonCode>
+            <note>
+                <authorReference>
+                    <reference value=""/>
+                    <display value=""/>
+                </authorReference>
+                <time value=""/>
+                <text value=""/>
+            </note>
+            <restriction>
+                <period>
+                    <start value=""/>
+                    <end value=""/>
+                </period>
+            </restriction>
+            <input>
+                <type>
+                    <coding>
+                        <system value="http://eNahar.org/ValueSet/task-input-types"/>
+                        <code value="tags"/>
+                    </coding>
+                </type>
+                <valueString value="spz"/>
+            </input>
+        </Task>
+
+
+
+ <instantiatesCanonical><!-- 0..1 canonical(ActivityDefinition) Formal definition of task --></instantiatesCanonical>
+ <instantiatesUri value="[uri]"/><!-- 0..1 Formal definition of task -->
+ <groupIdentifier><!-- 0..1 Identifier Requisition or grouper id --></groupIdentifier>
+ <partOf><!-- 0..* Reference(Task) Composite task --></partOf>
+
+ <statusReason><!-- 0..1 CodeableConcept Reason for current status --></statusReason>
+ <businessStatus><!-- 0..1 CodeableConcept E.g. "Specimen collected", "IV prepped" --></businessStatus>
+
+ <focus><!-- 0..1 Reference(Any) What task is acting on --></focus>
+
+ <encounter><!-- 0..1 Reference(Encounter) Healthcare event during which this task originated --></encounter>
+
+ <lastModified value="[dateTime]"/><!-- ?? 0..1 Task Last Modified Date -->
+
+ <location><!-- 0..1 Reference(Location) Where task occurs --></location>
+ <reasonCode><!-- 0..1 CodeableConcept Why task is needed --></reasonCode>
+ <reasonReference><!-- 0..1 Reference(Any) Why task is needed --></reasonReference>
+ <insurance><!-- 0..* Reference(Coverage|ClaimResponse) Associated insurance coverage --></insurance>
+
+ <relevantHistory><!-- 0..* Reference(Provenance) Key events in history of the Task --></relevantHistory>
+
+
+            <note>
+                <authorReference>
+                    <reference value=""/>
+                    <display value=""/>
+                </authorReference>
+                <time value=""/>
+                <text value=""/>
+            </note>
+        <recipient>
+            <extension url="http://eNahar.org/nabu/extension#task-recipient-role">
+                <valueString value=""/>
+            </extension>
+            <reference value=""/>
+            <display value=""/>
+        </recipient>
+        <relevantHistory>
+            <reference value=""/>
+        </relevantHistory>
+        <input>  <!-- 0..* Supporting information -->
+            <type><!-- 1..1 CodeableConcept Label for the input --></type>
+            <valueString value=""/>
+        </input>
+        <output>  <!-- 0..* Task Output -->
+            <type><!-- 1..1 CodeableConcept Output Name --></type>
+            <valueString value=""/>
+        </output>
+        <identifier>
+            <use value="[code]"/>
+            <system value="[uri]"/>
+            <value value="[string]"/>
+            <type>
+                <coding>
+                    <system value="http://uk-koeln.de/ValueSet/task-orbis-id"/>
+                    <code value="ORBIS"/>
+                </coding>
+            </type>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <assigner>
+                <reference value=""/>
+                <display value=""/>
+            </assigner>
+        </identifier>
+    </bricks>
+</task-infos>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<result>
+    <diabetes>
+        <name>Riese, Vanessa</name>
+        <birthDate>2000-09-21</birthDate>
+        <falldat>2014-02-04</falldat>
+        <paule pid="p-5873">
+            <same>2014-03-18T11:00:00</same>
+            <other>2014-10-21T12:00:00</other>
+            <other>2014-09-23T11:30:00</other>
+            <other>2014-09-23T11:30:00</other>
+            <other>2014-07-08T11:30:00</other>
+            <other>2014-07-08T11:30:00</other>
+            <other>2014-07-01T10:30:00</other>
+        </paule>
+    </diabetes>
+    <diabetes>
+        <name>Riese, Vanessa</name>
+        <birthDate>2000-09-21</birthDate>
+        <falldat>2014-04-17</falldat>
+        <paule pid="p-5873">
+            <other>2014-03-18T11:00:00</other>
+            <other>2014-10-21T12:00:00</other>
+            <other>2014-09-23T11:30:00</other>
+            <other>2014-09-23T11:30:00</other>
+            <other>2014-07-08T11:30:00</other>
+            <other>2014-07-08T11:30:00</other>
+            <other>2014-07-01T10:30:00</other>
+        </paule>
+    </diabetes>
+    <diabetes>
+        <name>Riese, Vanessa</name>
+        <birthDate>2000-09-21</birthDate>
+        <falldat>2014-07-01</falldat>
+        <paule pid="p-5873">
+            <other>2014-03-18T11:00:00</other>
+            <other>2014-10-21T12:00:00</other>
+            <same>2014-09-23T11:30:00</same>
+            <same>2014-09-23T11:30:00</same>
+            <same>2014-07-08T11:30:00</same>
+            <same>2014-07-08T11:30:00</same>
+            <same>2014-07-01T10:30:00</same>
+        </paule>
+    </diabetes>
+    <diabetes>
+        <name>Riese, Vanessa</name>
+        <birthDate>2000-09-21</birthDate>
+        <falldat>2014-10-21</falldat>
+        <paule pid="p-5873">
+            <other>2014-03-18T11:00:00</other>
+            <same>2014-10-21T12:00:00</same>
+            <other>2014-09-23T11:30:00</other>
+            <other>2014-09-23T11:30:00</other>
+            <other>2014-07-08T11:30:00</other>
+            <other>2014-07-08T11:30:00</other>
+            <other>2014-07-01T10:30:00</other>
+        </paule>
+    </diabetes>
+    <diabetes>
+        <name>Weichhaus, Ludger</name>
+        <birthDate>2001-10-22</birthDate>
+        <falldat>2014-01-23</falldat>
+        <paule pid="p-23122">
+            <same>2014-02-18T15:30:00</same>
+        </paule>
+    </diabetes>
+    <diabetes>
+        <name>Weichhaus, Ludger</name>
+        <birthDate>2001-10-22</birthDate>
+        <falldat>2014-05-30</falldat>
+        <paule pid="p-23122">
+            <other>2014-02-18T15:30:00</other>
+        </paule>
+    </diabetes>
+    <diabetes>
+        <name>Weichhaus, Ludger</name>
+        <birthDate>2001-10-22</birthDate>
+        <falldat>2014-08-19</falldat>
+        <paule pid="p-23122">
+            <other>2014-02-18T15:30:00</other>
+        </paule>
+    </diabetes>
+    <diabetes>
+        <name>Weichhaus, Ludger</name>
+        <birthDate>2001-10-22</birthDate>
+        <falldat>2014-12-22</falldat>
+        <paule pid="p-23122">
+            <other>2014-02-18T15:30:00</other>
+        </paule>
+    </diabetes>
+    <diabetes>
+        <name>Bademci, Carmen Juana</name>
+        <birthDate>2000-04-19</birthDate>
+        <falldat>2014-01-21</falldat>
+        <paule pid="p-9734">
+            <other>2014-04-29T15:00:00</other>
+            <other>2014-04-08T16:00:00</other>
+            <other>2014-04-08T16:30:00</other>
+        </paule>
+    </diabetes>
+    <diabetes>
+        <name>Bademci, Carmen Juana</name>
+        <birthDate>2000-04-19</birthDate>
+        <falldat>2014-04-08</falldat>
+        <paule pid="p-9734">
+            <same>2014-04-29T15:00:00</same>
+            <same>2014-04-08T16:00:00</same>
+            <same>2014-04-08T16:30:00</same>
+        </paule>
+    </diabetes>
+</result>

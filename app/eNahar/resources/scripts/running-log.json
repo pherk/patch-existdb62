@@ -1,0 +1,107 @@
+{
+	"name": 	"Kyle Belanger - Running log in JSON format",
+	"format": 	"JSON",
+
+	"data": [{
+				"date":				"January 18, 2016",
+				"miles":			"2",
+				"time":				"23 minutes",
+				"sets":				2,
+				"type":				1,
+				"stretchBefore":	"20 minutes",
+				"stretchAfter":		"15 minutes",
+				"notes":			"Starting day. Indoor run on the treadmill."
+			},
+			{
+				"date":				"January 20, 2016",
+				"miles":			"1.8",
+				"time":				"22 minutes",
+				"sets":				2,
+				"type":				1,
+				"stretchBefore":	"20 minutes",
+				"stretchAfter":		"15 minutes",
+				"notes":			null
+			},
+			{
+				"date":				"January 21, 2016",
+				"miles":			"2.03",
+				"time":				"21 minutes",
+				"sets":				1,
+				"type":				1,
+				"stretchBefore":	"20 minutes",
+				"stretchAfter":		"15 minutes",
+				"notes":			null
+			},
+			{
+				"date":				"January 24, 2016",
+				"miles":			"1.05",
+				"time":				"15 minutes",
+				"sets":				1,
+				"type":				0,
+				"stretchBefore":	"15 minutes",
+				"stretchAfter":		"10 minutes",
+				"notes":			null
+			},
+			{
+				"date":				"January 25, 2016",
+				"miles":			"2.05",
+				"time":				"21 minutes",
+				"sets":				1,
+				"type":				1,
+				"stretchBefore":	"20 minutes",
+				"stretchAfter":		"15 minutes",
+				"notes":			"Flexible pace between 5.7 - 6.2 -- 5.7 pace seems ideal for longer (3+ mile)."
+			},
+			{
+				"date":				"February 01, 2016",
+				"miles":			"1.50",
+				"time":				"16 minutes",
+				"sets":				1,
+				"type":				1,
+				"stretchBefore":	"20 minutes",
+				"stretchAfter":		"10 minutes",
+				"notes":			null
+			},
+			{
+				"date":				"February 02, 2016",
+				"miles":			"1.05",
+				"time":				"11 minutes",
+				"sets":				1,
+				"type":				0,
+				"stretchBefore":	"20 minutes",
+				"stretchAfter":		"10 minutes",
+				"notes":			null
+			},
+			{
+				"date":				"February 05, 2016",
+				"miles":			"1.35",
+				"time":				"12 minutes",
+				"sets":				1,
+				"type":				0,
+				"stretchBefore":	"20 minutes",
+				"stretchAfter":		"10 minutes",
+				"notes":			null
+			},
+			{
+				"date":				"February 06, 2016",
+				"miles":			"1.05",
+				"time":				"11 minutes",
+				"sets":				1,
+				"type":				0,
+				"stretchBefore":	"20 minutes",
+				"stretchAfter":		"10 minutes",
+				"notes":			null
+			},
+			{
+				"date":				"February 07, 2016",
+				"miles":			"1.50",
+				"time":				"11 minutes",
+				"sets":				1,
+				"type":				0,
+				"stretchBefore":	"20 minutes",
+				"stretchAfter":		"10 minutes",
+				"notes":			null
+			}
+	]
+}
+

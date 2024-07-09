@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schedule-infos>
+    <appletter>
+        <type>
+            <code value="note" label-de="Hinweis"/>
+            <code value="page" label-de="Seite"/>
+            <code value="letter" label-de="Brief"/>
+        </type>
+    </appletter>
+    <timing>
+        <query>
+            <code value="post" label-de="post"/>
+            <code value="pre" label-de="pre"/>
+        </query>
+    </timing>
+    <bricks>
+        <schedule>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+            <identifier>
+                <use value="official"/>
+                <system value="#enahar-id"/>
+                <value value=""/>
+            </identifier>
+            <type value=""/>
+            <name value=""/>
+            <description value=""/>
+            <fc>
+                <className value=""/>
+                <backgroundColor value="#ffffff"/>
+                <textColor value="#ffffff"/>
+                <editable value="false"/>
+            </fc>
+            <ff value="true"/>
+            <location>
+                <reference value="metis/locations/kikl-spz"/>
+                <display value="SPZ Kinderklinik"/>
+            </location>
+<!-- e.g. for meetings
+            <agenda>
+            </agenda>
+-->
+            <note>
+                <authorReference>
+                    <reference value=""/>
+                    <display value=""/>
+                </authorReference>
+                <text value=""/>
+                <time value=""/>
+            </note>
+            <active value="true"/>
+        </schedule>
+        <appletter>
+            <alt-name value=""/>
+            <template>
+                <reference value=""/>
+            </template>
+        </appletter>
+        <timing>
+            <pre value="15"/>
+            <exam value="30"/>
+            <post value="15"/>
+            <overbookable value="false"/>
+            <parallel-per-hour value="1"/>
+            <blocking value="true"/>        
+            <query value="post"/>
+        </timing>
+        <location>
+            <reference value="metis/locations/kikl-spz"/>
+            <display value="SPZ Kinderklinik"/>
+        </location>
+        <note>
+            <authorReference>
+                <reference value=""/>
+                <display value=""/>
+            </authorReference>
+            <text value=""/>
+            <time value=""/>
+        </note>
+    </bricks>
+</schedule-infos>

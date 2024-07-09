@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<careplan-infos>
+    <status>
+        <code label-de="inaktiv" value="draft"/>
+        <code label-de="aktiv" value="active"/>
+        <code label-de="beendet" value="completed"/>
+        <code label-de="angehalten" value="suspended"/>
+        <code label-de="abgebrochen" value="cancelled"/>
+        <code label-de="Fehler" value="entered-in-error"/>
+        <code label-de="???" value="unknown"/>
+    </status>
+    <intent>
+        <code label-de="Vorschlag" value="proposal"/>
+        <code label-de="Plan" value="plan"/>
+        <code label-de="Order" value="order"/>
+        <code label-de="Option" value="option"/>
+    </intent>
+    <detail>
+        <category>
+            <code label-de="Diät" value="diet"/>
+            <code label-de="Medikation" value="drug"/>
+            <code label-de="Besuch" value="encounter" comment="Plan to meet or communicate with the patient (in-patient, out-patient, phone call, etc.)"/>
+            <code label-de="Diagnostik" value="observation" comment="Plan to capture information about a patient (vitals, labs, diagnostic images, etc.)"/>
+            <code label-de="Prozedur" value="procedure" comment="Plan to modify the patient in some way (surgery, physiotherapy, education, counseling, etc.)"/>
+            <code label-de="Unterstützung" value="supply" comment="Plan to provide something to the patient (medication, medical supply, etc.)"/>
+            <code label-de="anderes" value="other"/>
+        </category>
+        <status>
+            <code label-de="nicht gestarted" value="not-started"/>
+            <code label-de="terminiert" value="scheduled"/>
+            <code label-de="in Arbeit" value="in-progress"/>
+            <code label-de="angehalten" value="on-hold"/>
+            <code label-de="beendet" value="completed"/>
+            <code label-de="cancelled" value="cancelled"/>
+            <code label-de="unbekannt" value="unknown"/>
+        </status>
+        <reasonCode>
+            <code label-de="unbekannt" value="unknown"/>
+        </reasonCode>
+    </detail>
+    <bricks xmlns="http://hl7.org/fhir" comp="4.0.1">
+        <CarePlan>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+            <definition>
+                <reference value=""/>
+                <display value=""/>
+            </definition>
+            <status value="draft"/>
+            <intent value="plan"/>
+            <title value="Human-friendly name for the CarePlan ..."/>
+            <description value=""/>
+            <subject>
+                <reference value=""/>
+                <display value=""/>
+            </subject>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <author>
+                <reference value=""/>
+                <display value=""/>
+            </author>
+        <note>
+            <authorReference>
+                <reference value=""/>
+                <display value=""/>
+            </authorReference>
+            <time value=""/>
+            <text value=""/>           
+        </note>
+        </CarePlan>
+        <activity>  <!-- 0..* Action to occur as part of plan -->
+            <outcomeCodeableConcept>
+                <coding>
+                    <system value="http://snomed.info/sct"/> 
+                    <code value=""/> 
+                    <display value=""/>
+                </coding>
+                <text value=""/>
+            </outcomeCodeableConcept>
+            <outcomeReference>
+                <reference value=""/>
+                <display value=""/>
+            </outcomeReference>
+            <!-- reference or detail -->
+        </activity>
+        <reference>
+            <reference value=""/>
+            <display value=""/>
+        </reference>
+        <note>
+            <authorReference>
+                <reference value=""/>
+                <display value=""/>
+            </authorReference>
+            <time value=""/>
+            <text value=""/>           
+        </note>
+        <detail>  <!-- 0..1 In-line definition of activity -->
+            <kind value="Appointment"/>
+            <category>
+                <coding>
+                    <system value="http://hl7.org/fhir/careplan-activity-category"/> 
+                    <code value=""/> 
+                </coding>
+                <text value=""/>
+            </category>
+            <status value="not-started"/>
+            <scheduledPeriod>
+                <start value=""/>
+                <end value=""/>
+            </scheduledPeriod>
+            <location>
+                <reference value="metis/locations/kikl-spz"/>
+                <display value="SPZ Kinderklinik"/>
+            </location>
+            <performer>
+                <reference value=""/>
+                <display value=""/>
+            </performer>
+            <description value="..."/>
+        </detail>
+        <detail-bricks>  <!-- 0..1 In-line definition of activity -->
+            <category>
+                <coding>
+                    <system value="http://hl7.org/fhir/care-plan-activity-category"/> 
+                    <code value="observation"/> 
+                </coding>
+                <text value="Befund"/>
+            </category>
+            <definition>
+                <reference value=""/>
+                <display value=""/>
+            </definition>
+            <code>
+                <!-- LOINC code example -->
+                <coding> 
+                    <system value="http://loinc.org"/> 
+                    <code value="3141-9"/> 
+                    <display value="Weight Measured"/> 
+                </coding> 
+            </code>
+            <reasonCode>
+                <coding>
+                    <code value=""/>
+                </coding>
+            </reasonCode>
+            <reasonReference>
+                <reference value=""/>
+                <display value=""/>
+            </reasonReference>
+            <goal>
+                <reference value=""/>
+                <display value=""/>
+            </goal>
+
+            <statusReason value="..."/>
+            <prohibited value="false"/>
+            <scheduledString value=""/>
+            <location>
+                <reference value="metis/locations/kikl-spz"/>
+                <display value="SPZ Kinderklinik"/>
+            </location>
+            <performer>
+                <reference value=""/>
+                <display value=""/>
+            </performer>
+        </detail-bricks>
+        <progress>
+            <authorReference>
+                <reference value=""/>
+                <display value=""/>
+            </authorReference>
+            <time value=""/>
+            <text value=""/>           
+        </progress>
+        <reasonReference>
+            <reference value=""/>
+            <display value=""/>
+        </reasonReference>
+        <category>
+            <coding>
+                <system value=""/>
+                <code value=""/>
+                <display value=""/>
+            </coding>
+            <text value=""/>
+        </category>
+        <definition>
+            <reference value=""/>
+            <display value=""/>
+        </definition>
+        <replaces>
+            <reference value=""/>
+            <display value=""/>
+        </replaces>
+        <basedOn>
+            <reference value=""/>
+            <display value=""/>
+        </basedOn>
+        <partOf>
+            <reference value=""/>
+            <display value=""/>
+        </partOf>
+        <careTeam>
+            <reference value=""/>
+            <display value=""/>
+        </careTeam>
+        <context>
+            <reference value=""/>
+            <display value=""/>
+        </context>
+        <goal>
+            <reference value=""/>
+            <display value=""/>
+        </goal>
+        <addresses>
+            <reference value=""/>
+            <display value=""/>
+        </addresses>
+        <supportingInfo>
+            <reference value=""/>
+            <display value=""/>
+        </supportingInfo>
+        <outcomeCodeableConcept>
+            <coding>
+                <system value="http://snomed.info/sct"/> 
+                <code value=""/> 
+                <display value=""/>
+            </coding>
+            <text value=""/>
+        </outcomeCodeableConcept>
+        <coding>
+            <system value="http://snomed.info/sct"/> 
+            <code value=""/> 
+            <display value=""/>
+        </coding>
+        <outcomeReference>
+            <reference value=""/>
+            <display value=""/>
+        </outcomeReference>
+    </bricks>
+</careplan-infos>

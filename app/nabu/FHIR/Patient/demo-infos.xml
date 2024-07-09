@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-demo-info" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:action if="not(instance('i-pat')/*:deceasedBoolean)">
+                        <xf:insert ref="instance('i-pat')/*:deceasedBoolean" context="instance('i-pat')" origin="instance('i-bricks')/*:deceasedBoolean"/>
+                        <xf:insert ref="instance('i-pat')/*:deceasedDateTime" context="instance('i-pat')" origin="instance('i-bricks')/*:deceasedDateTime"/>
+                    </xf:action>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:submission id="s-update-patient-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" model="m-demo-name" replace="none" method="post">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="bf:instanceOfModel('m-patient','i-control-center')/*:changed" value="'true'"/>
+                    <xf:setvalue ref="bf:instanceOfModel('m-demo-info','i-control-center')/*:isDirty" value="'false'"/>
+                    <xf:message level="ephemeral">Subform has updated Master.</xf:message>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot update Master!.</xf:message>
+            </xf:submission>
+            <xf:bind ref="*:deceasedBoolean/@value" type="xs:boolean"/>     
+
+            <xf:submission id="s-update-eoc" method="post" replace="none">
+                    <xf:resource value="concat('/exist/restxq/nabu/eocs?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm),'&amp;status=finished')"/>
+			    <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">cannot update EOC status!.</xf:message>
+            </xf:submission>
+            <xf:submission id="s-update-careteam" method="post" replace="none">
+                    <xf:resource value="concat('/exist/restxq/nabu/careteams?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm),'&amp;status=inactive')"/>
+			    <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">cannot update CT status!.</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-bricks">
+                <data xmlns="http://hl7.org/fhir">
+                    <deceasedBoolean value="false"/>
+                    <deceasedDateTime value=""/>
+                </data>
+            </xf:instance>
+            
+            <xf:instance id="i-control-center">
+                <data xmlns="">
+                    <isDirty>false</isDirty>
+                </data>
+            </xf:instance>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready"/>
+        </xf:model>
+    </div>
+    <xf:group ref="instance('i-pat')" class="svFullGroup bordered">
+        <xf:action ev:event="xforms-value-changed">
+            <xf:setvalue ref="instance('i-control-center')/*:isDirty" value="'true'"/>
+        </xf:action>
+        <xf:label>Weitere Infos</xf:label>
+        <xf:select1 id="gender" ref="*:gender/@value" appearance="full" class="radio-horizontal">
+            <xf:label>Geschlecht:</xf:label>
+            <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-pinfos')/gender">
+                <xf:label ref="./@label"/>
+                <xf:value ref="./@value"/>
+            </xf:itemset>
+        </xf:select1>
+        <xf:select1 id="oe" ref="*:managingOrganization/*:reference/@value" class="medium-input">
+            <xf:label>OE:</xf:label>
+            <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-pinfos')/oe">
+                <xf:label ref="./@label"/>
+                <xf:value ref="./@value"/>
+            </xf:itemset>
+        </xf:select1>
+        <br/>
+        <xf:select1 id="insurance" ref="*:extension[@url='#patient-medical-insurance']//*:code/@value" class="medium-input">
+            <xf:label>VersArt:</xf:label>
+            <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-pinfos')/*:insurance-type/*:code">
+                <xf:label ref="./@label-de"/>
+                <xf:value ref="./@value"/>
+            </xf:itemset>
+        </xf:select1>
+        <xf:input ref="*:extension[@url='#patient-medical-insurance']//*:display/@value" class="medium-input">
+            <xf:label>VersName:</xf:label>
+        </xf:input>
+        <br/>
+        <!--
+                    <xf:input id="addname" ref="contact/person/n/additional-name" class="medium-input">
+                        <xf:label>Zusätzl. Name:</xf:label>
+                        <xf:hint>Namenswechel</xf:hint>
+                    </xf:input>
+        -->
+        <xf:select1 id="lang" ref="*:communication/*:language/*:coding/*:code/@value" class="medium-input">
+            <xf:label>Bevorzugte Sprache:</xf:label>
+            <xf:hint>Muttersprache</xf:hint>
+            <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-bcp47')/lang">
+                <xf:label ref="./@label"/>
+                <xf:value ref="./@value"/>
+                <xf:action ev:event="xforms-value-changed">
+                    <xf:setvalue ref="instance('i-pat')/*:communication/*:language/*:coding/*:display/@value" value="''"/>
+                    <xf:setvalue ref="instance('i-pat')/*:communication/*:language/*:text/@value" value="''"/>
+                </xf:action>
+            </xf:itemset>
+        </xf:select1>
+
+        <xf:input ref="./*:deceasedBoolean/@value" incremental="true">
+            <xf:label class="">Verstorben?</xf:label>
+            <xf:action ev:event="xforms-value-changed">
+                <xf:action if="instance('i-pat')/*:deceasedBoolean/@value='true'">
+                    <xf:send submission="s-update-eoc"/>
+                    <xf:send submission="s-update-careteam"/>
+                    <xf:action if="not(instance('i-pat')/deceasedDateTime)">
+                        <xf:insert ref="instance('i-pat')/*:deceasedDateTime" context="instance('i-pat')" origin="instance('i-bricks')/*:deceasedDateTime"/>
+                        <xf:setvalue ref="instance('i-pat')/*:deceasedDateTime/@value" value="current-date()"/>
+                    </xf:action>
+                </xf:action>
+                <xf:action if="instance('i-pat')/*:deceasedBoolean/@value='false'">
+                    <xf:setvalue ref="instance('i-pat')/*:deceasedDateTime/@value" value="''"/>
+                </xf:action>
+            </xf:action>
+        </xf:input>
+        <xf:group ref="instance('i-pat')/*:extension[@url='#patient-cave']">
+            <strong>Cave</strong>
+            <xf:repeat id="r-cave-id" ref="instance('i-pat')/*:extension[@url='#patient-cave']" appearance="compact" class="svRepeat">
+                <xf:group>
+                <xf:select1 ref="./*:extension[@url='#patient-cave-class']/*:valueCodeableConcept/*:coding/*:code/@value" class="medium-input">
+                    <xf:label>Typ:</xf:label>
+                    <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-pinfos')/cave-class/code">
+                        <xf:label ref="./@label-de"/>
+                        <xf:value ref="./@value"/>
+                            <xf:action ev:event="xforms-value-changed">
+                                <xf:action if="string-length(./*:extension[@url='#patient-cave-class']/*:valueCodeableConcept/*:coding/*:code/@value)=0">
+                                <xf:setvalue ref="instance('i-pat')/*:extension[@url='#patient-cave'][index('r-cave-id')]/*:extension[@url='#patient-cave-class']/*:valueCodeableConcept/*:coding/*:code/@value" value="'unknown'"/>
+                                </xf:action>
+                            <xf:setvalue ref="instance('i-pat')/*:extension[@url='#patient-cave'][index('r-cave-id')]/*:extension[@url='#patient-cave-class']/*:valueCodeableConcept/*:coding/*:display/@value" value="'bf:instanceOfModel('m-patient','i-pinfos')/cave-class/code[@value=instance('i-pat')/*:extension[@url='#patient-cave'][index('r-cave-id')]/*:extension[@url='#patient-cave-class']/*:valueCodeableConcept/*:coding/*:code/@value]/@label-de'"/>
+                        </xf:action>
+                    </xf:itemset>
+                </xf:select1>
+                <xf:select1 ref="./*:extension[@url='#patient-cave-status']/*:valueCodeableConcept/*:coding/*:code/@value" class="medium-input">
+                    <xf:label>Status:</xf:label>
+                    <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-pinfos')/cave-status/code">
+                        <xf:label ref="./@label-de"/>
+                        <xf:value ref="./@value"/>
+                            <xf:action ev:event="xforms-value-changed">
+                                <xf:action if="string-length(./*:extension[@url='#patient-cave-status']/*:valueCodeableConcept/*:coding/*:code/@value)=0">
+                                <xf:setvalue ref="instance('i-pat')/*:extension[@url='#patient-cave'][index('r-cave-id')]/*:extension[@url='#patient-cave-status']/*:valueCodeableConcept/*:coding/*:code/@value" value="'active'"/>
+                                </xf:action>
+                            <xf:setvalue ref="instance('i-pat')/*:extension[@url='#patient-cave'][index('r-cave-id')]/*:extension[@url='#patient-cave-status']/*:valueCodeableConcept/*:coding/*:display/@value" value="'bf:instanceOfModel('m-patient','i-pinfos')/cave-status/code[@value=instance('i-pat')/*:extension[@url='#patient-cave'][index('r-cave-id')]/*:extension[@url='#patient-cave-status']/*:valueCodeableConcept/*:coding/*:code/@value]/@label-de'"/>
+                        </xf:action>
+                    </xf:itemset>
+                </xf:select1>
+                </xf:group>
+                <xf:textarea ref="./*:valueString/@value" class="halfarea">
+                    <xf:hint>Bitte Datum+Hz</xf:hint>
+                </xf:textarea>
+            </xf:repeat>
+        </xf:group>
+        <xf:group ref="instance('i-pat')/*:extension[not(../*:extension[@url='#patient-cave'])]">
+            <strong>Kein Cave vorhanden</strong>
+        </xf:group>
+        <xf:trigger id="demo-info-insert-cave" class="svAddTrigger">
+            <xf:label>Cave einfügen</xf:label>
+            <xf:action>
+                <xf:insert ref="instance('i-pat')/*:extension" context="instance('i-pat')" origin="bf:instanceOfModel('m-patient','i-pinfos')/*:bricks/*:extension[@url='#patient-cave']"/>
+            </xf:action>
+        </xf:trigger>
+    </xf:group>
+    <div class="svTriggerGroup">
+        <xf:group appearance="bf:horizontalTable">
+            <xf:trigger id="demo-save" class="svSaveTrigger">
+                <xf:label>Speichern</xf:label>
+                <xf:send submission="s-update-patient-master"/>
+            </xf:trigger>
+            <xf:trigger id="t-close" class="svUpdateMasterTrigger">
+                <xf:label>Schließen</xf:label>
+                <xf:action if="instance('i-control-center')/*:isDirty='true'">
+                    <script type="text/javascript">
+                        closeForm();
+                    </script>
+                </xf:action>
+                <xf:action if="instance('i-control-center')/*:isDirty='false'">
+                    <xf:dispatch name="unload-subform" targetid="controlCenter"/>
+                </xf:action>
+            </xf:trigger>
+            <xf:trigger id="close" class="hiddenControl">
+                <xf:label>close form</xf:label>
+                <xf:dispatch name="unload-subform" targetid="controlCenter"/>
+            </xf:trigger>
+        </xf:group>
+    </div>
+</div>

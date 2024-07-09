@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-syn-info" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-pat-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load Patient (Master)!.</xf:message>
+            </xf:submission>
+            <xf:instance xmlns="" id="i-eocs">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-eoc-from-master" resource="model:m-patient#instance('i-eocs')//*:EpisodeOfCare" instance="i-eocs" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load EoCs (Master)!.</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-careteams">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-careteams" instance="i-careteams" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/careteams?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm),'&amp;subject=', instance('i-pat')/*:id/@value,'&amp;status=active&amp;status=inactive')"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get careteams!</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-sozdat">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-sozdat" instance="i-sozdat" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/questionnaireresponses?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm),'&amp;subject=', instance('i-pat')/*:id/@value,'&amp;qid=q-soziales-v2019-09-30&amp;status=in-progress&amp;status=completed&amp;status=amended')"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get QR!</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-login">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-login-from-master" resource="model:m-patient#instance('i-login')//*:data" instance="i-login" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">login: cannot load from Master!.</xf:message>
+            </xf:submission>
+            
+            <xf:action ev:event="xforms-ready">
+                <xf:send submission="s-load-pat-from-master"/>
+                <xf:send submission="s-load-eoc-from-master"/>
+                <xf:send submission="s-load-login-from-master"/>
+            </xf:action>
+        </xf:model>
+    </div>
+    <xf:group id="synopsis-info" class="svFullGroup bordered">
+        <table>
+            <tr>
+                <td>
+                    <strong>PatID</strong>
+                </td>
+                <td>
+                    <xf:output value="*:identifier[*:use/@value='usual']/*:value/@value" class="alert-empty"/>
+                </td>
+                <td>
+                    <strong>OE</strong>
+                </td>
+                <td>
+                    <xf:output value="substring-after(*:managingOrganization/*:reference/@value,'metis/organizations/ukk-')"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <xf:group ref="instance('i-pat')/*:extension[@url='#patient-cave']">
+                <strong>Cave:</strong>
+                </xf:group>
+                </td>
+                <td style="color:#FF0000;">
+            <xf:repeat id="r-cave-id" ref="instance('i-pat')/*:extension[@url='#patient-cave'][./*:extension[@url='#patient-cave-status']/*:valueCodeableConcept/*:coding/*:code/@value='active']" appearance="compact" class="svRepeatBlank">
+                <xf:output ref="./*:valueString/@value" class="halfarea"/>
+            </xf:repeat>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>VCard</strong>
+                </td>
+                <td>
+                    <xf:group ref="bf:instanceOfModel('m-syn-info','i-pat')/*:name[*:use/@value='official']" class="svFullGroup vcard"><!-- Name -->
+                        <header class="n" title="Name">
+                            <span class="fn" itemprop="name">
+                                <span class="honorific-prefix">
+                                    <xf:output ref="instance('i-pinfos')/honorific-prefix[@value=instance('i-pat')/*:name[*:use/@value='official']/*:honorific-prefix/@value]/@label"/>
+                                </span>
+                                <span class="given-name">
+                                    <xf:output value="./*:given/@value"/>
+                                </span>
+                                <span class="family-name">
+                                    <xf:output value="./*:family/@value"/>,</span>
+                                <span>
+                                    <xf:output value="concat('*', ../*:birthDate/@value)"/>
+                                </span>
+                            </span><!--/ .fn -->
+                        </header><!--/ .n --><!-- Address -->
+                        <span>
+                            <xf:output ref="../*:address/*:line/@value"/>,
+                            <xf:output ref="../*:address/*:postalCode/@value"/>
+                            <xf:output ref="../*:address/*:city/@value"/>
+                        </span>
+                        <br/>
+                        <xf:output value="string-join(../*:telecom/*:value/@value,', ')"/>
+                    </xf:group>
+                    <br/>
+                    <xf:group ref="bf:instanceOfModel('m-syn-info','i-pat')/*:name[*:use/@value='old']">
+                        <table>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        <xf:output value="choose(count(./*:family)=1,'Alter Name:','Alte Namen:')"/>
+                                    </strong>
+                                </td>
+                                <td>
+                                    <xf:output value="string-join((concat(./*:family/@value,', ',./*:given/@value)),'; ')"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </xf:group>
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <strong>SozNet</strong>
+                </td>
+                <td>
+                    <xf:group ref="bf:instanceOfModel('m-syn-info','i-pat')/*:contact" class="svFullGroup">
+                        <xf:repeat id="r-contacts-id" ref="bf:instanceOfModel('m-syn-info','i-pat')/*:contact" appearance="compact" class="svRepeatBlank">
+                            <xf:output value="choose((./*:extension[@url='#patient-contact-preferred']/*:valueBoolean/@value='true'),'*!*',' ')"/>
+                            <xf:output value="string-join((./*:name/*:given/@value,./*:name/*:family/@value),' ')">
+                                <xf:label class="svRepeatHeader">Name</xf:label>
+                            </xf:output>
+                            <xf:output value="string-join((./*:address/*:line/@value,./*:address/*:postalCode/@value,./*:address/*:city/@value),', ')">
+                                <xf:label class="svRepeatHeader">Adresse</xf:label>
+                            </xf:output>
+                            <xf:output value="string-join(./*:telecom/*:value/@value,', ')">
+                                <xf:label class="svRepeatHeader">Telefone</xf:label>
+                            </xf:output>
+                        </xf:repeat>
+                    </xf:group>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>HCP</strong>
+                </td>
+                <td>
+                    <xf:group ref="bf:instanceOfModel('m-syn-info','i-pat')/*:generalPractitioner" class="svFullGroup">
+                        <xf:repeat id="r-hcps-id" ref="bf:instanceOfModel('m-syn-info','i-pat')/*:generalPractitioner" appearance="compact" class="svRepeatBlank">
+                            <xf:output value="choose((./*:extension[@url='#patient-gp-preferred']/*:valueBoolean/@value='true'),'*!*',' ')"/>
+                            <xf:output value="./*:display/@value">
+                                <xf:label class="svRepeatHeader">Name</xf:label>
+                            </xf:output>
+                            <xf:output value="./*:extension[@url='#patient-gp-specialty']/*:valueString/@value">
+                                <xf:label class="svRepeatHeader">Beruf</xf:label>
+                            </xf:output>
+                        </xf:repeat>
+                    </xf:group>
+                </td>
+            </tr>
+        </table>
+        <xf:group ref="bf:instanceOfModel('m-syn-info','i-pat')[*:multipleBirthBoolean/@value='true']">
+            <table>
+                <tr>
+                    <td>
+                        <strong>Mehrling</strong>
+                    </td>
+                    <td>
+                        <xf:output value="bf:instanceOfModel('m-syn-info','i-pat')/*:multipleBirthInteger/@value"/>
+                    </td>
+                </tr>
+            </table>
+        </xf:group>
+        <table>
+            <tr>
+                <td>
+                    <xf:group ref="bf:instanceOfModel('m-syn-info','i-pat')/*:deceasedBoolean[@value='true']">
+                        <xf:label>Verstorben</xf:label>
+                    </xf:group>
+                </td>
+                <td>
+                    <xf:group ref="bf:instanceOfModel('m-syn-info','i-pat')/*:deceasedBoolean[@value='true']">
+                        <xf:output value="bf:instanceOfModel('m-syn-info','i-pat')/*:deceasedDateTime/@value"/>
+                    </xf:group>
+                </td>
+            </tr>
+        </table>
+    </xf:group>
+    <br/>
+    <xf:group ref="instance('i-eocs')/*:status[@value=('planned','active')]/..">
+        <xf:group ref="bf:instanceOfModel('m-syn-info','i-pat')/*:birthDate[((substring(current-date(),1,4)*12+substring(current-date(),6,2)) - (substring(bf:instanceOfModel('m-syn-info','i-pat')/*:birthDate/@value,1,4)*12+substring(bf:instanceOfModel('m-syn-info','i-pat')/*:birthDate/@value,6,2))) &gt; 216]" class="svFullGroup">
+        <xf:label class="svListHeader">Behandlung über 18. LJ</xf:label>
+            <xf:group ref="bf:instanceOfModel('m-syn-info','i-pat')[not(*:extension[@url='#patient-over-18'])]">
+                <xf:label>unklar</xf:label>
+            </xf:group>
+            <xf:group ref="instance('i-pat')/*:extension[@url='#patient-over-18'][*:valueCodeableConcept/*:coding/*:code/@value='over-18-granted']">
+                <xf:label>Genehmigt bis zum:
+                <xf:output ref="instance('i-pat')/*:extension[@url='#patient-over-18-limit']/*:valueDate/@value"/>
+            </xf:label>
+            </xf:group>
+            <xf:group ref="instance('i-pat')/*:extension[@url='#patient-over-18'][*:valueCodeableConcept/*:coding/*:code/@value='not-granted']">
+                <xf:label>Von Kasse abgelehnt</xf:label>
+            </xf:group>
+            <xf:group ref="instance('i-pat')/*:extension[@url='#patient-over-18'][*:valueCodeableConcept/*:coding/*:code/@value='mzeb']">
+                <xf:label>Weiterbehandlung in MZEB</xf:label>
+            </xf:group>
+            <xf:group ref="instance('i-pat')/*:extension[@url='#patient-over-18'][*:valueCodeableConcept/*:coding/*:code/@value='other']">
+                <xf:label>Weiterbehandlung auswärts</xf:label>
+            </xf:group>
+            <xf:group ref="instance('i-pat')/*:extension[@url='#patient-over-18'][*:valueCodeableConcept/*:coding/*:code/@value='poli']">
+                <xf:label>Weiterbehandlung Poliklinik</xf:label>
+            </xf:group>
+            <xf:group ref="instance('i-pat')/*:extension[@url='#patient-over-18'][*:valueCodeableConcept/*:coding/*:code/@value='unknown']">
+                <xf:label>Weiterbehandlung unklar</xf:label>
+            </xf:group>
+        </xf:group>
+        <table>
+            <tr>
+                <td>
+                    <strong>Aktiver Verlauf</strong>
+                </td>
+                <td>                    
+                    <xf:repeat ref="./*:statusHistory" appearance="compact" class="svRepeatBlank">
+                        <xf:output ref="*:extension[@url=('#eoc-workflow-change','http://eNahar.org/nabu/extension#eoc-workflow-change')]/*:valueCodeableConcept/*:coding/*:display/@value"/>
+                        <xf:output id="syn-presenting-problem0" ref="./*:extension[@url=('#eoc-workflow-change','http://eNahar.org/nabu/extension#eoc-workflow-change')]/*:valueCodeableConcept/*:text/@value" class=""/>
+                    </xf:repeat>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Erstkontakt</strong>
+                </td>
+                <td>
+                    <xf:output value="tokenize(./*:period/*:start/@value,'T')[1]"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Fallführer</strong>
+                </td>
+                <td>
+                    <xf:output ref="./*:careManager/*:display/@value"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <xf:switch>
+                        <xf:case id="supplier-button">
+                            <xf:trigger class="svSubTrigger">
+                                <xf:label>Alle Erbringer</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:action if="count(instance('i-careteams')/*:count)=0">
+                                        <xf:message level="ephemeral">load suppliers</xf:message>
+                                        <xf:send submission="s-get-careteams"/>
+                                    </xf:action>
+                                    <xf:toggle case="supplier-list"/>
+                                </xf:action>
+                            </xf:trigger>
+                        </xf:case>
+                        <xf:case id="supplier-list">
+                            <table>
+                                <tr>
+                                    <td>
+                            <xf:trigger class="svUpdateMasterTrigger">
+                                <xf:label>Schließen</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:toggle case="supplier-button"/>
+                                </xf:action>
+                            </xf:trigger>
+                                    </td>
+                                    <td>
+                                        <strong>Alle Erbringer</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                <xf:repeat ref="instance('i-careteams')/*:CareTeam/*:participant" appearance="compact" class="svRepeatBlank">
+                                    <xf:output ref="./*:role/*:text/@value">
+                                        <xf:label class="svRepeatHeader">Role</xf:label>
+                                    </xf:output>
+                                    <xf:output ref="./*:member/*:display/@value">
+                                        <xf:label class="svRepeatHeader">Name</xf:label>
+                                    </xf:output>
+                                    <xf:output value="choose((tokenize(./*:period/*:start/@value,'T')[1]=tokenize(./*:period/*:end/@value,'T')[1]),tokenize(./*:period/*:start/@value,'T')[1],concat(tokenize(./*:period/*:start/@value,'T')[1],'-',tokenize(./*:period/*:end/@value,'T')[1]))">
+                                        <xf:label class="svRepeatHeader">Zeitraum</xf:label>
+                                    </xf:output>
+                                </xf:repeat>
+                                    </td>
+                                </tr>
+                            </table>
+                            <xf:group ref="instance('i-careteams')/*:CareTeam[*:status/@value='active'][count(*:participant)=0]">
+                                <strong>Bisher keine (bekannt)</strong>
+                            </xf:group>
+                        </xf:case>
+                    </xf:switch>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <xf:switch>
+                        <xf:case id="sozdat-button">
+                            <xf:trigger class="svSubTrigger">
+                                <xf:label>Sozial-Info</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:action if="count(instance('i-sozdat')/*:count)=0">
+                                        <xf:message level="ephemeral">load sozdat</xf:message>
+                                        <xf:send submission="s-get-sozdat"/>
+                                    </xf:action>
+                                    <xf:toggle case="sozdat-list"/>
+                                </xf:action>
+                            </xf:trigger>
+                        </xf:case>
+                        <xf:case id="sozdat-list">
+                            <table>
+                                <tr>
+                                    <td>
+                            <xf:trigger class="svUpdateMasterTrigger">
+                                <xf:label>Schließen</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:toggle case="sozdat-button"/>
+                                </xf:action>
+                            </xf:trigger>
+                                    </td>
+                                    <td>
+                                        <strong>SozialInfos?</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                <xf:repeat ref="instance('i-sozdat')/*:QuestionnaireResponse" appearance="compact" class="svRepeatBlank">
+                                    <xf:output ref="./*:status/@value">
+                                        <xf:label class="svRepeatHeader">Status</xf:label>
+                                    </xf:output>
+                                    <xf:output value="tokenize(./*:lastModified/@value,'T')[1]">
+                                        <xf:label class="svRepeatHeader">Zuletzt</xf:label>
+                                    </xf:output>
+                                </xf:repeat>
+                                    </td>
+                                </tr>
+                            </table>
+                            <xf:group ref="instance('i-sozdat')/*:count[.=0]">
+                                <strong>Bisher keine SozialInfos</strong>
+                            </xf:group>
+                        </xf:case>
+                    </xf:switch>
+                </td>
+            </tr>
+        </table>
+    </xf:group>
+    <xf:group ref="bf:instanceOfModel('m-patient','i-eocs')/*:EpisodeOfCare/*:status[@value=('finished','cancelled')][1]/..">
+        <strong>Frühere Betreuung/Kontakt</strong>
+        <table>
+            <tr>
+                <td>
+                    <strong>Verlauf</strong>
+                </td>
+                <td>
+                    <xf:repeat ref="./*:statusHistory" appearance="compact" class="svRepeatBlank">
+                        <xf:output ref="*:extension[@url=('#eoc-workflow-change','http://eNahar.org/nabu/extension#eoc-workflow-change')]/*:valueCodeableConcept/*:coding/*:display/@value"/>
+                        <xf:output id="syn-presenting-problem-text" ref="./*:extension[@url=('#eoc-workflow-change','http://eNahar.org/nabu/extension#eoc-workflow-change')]/*:valueCodeableConcept/*:text/@value" class=""/>
+                        <xf:output id="syn-presenting-problem-date" value="tokenize(./*:period/*:start/@value,'T')[1]" class=""/>
+                    </xf:repeat>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Behandlungsende</strong>
+                </td>
+                <td>
+                    <xf:output value="tokenize(./*:period/*:end/@value,'T')[1]"/>
+                </td>
+            </tr>
+        </table>
+    </xf:group>
+</div>

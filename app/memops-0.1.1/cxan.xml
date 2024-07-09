@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://cxan.org/ns/package" id="memops">
+    <abstract>An XQuery library module with functions for handling operations on memory nodes</abstract>
+    <author id="pherk">Peter Herkenrath</author>
+    <maintainer id="pherk">Peter Herkenrath</maintainer>
+    <home>http://github.com/pherk/memops</home>
+    <category id="libs">Libraries</category>
+    <tag>xupdate</tag>
+    <tag>xquery</tag>
+</package>

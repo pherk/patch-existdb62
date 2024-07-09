@@ -1,0 +1,765 @@
+@charset "utf-8";
+/* CSS Document */
+
+@import url('$shared/resources/css/fonts.css');
+@import url('$shared/resources/css/bootstrap.min.css');
+@import url('$shared/resources/css/bootstrap-responsive.min.css');
+
+
+/* ---------------------------------------- LAYOUT ---------------------------------------- */
+/* === Remove input autofocus webkit === */
+*:focus {outline: none;}
+
+/* === Form Typography === */
+body {font: 14px/21px "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", sans-serif;}
+.sp_form h2, .sp_form label {font-family:Georgia, Times, "Times New Roman", serif;}
+
+/* === Search Panel Form === */
+.sp_form {
+    width: 250px;
+	background-color: #DDD;
+	border: 1px solid #4297D7;
+	background-color: #FCFDFD;	
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	padding: 10px 5px 10px 5px;
+}
+
+/* === List Styles === */
+
+.sp_form ul {
+    list-style-type:none;
+    list-style-position:outside;
+    margin:0px;
+    padding:0px;
+}
+.sp_form li{
+    padding:0px; 
+	border-bottom:1px solid #eee;
+	position:relative;
+} 
+.sp_form li:first-child, .sp_form li:last-child {
+	border-bottom:1px solid #777;
+}
+
+/* === Form Header === */
+.sp_form h2 {
+	margin:0;
+	display: inline;
+}
+
+/* === Form Elements === */
+.sp_form label {
+	width:50px;
+	margin-top: 3px;
+	display:inline-block;
+	float:inherit; /* left; */
+	padding:3px;
+}
+.sp_form div ul  {
+	height:20px; 
+	width:120px; 
+	padding:5px 8px;
+}
+
+.sp_form div  {
+    margin-bottom: 8px;
+}
+
+
+.sp_form textarea {padding:8px; width:150px;}
+.sp_form button {margin-left:3px;}
+
+/* form element visual styles */
+.sp_form input, .sp_form textarea { 
+    width : 130px;
+	border:1px solid #aaa;
+	box-shadow: 0px 0px 3px #ccc, 0 10px 15px #eee inset;
+	border-radius:2px;
+	padding-right:5px;
+	-moz-transition: padding .25s; 
+	-webkit-transition: padding .25s; 
+	-o-transition: padding .25s;
+	transition: padding .25s;
+}
+.sp_form input:focus, .sp_form textarea:focus {
+		background: #fff; 
+		border:1px solid #555; 
+		box-shadow: 0 0 3px #aaa; 
+		padding-right:70px;
+}
+
+/* === HTML5 validation styles === */	
+.sp_form input:required, .sp_form textarea:required {
+	background: #fff url(../images/red_asterisk.png) no-repeat 98% center;
+}
+.sp_form input:required:valid, .sp_form textarea:required:valid {
+	background: #fff url(../images/valid.png) no-repeat 98% center;
+	box-shadow: 0 0 5px #5cd053;
+	border-color: #28921f;
+}
+.sp_form input:focus:invalid, .sp_form textarea:focus:invalid {
+	background: #fff url(../images/invalid.png) no-repeat 98% center;
+	box-shadow: 0 0 5px #d45252;
+	border-color: #b03535
+}
+
+.sp_form input:focus + .form_hint {display: inline;}
+.sp_form input:required:valid + .form_hint {background: #28921f;}
+.sp_form input:required:valid + .form_hint::before {color:#28921f;}
+
+.sp_form fieldset.sp-radiogroup  {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 1.25em;
+  border: none;
+}
+
+.sp_form ul.radio  {
+  margin: 0;
+  padding: 0;
+  margin-left: 20px;
+  list-style: none;
+}
+
+.sp_form fieldset.sp-radiogroup legend {
+  font-size: 100%;
+  color:  black;
+  font-weight: bold;
+  display: block;
+  width: 100%;
+  white-space: normal;
+}
+
+.sp_form ul.radio li {
+  border: 1px transparent solid;
+}
+
+.sp_form ul.radio li:hover,
+.sp_form ul.radio li.focus  {
+  background-color: lightyellow;
+  border: 1px gray solid;
+  width: 10em;
+}
+
+/* Checkbox */
+.sp_form fieldset.cbgroup  {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 1.25em;
+  border: none;
+}
+
+.sp_form ul.cbgroup  {
+  margin: 0;
+  padding: 0;
+  margin-left: 20px;
+  list-style: none;
+}
+
+.sp_form fieldset.cbgroup legend {
+  font-size: 100%;
+  color:  black;
+  display: block;
+  width: 100%;
+  margin-bottom: 0px;
+}
+
+.sp_form ul.cbgroup li {
+  border: 1px transparent solid;
+}
+.sp_form .cbgroup input {
+  width: auto ;
+}
+
+.sp_form ul.cbgroup li:hover,
+.sp_form ul.cbgroup li.focus  {
+  background-color: lightyellow;
+  border: 1px gray solid;
+  width: 10em;
+}
+.required {
+  font-size: 75%;
+  color: blue;
+}
+
+.divider {
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #ccc -moz-use-text-color #FFFFFF;
+  border-style: solid none;
+  border-width: 6px 0;
+  margin: 8px 8px 0 0;
+}
+
+/* === Button Style === */
+button.submit {
+	background-color: #68b12f;
+	background: -webkit-gradient(linear, left top, left bottom, from(#68b12f), to(#50911e));
+	background: -webkit-linear-gradient(top, #68b12f, #50911e);
+	background: -moz-linear-gradient(top, #68b12f, #50911e);
+	background: -ms-linear-gradient(top, #68b12f, #50911e);
+	background: -o-linear-gradient(top, #68b12f, #50911e);
+	background: linear-gradient(top, #68b12f, #50911e);
+	border: 1px solid #509111;
+	border-bottom: 1px solid #5b992b;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-ms-border-radius: 3px;
+	-o-border-radius: 3px;
+	box-shadow: inset 0 1px 0 0 #9fd574;
+	-webkit-box-shadow: 0 1px 0 0 #9fd574 inset ;
+	-moz-box-shadow: 0 1px 0 0 #9fd574 inset;
+	-ms-box-shadow: 0 1px 0 0 #9fd574 inset;
+	-o-box-shadow: 0 1px 0 0 #9fd574 inset;
+	color: white;
+	font-weight: bold;
+	padding: 6px 20px;
+	text-align: center;
+	text-shadow: 0 -1px 0 #396715;
+}
+button.submit:hover {
+	opacity:.85;
+	cursor: pointer; 
+}
+button.submit:active {
+	border: 1px solid #20911e;
+	box-shadow: 0 0 10px 5px #356b0b inset; 
+	-webkit-box-shadow:0 0 10px 5px #356b0b inset ;
+	-moz-box-shadow: 0 0 10px 5px #356b0b inset;
+	-ms-box-shadow: 0 0 10px 5px #356b0b inset;
+	-o-box-shadow: 0 0 10px 5px #356b0b inset;
+	
+}
+button.reset {
+    background-color: #68b12f;
+	background: -webkit-gradient(linear, left top, left bottom, from(#68b12f), to(#50911e));
+	background: -webkit-linear-gradient(top, #68b12f, #50911e);
+	background: -moz-linear-gradient(top, #68b12f, #50911e);
+	background: -ms-linear-gradient(top, #68b12f, #50911e);
+	background: -o-linear-gradient(top, #68b12f, #50911e);
+	background: linear-gradient(top, #68b12f, #50911e);
+	border: 1px solid #509111;
+	border-bottom: 1px solid #5b992b;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-ms-border-radius: 3px;
+	-o-border-radius: 3px;
+	box-shadow: inset 0 1px 0 0 #9fd574;
+	-webkit-box-shadow: 0 1px 0 0 #9fd574 inset ;
+	-moz-box-shadow: 0 1px 0 0 #9fd574 inset;
+	-ms-box-shadow: 0 1px 0 0 #9fd574 inset;
+	-o-box-shadow: 0 1px 0 0 #9fd574 inset;
+	color: white;
+	font-weight: bold;
+	padding: 6px 20px;
+	text-align: center;
+	text-shadow: 0 -1px 0 #396715;
+}
+button.reset:hover {
+	opacity:.85;
+	cursor: pointer; 
+}
+button.reset:active {
+	border: 1px solid #20911e;
+	box-shadow: 0 0 10px 5px #356b0b inset; 
+	-webkit-box-shadow:0 0 10px 5px #356b0b inset ;
+	-moz-box-shadow: 0 0 10px 5px #356b0b inset;
+	-ms-box-shadow: 0 0 10px 5px #356b0b inset;
+	-o-box-shadow: 0 0 10px 5px #356b0b inset;
+	
+}
+
+/* ======== Calendar ============ */
+fieldset.collapsible {
+    border: 1px solid #D5D8D8;
+}
+
+fieldset.collapsible > legend {
+    margin-left: 140px;
+    padding: 0 10px;
+    width: 10em;
+}
+
+fieldset.collapsible > div {
+    display: none;
+}
+
+.btn {
+    font-size: 85%;
+	margin-top: 10px;
+}
+ 
+#event_generation_wrapper{
+
+}
+
+#event_generation_wrapper .left{
+	float: left;
+	width: 70px;
+}
+
+#event_generation_wrapper .right{
+	float: left;
+	max-width: 25px;
+	margin-left: 10px;
+}
+
+#event_generation_wrapper input{
+	width: 180px;
+}
+
+#event_generation_wrapper textarea{
+	width: 180px;	
+	height: 50px;
+}
+
+#event_generation_wrapper .miniColors-triggerWrap{	
+	margin-bottom: 5px;
+}
+
+#event_generation_wrapper .text{
+	padding-top: 1px;	
+	margin-bottom: 5px;
+	line-height: 10px;
+}
+
+
+#external_events{
+	float: left;
+	width: 130px;
+	background-color: #DDD;
+	margin-left: 20px;
+	margin-top: 40px;
+	border: 1px solid #4297D7;
+	background-color: #FCFDFD;	
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+
+#external_events .external-event{
+	width: 100px;
+	margin: 5px;
+	font-family: Verdana, Arial, sans-serif;
+	border: 1px solid #36C;
+	padding: 3px;
+	text-align: center;
+	background-color: #36C;
+	color: white;
+	cursor: pointer;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+
+#calendar .ui-widget-header{
+	font-weight: normal;
+	padding: 3px 3px 3px 3px;
+}
+
+#calendar .fc-header-title{
+	font-weight: normal;
+}
+
+#external_event_template{
+	display: none;
+}
+
+
+.nube {
+    position: absolute;
+    left:0;
+    top:0;
+    width:200px;
+}
+.nube h3 {
+    color: black;
+    opacity: 1.0;
+}
+
+.holiday { opacity: 0.8; }
+.urlaub { opacity: 0.6;}
+.regaz { opacity: 0.3; }
+.ambulanz { opacity: 0.3; }
+.adm { opacity: 0.3; }
+.neuro-genetik { opacity: 0.3; }
+.ortho { opacity: 0.3; }
+.fg-gba { opacity: 0.3; }
+.botox { opacity: 0.3; }
+.nch { opacity: 0.3; }
+.nme { opacity:0.3; }
+.ortho { opacity: 0.3; }
+.patient { opacity: 0.8; }
+.meeting { opacity: 0.8; }
+
+
+/* ==== XForms === */
+.xfGroup.bordered {
+         border: solid black 2px;
+}
+.xfGroupLabel {
+         position: relative;
+         font-family: Helvetica, sans-serif;
+         font-weight: bold;
+         background-color: white;
+         padding: 0 2px 2px 2px;
+         top: -10px;
+         left: 10px;
+}
+/*
+.xfGroup p {
+         position: relative;
+         top: -30px;
+         padding: 5px;
+}
+*/
+.xfLabel {
+    display: inline-block;
+    float: inherit;
+    margin-top: 3px;
+    padding: 3px;
+    width: 100px;
+}
+
+.xfRadioLabel {
+    display: inline;
+}
+.radio-horizontal {
+    display:block;
+}
+.fullarea .xfValue {
+    height: 4em;
+    width: 490px;
+}
+
+.fullareashort .xfValue {
+    height: 1em;
+    width: 490px;
+}
+
+.fullareawol .xfValue {
+    height: 2em;
+    width: 590px;
+}
+
+.halfarea .xfValue {
+    height: 5em;
+    width: 190px;
+}
+.halfareashort .xfValue {
+    height: 2em;
+    width: 190px;
+}
+.area-input .xfValue {
+    height: 1.5em;
+    width: 130px;
+}
+#date-value, #nextDate-value {
+    font-size: 1.2em;
+}
+
+/* Supervision */
+.svRepeatHeader {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.svRepeat {
+    /* border: 1px solid black; */
+    padding: 5px;
+    width: 100%;
+    display:block;
+}
+
+.svRepeat tbody{
+    width: 100%;
+    display: table;
+}
+
+.svRepeat .xfRepeatHeader {
+    padding: 5px;
+}
+.svRepeat .xfRepeatHeader .xfLabel{
+    width: auto;
+}
+
+.svRepeat .xfRepeatItem .xfValue {
+    padding: 3px;
+    display: block;
+}
+.svRepeatBool{
+    width: 3em;
+}
+td .xfLabel{
+    width: 5em;
+}
+
+.svSubForm {
+    display: block;
+}
+.svSubForm .xfContainer{
+    border: thin dotted #666666;
+    background: #eeeeee;
+}
+
+.svSubForm .xfGroupLabel {
+    padding: 5px;
+    font-weight: bold;
+    font-size: 12pt;
+}
+
+.svSubForm .xfLabel {
+    padding: 3px 3px 3px 8px;
+    width: 7em;
+}
+
+.svHalfGroup {
+    width: 40%;
+}
+
+.svFullGroup .xfLabel {
+    width: 7em;
+}
+
+.svSpacerLeft {
+    width:20px;
+}
+
+.svTriggerGroup {
+    display: block;
+    text-align: center;
+    padding: 5px;
+}
+
+.svMasterTrigger {
+    display: inline;
+    text-align: center;
+    width: 150px;
+    padding-right: 15px;
+}
+
+.svMasterTrigger .xfValue {
+    background: url(../images/001_22.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 150px;
+    text-indent: 15px;
+}
+
+.svSubTrigger {
+    display: block;
+    text-align: left;
+    width: 140px;
+    padding-right: 15px;
+}
+
+.svSubTrigger .xfValue {
+    background: url(../images/001_22.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 140px;
+    text-indent: 15px;
+}
+
+.svAddTrigger {
+    display: block;
+    text-align: left;
+    width: 140px;
+    padding-right: 15px;
+}
+.svAddTrigger .xfValue {
+    background: url(../images/001_03.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 140px;
+    text-indent: 15px;
+
+}
+
+.svDelTrigger {
+    display: block;
+    text-align: left;
+    width: 140px;
+    padding-right: 15px;
+}
+.svDelTrigger .xfValue {
+    background: url(../images/001_04.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 140px;
+    text-indent: 15px;
+
+}
+
+.svSaveTrigger {
+    display: block;
+    text-align: left;
+    width: 140px;
+    padding-right: 15px;
+}
+.svSaveTrigger .xfValue {
+    background: url(../images/001_60.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 140px;
+    text-indent: 15px;
+
+}
+
+.svSearchTrigger {
+    display: block;
+    text-align: left;
+    width: 140px;
+    padding-right: 15px;
+}
+.svSearchTrigger .xfValue {
+    background: url(../images/001_06.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 140px;
+    text-indent: 15px;
+
+}
+
+.svUpdateMasterTrigger {
+    display: inline;
+    text-align: center;
+    width: 150px;
+    padding-right: 15px;
+    margin-left: 10px;
+}
+
+.svUpdateMasterTrigger .xfValue {
+    background: url(../images/001_24.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 150px;
+    text-indent:30px;
+}
+
+.svCalTrigger {
+    display: inline;
+    text-align: center;
+    width: 36px;
+    padding-right: 15px;
+    margin-left: 10px;
+}
+
+.svCalTrigger .xfValue {
+    background: url(../images/calendar.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    width: 36px;
+}
+
+.svFilterTrigger {
+    display: block;
+    text-align: left;
+    width: 140px;
+    padding-right: 15px;
+}
+
+.svFilterTrigger .xfValue {
+    background: url(../images/filter16x16.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 140px;
+    text-indent: 15px;
+}
+
+.svEnterTrigger {
+    display: block;
+    text-align: left;
+    width: 140px;
+    padding-right: 15px;
+}
+
+.svEnterTrigger .xfValue {
+    background: url(../images/enter16x16.png) no-repeat 5px 5px;
+    display: block;
+    height: 36px;
+    line-height: 29px;
+    text-decoration: none;
+    width: 140px;
+    text-indent: 15px;
+}
+
+.svListHeader {
+    margin-bottom : 5px;
+    font-weight: bold;
+}
+
+.svListHeaderShort {
+    margin-bottom : 5px;
+    font-weight: bold;
+    width:3em;
+}
+
+.search .xfValue {
+    width: 8em;
+}
+.search-short .xfValue {
+    width: 6em;
+}
+
+.tiny-input .xfValue{
+    width: 3em;
+}
+
+.short-input .xfValue {
+    width: 6em;
+}
+.medium-input .xfValue {
+    width: 8em;
+}
+.tel-input .xfValue {
+    width: 10em;
+}
+.short-select .xfValue {
+    width: 3em;
+}
+.medium-select .xfValue {
+    width: 10em;
+}
+
+div.tabs .xfRepeatItem  {
+    display:inline-block;
+    font-size:12pt;
+    font-family:Arial;
+    text-align:center;
+    padding:5px;
+    border:solid 1px black;
+    background-color:lightGray;
+    -moz-border-radius-topleft:10px;
+    -webkit-border-top-left-radius:10px;
+    -moz-border-radius-topright:10px;
+    -webkit-border-top-right-radius:10px;    
+}
+ 
+table td, table td * {
+    vertical-align: middle;
+}

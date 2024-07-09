@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plandefinition-infos>
+    <implemented>
+        <careplan>
+            <code value="nabu/plandefinitions/arzt-new-order-set" label-de="Arzt"/>
+            <code value="nabu/plandefinitions/arzt-psychsom-new-order-set" label-de="PsychSom"/>
+            <code value="nabu/plandefinitions/arzt-eeg-new-order-set" label-de="Arzt-EEG"/>
+            <code value="nabu/plandefinitions/arzt-eeg-psych-new-order-set" label-de="Arzt-EEG+Psych"/>
+            <code value="nabu/plandefinitions/ses-new-order-set" label-de="Arzt-EEG+Logo (SES)"/>
+            <code value="nabu/plandefinitions/arzt-physio-new-order-set" label-de="Arzt+Physio"/>
+            <code value="nabu/plandefinitions/neo-arzt-physio-new-order-set" label-de="NeoNachsorge 1.+2.Termin"/>
+<!--
+            <code value="nabu/plandefinitions/ises-new-order-set" label-de="Arzt-Logo-EEG (iSES)"/>
+-->
+            <code value="nabu/plandefinitions/arzt-psych-new-order-set" label-de="Arzt+Psych"/>
+            <code value="nabu/plandefinitions/psychsom-psych-new-order-set" label-de="PsychSom+Psych"/>
+            <code value="nabu/plandefinitions/ep-aabr-new-order-set" label-de="Hörscreening AABR"/>
+            <code value="nabu/plandefinitions/ep-toae-new-order-set" label-de="Hörscreening TOAE"/>
+<!--
+            <code value="nabu/plandefinitions/neo-nachsorge-order-set" label-de="Neo-Nachsorge"/>
+-->
+        </careplan>
+        <requestgroup>
+            <code value="nabu/plandefinitions/arzt-eeg-combi-order" label-de="Arzt-EEG"/>
+            <code value="nabu/plandefinitions/psych-psychdx-combi-order" label-de="Psych-PsychDx"/>
+        </requestgroup>
+    </implemented>
+    <type>
+        <code label-de="Order Set" value="order-set" comment="A pre-defined and approved group of orders related to a particular clinical condition (e.g. hypertension treatment and monitoring) or stage of care (e.g. hospital admission to Coronary Care Unit). An order set is used as a checklist for the clinician when managing a patient with a specific condition. It is a structured collection of orders relevant to that condition and presented to the clinician in a computerized provider order entry (CPOE) system"/>
+        <code label-de="Protocol" value="protocol" comment="A set of activities that can be peformed that have relationships in terms of order, pre-conditions etc"/>
+        <code label-de="ECA Rule" value="eca-rule" comment="A decision support rule of the form [on Event] if Condition then Action. It is intended to be a shareable, computable definition of a actions that should be taken whenever some condition is met in response to a particular event or events"/>
+    </type>
+    <status>
+        <code label-de="Entwurf" value="draft"/>
+        <code label-de="Aktiv" value="active"/>
+        <code label-de="Inaktiv" value="retired"/>
+    </status>
+    <kind>
+        <code label-de="Anwendbarkeit" value="applicability"/>
+        <code label-de="Start" value="start"/>
+        <code label-de="Stop" value="stop"/>
+    </kind>
+    <relationship>
+        <code label-de="vor Start" value="before-start"/>
+        <code label-de="vor" value="before"/>
+        <code label-de="vor Ende" value="before-end"/>
+        <code label-de="gleichzeitig-mit-Start" value="concurrent-with-start"/>
+        <code label-de="gleichzeitig" value="concurrent"/>
+        <code label-de="gleichzeitig-mit-Ende" value="concurrent-with-end"/>
+        <code label-de="nach Start" value="after-start"/>
+        <code label-de="nach" value="after"/>
+        <code label-de="nach Ende" value="after-end"/>
+    </relationship>
+    <actionDef>
+        <participantType>
+            <code label-de="Patient" value="patient"/>
+            <code label-de="Practitioner" value="practitioner"/>
+            <code label-de="Person" value="related-person"/>
+        </participantType>
+        <type> create | update | remove | fire-event --&gt;</type>
+        <groupingBehavior>
+            <code label-de="Visual" value="visual-group"/>
+            <code label-de="Logik" value="logical-group"/>
+            <code label-de="Satz" value="sentence-group"/>
+        </groupingBehavior>
+        <selectionBehavior>
+            <code label-de="*" value="any"/>
+            <code label-de="alle" value="all"/>
+            <code label-de="alle-oder-keins" value="all-or-none"/>
+            <code label-de="eins" value="exactly-one"/>
+            <code label-de="eins-oder-keins" value="at-most-one"/>
+            <code label-de="eins+" value="one-or-more"/>
+        </selectionBehavior>
+        <requiredBehavior>
+            <code label-de="muss" value="must"/>
+            <code label-de="kann" value="could"/>
+            <code label-de="muss-ausser-docu" value="must-unless-documented"/>
+        </requiredBehavior>
+        <precheckBehavior>
+            <code label-de="Ja" value="yes"/>
+            <code label-de="Nein" value="no"/>
+        </precheckBehavior>
+        <cardinalityBehavior>
+            <code label-de="einfach" value="single"/>
+            <code label-de="mehrfach" value="multiple"/>
+        </cardinalityBehavior>
+    </actionDef>
+    <bricks xmlns="http://hl7.org/fhir">
+        <PlanDefinition>
+            <id value=""/>
+            <meta>
+                <versionId value=""/>
+            </meta>
+            <url value="[uri]"/><!-- 0..1 Logical URI to reference this plan definition (globally unique) -->
+            <identifier><!-- 0..* Identifier Additional identifier for the plan definition --></identifier>
+            <version value="[string]"/><!-- 0..1 Business version of the plan definition -->
+            <name value="[string]"/><!-- 0..1 Name for this plan definition (computer friendly) -->
+            <title value="[string]"/><!-- 0..1 Name for this plan definition (human friendly) -->
+            <type><!-- 0..1 CodeableConcept order-set | protocol | eca-rule --></type>
+            <status value="[code]"/><!-- 1..1 draft | active | retired | unknown -->
+            <experimental value="[boolean]"/><!-- 0..1 For testing purposes, not real usage --> 
+            <date value="[dateTime]"/><!-- 0..1 Date this was last changed -->
+            <publisher value="[string]"/><!-- 0..1 Name of the publisher (organization or individual) -->
+            <description value="[markdown]"/><!-- 0..1 Natural language description of the plan definition -->
+            <purpose value="[markdown]"/><!-- 0..1 Why this plan definition is defined -->
+            <usage value="[string]"/><!-- 0..1 Describes the clinical usage of the asset -->
+            <approvalDate value="[date]"/><!-- 0..1 When the plan definition was approved by publisher -->
+            <lastReviewDate value="[date]"/><!-- 0..1 When the plan definition was last reviewed -->
+            <effectivePeriod><!-- 0..1 Period When the plan definition is expected to be used --></effectivePeriod>
+            <useContext><!-- 0..* UsageContext Context the content is intended to support --></useContext>
+            <jurisdiction><!-- 0..* CodeableConcept Intended jurisdiction for plan definition (if applicable) --></jurisdiction>
+            <topic><!-- 0..* CodeableConcept E.g. Education, Treatment, Assessment, etc --></topic>
+            <contributor><!-- 0..* Contributor A content contributor --></contributor>
+            <contact><!-- 0..* ContactDetail Contact details for the publisher --></contact>
+            <copyright value="[markdown]"/><!-- 0..1 Use and/or publishing restrictions -->
+            <relatedArtifact><!-- 0..* RelatedArtifact Related artifacts for the asset --></relatedArtifact>
+            <library><!-- 0..* Reference(Library) Logic used by the plan definition --></library>
+            <!-- goals 0..* -->
+            <!-- action 0..* -->
+        </PlanDefinition>
+        <!-- goal related -->
+        <target>  <!-- 0..* Target outcome for the goal -->
+            <measure><!-- 0..1 CodeableConcept The parameter whose value is to be tracked --></measure>
+            <due><!-- 0..1 Duration Reach goal within --></due>
+        </target>
+        <detailQuantity/>
+        <detailRange/>
+        <detailCodeableConcept/>
+        <goal>  <!-- 0..* What the plan is trying to accomplish -->
+            <category><!-- 0..1 CodeableConcept E.g. Treatment, dietary, behavioral, etc --></category>
+            <description><!-- 1..1 CodeableConcept Code or text describing the goal --></description>
+            <priority><!-- 0..1 CodeableConcept high-priority | medium-priority | low-priority --></priority>
+            <start><!-- 0..1 CodeableConcept When goal pursuit begins --></start>
+            <addresses><!-- 0..* CodeableConcept What does the goal address --></addresses>
+            <documentation><!-- 0..* RelatedArtifact Supporting documentation for the goal --></documentation>
+            <target>  <!-- 0..* Target outcome for the goal -->
+                <measure><!-- 0..1 CodeableConcept The parameter whose value is to be tracked --></measure>
+                <due><!-- 0..1 Duration Reach goal within --></due>
+            </target>
+        </goal>
+        <!-- action related -->
+        <condition>  <!-- 0..* Whether or not the action is applicable -->
+            <kind value="[code]"/><!-- 1..1 applicability | start | stop -->
+            <description value="[string]"/><!-- 0..1 Natural language description of the condition -->
+            <language value="[string]"/><!-- 0..1 Language of the expression -->
+            <expression value="[string]"/><!-- 0..1 Boolean-valued expression -->
+        </condition>
+        <relatedAction>  <!-- 0..* Relationship to another action -->
+            <actionId value="[id]"/><!-- 1..1 What action is this related to -->
+            <relationship value="[code]"/><!-- 1..1 before-start | before | before-end | concurrent-with-start | concurrent | concurrent-with-end | after-start | after | after-end -->
+            <offset><!-- 0..1 Duration|Range Time offset for the relationship --></offset>
+        </relatedAction>
+        <dynamicValue>  <!-- 0..* Dynamic aspects of the definition -->
+            <description value="[string]"/><!-- 0..1 Natural language description of the dynamic value -->
+            <path value="[string]"/><!-- 0..1 The path to the element to be set dynamically -->
+            <language value="[string]"/><!-- 0..1 Language of the expression -->
+            <expression value="[string]"/><!-- 0..1 An expression that provides the dynamic value for the customization -->
+        </dynamicValue>
+        <action>  <!-- 0..* Action defined by the plan -->
+            <label value="[string]"/><!-- 0..1 User-visible label for the action (e.g. 1. or A.) -->
+            <title value="[string]"/><!-- 0..1 User-visible title -->
+            <description value="[string]"/><!-- 0..1 Short description of the action -->
+            <textEquivalent value="[string]"/><!-- 0..1 Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system -->
+            <code><!-- 0..* CodeableConcept Code representing the meaning of the action or sub-actions --></code>
+            <reason><!-- 0..* CodeableConcept Why the action should be performed --></reason>
+            <documentation><!-- 0..* RelatedArtifact Supporting documentation for the intended performer of the action --></documentation>
+            <goalId value="[id]"/><!-- 0..* What goals this action supports -->
+            <triggerDefinition><!-- 0..* TriggerDefinition When the action should be triggered --></triggerDefinition>
+            <condition>  <!-- 0..* Whether or not the action is applicable -->
+                <kind value="[code]"/><!-- 1..1 applicability | start | stop -->
+                <description value="[string]"/><!-- 0..1 Natural language description of the condition -->
+                <language value="[string]"/><!-- 0..1 Language of the expression -->
+                <expression value="[string]"/><!-- 0..1 Boolean-valued expression -->
+            </condition>
+            <input><!-- 0..* DataRequirement Input data requirements --></input>
+            <output><!-- 0..* DataRequirement Output data definition --></output>
+            <relatedAction>  <!-- 0..* Relationship to another action -->
+                <actionId value="[id]"/><!-- 1..1 What action is this related to -->
+                <relationship value="[code]"/><!-- 1..1 before-start | before | before-end | concurrent-with-start | concurrent | concurrent-with-end | after-start | after | after-end -->
+                <offsetDuration><!-- 0..1 Duration|Range Time offset for the relationship --></offsetDuration>
+            </relatedAction>
+            <timingDateTime><!-- 0..1 dateTime|Period|Duration|Range|Timing When the action should take place --></timingDateTime>
+            <participant>  <!-- 0..* Who should participate in the action -->
+                <type value="[code]"/><!-- 1..1 patient | practitioner | related-person -->
+                <role><!-- 0..1 CodeableConcept E.g. Nurse, Surgeon, Parent, etc --></role>
+            </participant>
+            <type><!-- 0..1 Coding create | update | remove | fire-event --></type>
+            <groupingBehavior value="[code]"/><!-- 0..1 visual-group | logical-group | sentence-group -->
+            <selectionBehavior value="[code]"/><!-- 0..1 any | all | all-or-none | exactly-one | at-most-one | one-or-more -->
+            <requiredBehavior value="[code]"/><!-- 0..1 must | could | must-unless-documented -->
+            <precheckBehavior value="[code]"/><!-- 0..1 yes | no -->
+            <cardinalityBehavior value="[code]"/><!-- 0..1 single | multiple -->
+            <definition><!-- 0..1 Reference(ActivityDefinition|PlanDefinition) Description of the activity to be performed --></definition>
+            <transform><!-- 0..1 Reference(StructureMap) Transform to apply the template --></transform>
+            <dynamicValue>  <!-- 0..* Dynamic aspects of the definition -->
+                <description value="[string]"/><!-- 0..1 Natural language description of the dynamic value -->
+                <path value="[string]"/><!-- 0..1 The path to the element to be set dynamically -->
+                <language value="[string]"/><!-- 0..1 Language of the expression -->
+                <expression value="[string]"/><!-- 0..1 An expression that provides the dynamic value for the customization -->
+            </dynamicValue>
+            <action><!-- 0..* Content as for PlanDefinition.action A sub-action --></action>
+        </action>
+    </bricks>
+</plandefinition-infos>

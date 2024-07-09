@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<meta xmlns="http://exist-db.org/xquery/repo">
+    <description>Terminology for Nabu</description>
+    <author>Peter Herkenrath</author>
+    <website>http://www.enahar.org</website>
+    <status>unstable</status>
+    <changelog>
+        <change version="0.9.0">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>Class API; HPO, ORPHANET, ICF classifications</li>
+            </ul>
+        </change>
+        <repo:change xmlns:repo="http://exist-db.org/xquery/repo" version="0.7.0">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>Initial version</li>
+            </ul>
+        </repo:change>
+    </changelog>
+    <repo:license xmlns:repo="http://exist-db.org/xquery/repo">CC-BY-NC-ND</repo:license>
+    <repo:copyright xmlns:repo="http://exist-db.org/xquery/repo">true</repo:copyright>
+    <repo:type xmlns:repo="http://exist-db.org/xquery/repo">application</repo:type>
+    <repo:target xmlns:repo="http://exist-db.org/xquery/repo">terminology</repo:target>
+    <repo:prepare xmlns:repo="http://exist-db.org/xquery/repo">pre-install.xql</repo:prepare>
+
+<deployed>2018-09-08T08:52:29.153+02:00</deployed></meta>

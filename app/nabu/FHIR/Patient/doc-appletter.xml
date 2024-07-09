@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-doc-pheno" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:bind ref="*:name[*:use/@value='official']/*:given/@value" type="xs:string" required="true()"/>
+            <xf:bind ref="*:name[*:use/@value='official']/*:family/@value" type="xs:string" required="true()"/><!--
+            <xf:bind ref="*:birthDate/@value" type="xs:date" required="true()"/>
+-->
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="instance('i-search')/*:subject" value="instance('i-pat')/*:id/@value"/>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:instance xmlns="" id="i-login">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-login-from-master" resource="model:m-patient#instance('i-login')//*:data" instance="i-login" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">login: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <!--            
+            <xf:instance id="views">
+                <data xmlns="">
+                    <isDirty/>
+                    <PatientDirty/>
+                </data>
+            </xf:instance>
+            <xf:bind id="PatientDirty"
+                ref="bf:instanceOfModel('m-demo-name','views')/*:PatientDirty"
+                relevant="bf:instanceOfModel('m-demo-name','views')/*:isDirty = 'true'"/>   
+-->
+            <xf:instance id="i-docs">
+                <data xmlns="">
+                </data>
+            </xf:instance>
+            <xf:submission method="get" id="s-get-docs" instance="i-docs" replace="instance" ref="instance('i-search')">
+                <xf:resource value="'/exist/restxq/nabu/communications?_format=metadata&amp;status=printed&amp;status=completed'"/>
+                <xf:action ev:event="xforms-submit-done">
+                </xf:action>
+            </xf:submission>   
+
+            <xf:instance id="i-letter">
+                <data xmlns="">
+                    <id/>
+                </data>
+            </xf:instance>
+            <xf:submission method="get" id="s-get-raw-payload" replace="embedHTML" targetid="letterpane">
+                <xf:resource value="concat('/exist/restxq/nabu/communications/',instance('i-control-center')/*:docid,'/payload')"/>
+            </xf:submission>
+            
+           <xf:submission id="s-submit-encletter" method="get" replace="none">
+            <xf:resource value="concat('/exist/restxq/nabu/encounters/',bf:instanceOfModel('m-patient','i-patient')/*:Patient/*:id/@value,'/letter?status=in-progress&amp;loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+			<xf:header>
+                <xf:name>Content-Type</xf:name>
+                <xf:value>application/xml</xf:value>
+            </xf:header>
+            <xf:message ev:event="xforms-submit-done" level="ephemeral">Terminbrief -&gt; Druckliste</xf:message>
+            <xf:message ev:event="xforms-submit-error" level="modal">Kein geplanter Termin?</xf:message>
+        </xf:submission>
+         
+            <xf:instance id="i-com-infos">
+                <data xmlns="">
+                    <doctype>
+                        <code label="Termin" value="communication"/>
+                    </doctype>
+                    <appletter>
+                        <base>/db/apps/nabuData/data/FHIR/Communications</base>
+                    </appletter>
+                </data>
+            </xf:instance>
+            
+            <xf:instance id="i-search">
+                <data xmlns="">
+                    <subject/>
+                </data>
+            </xf:instance>            
+
+            <xf:instance id="i-control-center">
+                <data xmlns="">
+                    <doctype>communication</doctype>
+                    <docid/>
+                    <author-uid/>
+                </data>
+            </xf:instance>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+                <xf:send submission="s-load-login-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+                <xf:send submission="s-get-docs"/>
+            </xf:action>
+        </xf:model>
+    </div>
+    <xf:group class="svFullGroup">
+        <table>
+            <tr>
+                <td>
+                    <xf:group ref="instance('i-docs')[*:count&gt;0]">
+                        <xf:select1 ref="instance('i-control-center')/*:docid" appearance="compact" incremental="true">
+                            <xf:itemset ref="instance('i-docs')/*:doc">
+                                <xf:label ref="./*:label/@value"/>
+                                <xf:value ref="./*:id/@value"/>
+                            </xf:itemset>
+                            <xf:action ev:event="xforms-value-changed">
+                                <xf:send submission="s-get-raw-payload"/>
+                            </xf:action>
+                        </xf:select1>
+                    </xf:group>
+                </td>
+                <td>
+                    <xf:group ref="bf:instanceOfModel('m-patient','i-control-center')/*:isNotGuest">
+                        <xf:trigger ref="instance('i-control-center')/*:docid[.!='']">
+                            <xf:label>
+                                <span class="glyphicon glyphicon-print"/>
+                            </xf:label>
+                            <xf:action ev:event="DOMActivate">
+                                <xf:load show="new">
+                                    <xf:resource value="concat('/exist/restxq/nabu/communications2pdf?id=',instance('i-control-center')/*:docid)"/>
+                                </xf:load>
+                            </xf:action>
+                        </xf:trigger>
+                        <xf:trigger class="svAddTrigger">
+                            <xf:label>Akt.TB drucken</xf:label>
+                            <xf:action ev:event="DOMActivate">
+                                    <xf:send submission="s-submit-encletter"/>
+                            </xf:action>
+                        </xf:trigger>
+                    </xf:group>
+                    <xf:group ref="instance('i-docs')[*:count=0]">
+                        <xf:output value="'Kein Brief verfügbar'" class=""/>
+                    </xf:group>
+                </td>
+            </tr>
+        </table>
+        <hr/>
+        <xf:textarea ref="instance('i-docs')/*:doc[*:id/@value=instance('i-control-center')/*:docid]/*:note/*:text/@value" class="">
+            <xf:label>Notiz</xf:label>
+        </xf:textarea>
+        <xf:group ref="instance('i-control-center')/*:docid" class="svFullGroup bordered">
+            <div id="letterpane" class="letterarea"/>
+        </xf:group>
+    </xf:group>
+</div>

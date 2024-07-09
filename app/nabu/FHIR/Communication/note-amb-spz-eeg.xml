@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Communication xmlns="http://hl7.org/fhir">
+    <id value="note-amb-spz-eeg"/>
+    <meta>
+        <versionId value="0"/>
+        <lastUpdated value="2019-01-03T10:00:00"/>
+        <extension url="http://eNahar.org/nabu/extension#lastUpdatedBy">
+            <valueReference>
+                <reference value="metis/practitioners/u-admin"/>
+                <display value="Admin"/>
+            </valueReference>
+        </extension>
+    </meta>
+    <category>
+        <coding>
+            <system value="#nabu-communication-template"/>
+            <code value="note"/>
+            <display value="Hinweis"/>
+        </coding>
+        <coding>
+            <system value="#nabu-communication-encounter-type"/>
+            <code value="fun-spz-eeg"/>
+            <display value="EEG"/>
+        </coding>
+        <text value="Hinweis EEG"/>
+    </category>
+    <payload>
+        <contentTEI>
+            <div xmlns="http://www.tei-c.org/ns/1.0" type="note">
+                <p>Für das geplante EEG bitte die Haare waschen!</p>
+            </div>
+        </contentTEI>
+    </payload>
+    <note>
+        <text value="Communication template"/>
+    </note>
+</Communication>

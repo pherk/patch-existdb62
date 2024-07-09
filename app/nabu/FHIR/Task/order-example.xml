@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Order xml:id="o-33fb769c-6f3b-4ddd-912c-0b2f00cafefd">
+    <id value="o-718e7595-ce5d-4d86-aaba-856b3331d0d0"/>
+    <meta>
+        <versionId value="1"/>
+    </meta>
+    <lastModifiedBy>
+        <reference value="metis/practitioners/u-duechtingc"/>
+        <display value="Düchting, Christoph"/>
+    </lastModifiedBy>
+    <lastModified value="2017-02-22T11:34:38.762+01:00"/>
+    <when>
+        <code>
+            <coding>
+                <system value="#order-priority"/>
+                <code value="medium"/>
+                <display value="normal"/>
+            </coding>
+        </code>
+        <schedule>
+            <event value="17-02-21"/>
+        </schedule>
+    </when>
+    <detail>
+        <tags value="spz"/>
+        <priority>
+            <coding>
+                <system value="#order-prio"/>
+                <code value="normal"/>
+                <display value="mittel"/>
+            </coding>
+            <text value="mittel"/>
+        </priority>
+        <requester value=""/>
+        <summary value="Abklärung postoperative Belastung"/>
+        <info value="kardio Kind, nach OP, traumatisch belastet, Vorstellung zur psychologischen Abklärung erbeten. Kind ist bereits wieder zuhause. Kommen aus Herne, mgl. nachmittags. Kann das jemand in den nächsten 2 Wochen machen? Danke, LG; C."/>
+        <comment value=""/>
+    </detail>
+    <identifier/>
+    <date value="2017-02-21T16:13:43.305+01:00"/>
+    <subject>
+        <reference value="nabu/patients/p-23124"/>
+        <display value="Becker, Julian Alexander, *2013-07-16"/>
+    </subject>
+    <source>
+        <reference value="metis/practitioners/u-duechtingc"/>
+        <display value="Düchting, Christoph"/>
+    </source>
+    <target>
+        <role value="spz-psych"/>
+        <reference value=""/>
+        <display value=""/>
+    </target>
+    <reason>
+        <coding>
+            <system value="#order-reason"/>
+            <code value="task"/>
+            <display value="ToDo"/>
+        </coding>
+        <text value="ToDo"/>
+    </reason>
+    <authority>
+        <reference value="metis/organizations/kikl-spz"/>
+        <display value="SPZ Kinderklinik"/>
+    </authority>
+    <extension url="#order-status">
+        <status>
+            <coding>
+                <system value="#order-status"/>
+                <code value="assigned"/>
+                <display value="zugewiesen"/>
+            </coding>
+            <text value="zugewiesen"/>
+        </status>
+    </extension>
+</Order>

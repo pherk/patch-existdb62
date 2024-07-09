@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-syn-appointments" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-done" level="ephemeral">Subform has updated itself.</xf:message>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:instance id="i-appointments">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-appointments" instance="i-appointments" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/appointmentsBySubject/', instance('i-pat')/*:id/@value,'?status=booked&amp;status=tentative')"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header><!--
+                <xf:header>
+                    <xf:name>loguid</xf:name>
+                    <xf:value>{ $loguid }</xf:value>
+                </xf:header>
+                <xf:header>
+                    <xf:name>realm</xf:name>
+                    <xf:value>{$realm}</xf:value>
+                </xf:header>
+-->.
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get appointments!</xf:message>
+            </xf:submission>
+            <xf:instance id="views">
+                <data xmlns="">
+                    <AppointmentsToSelect/>
+                    <noAppointments/>
+                </data>
+            </xf:instance>
+            <xf:bind id="AppointmentsToSelect" ref="instance('views')/*:AppointmentsToSelect" relevant="count(instance('i-appointments')/*:Appointment) &gt; 0"/>
+            <xf:bind id="noAppointments" ref="instance('views')/*:noAppointments" relevant="count(instance('i-appointments')/*:Appointment) = 0"/>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+                <xf:send submission="s-get-appointments"/>
+            </xf:action>
+        </xf:model>
+    </div>
+    <div>
+        <xf:group ref="instance('views')/*:AppointmentsToSelect" class="bordered">
+            <xf:label>Offene Termine</xf:label>
+            <xf:repeat ref="instance('i-appointments')/*:Appointment" appearance="compact" class="svRepeat">
+                <xf:output value="format-dateTime(./*:start/@value, '[D01].[M01].[Y01] um [H01]:[m01]')">
+                    <xf:label class="svRepeatHeader">Datum</xf:label>
+                </xf:output>
+                <xf:output value="choose(./*:status/@value='booked', ' ', '?')" class="svRepeatOutputTiny"/>
+                <xf:output ref="./*:reasonCode/*:text/@value">
+                    <xf:label class="svRepeatHeader">Anlass</xf:label>                        
+                </xf:output>
+                <xf:output ref="./*:description/@value">
+                    <xf:label class="svRepeatHeader">Info</xf:label>                        
+                </xf:output>
+                <xf:output ref="./*:participant[*:type//*:code/@value!='patient']/*:type/*:coding/*:code/@value">
+                    <xf:label class="svRepeatHeader">Service:</xf:label>                        
+                </xf:output>
+                <xf:output value="string-join(./*:participant[*:type/*:coding/*:code/@value!='patient']/*:individual/*:display/@value,':')">
+                    <xf:label class="svRepeatHeader">Erbringer</xf:label>
+                </xf:output>
+            </xf:repeat>
+        </xf:group>
+        <xf:group ref="instance('views')/*:noAppointments">
+            <xf:label>Keine offenen Termine</xf:label>
+        </xf:group>
+    </div>
+</div>

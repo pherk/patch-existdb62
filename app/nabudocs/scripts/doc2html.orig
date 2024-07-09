@@ -1,0 +1,11 @@
+#!/bin/bash
+
+CONFIG=./tidy_options.conf
+#rm -rf     $2
+mkdir -p $2
+for F in `find $1 -type f \( -name "*.doc" -or -name "*.docx" -name "*.dot" \)`
+do
+   BASE=`basename $F .doc` ; BASE=`basename $BASE .docx`
+   libreoffice --headless --convert-to htm:HTML --outdir $2 $F
+   tidy -q -config $CONFIG -f $2/$BASE.err -i $2/$BASE.htm | sed 's/ class="c[0-9]*"//g' > $2/$BASE.xml
+done

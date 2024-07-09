@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<meta xmlns="http://exist-db.org/xquery/repo">
+    <description>Nabu SPZ Partner</description>
+    <author>Peter Herkenrath</author>
+    <website>www.enahar.org</website>
+    <status>production</status>
+    <license>MAAT</license>
+    <copyright>true</copyright>
+    <type>application</type>
+    <target>nabu</target>
+    <prepare>pre-install.xql</prepare>
+    <finish/>
+    <changelog>
+        <change version="0.8.0">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>Many more FHIR-Objects for CarePlan support</li>
+            </ul>
+        </change>
+        <repo:change xmlns:repo="http://exist-db.org/xquery/repo" version="0.7.0">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>print list</li>
+                <li>FHIR-Objects for Doc import</li>
+            </ul>
+        </repo:change>
+        <repo:change xmlns:repo="http://exist-db.org/xquery/repo" version="0.6.13">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>first working version</li>
+            </ul>
+        </repo:change>
+    </changelog>
+
+<deployed>2018-12-01T08:30:32.465+01:00</deployed></meta>

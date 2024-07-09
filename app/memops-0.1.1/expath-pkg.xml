@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://expath.org/ns/pkg" name="http://enahar.org/lib/memops" abbrev="memops" version="0.1.1" spec="1.0">
+    <title>Memory Operations</title>
+    <xquery>
+        <namespace>http://enahar.org/lib/mem</namespace>
+        <file>memory-operations-pure-xquery.xqy</file>
+    </xquery>
+    <xquery>
+        <namespace>http://enahar.org/lib/nodeops</namespace>
+        <file>node-operations.xqy</file>
+    </xquery>
+    <xquery>
+        <namespace>http://enahar.org/lib/memops</namespace>
+        <file>memory-operations.xqy</file>
+    </xquery>
+</package>

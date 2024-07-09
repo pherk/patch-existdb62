@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<encounter-infos>
+    <state>
+        <scxml version="1.0" initial="pending">
+            <state id="tentative">
+                <transition target="planned" event="accept"/>
+                <transition target="cancelled" event="reorder-spz"/>
+                <transition target="tentative" event="leave"/>
+            </state>
+            <state id="planned">
+                <transition target="arrived" event="arrive"/>
+                <transition target="cancelled" event="cancel"/>
+                <transition target="noshow" event="noshow"/>
+                <transition target="planned" event="leave"/>
+            </state>
+            <state id="arrived">
+                <transition target="triage" event="register"/>
+                <transition target="finished" event="finish"/>
+                <transition target="cancelled" event="cancel"/>
+                <transition target="arrived" event="leave"/>
+            </state>
+            <state id="triaged">
+                <transition target="fnished" event="finish"/>
+                <transition target="cancelled" event="cancel"/>
+                <transition target="triaged" event="leave"/>
+            </state>
+            <state id="noshow">
+                <transition target="noshow" event="reorder"/>
+                <transition target="noshow" event="leave"/>
+            </state>
+            <state id="cancelled">
+                <transition target="cancelled" event="reorder-spz"/>
+                <transition target="cancelled" event="leave"/>
+            </state>
+            <state id="finished">
+                <transition target="finished" event="leave"/>
+            </state>
+        </scxml>
+        <event value="accept" label="annehmen"/>
+        <event value="noshow" label="nicht erschienen"/>
+        <event value="arrive" label="ist da"/>
+        <event value="triaged" label="aufgenommen"/>
+        <event value="in-progress" label="starten"/>
+        <event value="onleave" label="beurlauben"/>
+        <event value="finish" label="fertig"/>
+        <event value="cancel-pat" label="abgesagt (Pat)"/>
+        <event value="cancel-spz" label="absagen (SPZ)"/>
+        <event value="leave" label="unverändert"/>
+    </state>
+    <type>
+        <code label="WV" value="known">Eine Wiedervorstellung für den Erbringer</code>
+        <code label="NeuV" value="new">Eine Neuvorstellung für den Erbringer</code>
+    </type>
+    <reasonCode>
+        <code label="Ambulanter Notfall" value="ambu"/>
+        <code label="Ambulanter Fall" value="amb"/>
+        <code label="Poststationäre ErstV" value="post-new">Poststationäre Erstvorstellung</code>
+        <code label="Poststationäre WV" value="post-known">Poststationäre Wiedervorstellung</code>
+    </reasonCode>
+    <status-fhir>
+        <code label-ger="geplant" value="planned"/>
+        <code label-ger="ist da" value="arrived"/>
+        <code label-ger="triagiert" value="triaged"/>
+        <code label-ger="Termin läuft" value="in-progress"/>
+        <code label-ger="da, beurlaubt" value="onleave"/>
+        <code label-ger="beendet" value="finished"/>
+        <code label-ger="cancelled" value="cancelled"/>
+        <code label-ger="Fehler" value="entered-in-error"/>
+        <code label-ger="???" value="unknown"/>
+    </status-fhir>
+    <status-daylist>
+        <code label-ger="geplant" value="planned"/>
+        <code label-ger="ist da" value="arrived"/>
+
+        <code label-ger="triagiert" value="triaged"/>
+        <code label-ger="Termin läuft" value="in-progress"/>
+        <code label-ger="da, beurlaubt" value="onleave"/>
+
+        <code label-ger="beendet" value="finished"/>
+        <code label-ger="cancelled" value="cancelled"/>
+    </status-daylist>
+    <status-e2order>
+        <code e="planned" o="accepted"/>
+        <code e="finished" o="completed"/>
+        <code e="cancelled" o="cancelled"/>
+        <code e="unbekannt" o="unknown"/>
+    </status-e2order>
+    <event-tentative>
+        <code label-ger="annehmen/buchen" value="planned"/>
+        <code label-ger="ablehnen, Termin neu" value="reorder-spz"/>
+        <code label-ger="lassen" value="leave"/>
+    </event-tentative>
+    <event-planned>
+        <code label-ger="ist da" value="arrived"/>
+<!--
+        <code label-ger="aufnehmen" value="triaged"/>
+        <code label-ger="Termin läuft" value="in-progress"/>
+        <code label-ger="beurlauben" value="onleave"/>
+-->
+        <code label-ger="beendet" value="finished"/>
+        <code label-ger="nicht wahrgenommen" value="noshow"/>
+        <code label-ger="abgesagt (Pat)" value="cancelled-pat"/>
+        <code label-ger="absagen (SPZ)" value="cancelled-spz"/>
+    </event-planned>
+    <event-cancelled>
+        <code label-ger="abgesagt (Pat)" value="cancelled-pat"/>
+        <code label-ger="absagen (SPZ)" value="cancelled-spz"/>
+    </event-cancelled>
+    <priority>
+        <code label="normal" value="0"/>
+    </priority>
+    <time>
+        <code label="8:00" value="08:00:00"/>
+        <code label="8:30" value="08:30:00"/>
+        <code label="9:00" value="09:00:00"/>
+        <code label="9:30" value="09:30:00"/>
+        <code label="10:00" value="10:00:00"/>
+        <code label="10:30" value="10:30:00"/>
+        <code label="11:00" value="11:00:00"/>
+        <code label="11:30" value="11:30:00"/>
+        <code label="12:00" value="12:00:00"/>
+        <code label="12:30" value="12:30:00"/>
+        <code label="13:00" value="13:00:00"/>
+        <code label="13:30" value="13:30:00"/>
+        <code label="14:00" value="14:00:00"/>
+        <code label="14:30" value="14:30:00"/>
+        <code label="15:00" value="15:00:00"/>
+        <code label="15:30" value="15:30:00"/>
+        <code label="16:00" value="16:00:00"/>
+        <code label="16:30" value="16:30:00"/>
+        <code label="17:00" value="17:00:00"/>
+        <code label="17:30" value="17:30:00"/>
+        <code label="18:00" value="18:00:00"/>
+        <code label="18:30" value="18:30:00"/>
+        <code label="19:00" value="19:00:00"/>
+    </time>
+    <sort>
+        <code value="date:asc" label="Zeit &gt;"/>
+        <code value="patient:asc" label="Patient &gt;"/>
+        <code value="actor:asc" label="Erbringer &gt;"/>
+    </sort>
+    <diagnosis>
+        <role value="AD" label-en="Admission diagnosis"/>	
+        <role value="DD" label-en="Discharge diagnosis"/>	
+        <role value="CC" label-en="Chief complaint"/>
+        <role value="CM" label-en="Comorbidity diagnosis"/>
+        <role value="pre-op" label-en="pre-op diagnosis"/>
+        <role value="post-op" label-en="post-op diagnosis"/>
+        <role value="billing" label-en="Billing"/>
+    </diagnosis>
+    <bricks xmlns="http://hl7.org/fhir" comp="4.0.1">
+        <Encounter>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+            <basedOn>
+                <reference value=""/>
+                <display value=""/>
+            </basedOn>
+            <status value="planned"/>
+            <class value="AMB"/>
+            <type>
+                <coding>
+                    <system value="http://hl7.org/fhir/encounter-type"/>
+                    <code value="amb"/>
+                    <display value="ambulant"/>
+                </coding>
+                <text value="ambulant"/>
+            </type>
+            <subject>
+                <reference value=""/>
+                <display value=""/>
+            </subject>
+            <participant>
+                <type>
+                    <coding>
+                        <system value=""/>
+                        <code value=""/>
+                        <display value=""/>
+                    </coding>
+                    <text value=""/>
+                </type>
+                <individual>
+                    <reference value=""/>
+                    <display value=""/>
+                </individual>
+                <period>
+                    <start value=""/>
+                    <end value=""/>
+                </period>
+            </participant>
+            <appointment>
+                <reference value=""/>
+            </appointment>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <length value=""/>
+            <reasonCode>
+                <coding>
+                    <system value="#encounter-reason"/>
+                    <code value="amb"/>
+                    <display value="Ambulanter Besuch"/>
+                </coding>
+                <text value="Ambulanter Besuch"/>
+            </reasonCode>
+            <serviceProvider>
+                <reference value="metis/organizations/kikl-spz"/>
+                <display value="SPZ Kinderklinik"/>
+            </serviceProvider>
+            <location>
+                <location>
+                    <reference value="metis/locations/kikl-spz"/>
+                    <display value="SPZ KiKl"/>
+                </location>
+                <status value="planned"/>
+                <period>
+                    <start value=""/>
+                    <end value=""/>
+                </period>
+            </location>
+        </Encounter>
+        <basedOn>
+            <reference value=""/>
+            <display value=""/>
+        </basedOn>
+        <type>
+            <coding>
+                <system value="http://hl7.org/fhir/encounter-type"/>
+                <code value="amb"/>
+                <display value="ambulant"/>
+            </coding>
+            <coding>
+                <system value="http://hl7.org/fhir/v2/0276"/>
+                <code value="ROUTINE"/>
+                <display value="Routine"/>
+            </coding>
+            <text value="ambulant"/>
+        </type>
+        <episodeOfCare>
+            <reference value=""/>
+            <display value=""/>        
+        </episodeOfCare>
+        <priority>
+            <coding>
+                <system value="#encounter-prio"/>
+                <code value="normal"/>
+                <display value="normal"/>
+            </coding>
+            <text value="normal"/>
+        </priority>
+        <partOf>
+            <reference value=""/>
+            <display value=""/>
+        </partOf>
+        <location>
+            <location>
+                <reference value="metis/locations/kikl-spz"/>
+                <display value="SPZ KiKl"/>
+            </location>
+            <status value="planned"/>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+        </location>
+        <statusHistory>
+            <status value=""/>
+            <extension url="#encounter-status-change">
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="#encounter-status-change-reason"/>
+                        <code value=""/>
+                    </coding>
+                    <text value=""/>
+                </valueCodeableConcept>
+            </extension>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+        </statusHistory>
+        <diagnosis>
+            <condition>
+                <reference value=""/>
+                <display value=""/>
+            </condition>
+            <use>
+                <coding>
+                    <system value="http://hl7.org/fhir/diagnosis-role"/>
+                    <code value="AD"/>
+                    <display value="Aufnahmediagnose"/>
+                </coding>
+                <text value="Behandlungsdiagnose"/>
+            </use>
+            <rank value="1"/>
+        </diagnosis>
+    </bricks>
+</encounter-infos>

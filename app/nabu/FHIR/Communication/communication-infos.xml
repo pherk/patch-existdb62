@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<communication-infos>
+    <status>
+        <code label-de="in Arbeit" value="in-progress"/>
+        <code label-de="angehalten" value="suspended"/>
+        <code label-de="im Druck" value="printing"/>
+        <code label-de="beended o.Dr." value="completed"/>
+        <code label-de="abgebrochen o.Dr." value="failed"/>
+        <code label-de="zurückgewiesen" value="rejected"/>
+        <code label-de="gedruckt" value="printed"/>
+    </status>
+    <medium>
+        <code label-de="schriftlich" value="byletter"/>
+        <code label-de="Phone" value="phone"/>
+        <code label-de="mündlich" value="orally"/>
+        <code label-de="Email" value="email"/>
+        <code label-de="SMS" value="sms"/>
+        <code value="no-info" label-de="keine Info"/>
+    </medium>
+    <category>
+        <code label-de="Brief" value="letter"/>
+    </category>
+    <reasonCode>
+        <code label-de="Info" value="info"/>
+    </reasonCode>
+    <infobrief>
+        <text label-de="Arzt n.d." value="Aus organisatorischen Gründen mussten wir Ihren alten Termin leider verschieben. Bitte beachten Sie das neue Datum. Wir bitten um Ihr Verständnis."/>
+        <text label-de="16:00 Termin" value="Bitte 15 Minuten früher kommen, da die Anmeldung um 16:00 schließt."/>
+<!--
+        <text label-de="GBA-Bayley" 
+           value="<p>Vor etwa 2 Jahren wurde Ihr Kind  in der Uniklinik Köln geboren. Ihr Kind gehört zur Gruppe frühgeborener Kinder mit einem Geburtsgewicht unter 1500g. Wir sind verpflichtet, diese Kinder im Alter von 2 Jahren mit einem Entwicklungstest zu untersuchen. Hierzu werden die Bayley-Scales of Infant Development III verwendet. Der Test prüft den kognitiven, sprachlichen und motorischen Entwicklungsstand des Kindes.</p> 
+<p>Wir verstehen diese Untersuchung als Förderdiagnostik, bei der Sie auch beraten werden, ob und welche Förderung ggf. für Ihr Kind zu empfehlen ist.</p>
+<p>Wir haben für diese Untersuchung den obenstehenden Termin reserviert. Die Untersuchung dauert mit Beratung etwa 2 Stunden. Bei Mehrlingen versuchen wir, diese parallel zu terminieren. Dann sollte für jedes Kind eine Begleitperson mitkommen.</p>
+<p>Bitte informieren Sie uns, falls
+  <ul>
+    <li>hr Kind bereits von einer anderen Stelle in dieser Zeit mit einem Entwicklungstest untersucht wurde/wird</li>
+    <li>Sie verhindert sind. Wir können dann einen anderen Termin vereinbaren.</li>
+    <li>Sie aus anderen Gründen nicht teilnehmen möchten oder können.</li>
+  </ul></p>"/>
+
+Bayley
+an untenstehendem Termin planen wir, Ihr Kind mit einem Entwicklungstest zu untersuchen. Hierzu werden die Bayley-Scales of Infant Development III verwendet. Der Test prüft den kognitiven, sprachlichen und motorischen Entwicklungsstand des Kindes. 
+Wir verstehen diese Untersuchung als Förderdiagnostik, bei der Sie auch beraten werden, ob und welche Förderung ggf. für Ihr Kind zu empfehlen ist. 
+Die Untersuchung dauert mit Beratung etwa 2 Stunden. Bei Mehrlingen versuchen wir, diese parallel zu terminieren. Dann sollte für jedes Kind eine Begleitperson mitkommen.
+
+Psych bzw lange Termine mit Diagnostik (120min)
+an untenstehendem Termin ist eine psychologische Untersuchung geplant. Bitte planen Sie für diesen Termin genügend Zeit ein. Die Untersuchung des Kindes und Besprechung Ihrer Fragen kann bis zu zwei Stunden dauern. Bitte bringen Sie auch aktuelle Befundberichte z.B. von Therapien, bei Schulfragen aktuelle Schulzeugnisse, Kindergartenberichte, Befunde von früheren Untersuchungen an anderen Stellen oder ähnliche Unterlagen mit.
+-->
+    </infobrief>
+    <bricks xmlns="http://hl7.org/fhir" comp="4.0.1">
+        <Communication>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+            <basedOn/>
+            <partOf/>
+            <inResponseTo/>
+            <category>
+                <coding>
+                    <system value="#nabu-communication"/>
+                    <code value="info-app"/>
+                    <display value="Info Appointment"/>
+                    </coding>
+                <text value="Info Appointment"/>
+            </category>
+            <subject>
+                <reference value=""/>
+                <display value=""/>
+            </subject>
+            <sender>
+                <reference value="metis/organizations/kikl-spzn"/>
+                <display value="SPZ Kinderklinik"/>
+            </sender>
+            <recipient>
+                <reference value=""/>
+                <display value=""/>
+            </recipient>
+            <parent>
+                <reference value=""/>
+            </parent>
+            <medium>
+                <coding>
+                    <system value="#nabu-medium"/>
+                    <code value="byletter"/>
+                    <display value="Post"/>
+                </coding>
+            </medium>
+            <status value="in-progress"/>
+            <sent value=""/>
+            <received value=""/>
+            <reasonCode>
+                <coding>
+                    <system value="#nabu-reason"/>
+                    <code value="info"/>
+                    <display value="Info"/>
+                </coding>
+                <text value="Info"/>
+            </reasonCode>
+            <note>
+                <text value=""/>
+            </note>
+        </Communication>
+        <notDone value="false"/>
+        <notDoneReason>
+            <coding>
+                <system value="#nabu-notdone-reason"/>
+                <code value="info-only"/>
+                <display value="nur Info"/>
+            </coding>
+            <text value="nur Info"/>
+        </notDoneReason>
+    </bricks>
+</communication-infos>

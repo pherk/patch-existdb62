@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composition-infos>
+    <type>
+        <code value="18842-5" label-ger="Entlassbrief" label-en="discharge summary"/>
+    </type>
+    <class>
+        <code value="173387-4" label-ger="" label-en="Administrative note"/>
+        <code value="173388-2" label-ger="" label-en="Against medical advice note"/>
+        <code value="173389-0" label-ger="Übereinkunft" label-en="Agreement"/>
+        <code value="173390-8" label-ger="" label-en="Certificate"/>
+        <code value="173394-0" label-ger="Enverständnis" label-en="Consent"/>
+        <code value="173403-9" label-ger="" label-en="Contract"/>
+        <code value="193873-9" label-ger="" label-en="Driver license"/>
+        <code value="173404-7" label-ger="" label-en="Health insurance card"/>
+        <code value="173405-4" label-ger="" label-en="Health insurance-related form"/>
+        <code value="173406-2" label-ger="" label-en="Health record cover sheet"/>
+        <code value="173407-0" label-ger="" label-en="Legal document"/>
+        <code value="181089-6" label-ger="" label-en="Request"/>
+        <code value="173409-6" label-ger="" label-en="Advance directive"/>
+        <code value="173410-4" label-ger="" label-en="Do not resuscitate"/>
+        <code value="173412-0" label-ger="" label-en="Living will"/>
+        <code value="173413-8" label-ger="" label-en="Rescinded advance directive"/>
+        <code value="173414-6" label-ger="Diagramm" label-en="Diagram"/>
+        <code value="173415-3" label-ger="Flussdiagramm" label-en="Flowsheet"/>
+        <code value="181112-6" label-ger="" label-en="Form"/>
+        <code value="181116-7" label-ger="Instruktionen" label-en="Instructions"/>
+        <code value="181119-1" label-ger="Aktionsplan" label-en="Action plan"/>
+        <code value="173118-3" label-ger="" label-en="Discharge instructions"/>
+        <code value="173416-1" label-ger="" label-en="Legal"/>
+        <code value="173417-9" label-ger="Brief" label-en="Letter"/>
+        <code value="173418-7" label-ger="Notiz" label-en="Note"/>
+        <code value="173419-5" label-ger="" label-en="Adverse event note"/>
+        <code value="173420-3" label-ger="" label-en="Alert"/>
+        <code value="181207-4" label-ger="" label-en="Order"/>
+        <code value="181204-1" label-ger="" label-en="Prescription"/>
+        <code value="156982-3" label-ger="" label-en="Photographic image"/>
+        <code value="173421-1" label-ger="Bericht" label-en="Report"/>
+        <code value="183503-4" label-ger="Fallbericht" label-en="Case report"/>
+        <code value="183502-6" label-ger="" label-en="Registry report"/>
+    </class>
+    <confidentiality>
+        <code value="U" label="unrestricted" definition="Privacy metadata indicating that the information is not classified as sensitive."/>
+        <code value="L" label="low" definition="Privacy metadata indicating that the information has been de-identified, and there are mitigating circumstances that prevent re-identification, which minimize risk of harm from unauthorized disclosure. The information requires protection to maintain low sensitivity."/>
+        <code value="M" label="moderate" definition="Privacy metadata indicating moderately sensitive information, which presents moderate risk of harm if disclosed without authorization."/>
+        <code value="N" label="normal" definition="Privacy metadata indicating that the information is typical, non-stigmatizing health information, which presents typical risk of harm if disclosed without authorization."/>
+        <code value="R" label="restricted" definition="Privacy metadata indicating highly sensitive, potentially stigmatizing information, which presents a high risk to the information subject if disclosed without authorization. May be pre-empted by jurisdictional law, e.g., for public health reporting or emergency treatment."/>
+        <code value="V" label="very restricted" definition="Privacy metadata indicating that the information is extremely sensitive and likely stigmatizing health information that presents a very high risk if disclosed without authorization. This information must be kept in the highest confidence."/>
+    </confidentiality>
+    <status>
+        <code label-en="" label-ger="vorläufig" value="preliminary"/>
+        <code label-en="" label-ger="vidiert" value="final"/>
+        <code label-en="" label-ger="erweitert" value="appended"/>
+        <code label-en="" label-ger="revidiert" value="amended"/>
+        <code label-en="" label-ger="invalide" value="retracted"/>
+    </status>
+    <medium>
+        <code label-en="" label-ger="schriftlich" value="byletter"/>
+        <code label-en="" label-ger="Phone" value="phone"/>
+        <code label-en="" label-ger="mündlich" value="orally"/>
+        <code label-en="" label-ger="Email" value="email"/>
+        <code label-en="" label-ger="SMS" value="sms"/>
+        <code label-en="" label-ger="keine Info" value="no-info"/>
+    </medium>
+    <category>
+        <code label-ger="" label-en="Brief" value="letter"/>
+    </category>
+    <reason>
+        <code label-ger="" label-en="Info" value="info"/>
+    </reason>
+    <bricks xmlns="http://hl7.org/fhir" comp="4.0.1">
+        <Composition>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+            <date value=""/>
+            <type>
+                <coding>
+                    <system value="http://loinc.org"/>
+                    <code value="18842-5"/>
+                    <display value="Ambulanzbrief"/>
+                </coding>
+                <text value="Ambulanzbrief"/>
+            </type>
+            <category>
+                <coding>
+                    <system value="http://loinc.org"/>
+                    <code value="173421-1"/>
+                    <display value="Report"/>
+                </coding>
+                <text value="Bericht"/>
+            </category>
+            <title value=""/>
+            <status value="preliminary"/>
+            <confidentiality value="N"/>
+            <subject>
+                <reference value=""/>
+                <display value=""/>
+            </subject>
+            <author>
+                <reference value=""/>
+                <display value=""/>                
+            </author>
+            <extension url="http://www.eNahar.org/exist/apps/nabu/composition-recipient">
+                <valueReference>
+                    <reference value=""/>
+                    <display value=""/>
+                </valueReference>
+            </extension>
+            <attester>
+                <mode value="official"/>
+                <time value=""/>
+                <party>
+                    <reference value="metis/organizations/kikl-spz"/>
+                    <display value="SPZ Kinderklinik"/>
+                </party>
+            </attester>
+            <custodian>
+                <reference value="metis/organizations/kikl-spz"/>
+                <display value="SPZ Kinderklinik"/>
+            </custodian>
+            <event>  <!-- 0..* The clinical service(s) being documented -->
+                <code>
+                    <coding>
+                        <system value="http://hl7.org/fhir/v3/ActCode"/>
+                        <code value="HEALTHREC"/>
+                        <display value="health record"/>
+                    </coding>                
+                </code>
+                <period>
+                    <start value=""/>
+                    <end value=""/>
+                </period>
+            </event>
+            <encounter>
+                <reference value=""/>
+                <display value=""/>
+            </encounter>
+            <section>  <!-- 0..* Composition is broken into sections -->
+                <title value=""/>
+                <code><!-- 0..1 CodeableConcept Classification of section (recommended) --></code>
+                <text><!-- ?? 0..1 Narrative Text summary of the section, for human interpretation --></text>
+                <mode value="[code]"/><!-- 0..1 working | snapshot | changes -->
+                <orderedBy><!-- 0..1 CodeableConcept Order of section entries --></orderedBy>
+                <entry><!-- ?? 0..* Reference(Any) A reference to data that supports this section --></entry>
+                <emptyReason><!-- ?? 0..1 CodeableConcept Why the section is empty --></emptyReason>
+            </section>
+        </Composition>
+        <section>  <!-- 0..* Composition is broken into sections -->
+            <title value="[string]"/><!-- 0..1 Label for section (e.g. for ToC) -->
+            <code><!-- 0..1 CodeableConcept Classification of section (recommended) --></code>
+            <text><!-- ?? 0..1 Narrative Text summary of the section, for human interpretation --></text>
+            <mode value="[code]"/><!-- 0..1 working | snapshot | changes -->
+            <orderedBy><!-- 0..1 CodeableConcept Order of section entries --></orderedBy>
+            <entry><!-- ?? 0..* Reference(Any) A reference to data that supports this section --></entry>
+            <emptyReason><!-- ?? 0..1 CodeableConcept Why the section is empty --></emptyReason>
+        </section>
+            <author>
+                <reference value=""/>
+                <display value=""/>                
+            </author>
+            <focus>
+                <reference value=""/>
+                <display value=""/>                
+            </focus>
+            <event>  <!-- 0..* The clinical service(s) being documented -->
+                <code>
+                    <coding>
+                        <system value="http://hl7.org/fhir/v3/ActCode"/>
+                        <code value="HEALTHREC"/>
+                        <display value="health record"/>
+                    </coding>                
+                </code>
+                <period>
+                    <start value=""/>
+                    <end value=""/>
+                </period>
+                <detail/>
+            </event>
+        <relatesTo>  <!-- 0..* Relationships to other compositions/documents -->
+            <code value="[code]"/><!-- 1..1 replaces | transforms | signs | appends -->
+            <targetReferenc>
+                <reference value=""/>
+                <display value=""/>
+            </targetReferenc>
+        </relatesTo>
+    </bricks>
+</composition-infos>

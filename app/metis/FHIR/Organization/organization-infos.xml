@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contact-infos>
+    <active value="true" label="aktiv"/>
+    <active value="false" label="inaktiv"/>
+    <telecom>
+        <use value="home" label="Privat"/>
+        <use value="work" label="Arbeit"/>
+        <system value="phone" label="Phone"/>
+        <system value="mobil" label="Mobil"/>
+        <system value="email" label="Email"/>
+        <system value="url" label="Internet"/>
+        <system value="fax" label="Fax"/>
+        <system value="pager" label="Funker"/>
+    </telecom>
+    <tags>
+        <item value="arzt" label="Arzt"/>
+        <item value="uk" label="intern UK"/>
+        <item value="nurse" label="Pflege"/>
+        <item value="psych" label="Psychologie"/>
+        <item value="team" label="Team"/>
+        <item value="tx" label="Therapie"/>
+        <item value="other" label="Sonstige"/>
+        <item value="new" label="neu"/>
+        <item value="inactive" label="inaktiv"/>
+    </tags>
+    <type>
+        <item value="dept" label="Abteilung"/>
+        <item value="auth" label="Behörde"/>
+        <item value="firma" label="Firma"/>
+        <item value="fv" label="Förderverein"/>
+        <item value="institute" label="Institut"/>
+        <item value="prov" label="HCP"/>
+        <item value="clinic" label="Klinik"/>
+        <item value="kita" label="KiTa"/>
+        <item value="nurse" label="Pflege"/>
+        <item value="reha" label="REHA"/>
+        <item value="school" label="Schule"/>
+        <item value="insurance" label="Versicherung"/>
+        <item value="other" label="Sonstige"/>
+    </type>
+    <dow>
+        <day value="0" label="Sonntag"/>
+        <day value="1" label="Montag"/>
+        <day value="2" label="Dienstag"/>
+        <day value="3" label="Mittwoch"/>
+        <day value="4" label="Donnerstag"/>
+        <day value="5" label="Freitag"/>
+        <day value="6" label="Samstag"/>
+    </dow>
+    <bricks xmlns="http://hl7.org/fhir" version="4.0.4">
+<Organization>
+    <id value=""/>
+    <meta>
+        <tag>
+            <coding>
+                <system value="#metis-tag"/>
+                <code value=""/>
+                <display value=""/>
+            </coding>
+            <text value="invalid"/>
+        </tag>
+        <versionID value="0"/>
+    </meta>
+    <identifier>
+        <use value="official"/>
+        <label value="Nabu"/>
+        <system value="#organization-id"/>
+        <value value=""/>
+    </identifier>
+    <name value=""/>
+    <alias value=""/>
+    <type>
+        <coding>
+            <system value="#organization-type"/>
+            <code value=""/>
+            <display value=""/>
+        </coding>
+        <text value="invalid"/>
+    </type>
+    <address>
+        <use value="work"/>
+        <line value=""/>
+        <line value=""/>
+        <city value=""/>
+        <state value="NW"/>
+        <postalCode value=""/>
+        <country value="DEU"/>
+    </address>
+    <partOf>
+        <reference value=""/>
+        <display value=""/>
+    </partOf>
+    <active value="true"/>
+</Organization>
+        <tag>
+            <coding>
+                <code value=""/>
+                <display value=""/>
+            </coding>
+            <text value=""/>
+        </tag>
+        <contact>
+            <purpose>
+                <coding>
+                    <system value="http://hl7.org/fhir/vs/organization-purpose"/>
+                    <code value=""/>
+                    <display value="./."/>
+                </coding>
+                <text value="./."/>
+            </purpose>
+            <name>
+                <use value="official"/>
+                <prefix value="">
+                    <extension url="http://hl7.org/fhir/ExtensionDefinition/iso21090-EN-qualifier">
+                        <valueCode value="AC"/>
+                    </extension>
+                </prefix>
+                <given value=""/>
+                <family value=""/>
+            </name>
+            <address>
+                <line value=""/>
+                <line value=""/>
+                <city value=""/>
+                <state value="NW"/>
+                <postalCode value=""/>
+                <country value="DEU"/>
+            </address>
+            <telecom>
+                <use value="work"/>
+                <system value="phone"/>
+                <value value="+49 221 "/>
+                <rank value=""/>
+            </telecom>
+            <gender value=""/>
+        </contact>
+        <telecom>
+            <use value="work"/>
+            <system value="phone"/>
+            <value value="+49 221 "/>
+            <rank value=""/>
+        </telecom>
+        <telecom>
+            <use value="home"/>
+            <system value="phone"/>
+            <value value="+49 221 "/>
+        </telecom>
+    </bricks>
+</contact-infos>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appointment-infos>
+    <scxml version="1.0" initial="pending">
+        <state id="tentative">
+            <transition target="booked" event="accept"/>
+            <transition target="tentative" event="leave"/>
+        </state>
+        <state id="booked">
+            <transition target="arrived" event="arrive"/>
+            <transition target="cancelled" event="cancel"/>
+            <transition target="noshow" event="noshow"/>
+            <transition target="booked" event="leave"/>
+        </state>
+        <state id="arrived">
+            <transition target="registered" event="register"/>
+            <transition target="fulfilled" event="fulfill"/>
+            <transition target="cancelled" event="cancel"/>
+            <transition target="arrived" event="leave"/>
+        </state>
+        <state id="registered">
+            <transition target="fulfilled" event="fulfill"/>
+            <transition target="cancelled" event="cancel"/>
+            <transition target="registered" event="leave"/>
+        </state>
+        <state id="noshow">
+            <transition target="noshow" event="reorder"/>
+            <transition target="noshow" event="leave"/>
+        </state>
+        <state id="cancelled">
+            <transition target="cancelled" event="reorder"/>
+            <transition target="cancelled" event="leave"/>
+        </state>
+        <state id="fulfilled">
+            <transition target="fulfilled" event="leave"/>
+        </state>
+    </scxml>
+    <event value="accept" label="annehmen"/>
+    <event value="noshow" label="nicht erschienen"/>
+    <event value="arrive" label="ist da"/>
+    <event value="register" label="aufgenommen"/>
+    <event value="fulfill" label="fertig"/>
+    <event value="reorder" label="neuterminieren"/>
+    <event value="cancel" label="cancel"/>
+    <event value="leave" label="unverändert"/>
+    <status><!-- FHIR status -->
+        <code label="vorläufig" value="tentative"/>
+        <code label="gebucht" value="booked"/>
+        <code label="ist da" value="arrived"/>
+        <code label="aufgenommen" value="registered"/>
+        <code label="fertig" value="fulfilled"/>
+        <code label="nicht erschienen" value="noshow"/>
+        <code label="gestrichen" value="cancelled"/>
+        <code label="reorder" value="reorder"/>
+    </status>
+    <ActStatus><!-- not used -->
+        <code level="1" label="normal" value="normal">Encompasses the expected states of an Act, but excludes "nullified" and "obsolete" which represent unusual terminal states for the life-cycle.</code>
+        <code level="2" label="aborted" value="aborted">The Act has been terminated prior to the originally intended completion.</code>
+        <code level="2" label="active" value="active">The Act can be performed or is being performed</code>
+        <code level="2" label="cancelled" value="cancelled">The Act has been abandoned before activation.</code>
+        <code level="2" label="completed" value="completed">An Act that has terminated normally after all of its constituents have been performed.</code>
+        <code level="2" label="held" value="held">An Act that is still in the preparatory stages has been put aside. No action can occur until the Act is released.</code>
+        <code level="2" label="new" value="new">An Act that is in the preparatory stages and may not yet be acted upon</code>
+        <code level="2" label="suspended" value="suspended">An Act that has been activated (actions could or have been performed against it), but has been temporarily disabled. No further action should be taken against it until it is released</code>
+        <code level="1" label="nullified" value="nullified">This Act instance was created in error and has been 'removed' and is treated as though it never existed. A record is retained for audit purposes only.</code>
+        <code level="1" label="obsolete" value="obsolete">This Act instance has been replaced by a new instance.</code>
+    </ActStatus>
+    <type>
+        <code label="Ambulanz" value="amb"/>
+    </type>
+    <reason>
+        <code label="Ambulanter Notfall" value="ambu"/>
+        <code label="Ambulanter Besuch" value="amb"/>
+        <code label="Poststationäre ErstV" value="post-new">Poststationäre Erstvorstellung</code>
+        <code label="Poststationäre WV" value="post-known">Poststationäre Wiedervorstellung</code>
+    </reason>
+    <required>
+        <code label="erforderlich" value="required"/>
+        <code label="optional" value="optional"/>
+        <code label="nur Info" value="info-only">nur Info</code>
+    </required>
+    <action><!-- iCal status -->
+        <code label="angenommen" value="accepted"/>
+        <code label="abgelehnt" value="declined "/>
+        <code label="vorläufig" value="tentative"/><!-- not used
+    <code label=""          value="in-process"/>
+    <code label=""          value="completed"/>
+    <code label=""          value="needs-action"/>
+-->
+    </action>
+    <priority>
+        <code label="normal" value="0"/>
+    </priority>
+    <sort>
+        <code value="date:asc" label="Zeit &gt;"/>
+        <code value="patient:asc" label="Patient &gt;"/>
+        <code value="actor:asc" label="Erbringer &gt;"/>
+    </sort>
+    <time>
+        <code label="8:00" value="08:00:00"/>
+        <code label="8:30" value="08:30:00"/>
+        <code label="9:00" value="09:00:00"/>
+        <code label="9:30" value="09:30:00"/>
+        <code label="10:00" value="10:00:00"/>
+        <code label="10:30" value="10:30:00"/>
+        <code label="11:00" value="11:00:00"/>
+        <code label="11:30" value="11:30:00"/>
+        <code label="12:00" value="12:00:00"/>
+        <code label="12:30" value="12:30:00"/>
+        <code label="13:00" value="13:00:00"/>
+        <code label="13:30" value="13:30:00"/>
+        <code label="14:00" value="14:00:00"/>
+        <code label="14:30" value="14:30:00"/>
+        <code label="15:00" value="15:00:00"/>
+        <code label="15:30" value="15:30:00"/>
+        <code label="16:00" value="16:00:00"/>
+        <code label="16:30" value="16:30:00"/>
+        <code label="17:00" value="17:00:00"/>
+        <code label="17:30" value="17:30:00"/>
+        <code label="18:00" value="18:00:00"/>
+        <code label="18:30" value="18:30:00"/>
+        <code label="19:00" value="19:00:00"/>
+    </time>
+</appointment-infos>

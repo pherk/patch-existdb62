@@ -1,0 +1,27 @@
+Dashboard
+- portlets
+
+Admin
+- combine schedules
+- more checking, validate
+- location
+- schedule param overrride (timing)
+
+Main
+- fullcalendar goto nur 1.Zeile, falscher Erbringer
+
+- too big, details too small
+
+Kombi-Termin workflow shaky, multiple comms
+
+- german date
+
+scheduledEvent JSON partial leaves
+scheduledEventXML partial HD?
+
+- respon path uid=0
+- getting cal for group 
+- must delete old values from i-search; aktualize filter combi?
+
+- rdate
+- exdate

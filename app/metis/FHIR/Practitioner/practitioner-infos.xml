@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contact-infos>
+    <active value="true" label="aktiv"/>
+    <active value="false" label="inaktiv"/>
+    <honorific-prefix value="drmed" label="Dr.med."/>
+    <honorific-prefix value="diplpsych" label="Dipl.psych."/>
+    <honorific-prefix value="dr" label="Dr."/>
+    <honorific-prefix value="pd" label="PD Dr."/>
+    <honorific-prefix value="prof" label="Prof.Dr."/>
+    <gender value="m" label="männlich"/>
+    <gender value="w" label="weiblich"/>
+    <address>
+        <use value="home" label="Privat"/>
+        <use value="work" label="Arbeit"/>
+    </address>
+    <telecom>
+        <use value="home" label="Privat"/>
+        <use value="work" label="Arbeit"/>
+        <system value="phone" label="Phone"/>
+        <system value="mobil" label="Mobil"/>
+        <system value="email" label="Email"/>
+        <system value="url" label="Internet"/>
+        <system value="fax" label="Fax"/>
+        <system value="pager" label="Funker"/>
+    </telecom>
+    <relations>
+        <relation value="mother" label="Mutter"/>
+        <relation value="father" label="Vater"/>
+        <relation value="caregiver" label="Pflege">(Non)professional caregiver</relation>
+        <relation value="insurant" label="Versicherter"/>
+        <relation value="emergency" label="Notfall">Contact for use in case of emergency</relation>
+        <relation value="family" label="Family"/>
+        <relation value="guardian" label="Betreuer"/>
+        <relation value="friend" label="Freund"/>
+        <relation value="partner" label="Partner"/>
+        <relation value="work" label="Arbeitstelle">Contact for matters related to the patients occupation/employment</relation>
+        <relation value="agent" label="Agent">Contact that acts on behalf of the patient</relation>
+        <relation value="guarantor" label="Bürge">Contact for financial matters</relation>
+        <relation value="parent" label="Parent">Parent of the patient</relation>
+    </relations>
+    <types>
+        <item value="person" label="Person"/>
+        <item value="organization" label="Organisation"/>
+    </types>
+    <tags>
+        <item value="arzt" label="Arzt"/>
+        <item value="auth" label="Behörde"/>
+        <item value="firma" label="Firma"/>
+        <item value="fv" label="Förderverein"/>
+        <item value="uk" label="intern UK"/>
+        <item value="clinic" label="Klinik"/>
+        <item value="kita" label="KiTa"/>
+        <item value="nurse" label="Pflege"/>
+        <item value="psych" label="Psychologie"/>
+        <item value="reha" label="REHA"/>
+        <item value="school" label="Schule"/>
+        <item value="team" label="Team"/>
+        <item value="tx" label="Therapie"/>
+        <item value="insurance" label="Versicherung"/>
+        <item value="other" label="Sonstige"/>
+        <item value="new" label="neu"/>
+        <item value="inactive" label="inaktiv"/>
+    </tags>
+    <profs>
+        <prof value="arzt" label="Arzt"/>
+        <prof value="arzt-ki" label="Kinderarzt"/>
+        <prof value="arzt-ortho" label="Orthopäde"/>
+        <prof value="arzt-kjp" label="KJP"/>
+        <prof value="arzt-nch" label="NCH"/>
+        <prof value="at-shk" label="Stud.Hilfskraft"/>
+        <prof value="at-kk" label="Kinderkrankenschwester"/>
+        <prof value="at-kr" label="Krankenschwester"/>
+        <prof value="at-mfa" label="Med.Fachangestellte"/>
+        <prof value="at-ass" label="Teamassistent"/>
+        <prof value="at-prakt" label="Praktikant"/>
+        <prof value="at-helfer" label="Amb Helfer"/>
+        <prof value="ergo" label="Ergotherapie"/>
+        <prof value="hp" label="Heilpädagogik"/>
+        <prof value="logo" label="Logopädie"/>
+        <prof value="musik" label="Musiktherapie"/>
+        <prof value="orthotic" label="Orthopädie-Technik"/>
+        <prof value="orthoptic" label="Orthoptik"/>
+        <prof value="physio" label="Physiotherapie"/>
+        <prof value="psych" label="Psychologe"/>
+        <prof value="psych-pt" label="Psychotherapeut"/>
+        <prof value="se" label="Sekretariat"/>
+        <prof value="sa" label="Sozialarbeit"/>
+        <prof value="babwl" label="BA BWL"/>
+        <prof value="other" label="Sonstige"/>
+    </profs>
+    <dow>
+        <day value="0" label="Sonntag"/>
+        <day value="1" label="Montag"/>
+        <day value="2" label="Dienstag"/>
+        <day value="3" label="Mittwoch"/>
+        <day value="4" label="Donnerstag"/>
+        <day value="5" label="Freitag"/>
+        <day value="6" label="Samstag"/>
+    </dow>
+    <bricks xmlns="http://hl7.org/fhir">
+        <Practitioner>
+            <id value=""/>
+            <meta>
+                <tag>
+                    <coding>
+                        <system value="#metis-tag"/>
+                        <code value=""/>
+                        <display value=""/>
+                    </coding>
+                    <text value="invalid"/>
+                </tag>
+                <versionID value="0"/>
+            </meta>
+            <name>
+                <use value="official"/>
+                <prefix value="">
+                    <extension url="http://hl7.org/fhir/ExtensionDefinition/iso21090-EN-qualifier">
+                        <valueCode value="AC"/>
+                    </extension>
+                </prefix>
+                <given value=""/>
+                <family value=""/>
+                <text value=""/>
+                <suffix value=""/>
+                <period>
+                    <start value=""/>
+                    <end value=""/>
+                </period>
+            </name>
+            <address>
+                <use value="work"/>
+                <line value=""/>
+                <line value=""/>
+                <city value=""/>
+                <state value="NW"/>
+                <postalCode value=""/>
+                <country value="DEU"/>
+            </address>
+            <telecom>
+                <system value="phone"/>
+                <value value=""/>
+                <use value="work"/>
+            </telecom>
+            <telecom>
+                <system value="email"/>
+                <value value=""/>
+                <use value="work"/>
+            </telecom>
+            <telecom>
+                <system value="url"/>
+                <value value=""/>
+                <use value="work"/>
+            </telecom>
+            <birthDate value=""/>
+            <gender value="unknown"/>
+            <communication>
+                <coding>
+                    <system value="urn:ietf:bcp:47"/><!--   IETF language tag   -->
+                    <code value="de"/>
+                    <display value="Deutsch"/>
+                </coding>
+                <text value="Deutsch"/>
+            </communication>
+        <qualification><!-- 0..* Qualifications obtained by training and certification -->
+            <identifier/>
+            <code>
+                <coding>
+                    <system value="http://hl7.org/fhir/vs/practitioner-specialty"/>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>
+            </code>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <issuer>
+                <reference value=""/>
+                <display value=""/>
+            </issuer>
+        </qualification>
+            <extension url="#practitioner-note">
+                <note value=""/>
+            </extension>
+            <active value="true"/>
+        </Practitioner>
+        <tag>
+            <coding>
+                <code value=""/>
+                <display value=""/>
+            </coding>
+            <text value=""/>
+        </tag>
+        <identifier>
+            <use value="official"/>
+            <type value="UKK-BSNR"/>
+            <system value="http://eNahar.org/nabu/system#ukk-bsnr"/>
+            <value value=""/>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <assigner>
+                <reference value="metis/Organization/ukk"/>
+                <display value="UKK"/>
+            </assigner>
+        </identifier>
+        <identifier>
+            <use value="official"/>
+            <type value="PersonalID"/>
+            <system value="http://eNahar.org/nabu/system#ukk-idm"/>
+            <value value=""/>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <assigner>
+                <reference value="metis/Organization/ukk"/>
+                <display value="UKK"/>
+            </assigner>
+        </identifier>
+            <identifier>
+                <use value="usual"/>
+                <type value="MetisID"/>
+                <system value="http://eNahar.org/nabu/system#metis-account"/>
+                <value value=""/>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <assigner>
+                <reference value="metis/Organization/kikl-spzn"/>
+                <display value="nSPZ UKK"/>
+            </assigner>
+            </identifier>
+        <organization>
+            <reference value=""/>
+            <display value=""/>
+        </organization>
+        <telecom>
+            <use value="work"/>
+            <system value="phone"/>
+            <value value="+49 221 "/>
+        </telecom>
+        <telecom>
+            <use value="home"/>
+            <system value="phone"/>
+            <value value="+49 221 "/>
+        </telecom>
+        <qualification><!-- 0..* Qualifications obtained by training and certification -->
+            <identifier/>
+            <code>
+                <coding>
+                    <system value="http://eNahar.org/nabu/system#practitioner-qualification"/>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>
+            </code>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <issuer>
+                <reference value=""/>
+                <display value=""/>
+            </issuer>
+        </qualification>
+    </bricks>
+</contact-infos>

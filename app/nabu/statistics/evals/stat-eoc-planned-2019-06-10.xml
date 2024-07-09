@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stats count="853"><eoc-with-encs><count>7</count><encs count="3"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-5402b50a-b144-4fc9-828b-fdbf194706ba"/>
+                <display value="Scheider, Felix, *2018-12-13"/>                
+            </subject><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-5402b50a-b144-4fc9-828b-fdbf194706ba"/>
+            <display value="Scheider, Felix, *2018-12-13"/>
+        </subject><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-5402b50a-b144-4fc9-828b-fdbf194706ba"/>
+            <display value="Scheider, Felix, *2018-12-13"/>
+        </subject><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-5402b50a-b144-4fc9-828b-fdbf194706ba"/>
+            <display value="Scheider, Felix, *2018-12-13"/>
+        </subject></encs><encs count="2"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-1754c620-c122-49b5-b55a-24d506bfc9ba"/>
+                <display value="Welmann, Nikita, *2018-11-21"/>                
+            </subject><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-1754c620-c122-49b5-b55a-24d506bfc9ba"/>
+            <display value="Welmann, Nikita, *2018-11-21"/>
+        </subject><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-1754c620-c122-49b5-b55a-24d506bfc9ba"/>
+            <display value="Welmann, Nikita, *2018-11-21"/>
+        </subject><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-5e44b601-efd0-4674-963e-f50ce22ef317"/>
+                <display value="Funken, Jona, *2018-12-18"/>                
+            </subject><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-5e44b601-efd0-4674-963e-f50ce22ef317"/>
+            <display value="Funken, Jona, *2018-12-18"/>
+        </subject><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-5e44b601-efd0-4674-963e-f50ce22ef317"/>
+            <display value="Funken, Jona, *2018-12-18"/>
+        </subject></encs><encs count="1"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-a2f62815-8951-4298-9377-0b7dd508344c"/>
+                <display value="Ben Said, Youssef, *2019-01-04"/>                
+            </subject><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-a2f62815-8951-4298-9377-0b7dd508344c"/>
+            <display value="Ben Said, Youssef, *2019-01-04"/>
+        </subject><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-316f6ee4-2793-4ec2-92d3-61ed44e69160"/>
+                <display value="Oepen, Maurice, *2019-01-16"/>                
+            </subject><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-316f6ee4-2793-4ec2-92d3-61ed44e69160"/>
+            <display value="Oepen, Maurice, *2019-01-16"/>
+        </subject><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-0c291f5b-6aaf-40be-b41f-9a653a073165"/>
+                <display value="Nüsser, Ole, *2015-05-04"/>                
+            </subject><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-0c291f5b-6aaf-40be-b41f-9a653a073165"/>
+            <display value="Nüsser, Ole, *2015-05-04"/>
+        </subject><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-cc088c1b-8600-47b9-b877-12ad4d92082c"/>
+                <display value="Rinkliöz, Ali, *2018-10-12"/>                
+            </subject><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-cc088c1b-8600-47b9-b877-12ad4d92082c"/>
+                <display value="Renkliöz, Ali, *2018-10-12"/>
+            </subject></encs></eoc-with-encs><eoc-without-encs><count>310</count><older-than date="2018-12-12+02:00"><eoc start="2016-08-29T14:49:20.79+02:00"><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-7192934d-7ec0-4267-8b47-035a06b8fc76"/>
+            <display value="Franco-Pazos, Diego, *2011-09-26"/>
+        </subject></eoc><eoc start="2018-02-01T10:17:44.148+01:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-2043faec-d821-4c4d-8ab8-ff4a3869ef9e"/><display value="Ait Sghir, Anis, *2013-02-08"/></subject></eoc><eoc start="2018-02-23T10:57:30.843+01:00"><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-7fa3f8b6-1f92-4acb-8d8c-b94de9df41d6"/>
+            <display value="Schmitz, Leonie, *2011-04-24"/>
+        </subject></eoc><eoc start="2018-03-09T08:11:35.823+01:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-716be62a-2fd2-4ece-8f20-9e1aad7eb143"/><display value="Peusmann, Felix, *2011-05-04"/></subject></eoc><eoc start="2018-03-13T09:09:04.632+01:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-d4610ce9-a2fe-4901-8a6f-5846c3f149b0"/><display value="Sezer, Sinem, *2003-12-11"/></subject></eoc><eoc start="2018-04-23T11:46:47.826+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-cda31a63-6991-422e-bdd0-da04d299f49a"/><display value="Haltenhoff, Finn Luca , *2013-09-05"/></subject></eoc><eoc start="2018-04-23T14:42:51.415+02:00"><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-4428d0bb-55c4-4ee8-857a-fab9fb9aaae1"/>
+            <display value="Weigandt, Adina, *2008-07-23"/>
+        </subject></eoc><eoc start="2018-04-24T13:10:02.577+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-909a0c33-f7c1-4dce-b584-6f2c99d59119"/><display value="Baghdadchi, Amanda, *2017-05-26"/></subject></eoc><eoc start="2018-04-25T10:32:42.962+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-d547573c-7525-422e-b75d-0f357d5469f6"/><display value="Durdu, Yunus, *2018-04-21"/></subject></eoc><eoc start="2018-04-27T11:18:31.421+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-b815f3ce-bf81-4bcc-a03d-6c6decd3deaa"/><display value="Köhn, Aris, *2018-04-20"/></subject></eoc><eoc start="2018-05-02T10:15:10.081+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-aa7d1cbd-ec0d-4199-9439-81dfd90bc7af"/><display value="Madanoglu, Atlas, *2018-03-07"/></subject></eoc><eoc start="2018-05-02T10:36:25.831+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-e1858af2-754f-43ca-b079-662707345c85"/><display value="Kokot, Leonard, *2018-04-26"/></subject></eoc><eoc start="2018-05-03T16:02:04.632+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-1d66ea83-ea48-4979-8dc0-529a4503db7d"/><display value="Candic, Malik, *2018-04-24"/></subject></eoc><eoc start="2018-05-07T15:35:35.446+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-ac1f9c4d-50c9-4c6b-abab-b87d3c51de7a"/><display value="Kluth, Lea, *2018-05-04"/></subject></eoc><eoc start="2018-05-09T10:01:57.795+02:00"><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-17db7345-023e-4115-9a5b-38507594967b"/>
+            <display value="Gruber, Matilda, *2018-02-20"/>
+        </subject></eoc><eoc start="2018-05-09T11:39:12.309+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-d6977108-4023-4996-9076-fe291676fb39"/><display value="Skiba, Frederik, *2006-04-11"/></subject></eoc><eoc start="2018-05-09T14:54:35.815+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-f5416ac0-5d77-4b3f-bca3-6e5574bf503c"/><display value="Panzer, Quint, *2006-08-15"/></subject></eoc><eoc start="2018-05-14T11:34:47.259+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-4ca30da2-a378-449b-ba30-3ce3611f197d"/><display value="Isik, Eymen, *2018-04-15"/></subject></eoc><eoc start="2018-05-15T09:30:59.401+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-304a6422-c603-4ebe-88b6-1e5b4727b7a8"/><display value="Abbassi, Cedra, *2018-04-04"/></subject></eoc><eoc start="2018-05-15T10:39:05.047+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-efac4758-4270-40c6-8327-ec55858ed5f3"/><display value="Öztürk, Ileyna, *2018-04-25"/></subject></eoc><eoc start="2018-05-15T12:21:45.227+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-5757d5d3-751f-4841-a7d4-c2d549e04dee"/><display value="D' Ambrosio, Maila, *2012-09-03"/></subject></eoc><eoc start="2018-05-17T11:04:43.406+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-02dc2c72-9ea0-48d8-beb3-2f2ad69f6999"/><display value="Petinaris, Sophie, *2018-05-10"/></subject></eoc><eoc start="2018-05-17T15:07:34.087+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-e7c9090f-bdc4-419e-9c93-78b5c2123174"/><display value="Chasse de Abreu, Gabriel, *2017-01-15"/></subject></eoc><eoc start="2018-05-18T09:26:26.213+02:00"><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-ff3cc9c2-6e84-4764-93d9-4115df323291"/>
+            <display value="Bersch, Marco Luca, *2012-01-16"/>
+        </subject></eoc><eoc start="2018-05-18T10:47:14.382+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-85762699-0c98-4025-a24b-3cac3b8dd5dc"/><display value="Zundel, Maurice, *2016-04-23"/></subject></eoc><eoc start="2018-05-22T10:47:21.29+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-0c0a5b5d-ea91-4083-9c3c-c1af4b6a4094"/><display value="Manjooran, Yash, *2018-02-25"/></subject></eoc><eoc start="2018-05-22T11:10:54.906+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-3536b65b-7ac7-4789-9a23-772d700071f5"/><display value="Runkel, Lena, *2010-11-05"/></subject></eoc><eoc start="2018-05-22T11:30:40.808+02:00"><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-0c4da8d5-5d1d-4891-93c1-dccdc25da08e"/>
+            <display value="Winkelmann, Leona Marie, *2018-05-11"/>
+        </subject></eoc><eoc start="2018-05-23T08:48:49.135+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-e589c2ad-92ca-4b59-9540-113bfaa204e4"/><display value="Areas- Canosa, Marcel, *2003-08-01"/></subject></eoc><eoc start="2018-05-23T14:34:08.758+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-632533c9-5759-47fe-b5de-0840884a9bbf"/><display value="Atasoy, Azra, *2018-02-27"/></subject></eoc><eoc start="2018-05-24T09:24:24.064+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-58e8722b-fa07-43b8-b0d3-0995f5d93761"/><display value="Homscheid, Luca Benedikt, *2008-06-30"/></subject></eoc><eoc start="2018-05-25T10:40:32.762+02:00"><subject xmlns="http://hl7.org/fhir">
+            <reference value="nabu/patients/p-693ddb44-46e8-4ac7-bd3a-b13b4944374c"/>
+            <display value="Birks, Gloria, *2014-01-27"/>
+        </subject></eoc><eoc start="2018-05-28T15:01:48.554+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-2150c095-676f-4ca7-b7ae-4452bc9bb440"/><display value="Certel, Enes, *2004-09-11"/></subject></eoc><eoc start="2018-05-28T15:07:56.486+02:00"><subject xmlns="http://hl7.org/fhir"><reference value="nabu/patients/p-f7f3fa5f-0eac-43dc-842d-1d2956057451"/><display value="Kasumi, Vesna, *2004-12-28"/></subject></eoc><eoc start="2018-06-04T16:07:11.032+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-5e80d771-7476-4278-86f1-a7bec8f637f0"/>
+                <display value="Scutarin, Vlad, *2018-05-02"/>                
+            </subject></eoc><eoc start="2018-06-05T14:09:12.028+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-ff649058-273a-4b14-b41d-31d501a72d04"/>
+                <display value="Haji, Ayla, *2014-01-06"/>                
+            </subject></eoc><eoc start="2018-06-05T15:51:37.414+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-6b7a1ee1-1c3d-4eb8-a46b-24d4d72a3acd"/>
+                <display value="Wittke, Angelina, *2005-06-02"/>                
+            </subject></eoc><eoc start="2018-06-06T09:18:57.169+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-1c920baa-5c24-4160-8f21-015804dda7f9"/>
+                <display value="Schalis, Leo, *2013-06-18"/>                
+            </subject></eoc><eoc start="2018-06-06T09:56:38.943+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-fe7acda3-2517-41fb-b3ed-3f77edf61fa8"/>
+                <display value="Reisdorf, Marlon, *2008-01-03"/>                
+            </subject></eoc><eoc start="2018-06-06T10:40:28.875+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-e7a7c9aa-c138-4ff8-8aea-995dd0e920f2"/>
+                <display value="Boykov, Prochor Sergeevich, *2015-03-23"/>                
+            </subject></eoc><eoc start="2018-06-06T12:06:10.233+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-20bf7cdb-d183-41d9-9f9c-ba60f04f11ff"/>
+                <display value="Scheffer, Aaaron, *2016-12-21"/>                
+            </subject></eoc><eoc start="2018-06-11T15:21:19.868+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-c51af46a-c5da-4169-88f1-20b606c5114f"/>
+                <display value="Potylitsyna, Uliana Sergeyevna, *2014-11-20"/>                
+            </subject></eoc><eoc start="2018-06-12T10:02:08.906+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-e61d820c-32ba-441d-a71e-ab33473fe12b"/>
+                <display value="Jan, Benjamin, *2017-03-31"/>                
+            </subject></eoc><eoc start="2018-06-12T14:35:03.231+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-0baf379c-40c2-42a0-9a17-4d081e66e5d3"/>
+                <display value="Sollaku, Anjeza, *2018-06-05"/>                
+            </subject></eoc><eoc start="2018-06-14T14:49:04.099+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-b767ed58-984c-4b8e-b0d4-73eea533db73"/>
+                <display value="Hülzer, Marvin, *2018-06-08"/>                
+            </subject></eoc><eoc start="2018-06-18T10:22:01.348+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-a0ffe404-a8b6-45f6-aceb-d4c284a054a2"/>
+                <display value="Thurow, Kathrin, *2013-07-15"/>                
+            </subject></eoc><eoc start="2018-06-18T10:29:17.61+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-5d68a040-2d72-45f2-8e79-1d2651389383"/>
+                <display value="Göddicke, Moritz, *2017-03-01"/>                
+            </subject></eoc><eoc start="2018-06-19T10:31:34.01+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-4e0d3df8-9f45-4fb4-86f5-47f5444afc7f"/>
+                <display value="Beuth, Phil, *2018-01-29"/>                
+            </subject></eoc><eoc start="2018-06-20T10:39:57.799+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-93790aa8-636c-4829-8f4e-053244f628ce"/>
+                <display value="Klaiber, Jonas, *2015-02-20"/>                
+            </subject></eoc><eoc start="2018-06-21T09:30:04.544+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-9cf22f59-9a1b-490f-8f17-1a80ba6a9750"/>
+                <display value="Breuer, Paul Jonas, *2005-02-08"/>                
+            </subject></eoc><eoc start="2018-06-21T13:31:33.549+01:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-70134ab7-ebe6-4d86-a17a-d906141be2bc"/>
+                <display value="Levering, Bela, *2018-03-24"/>                
+            </subject></eoc><eoc start="2018-06-22T09:59:52.812+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-23736658-bd73-4b1a-bd33-58c6fbec7a4e"/>
+                <display value="Erdogan, Hüseyin Ali, *2013-05-10"/>                
+            </subject></eoc><eoc start="2018-06-26T09:14:49.222+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-99144232-8736-49f2-b5c6-4487c4a48e40"/>
+                <display value="Berntgen, Noah, *2013-10-25"/>                
+            </subject></eoc><eoc start="2018-06-26T12:47:08.621+01:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-36d94e82-dcf2-464d-940c-363c6012f3ee"/>
+                <display value="Rung, Amelia Maria, *2018-04-24"/>                
+            </subject></eoc><eoc start="2018-06-27T08:52:49.47+01:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-b2a060a9-978d-4816-ac52-493bc4bec5f2"/>
+                <display value="Langensiepen, Matti, *2016-07-11"/>                
+            </subject></eoc><eoc start="2018-06-27T09:45:33.558+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-dfccf770-a283-4cde-91b1-21e8087101ee"/>
+                <display value="Kiskac, Mert, *2006-10-10"/>                
+            </subject></eoc><eoc start="2018-06-28T08:21:36.043+01:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-21763"/>
+                <display value="Galuska, Nicolina, *2013-01-29"/>                
+            </subject></eoc><eoc start="2018-06-28T08:57:13.198+01:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-baf3d76e-6733-4d22-81c8-fd24b8c772e4"/>
+                <display value="Piliqi, Milazim, *2004-11-11"/>                
+            </subject></eoc><eoc start="2018-06-29T14:42:38.839+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-3f5a2ffe-a5d7-4aca-a042-4ed5bf4186cd"/>
+                <display value="Redjepovska, Melek, *2018-06-02"/>                
+            </subject></eoc><eoc start="2018-07-02T11:34:15.931+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-d261ba38-3eba-4973-a88a-f0e46ef37562"/>
+                <display value="Illerhaus, Jonathan, *2018-09-10"/>                
+            </subject></eoc><eoc start="2018-07-03T10:11:42.878+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-f4dd42d5-a7b0-4a5a-b944-633edc1fa5ce"/>
+                <display value="Mila, Bekel, *2015-01-02"/>                
+            </subject></eoc><eoc start="2018-07-03T14:40:19.763+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-8cfaba73-d3fd-4a36-8030-8c6fb13bf1b9"/>
+                <display value="Hassi, Yunus, *2010-12-27"/>                
+            </subject></eoc><eoc start="2018-07-03T15:13:22.249+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-e46b9a9d-e8e2-4e9a-b8b3-b0be30eb6f33"/>
+                <display value="Beckers, Emiel, *2018-07-01"/>                
+            </subject></eoc><eoc start="2018-07-04T10:32:05.123+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-8eabe60e-92c4-4e44-81ee-41c2cc5481ff"/>
+                <display value="Wagner, Henri Justus, *2018-06-27"/>                
+            </subject></eoc><eoc start="2018-07-04T11:00:24.634+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-e03e9443-2219-416d-a5d5-a77eb486c1f8"/>
+                <display value="Tochtrop, Feno, *2018-04-18"/>                
+            </subject></eoc><eoc start="2018-07-05T09:35:09.084+01:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-43139981-edbe-44c2-abed-21424d39adb9"/>
+                <display value="Kilian, Angelina, *2016-12-12"/>                
+            </subject></eoc><eoc start="2018-07-05T09:49:28.357+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-3b4e932c-ab4d-4217-a4f3-b20457f9e89e"/>
+                <display value="Rabashapca, Valeria, *2018-03-26"/>                
+            </subject></eoc><eoc start="2018-07-05T11:09:58.882+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-8f6fe77d-3211-486f-b168-f3ba29af0a49"/>
+                <display value="Yegin, Max, *2018-05-25"/>                
+            </subject></eoc><eoc start="2018-07-06T10:04:22.07+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-fb8dbf1a-7fcd-4e9c-827e-65c059243176"/>
+                <display value="Rusyeva, Yeva, *2002-07-25"/>                
+            </subject></eoc><eoc start="2018-07-09T09:37:41.066+01:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-7576"/>
+                <display value="Keiser, Alexander, *2003-10-02"/>                
+            </subject></eoc><eoc start="2018-07-13T16:41:21.34+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-8f834642-2baf-4de6-9cc6-546824369f6a"/>
+                <display value="Gellert, Celine, *2001-11-05"/>                
+            </subject></eoc><eoc start="2018-07-16T14:58:07.497+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-85382443-5d53-4760-9190-1aaba6b5af38"/>
+                <display value="Böcker, Nele, *2018-07-04"/>                
+            </subject></eoc><eoc start="2018-07-17T08:42:22.889+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-bb40e6fa-cfc6-47f8-beee-608c249f39d5"/>
+                <display value="Schernuly, Luis, *2018-07-13"/>                
+            </subject></eoc><eoc start="2018-07-17T11:40:02.61+01:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-15804"/>
+                <display value="Krings, Fabiano, *2005-11-21"/>                
+            </subject></eoc><eoc start="2018-07-17T14:00:55.889+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-ab9f431c-4d6a-4a45-8adf-ac9b229aea22"/>
+                <display value="Elias, Meier, *2007-02-18"/>                
+            </subject></eoc><eoc start="2018-07-18T08:50:45.826+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-da4dffbb-88e2-4c5e-83d3-6d08c369184e"/>
+                <display value="Luhr, Jerome, *2011-03-15"/>                
+            </subject></eoc><eoc start="2018-07-18T16:13:20.26+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-11de825e-1982-44fe-a563-a74200fa1f5f"/>
+                <display value="Agirbas, Luan, *2018-07-07"/>                
+            </subject></eoc><eoc start="2018-07-19T08:55:40.79+01:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-9233"/>
+                <display value="Jucknath, Moritz, *2007-12-06"/>                
+            </subject></eoc><eoc start="2018-07-20T10:10:14.175+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-508e1793-775a-4d3c-b646-0656e29d7092"/>
+                <display value="Baraderan, Jawad, *2013-11-12"/>                
+            </subject></eoc><eoc start="2018-07-23T09:12:00.721+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-8a0bd419-03e5-4905-90cb-d4a42e741327"/>
+                <display value="Meister, Clara, *2013-03-15"/>                
+            </subject></eoc><eoc start="2018-07-24T10:22:31.992+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-6916ce64-1f1e-4d77-ad27-0e706c0dd6d1"/>
+                <display value="Leininger, Ela Luisa Jona, *2017-04-05"/>                
+            </subject></eoc><eoc start="2018-07-24T12:10:59.468+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-ee2691a5-a3ef-4649-aae7-90c87eb75d0e"/>
+                <display value="Streve-Mühlens, Emilia, *2017-04-02"/>                
+            </subject></eoc><eoc start="2018-07-25T14:18:44.59+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-313d1937-18d5-471b-a345-15acb2902680"/>
+                <display value="Turke, Can, *2016-03-02"/>                
+            </subject></eoc><eoc start="2018-07-26T09:15:04.076+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-0cef3b25-43df-459a-b467-df7c8950b7b0"/>
+                <display value="Kunske, Kea, *2009-11-08"/>                
+            </subject></eoc><eoc start="2018-07-27T11:23:32.886+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-f16da4da-bf2e-442a-9781-eb6729a9f90f"/>
+                <display value="Salomon, Simon, *2018-05-25"/>                
+            </subject></eoc><eoc start="2018-07-30T09:06:21.52+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-5c523564-e4e7-4838-9d52-b620c0d8ff8f"/>
+                <display value="Michel, Marvin, *2013-05-23"/>                
+            </subject></eoc><eoc start="2018-07-30T10:37:50.276+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-872b9530-1231-4c60-83a2-14c3a4c08a1f"/>
+                <display value="Jost, Tom, *2018-02-20"/>                
+            </subject></eoc><eoc start="2018-07-30T16:34:13.039+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-734e039a-74b8-4398-b2f1-89a0ec4ff7ff"/>
+                <display value="Seifert, Thea, *2013-06-17"/>                
+            </subject></eoc><eoc start="2018-08-01T08:11:19.251+01:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-dbe610dc-5f19-4d9d-9210-e7bd792c8774"/>
+                <display value="Neis, Liana, *2016-08-12"/>                
+            </subject></eoc><eoc start="2018-08-01T16:22:44.994+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-132bf3bf-2926-40d6-ad46-ab79845866bc"/>
+                <display value="Penner, Alina, *14-06-24"/>                
+            </subject></eoc><eoc start="2018-08-03T08:35:31.604+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-7c909946-88ce-439d-a1fe-830603f4c4fb"/>
+                <display value="Ahdi, Yaran, *2014-02-14"/>                
+            </subject></eoc><eoc start="2018-08-03T13:52:05.225+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-7dd6c662-1787-4626-b247-ba7c34fcc96f"/>
+                <display value="Kayas, Mohamed, *2001-01-01"/>                
+            </subject></eoc><eoc start="2018-08-06T11:49:22.338+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-d680013b-d45f-4ac7-a351-bca854874af0"/>
+                <display value="Bonnet, Loic, *2008-11-30"/>                
+            </subject></eoc><eoc start="2018-08-06T14:36:50.372+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-e032d035-638e-47ba-835a-c6efcfcc4db4"/>
+                <display value="Salman, Kaan, *2015-08-28"/>                
+            </subject></eoc><eoc start="2018-08-06T16:01:38.713+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-28237485-9f03-4b6e-8611-fe39a181da58"/>
+                <display value="Cepoi, Carlos, *2014-12-01"/>                
+            </subject></eoc><eoc start="2018-08-07T10:46:50.439+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-18e9fcee-c627-4b6b-a124-a8d4dfc21b64"/>
+                <display value="Wolf, Tom Alexander , *2000-07-12"/>                
+            </subject></eoc><eoc start="2018-08-07T11:03:18.057+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-516604f8-1d64-4f3b-b4d1-00855c566d58"/>
+                <display value="Krüger, Louisa Anna, *2004-06-19"/>                
+            </subject></eoc><eoc start="2018-08-10T10:03:09.519+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-3cbe5ef2-8fb9-4b89-9c69-a88f572fbb8f"/>
+                <display value="Osmani, Ayse, *2004-07-15"/>                
+            </subject></eoc><eoc start="2018-08-13T09:20:33.565+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-e0e64651-a4a8-493b-b991-bc6daa0fd0f3"/>
+                <display value="Behrendt, Lisann, *2013-08-05"/>                
+            </subject></eoc><eoc start="2018-08-13T09:53:26.294+02:00"><subject xmlns="http://hl7.org/fhir">
+                <reference value="nabu/patients/p-3a6b8417-b10f-4772-a4cb-e4b3ffd2664c"/>
+                <display value="Haziri, Tian, *2018-07-30"/>                
+            </subject></eoc></older-than></eoc-without-encs></stats>

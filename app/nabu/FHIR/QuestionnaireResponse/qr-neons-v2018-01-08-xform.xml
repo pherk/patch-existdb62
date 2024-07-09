@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="q-neons-v2018-01-08" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-qr">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-qr-from-master" resource="model:m-qrmaster#instance('i-qrs-user')//*:QuestionnaireResponse[index('r-qrs-id')]" instance="i-qr" replace="instance" method="get">
+                <xf:action ev:event="xforms-submit-done"/>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:submission id="s-update-qr-master" resource="model:m-qrmaster#instance('i-qrs-user')//*:QuestionnaireResponse[index('r-qrs-id')]" instance="i-qr" model="q-hilfsmittel--v2018-04-08" replace="none" method="post">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:message level="ephemeral">Subform has updated Master.</xf:message>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot update Master!.</xf:message>
+            </xf:submission>
+            <xf:instance xmlns="" id="i-control-center">
+                <data>
+                    <qr-dirty>false</qr-dirty>
+                </data>
+            </xf:instance>
+            <xf:instance xmlns="" id="tabset-instance">
+                <tabset value="editQR">
+                    <item value="1-perinatalInfo">Perinataldaten</item>
+                    <item value="1-encounter">stat.Aufenthalt</item>
+                    <item value="1-outcome">Verlauf</item>
+                </tabset>
+            </xf:instance>
+            <xf:action ev:event="xforms-ready">
+                <xf:send submission="s-load-qr-from-master"/>
+            </xf:action>
+        </xf:model>
+    </div>
+    <xf:group id="0-neonachsorge" ref="instance('i-qr')" class="tabframe">
+        <xf:action ev:event="xforms-value-changed">
+            <xf:setvalue ref="instance('i-control-center')/*:qr-dirty" value="'true'"/>
+        </xf:action>
+        <xf:group id="maintriggers" class="svTriggerGroup">
+            <table xmlns="">
+                <tr>
+                    <td>
+                        <xf:trigger class="svUpdateMasterTrigger">
+                            <xf:label>Schließen</xf:label>
+                            <xf:action ev:event="DOMActivate">
+                                <xf:toggle case="listQRs"/>
+                            </xf:action>
+                        </xf:trigger>
+                    </td>
+                    <td>
+                        <xf:trigger ref="instance('i-control-center')/*:qr-dirty[.='true']" class="svUpdateMasterTrigger">
+                            <xf:label>Speichern</xf:label>
+                            <xf:action ev:event="DOMActivate">
+                                <xf:setvalue ref="instance('i-qr')/*:status/@value" value="'completed'"/>
+                                <xf:send submission="s-update-qr-master"/>
+                                <xf:toggle case="listQRs"/>
+                            </xf:action>
+                        </xf:trigger>
+                    </td>
+                </tr>
+            </table>
+        </xf:group>
+        <div xmlns="" class="tabs">
+            <xf:repeat nodeset="instance('tabset-instance')/item" id="tab-item-repeat">
+                <xf:trigger ref="." appearance="minimal">
+                    <xf:label>
+                        <xf:output ref="."/>
+                    </xf:label>
+                    <xf:action ev:event="DOMActivate">
+                        <xf:setvalue ref="instance('tabset-instance')/@value" value="instance('tabset-instance')/item[index('tab-item-repeat')]"/>
+                        <xf:toggle ref=".">
+                            <xf:case value="@value"/>
+                        </xf:toggle>
+                    </xf:action>
+                </xf:trigger>
+            </xf:repeat>
+        </div>
+        <div class="tabpane">
+            <xf:label>NeoNachsorge</xf:label>
+            <xf:switch>
+                <xf:case id="1-perinatalInfo">
+                    <xf:label>Perinataldaten</xf:label>
+                    <br/>
+                    <xf:group id="2-pca">
+                        <xf:label>SSW</xf:label>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Wochen</th>
+                                    <th>Tage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <xf:input id="3-pca-weeks" ref=".//*:item[*:linkId/@value='pca-weeks']/*:answer/*:valueInteger/@value" class="short-input">
+                                            <xf:hint>[2-3][0-9]|4[0-3]</xf:hint>
+                                        </xf:input>
+                                    </td>
+                                    <td>
+                                        <xf:input id="3-pca-days" ref=".//*:item[*:linkId/@value='pca-days']/*:answer/*:valueInteger/@value" class="short-input">
+                                            <xf:hint>[0-6]</xf:hint>
+                                        </xf:input>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </xf:group>
+                    <xf:input id="2-et" ref=".//*:item[*:linkId/@value='et']/*:answer/*:valueDate/@value" class="short-input">
+                        <xf:label class="svListHeader">ET</xf:label>
+                    </xf:input>
+                    <xf:input id="2-birth-multiple" ref=".//*:item[*:linkId/@value='birth-multiple']/*:answer/*:valueBoolean/@value" class="xsdBoolean svRepeatBool">
+                        <xf:label class="svListHeader">Mehrling</xf:label>
+                    </xf:input>
+                    <xf:input id="2-birth-multiple-n" ref=".//*:item[*:linkId/@value='birth-multiple-n']/*:answer/*:valueInteger/@value" class="short-input">
+                        <xf:label class="svListHeader">Anzahl</xf:label>
+                    </xf:input>
+                    <xf:input id="2-birth-multiple-nth" ref=".//*:item[*:linkId/@value='birth-multiple-nth']/*:answer/*:valueInteger/@value" class="short-input">
+                        <xf:label class="svListHeader">Nth</xf:label>
+                    </xf:input>
+                    <xf:input id="2-birth-weight" ref=".//*:item[*:linkId/@value='birth-weight']/*:answer/*:valueDecimal/@value" class="short-input">
+                        <xf:label class="svListHeader">Gewicht</xf:label>
+                        <xf:hint>\d\d\d\d</xf:hint>
+                    </xf:input>
+                    <xf:input id="2-birth-length" ref=".//*:item[*:linkId/@value='birth-length']/*:answer/*:valueInteger/@value" class="short-input">
+                        <xf:label class="svListHeader">Länge</xf:label>
+                    </xf:input>
+                    <xf:input id="2-birth-head-cf" ref=".//*:item[*:linkId/@value='birth-head-cf']/*:answer/*:valueDecimal/@value" class="short-input">
+                        <xf:label class="svListHeader">KU</xf:label>
+                        <xf:hint>\d\d\.\d</xf:hint>
+                    </xf:input>
+                </xf:case>
+                <xf:case id="1-encounter">
+                    <xf:label>stat.Aufenthalt</xf:label>
+                    <br/>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Geburtsklinik</th>
+                                <th>Kinderklinik</th>
+                                <th>Aufnahmedatum</th>
+                                <th>Entlassung</th>
+                                <th>Verstorben</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <xf:input id="2-enc-gebkli" ref=".//*:item[*:linkId/@value='enc-gebkli']/*:answer/*:valueString/@value" class="medium-input"/>
+                                </td>
+                                <td>
+                                    <xf:input id="2-enc-kikl" ref=".//*:item[*:linkId/@value='enc-kikl']/*:answer/*:valueString/@value" class="medium-input"/>
+                                </td>
+                                <td>
+                                    <xf:input id="2-enc-admission" ref=".//*:item[*:linkId/@value='enc-admission']/*:answer/*:valueDateTime/@value" class="short-input">
+                                        <xf:hint>\d\d\d\d-\d\d-\d\d</xf:hint>
+                                    </xf:input>
+                                </td>
+                                <td>
+                                    <xf:input id="2-enc-dismissal" ref=".//*:item[*:linkId/@value='enc-dismissal']/*:answer/*:valueDateTime/@value" class="short-input">
+                                        <xf:hint>\d\d\d\d-\d\d-\d\d</xf:hint>
+                                    </xf:input>
+                                </td>
+                                <td>
+                                    <xf:input id="2-enc-death" ref=".//*:item[*:linkId/@value='enc-death']/*:answer/*:valueBoolean/@value" class="xsdBoolean svRepeatBool"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </xf:case>
+                <xf:case id="1-outcome">
+                    <xf:label>Verlauf</xf:label>
+                    <br/>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ICH-GradMax</th>
+                                <th>ICH-ParenA</th>
+                                <th>PVL</th>
+                                <th>BPD</th>
+                                <th>NEC</th>
+                                <th>NG-Krämpfe</th>
+                                <th>HIE-Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <xf:select1 id="2-outcome-ichgradma" ref=".//*:item[*:linkId/@value='outcome-ichgradma']/*:answer//*:code/@value" class="short-input">
+                                        <xf:item>
+                                            <xf:label>normal</xf:label>
+                                            <xf:value>0</xf:value>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Grad I</xf:label>
+                                            <xf:value>1</xf:value>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Grad II</xf:label>
+                                            <xf:value>2</xf:value>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Grad III</xf:label>
+                                            <xf:value>3</xf:value>
+                                        </xf:item><!--
+            <xf:itemset ref="bf:instanceOfModel('m-qrmaster','i-questionnaire')//*:item[*:linkId/@value='{$linkId}']/*:option/*:valueCoding">
+                <xf:label ref=".//*:display/@value"/>
+                <xf:value ref=".//*:code/@value"/>                                        
+            </xf:itemset>
+            -->
+                                        <xf:action ev:event="xforms-value-changed">
+                                            <xf:setvalue ref="instance('i-qr')//*:item[*:linkId/@value='outcome-ichgradma']/*:answer//*:display/@value" value="bf:instanceOfModel('m-qrmaster','i-questionnaire')//*:item[*:linkId/@value='outcome-ichgradma']/*:option[.//*:code/@value=instance('i-qr')//*:item[*:linkId/@value='outcome-ichgradma']/*:answer//*:code/@value]/*:display/@value"/>
+                                        </xf:action>
+                                    </xf:select1>
+                                </td>
+                                <td>
+                                    <xf:input id="2-outcome-ichparena" ref=".//*:item[*:linkId/@value='outcome-ichparena']/*:answer/*:valueBoolean/@value" class="xsdBoolean svRepeatBool"/>
+                                </td>
+                                <td>
+                                    <xf:input id="2-outcome-pvl" ref=".//*:item[*:linkId/@value='outcome-pvl']/*:answer/*:valueBoolean/@value" class="xsdBoolean svRepeatBool"/>
+                                </td>
+                                <td>
+                                    <xf:select1 id="2-outcome-bpd" ref=".//*:item[*:linkId/@value='outcome-bpd']/*:answer//*:code/@value" class="short-input">
+                                        <xf:item>
+                                            <xf:label>normal</xf:label>
+                                            <xf:value>0</xf:value>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Milde</xf:label>
+                                            <xf:value>1</xf:value>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Moderat</xf:label>
+                                            <xf:value>2</xf:value>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Schwer</xf:label>
+                                            <xf:value>3</xf:value>
+                                        </xf:item><!--
+            <xf:itemset ref="bf:instanceOfModel('m-qrmaster','i-questionnaire')//*:item[*:linkId/@value='{$linkId}']/*:option/*:valueCoding">
+                <xf:label ref=".//*:display/@value"/>
+                <xf:value ref=".//*:code/@value"/>                                        
+            </xf:itemset>
+            -->
+                                        <xf:action ev:event="xforms-value-changed">
+                                            <xf:setvalue ref="instance('i-qr')//*:item[*:linkId/@value='outcome-bpd']/*:answer//*:display/@value" value="bf:instanceOfModel('m-qrmaster','i-questionnaire')//*:item[*:linkId/@value='outcome-bpd']/*:option[.//*:code/@value=instance('i-qr')//*:item[*:linkId/@value='outcome-bpd']/*:answer//*:code/@value]/*:display/@value"/>
+                                        </xf:action>
+                                    </xf:select1>
+                                </td>
+                                <td>
+                                    <xf:select1 id="2-outcome-nec" ref=".//*:item[*:linkId/@value='outcome-nec']/*:answer//*:code/@value" class="short-input">
+                                        <xf:item>
+                                            <xf:label>normal</xf:label>
+                                            <xf:value>0</xf:value>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Verdacht</xf:label>
+                                            <xf:value>1</xf:value>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Manifest</xf:label>
+                                            <xf:value>2</xf:value>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Fortgeschritten</xf:label>
+                                            <xf:value>3</xf:value>
+                                        </xf:item><!--
+            <xf:itemset ref="bf:instanceOfModel('m-qrmaster','i-questionnaire')//*:item[*:linkId/@value='{$linkId}']/*:option/*:valueCoding">
+                <xf:label ref=".//*:display/@value"/>
+                <xf:value ref=".//*:code/@value"/>                                        
+            </xf:itemset>
+            -->
+                                        <xf:action ev:event="xforms-value-changed">
+                                            <xf:setvalue ref="instance('i-qr')//*:item[*:linkId/@value='outcome-nec']/*:answer//*:display/@value" value="bf:instanceOfModel('m-qrmaster','i-questionnaire')//*:item[*:linkId/@value='outcome-nec']/*:option[.//*:code/@value=instance('i-qr')//*:item[*:linkId/@value='outcome-nec']/*:answer//*:code/@value]/*:display/@value"/>
+                                        </xf:action>
+                                    </xf:select1>
+                                </td>
+                                <td>
+                                    <xf:input id="2-outcome-ngka" ref=".//*:item[*:linkId/@value='outcome-ngka']/*:answer/*:valueBoolean/@value" class="xsdBoolean svRepeatBool"/>
+                                </td>
+                                <td>
+                                    <xf:select1 id="2-outcome-hie" ref=".//*:item[*:linkId/@value='outcome-hie']/*:answer//*:code/@value" class="short-input">
+                                        <xf:item>
+                                            <xf:label>normal</xf:label>
+                                            <xf:value>0</xf:value>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Milde</xf:label>
+                                            <xf:value>1</xf:value>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Moderat</xf:label>
+                                            <xf:value>2</xf:value>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Schwer</xf:label>
+                                            <xf:value>3</xf:value>
+                                        </xf:item><!--
+            <xf:itemset ref="bf:instanceOfModel('m-qrmaster','i-questionnaire')//*:item[*:linkId/@value='{$linkId}']/*:option/*:valueCoding">
+                <xf:label ref=".//*:display/@value"/>
+                <xf:value ref=".//*:code/@value"/>                                        
+            </xf:itemset>
+            -->
+                                        <xf:action ev:event="xforms-value-changed">
+                                            <xf:setvalue ref="instance('i-qr')//*:item[*:linkId/@value='outcome-hie']/*:answer//*:display/@value" value="bf:instanceOfModel('m-qrmaster','i-questionnaire')//*:item[*:linkId/@value='outcome-hie']/*:option[.//*:code/@value=instance('i-qr')//*:item[*:linkId/@value='outcome-hie']/*:answer//*:code/@value]/*:display/@value"/>
+                                        </xf:action>
+                                    </xf:select1>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </xf:case>
+            </xf:switch>
+        </div>
+    </xf:group>
+</div>

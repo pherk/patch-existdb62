@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-wf-goals" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance id="i-pat">
+                <data xmlns=""/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-done" level="ephemeral">Subform has updated itself.</xf:message>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+
+            <xf:instance id="i-goals">
+                <data xmlns=""/>
+            </xf:instance>
+            <xf:submission id="s-get-goals" instance="i-goals" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/goals?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm),'&amp;subject=', instance('i-pat')/*:id/@value,'&amp;lifecycleStatus=all&amp;length=10')"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+<!--
+                    <xf:toggle case="listGoals"/>
+-->
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get goals!</xf:message>
+            </xf:submission>
+            <xf:submission id="s-submit-goal" ref="instance('i-goals')/*:Goal[index('r-goals-id')]" method="put" replace="none">
+                <xf:resource value="concat('/exist/restxq/nabu/goals?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">Beschreibung leer? cannot submit goal!</xf:message>
+            </xf:submission>
+            
+            <xf:instance id="i-login">
+                <data xmlns=""/>
+            </xf:instance>
+            <xf:submission id="s-load-login-from-master" resource="model:m-patient#instance('i-login')//*:data" instance="i-login" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">login: cannot load from Master!.</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-g-infos" src="FHIR/Goal/goal-infos.xml"/>            
+            <xf:instance xmlns="" id="i-c-infos" src="FHIR/Condition/condition-infos.xml"/>            
+            
+            <xf:instance id="i-bricks">
+                <bricks xmlns="">
+                </bricks>
+            </xf:instance>
+            <xf:instance id="i-search">
+                <data xmlns="">
+                    <active>true</active>
+                </data>
+            </xf:instance>
+            <xf:instance id="views">
+                <data xmlns="">
+                    <GoalsToSelect/>
+                    <noGoals/>
+                </data>
+            </xf:instance>
+            
+            <xf:bind id="GoalsToSelect" ref="instance('views')/*:GoalsToSelect" relevant="count(instance('i-goals')/*:Goal) &gt; 0"/>
+            <xf:bind id="noGoals" ref="instance('views')/*:noGoals" relevant="count(instance('i-goals')/*:Goal) = 0"/>
+            
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+                <xf:send submission="s-load-login-from-master"/>
+                <xf:send submission="s-get-goals"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+                <script type="text/javascript">
+                    setOnsetDateTime();
+                </script>
+            </xf:action>
+        </xf:model>
+        <xf:input id="onset" ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:target/*:dueDate/@value" appearance="bf:iso8601" data-bf-params="date:'dd.MM.yyyy'">
+            <xf:label>Fälligkeit:</xf:label>
+            <xf:alert>a valid date is required</xf:alert>
+        </xf:input>
+    </div>
+    <xf:group id="goallist" class="bordered">
+        <xf:action ev:event="insertDefaultConsent">
+                                        <xf:insert at="last()" nodeset="instance('i-goals')/*:Goal[last()]/*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-goal-consent']" context="instance('i-goals')/*:Goal[last()]" origin="instance('i-g-infos')/*:bricks/*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-goal-consent']"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-goal-consent'][last()]//*:coding[*:system/@value='#nabu-goal-consent-code']/*:code/@value" value="'opt-in'"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-goal-consent'][last()]//*:coding[*:system/@value='#nabu-goal-consent-code']/*:display/@value" value="'zugestimmt'"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-goal-consent'][last()]//*:coding[*:system/@value='#nabu-goal-consent-actor']/*:code/@value" value="'family'"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-goal-consent'][last()]//*:coding[*:system/@value='#nabu-goal-consent-actor']/*:display/@value" value="'Familie'"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-goal-consent'][last()]//*:text/@value" value="'zugestimmt von Familie'"/>
+        </xf:action>
+        <xf:action ev:event="betterform-index-changed">
+        </xf:action>
+        <xf:label>Behandlungsziele</xf:label>
+        <xf:repeat id="r-goals-id" ref="instance('i-goals')/*:Goal" appearance="compact" class="svRepeat">
+                <xf:output value="substring(./*:statusDate/@value,1,10)">
+                    <xf:label class="svRepeatHeader">Erfasst</xf:label>
+                </xf:output>
+                <xf:output value="substring(./*:category/*:text/@value,1,1)" class="tiny-input">
+                </xf:output>
+                <xf:group>
+                    <xf:label class="svRepeatHeader">Prio</xf:label>
+                    <xf:output ref="./*:priority/*:text/@value"/>
+                </xf:group>
+                <xf:group>
+                    <xf:label class="svRepeatHeader">Text/Outcome</xf:label>
+                    <xf:output ref="./*:description/*:text/@value"/>
+                    <xf:output ref="./*:outcomeCode/*:text/@value"/>
+                </xf:group>
+                <xf:group>
+                    <xf:label class="svRepeatHeader">Mess/Fällig</xf:label>
+                    <xf:output ref="./*:target/*:measure/*:text/@value"/>
+                    <xf:output ref="./*:target/*:dueDate/@value"/>
+                </xf:group>
+                <xf:group>
+                    <xf:label class="svRepeatHeader">Festgestellt</xf:label>
+                    <xf:output ref="./*:expressedBy/*:display/@value"/>
+                </xf:group>
+                <xf:group>
+                    <xf:label class="svRepeatHeader">Status</xf:label>
+                    <xf:output ref="./*:lifecycleStatus/@value"/>
+                    <xf:output ref="./*:achievementStatus/*:text/@value"/>
+                    <xf:output ref="./*:statusReason/@value"/>
+                </xf:group>
+        </xf:repeat>
+        <xf:group ref="instance('views')/*:noGoals">
+            <p>
+                <strong>Kein Ziele definiert</strong>
+            </p>
+        </xf:group>
+        <xf:switch id="switch">
+            <xf:case id="listGoals">
+                <xf:group class="svTriggerGroup">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svSubTrigger" ref="instance('i-goals')/*:Goal">
+                                    <xf:label>Edit</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="editGoal"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svAddTrigger">
+                                    <xf:label>Neu</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:insert at="last()" nodeset="instance('i-goals')/*:Goal" context="instance('i-goals')" origin="instance('i-g-infos')/*:bricks/*:Goal"/>
+                                    </xf:action>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:insert at="last()" nodeset="instance('i-goals')/*:Goal[last()]/*:note" context="instance('i-goals')/*:Goal[last()]" origin="instance('i-g-infos')/*:bricks/*:note"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:startDate/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:expressedBy/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:expressedBy/*:display/@value" value="instance('i-login')/*:lognam"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:subject/*:reference/@value" value="concat('nabu/patients/',instance('i-pat')/*:id/@value)"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:subject/*:display/@value" value="concat(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-pat')/*:name[*:use/@value='official']/*:given/@value,', *',instance('i-pat')/*:birthDate/@value)"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:note[1]/*:time/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:note[1]/*:authorReference/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:note[1]/*:authorReference/*:display/@value" value="instance('i-login')/*:lognam"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:note[1]/*:text/@value" value="'angelegt'"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:lifecycleStatus/@value" value="'proposed'"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:statusDate/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[last()]/*:statusReason/@value" value="'neu'"/>
+                                        <xf:toggle case="editGoal"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+<!--
+                            <td>
+                                <xf:trigger ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:lifecycleStatus[@value=('active','draft','suspended','unknown')]">
+                                    <xf:label>
+                                        <span class="glyphicon glyphicon-trash"/>
+                                    </xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:period/*:end/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:lifecycleStatus/@value" value="'cancelled'"/>
+                                        <xf:setvalue ref="instance('views')/*:dirty" value="'true'"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:lifecycleStatus[@value=('active','draft','suspended','unknown')]">
+                                    <xf:label>
+                                        <span class="glyphicon glyphicon-ok"/>
+                                    </xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:period/*:end/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:lifecycleStatus/@value" value="'completed'"/>
+                                        <xf:setvalue ref="instance('views')/*:dirty" value="'true'"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+-->
+                            <td>
+                                <xf:trigger>
+                                    <xf:label>
+                                        <strong>?</strong>
+                                    </xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="showHelp"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                </xf:group>
+            </xf:case>
+            <xf:case id="editGoal">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:lifecycleStatus[@value!='unknown']" class="svUpdateMasterTrigger">
+                                    <xf:label>Speichern</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:expressedBy/*:reference/@value" value="concat('metis/practitioners/', instance('i-login')/*:loguid)"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:expressedBy/*:display/@value" value="instance('i-login')/*:lognam"/>
+                                        <xf:send submission="s-submit-goal"/>
+                                        <xf:toggle case="listGoals"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Schließen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:send submission="s-get-goals"/>
+                                        <xf:toggle case="listGoals"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                <xf:group id="editNonRefGroup" ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:category/*:coding/*:code[@value!='registration']">
+
+                    <xf:group ref="instance('i-goals')/*:Goal[index('r-goals-id')]" class="svFullGroup">
+                        <xf:label>
+                            <xf:output value="concat('Edit - ',instance('i-goals')/*:Goal[index('r-goals-id')]/*:category/*:coding[*:system/@value='http://hl7.org/fhir/ValueSet/goal-category']/*:display/@value)"/>
+                        </xf:label>
+                        <br/>
+                        <xf:select1 ref="./*:category/*:coding[*:system/@value='http://hl7.org/fhir/ValueSet/goal-category']/*:code/@value" class="medium-input">
+                            <xf:label>Kategorie:</xf:label>
+                            <xf:itemset nodeset="instance('i-g-infos')/*:category/*:code">
+                                <xf:label ref="./@label-de"/>
+                                <xf:value ref="./@value"/>
+                            </xf:itemset>
+                            <xf:action ev:event="xforms-value-changed">
+                                <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:category/*:coding[*:system/@value='http://hl7.org/fhir/ValueSet/goal-category']/*:display/@value" value="instance('i-g-infos')/*:category/*:code[@value=instance('i-goals')/*:Goal[index('r-goals-id')]/*:category/*:coding[*:system/@value='http://hl7.org/fhir/ValueSet/goal-category']/*:code/@value]/@label-de"/>
+                                <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:category/*:text/@value" value="instance('i-g-infos')/*:category/*:code[@value=instance('i-goals')/*:Goal[index('r-goals-id')]/*:category/*:coding[*:system/@value='http://hl7.org/fhir/ValueSet/goal-category']/*:code/@value]/@label-de"/>
+                                </xf:action>
+                        </xf:select1>
+                        <xf:select1 ref="./*:lifecycleStatus/@value" class="medium-input">
+                            <xf:label>Status:</xf:label>
+                            <xf:itemset nodeset="instance('i-g-infos')/*:lifecycleStatus/*:code">
+                                <xf:label ref="./@label-de"/>
+                                <xf:value ref="./@value"/>
+                            </xf:itemset>
+                            <xf:action ev:event="xforms-value-changed">
+                                <xf:action if="instance('i-goals')/*:Goal[index('r-goals-id')]/*:lifecycleStatus/@value='accepted'">
+                                    <xf:dispatch name="insertDefaultConsent" targetid="goallist"/>
+                                </xf:action>
+                            </xf:action>
+                        </xf:select1>
+                        <xf:group ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:lifecycleStatus[@value=('rejected','on-hold','cancelled','unknown')]">
+                            <xf:label>Bitte Grund für Statusänderung eingeben:</xf:label>
+                            <xf:input ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:statusReason/@value" class="long-input">
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:statusDate/@value" value="current-dateTime()"/>
+                                </xf:action>
+                            </xf:input>
+                        </xf:group>
+                        <xf:select1 ref="./*:achievementStatus/*:coding/*:code/@value">
+                            <xf:label>Progress:</xf:label>
+                            <xf:itemset nodeset="instance('i-g-infos')/*:achievementStatus/*:code">
+                                <xf:label ref="./@label-de"/>
+                                <xf:value ref="./@value"/>
+                            </xf:itemset>
+                        </xf:select1>
+                        <xf:select1 ref="./*:priority/*:coding/*:code/@value" class="medium-input">
+                            <xf:label>Prio:</xf:label>
+                            <xf:itemset nodeset="instance('i-g-infos')/*:priority/*:code">
+                                <xf:label ref="./@label-de"/>
+                                <xf:value ref="./@value"/>
+                            </xf:itemset>
+                            <xf:action ev:event="xforms-value-changed">
+                                <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:priority/*:coding/*:display/@value" value="instance('i-g-infos')/*:priority/*:code[@value=instance('i-goals')/*:Goal[index('r-goals-id')]/*:priority/*:coding/*:code/@value]/@label-de"/>
+                                <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:priority/*:text/@value" value="instance('i-g-infos')/*:priority/*:code[@value=instance('i-goals')/*:Goal[index('r-goals-id')]/*:priority/*:coding/*:code/@value]/@label-de"/>
+                                </xf:action>
+                        </xf:select1>
+                        <xf:group class="svFullGroup">
+                            <xf:select1 ref="./*:description/*:coding/*:code/@value">
+                                <xf:label>Pat-Gruppe:</xf:label>
+                                <xf:itemset nodeset="instance('i-c-infos')/*:finding/*:code">
+                                    <xf:label ref="./@label-de"/>
+                                    <xf:value ref="./@value"/>
+                                </xf:itemset>
+                            </xf:select1>
+                            <xf:textarea ref="./*:description/*:text/@value" class="fullareashort">
+                                <xf:label>Titel:</xf:label>
+                            </xf:textarea>
+                        </xf:group>
+                        <div class="form-horizontal">
+                            <xf:input ref="./*:target/*:measure/*:text/@value" class="long-input">
+                                <xf:label>Maßnahme:</xf:label>
+                            </xf:input>
+                            <xf:group class="form-group form-inline">
+                                <xf:label>Fällig am:   </xf:label>
+                                <div class="input-group date col-sm-2" id="cond-onset" data-date-format="yyyy-mm-dd" data-date-language="de">
+                                    <input type="text" class="form-control" id="cond-onset-input"/>
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-th"/>
+                                    </div>
+                                </div>
+                            </xf:group>
+                        </div>
+                        <xf:input ref="./*:outcome/*:text/@value" class="long-input">
+                            <xf:label>Ergebnis:</xf:label>
+                        </xf:input>
+                        <br/>                            
+                        <xf:group class="svFullGroup">
+                            <xf:label class="svRepeatHeader">Consentierung</xf:label>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <xf:trigger>
+                                            <xf:label>+</xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:insert at="last()" nodeset="./*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-goal-consent']" context="." origin="instance('i-g-infos')/*:bricks/*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-goal-consent']"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                    </td>
+                                    <td>
+                                            <xf:trigger>
+                                                <xf:label>-</xf:label>
+                                                <xf:action ev:event="DOMActivate">
+                                                    <xf:delete nodeset="./*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-goal-consent']" at="index('r-consents-id')"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                    </td>
+                                    <td>
+                                        <xf:repeat id="r-consents-id" ref="./*:extension[@url='http://eNahar.org/nabu/StructureDefinition/nabu-goal-consent']" appearance="compact" class="svRepeat">
+                                                <xf:select1 ref=".//*:coding[*:system/@value='#nabu-goal-consent-code']/*:code/@value" class="medium-input">
+                                                <xf:label>Ergebnis:</xf:label>
+                                                    <xf:itemset nodeset="instance('i-g-infos')/*:consent-ext-code/*:code">
+                                                        <xf:label ref="./@label-de"/>
+                                                        <xf:value ref="./@value"/>
+                                                    </xf:itemset>
+                                                </xf:select1>
+                                                <xf:output value="'von'"/>
+                                                <xf:select1 ref=".//*:coding[*:system/@value='#nabu-goal-consent-actor']/*:code/@value" class="medium-input">
+                                                <xf:label>Akteur:</xf:label>
+                                                    <xf:itemset nodeset="instance('i-g-infos')/*:consent-ext-actor/*:code">
+                                                        <xf:label ref="./@label-de"/>
+                                                        <xf:value ref="./@value"/>
+                                                    </xf:itemset>
+                                                </xf:select1>
+                                            </xf:repeat>
+                                    </td>
+                                </tr>
+                            </table>
+                        </xf:group>
+                        <xf:group class="svFullGroup">
+                            <xf:label class="svRepeatHeader">Notizen</xf:label>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <xf:trigger>
+                                            <xf:label>+</xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:insert nodeset="./*:note" context="." origin="instance('i-g-infos')/*:bricks/*:note"/>
+                                                <xf:setvalue ref="./*:note[last()]/*:authorReference/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                                                <xf:setvalue ref="./*:note[last()]/*:authorReference/*:display/@value" value="instance('i-login')/*:lognam"/>
+                                                <xf:setvalue ref="./*:note[last()]/*:time/@value" value="current-dateTime()"/>
+                                            </xf:action>
+                                        </xf:trigger>
+                                    </td>
+                                    <td>
+                                        <xf:trigger>
+                                            <xf:label>-</xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                    <xf:delete nodeset="./*:note" at="index('r-notes-id')"/>
+                                                </xf:action>
+                                            </xf:trigger>
+                                        </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                <xf:repeat id="r-notes-id" ref="./*:note" appearance="compact" class="svRepeat">
+                                            <xf:textarea ref="./*:text/@value" class="fullareashort">
+                                                <xf:label class="svRepeatHeader">Notiz</xf:label>
+                                            </xf:textarea>
+                                            <xf:output ref="./*:authorReference/*:display/@value">
+                                                <xf:label class="svRepeatHeader">Author</xf:label>
+                                            </xf:output>
+                                            <xf:output value="substring(./*:time/@value,1,10)"/>
+                                </xf:repeat>
+                                    </td>
+                                </tr>
+                            </table>
+                        </xf:group>
+                    </xf:group>
+                </xf:group>
+                <xf:group id="editRegGroup" ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:category/*:coding/*:code[@value='registration']">
+                    <xf:group ref="instance('i-goals')/*:Goal[index('r-goals-id')]" class="svFullGroup">
+                        <xf:label>Anmeldung bearbeiten (vom <xf:output value="substring(./*:startDate/@value,1,10)"/>)</xf:label>
+                        <br/>
+                        <xf:select1 ref="./*:lifecycleStatus/@value" incremental="true">
+                            <xf:label>Status:</xf:label>
+                            <xf:itemset nodeset="instance('i-g-infos')/*:lifecycleStatus/*:code">
+                                <xf:label ref="./@label-de"/>
+                                <xf:value ref="./@value"/>
+                            </xf:itemset>
+                        </xf:select1>
+                        <xf:select1 ref="./*:achievementStatus/*:coding/*:code/@value" incremental="true">
+                            <xf:itemset nodeset="instance('i-g-infos')/*:achievementStatus/*:code">
+                                <xf:label ref="./@label-de"/>
+                                <xf:value ref="./@value"/>
+                            </xf:itemset>
+                        </xf:select1>
+                        <strong>
+                        <xf:output value="choose(./*:lifecycleStatus/@value='proposed','Neu Anmeldung', choose(./*:lifecycleStatus/@value='accepted','Anmeldebogen da', choose(./*:lifecycleStatus/@value='active', 'Anforderung', 'Fertig?')))">
+                        </xf:output>
+                        </strong>
+                        <br/>
+                        <xf:output value="substring(./*:statusDate/@value,1,10)">
+                            <xf:label>Datum/Grund</xf:label>
+                        </xf:output>
+                        <xf:output ref="./*:statusReason/@value"/>
+                        <xf:group ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:lifecycleStatus[@value=('rejected','on-hold','cancelled','unknown')]">
+                            <xf:label>Bitte Grund für Statusänderung eingeben:</xf:label>
+                            <xf:input ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:statusReason/@value" class="long-input">
+                                <xf:action ev:event="xforms-value-changed">
+                                    <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:statusDate/@value" value="current-dateTime()"/>
+                                </xf:action>
+                            </xf:input>
+                        </xf:group>
+                        <br/>
+                        <xf:select1 ref="./*:priority/*:coding/*:code/@value" class="medium-input">
+                            <xf:label>Prio:</xf:label>
+                            <xf:itemset nodeset="instance('i-g-infos')/*:priority/*:code">
+                                <xf:label ref="./@label-de"/>
+                                <xf:value ref="./@value"/>
+                            </xf:itemset>
+                            <xf:action ev:event="xforms-value-changed">
+                                <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:priority/*:coding/*:display/@value" value="instance('i-g-infos')/*:priority/*:code[@value=instance('i-goals')/*:Goal[index('r-goals-id')]/*:priority/*:coding/*:code/@value]/@label-de"/>
+                                <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:priority/*:text/@value" value="instance('i-g-infos')/*:priority/*:code[@value=instance('i-goals')/*:Goal[index('r-goals-id')]/*:priority/*:coding/*:code/@value]/@label-de"/>
+                                </xf:action>
+                        </xf:select1>
+                        <xf:group class="form-group form-inline">
+                            <xf:label>Fällig am:   </xf:label>
+                            <div class="input-group date col-sm-2" id="cond-onset" data-date-format="yyyy-mm-dd" data-date-language="de">
+                                <input type="text" class="form-control" id="cond-onset-input"/>
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"/>
+                                </div>
+                            </div>
+                        </xf:group>
+                        <xf:group class="svFullGroup">
+                            <xf:select1 ref="./*:description/*:coding/*:code/@value">
+                                <xf:label>Pat-Gruppe:</xf:label>
+                                <xf:itemset nodeset="instance('i-c-infos')/*:finding/*:code">
+                                    <xf:label ref="./@label-de"/>
+                                    <xf:value ref="./@value"/>
+                                </xf:itemset>
+                            </xf:select1>
+                            <xf:textarea ref="./*:description/*:text/@value" class="fullareashort">
+                                <xf:label>Fragestellung:</xf:label>
+                            </xf:textarea>
+                        </xf:group>
+                        <div class="form-horizontal">
+                                <xf:group class="form-group form-inline">
+                                        <div class="input-group date col-sm-2" id="cond-onset" data-date-format="yyyy-mm-dd" data-date-language="de">
+                                            <label for="cond-onset-input">Fällig</label>
+                                            <input type="text" class="form-control" id="cond-onset-input"/>
+                                            <div class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"/>
+                                            </div>
+                                        </div>
+                                    
+                                </xf:group>
+                        </div>
+                        <xf:group class="svFullGroup">
+                            <xf:label class="svRepeatHeader">Notizen</xf:label>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <xf:trigger>
+                                            <xf:label>+</xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:insert nodeset="./*:note" context="." origin="instance('i-g-infos')/*:bricks/*:note"/>
+                                                <xf:setvalue ref="./*:note[last()]/*:authorReference/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                                                <xf:setvalue ref="./*:note[last()]/*:authorReference/*:display/@value" value="instance('i-login')/*:lognam"/>
+                                                <xf:setvalue ref="./*:note[last()]/*:time/@value" value="current-dateTime()"/>
+                                            </xf:action>
+                                        </xf:trigger>
+                                    </td>
+                                    <td>
+                                        <xf:trigger>
+                                            <xf:label>-</xf:label>
+                                            <xf:action ev:event="DOMActivate">
+                                                <xf:delete nodeset="./*:note" at="index('r-notes-id')"/>
+                                            </xf:action>
+                                        </xf:trigger>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <xf:repeat id="r-notes-id" ref="./*:note" appearance="compact" class="svRepeat">
+                                            <xf:textarea ref="./*:text/@value" class="fullareashort">
+                                                <xf:label class="svRepeatHeader">Notiz</xf:label>
+                                            </xf:textarea>
+                                            <xf:output ref="./*:authorReference/*:display/@value">
+                                                <xf:label class="svRepeatHeader">Author</xf:label>
+                                            </xf:output>
+                                            <xf:output value="substring(./*:time/@value,1,10)"/>
+                                                </xf:repeat>
+                                    </td>
+                                </tr>
+                            </table>
+                        </xf:group>
+                    </xf:group>
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:lifecycleStatus[@value='proposed']" class="svUpdateMasterTrigger">
+                                    <xf:label>Anmeldebogen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:lifecycleStatus[@value" value="'accepted'"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:statusReason/@value" value="'Bogen da'"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:statusDate/@value" value="current-dateTime()"/>
+                                    <!--
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:expressedBy/*:reference/@value" value="concat('metis/practitioners/', instance('i-login')/*:loguid)"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:expressedBy/*:display/@value" value="instance('i-login')/*:lognam"/>
+                                        <xf:send submission="s-submit-goal"/>
+                                    -->
+                                        <xf:toggle case="listGoals"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:lifecycleStatus[@value='proposed']" class="svUpdateMasterTrigger">
+                                    <xf:label>Bogen angemahnt</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:insert nodeset="./*:note" context="." origin="instance('i-g-infos')/*:bricks/*:note"/>
+
+                                    <!--
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:note[last()]/*:authorReference/*:reference/@value" value="concat('metis/practitioners/', instance('i-login')/*:loguid)"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:note[last()]/*:authorReference/*:display/@value" value="instance('i-login')/*:lognam"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:note[last()]/*:time/@value" value="current-dateTime()"/>
+                                        <xf:setvalue ref="instance('i-goals')/*:Goal[index('r-goals-id')]/*:note[last()]/*:text/@value" value="Anmeldebogen angemahnt"/>
+                                    -->
+                                        <xf:toggle case="listGoals"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                </xf:group>
+            </xf:case>
+            <xf:case id="showHelp">
+                <xf:group>
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Schließen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="listGoals"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                    <h4>Hilfe</h4>
+                    <p>Ziele erlauben wichtige Vereinbarungen mit dem Patienten zu seinen Beschwerden und Wünschen nachvollziehbar zu dokumentieren. Offene Probleme können Patienten/Erbringer-bezogen oder -übergreifend detektiert werden.
+                    <ul>
+                        <li>Inhalt (Diagnostik, Therapie, Teilhabe, Pflege, Vorsorge usw.)</li>
+                        <li>Status und Fortschritt</li>
+                        <li>Fälligkeit</li>
+                        <li>Konsens</li>
+                        <li>Ergebnis</li>
+                    </ul>
+                    </p>
+                    <p>Der Workflow eines Ziels wird durch zwei parallele Status abgebildet; kompliziert aber notwendig:
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Status (LifeCycle; aktiv, final)</th>
+                                <th>Progress (Achievement; aktiv, final)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                <ul>
+                                <li>vorgeschlagen (a)</li>
+                                <li>geplant (a)</li>
+                                <li>angenommen (a)</li>
+                                <li>aktiv (a)</li>
+                                <li>angehalten (a)</li>
+                                <li>fertig (f)</li>
+                                <li>zurückgewiesen (f)</li>
+                                <li>... weitere Error Codes</li>
+                                </ul>
+                                </td>
+                                <td>
+                                <ul>
+                                <li>in-Arbeit (a)</li>
+                                <li>Besserung (a)</li>
+                                <li>Verschlechterung (a)</li>
+                                <li>unverändert (a)</li>
+                                <li>erreicht (a)</li>
+                                <li>nachhaltig erreicht (f)</li>
+                                <li>nicht erreicht (f)</li>
+                                <li>ohne Fortschritt (f)</li>
+                                <li>nicht erreichbar (f)</li>
+                                <li>... weitere Error Codes</li>
+                                </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </p>
+                    <p>Für die Zwecke der Anmeldung gibt es vereinfachte spezifische Kombinationen:
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Workflow</th>
+                                    <th>Status</th>
+                                    <th>Achievement</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th>NeuAnmeldung</th>
+                                    <td>proposed</td>
+                                    <td>in-progress</td>
+                        </tr>
+                        <tr>
+                            <th>Anmeldebogen</th>
+                                    <td>accepted</td>
+                                    <td>in-progress</td>
+                        </tr>
+                        <tr>
+                            <th>Anforderung</th>
+                                    <td>active</td>
+                                    <td>improving</td>
+                        </tr>
+                        <tr>
+                            <th>Termin geplant</th>
+                                    <td>active</td>
+                                    <td>achieved</td>
+                        </tr>
+                        <tr>
+                            <th>Termin finished</th>
+                                    <td>completed</td>
+                                    <td>sustained</td>
+                        </tr>
+                        <tr>
+                            <th>Abbruch o.T.</th>
+                                    <td>completed</td>
+                                    <td>not-attainable</td>
+                        </tr>
+                        <tr>
+                            <th>Cancelled</th>
+                                    <td>cancelled</td>
+                                    <td>not-attainable</td>
+                        </tr>                        
+                        </tbody>
+                    </table>
+                    </p>
+                </xf:group>
+            </xf:case>
+        </xf:switch>
+    </xf:group>
+</div>

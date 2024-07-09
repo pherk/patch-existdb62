@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-demo-address" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:bind ref="*:name[*:use/@value='official']/*:given/@value" type="xs:string" required="true()"/>
+            <xf:bind ref="*:name[*:use/@value='official']/*:family/@value" type="xs:string" required="true()"/><!--
+            <xf:bind ref="*:birthDate/@value" type="xs:date" required="true()"/>
+-->
+            <xf:bind ref="*:telecom/*:rank/@value" type="xs:int" required="true()"/>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:submission id="s-update-patient-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" model="m-demo-name" replace="none" method="post">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="bf:instanceOfModel('m-patient','i-control-center')/*:changed" value="'true'"/>
+                    <xf:setvalue ref="bf:instanceOfModel('m-demo-address','i-control-center')/*:isDirty" value="'false'"/>
+                    <xf:message level="ephemeral">Subform has updated Master.</xf:message>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot update Master!.</xf:message>
+            </xf:submission>
+            <xf:instance id="i-control-center">
+                <data xmlns="">
+                    <isDirty>false</isDirty>
+                </data>
+            </xf:instance>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready"/>
+        </xf:model>
+    </div>
+    <xf:group ref="instance('i-pat')" class="svFullGroup bordered">
+        <xf:action ev:event="xforms-value-changed">
+            <xf:setvalue ref="instance('i-control-center')/*:isDirty" value="'true'"/>
+        </xf:action>
+        <xf:group class="svFullGroup bordered">
+            <xf:label>Adresse</xf:label>
+            <br/>
+            <xf:input id="street" ref="*:address/*:line[1]/@value">
+                <xf:label>Straße:</xf:label>
+            </xf:input>
+            <xf:input id="app" ref="*:address/*:line[2]/@value">
+                <xf:label>Zusatz:</xf:label>
+            </xf:input>
+            <xf:group>
+                <xf:input id="plz" ref="*:address/*:postalCode/@value" class="short-input">
+                    <xf:label>PLZ:Ort:</xf:label>
+                </xf:input>
+                <xf:input id="city" ref="*:address/*:city/@value"/>
+            </xf:group>
+            <xf:group>
+                <xf:select1 id="region" ref="*:address/*:state/@value" class="long-select">
+                    <xf:label>Region:</xf:label>
+                    <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-iso3166-2')/de/region">
+                        <xf:label ref="./@label"/>
+                        <xf:value ref="./@value"/>
+                    </xf:itemset>
+                </xf:select1>
+                <xf:select1 id="staat" ref="*:address/*:country/@value" class="medium-select">
+                    <xf:label>Land:</xf:label>
+                    <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-iso3166-1')/country">
+                        <xf:label ref="./@label"/>
+                        <xf:value ref="./@value"/>
+                    </xf:itemset>
+                </xf:select1>
+            </xf:group>
+        </xf:group>
+        <xf:group ref="instance('i-pat')" class="svFullGroup bordered">
+            <xf:label>Telecom</xf:label>
+            <table>
+                <thead>
+                    <tr>
+                        <td>
+                            <xf:label>Home </xf:label>
+                            <xf:trigger>
+                                <xf:label>+</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:insert nodeset="instance('i-pat')/*:telecom[*:use/@value='home']" context="instance('i-pat')" origin="bf:instanceOfModel('m-patient','i-pinfos')/*:bricks/*:telecom[*:use/@value='home']"/>
+                                </xf:action>
+                            </xf:trigger>
+                            <xf:trigger>
+                                <xf:label>-</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:delete nodeset="instance('i-pat')/*:telecom[*:use/@value='home']" at="index('tce-home-id')"/>
+                                </xf:action>
+                            </xf:trigger>
+                        </td>
+                        <td>
+                            <xf:label>Work </xf:label>
+                            <xf:trigger>
+                                <xf:label>+</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:insert nodeset="instance('i-pat')/*:telecom[*:use/@value='work']" context="instance('i-pat')" origin="bf:instanceOfModel('m-patient','i-pinfos')/*:bricks/*:telecom[*:use/@value='work']"/>
+                                </xf:action>
+                            </xf:trigger>
+                            <xf:trigger>
+                                <xf:label>-</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:delete nodeset="instance('i-pat')/*:telecom[*:use/@value='work']" at="index('tce-work-id')"/>
+                                </xf:action>
+                            </xf:trigger>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <xf:repeat id="tce-home-id" ref="./*:telecom[*:use/@value='home']" appearance="compact" class="svRepeat">
+                                <xf:input ref="./*:rank/@value" class="tiny-input">
+                                    <xf:label class="svRepeatHeader">Rang</xf:label>
+                                </xf:input>
+                                <xf:select1 ref="./*:system/@value" class="short-input">
+                                    <xf:label class="svRepeatHeader">System</xf:label>
+                                    <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-pinfos')/telecom/system">
+                                        <xf:label ref="./@label"/>
+                                        <xf:value ref="./@value"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                                <xf:input ref="./*:value/@value">
+                                    <xf:label class="svRepeatHeader">Nr:</xf:label>
+                                </xf:input>
+                            </xf:repeat>
+                        </td>
+                        <td>
+                            <xf:repeat id="tce-work-id" ref="./*:telecom[*:use/@value='work']" appearance="compact" class="svRepeat">
+                                <xf:input ref="./*:rank/@value" class="tiny-input">
+                                    <xf:label class="svRepeatHeader">Rang</xf:label>
+                                </xf:input>
+                                <xf:select1 ref="./*:system/@value" class="short-input">
+                                    <xf:label class="svRepeatHeader">System</xf:label>
+                                    <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-pinfos')/telecom/system">
+                                        <xf:label ref="./@label"/>
+                                        <xf:value ref="./@value"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                                <xf:input ref="./*:value/@value">
+                                    <xf:label class="svRepeatHeader">Nr:</xf:label>
+                                </xf:input>
+                            </xf:repeat>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </xf:group>
+    </xf:group>
+    <div class="svTriggerGroup">
+        <xf:group appearance="bf:horizontalTable">
+            <xf:trigger id="demo-save" class="svSaveTrigger">
+                <xf:label>Speichern</xf:label>
+                <xf:send submission="s-update-patient-master"/>
+            </xf:trigger>
+            <xf:trigger id="t-close" class="svUpdateMasterTrigger">
+                <xf:label>Schließen</xf:label>
+                <xf:action if="instance('i-control-center')/*:isDirty='true'">
+                    <script type="text/javascript">
+                        closeForm();
+                    </script>
+                </xf:action>
+                <xf:action if="instance('i-control-center')/*:isDirty='false'">
+                    <xf:dispatch name="unload-subform" targetid="controlCenter"/>
+                </xf:action>
+            </xf:trigger>
+            <xf:trigger id="close" class="hiddenControl">
+                <xf:label>close form</xf:label>
+                <xf:dispatch name="unload-subform" targetid="controlCenter"/>
+            </xf:trigger>
+        </xf:group>
+    </div>
+</div>

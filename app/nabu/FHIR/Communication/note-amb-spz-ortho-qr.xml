@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Communication xmlns="http://hl7.org/fhir">
+    <id value="note-amb-spz-ortho-qr"/>
+    <meta>
+        <versionId value="0"/>
+        <extension url="http://eNahar.org/nabu/extension#lastUpdatedBy">
+            <valueReference>
+                <reference value="metis/practitioners/u-admin"/>
+                <display value="Admin"/>
+            </valueReference>
+        </extension>
+    </meta>
+    <category>
+        <coding>
+            <system value="#nabu-communication-template"/>
+            <code value="letter"/>
+            <display value="Brief"/>
+        </coding>
+        <coding>
+            <system value="#nabu-communication-encounter-type"/>
+            <code value="amb-spz-ortho-qr"/>
+            <display value="Ortho Ellerich"/>
+        </coding>
+        <text value="Brief Ortho Ellerich"/>
+    </category>
+<!--
+<location>
+ <name type="org">Queen Rania Rehabilitation Center (Gebäude 21)</name>
+ <street>Lindenburger Allee 44</street>
+ <settlement>Köln</settlement>
+ <postCode>50931</postCode>
+ <country>Deutschland</country>
+  <geo>50.xx 6.xx</geo>
+</location>
+-->
+    <payload>
+        <contentTEI>
+            <div xmlns="http://www.tei-c.org/ns/1.0" type="info">
+                
+                <p>Beachten Sie bitte die am Termin gültigen Corona-Regeln; bitte (möglichst) nur eine Begleitperson!</p>
+                <p/>
+                <p>Bitte alle transportablen Hilfsmittel (z.B. Orthesen, Nachtlagerungsschienen, Einlagen) mitbringen</p>
+                <p/>
+                <p>Wichtig für Gesetzlich Versicherte: Behandlung nur mit Überweisungsschein für "Sozialpädiatrisches Zentrum (SPZ)"
+                  möglich (gültig für das aktuelle Quartal)!</p>
+                <p>Kommen Sie bitte wegen Parkplatzsuche und Anmeldung etwas früher (ca. 15-30min), damit Sie rechtzeitig zum Termin im SPZ ankommen.</p>
+                <p>Die Anmeldung befindet sich im CIO-Gebäude 70, 3. Etage, Raum 79 oder 80; erreichbar am besten über Aufzuggruppe A.</p>
+                <p>Bringen Sie bitte alle Unterlagen zu den Problemen des Kindes (zB. U-Heft, Arzt-, Therapiebefunde) und Hilfsmittel (z.B. Brille, Orthesen) mit.</p>
+                <p>Falls Sie den Termin nicht wahrnehmen wollen oder verlegen müssen, sagen sie bitte rechtzeitig telefonisch (478-42156, -42157) oder per email an spz@uk-koeln.de Bescheid</p>
+            </div>
+        </contentTEI>
+    </payload>
+    <note>
+        <text value="Communication template"/>
+    </note>
+</Communication>

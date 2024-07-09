@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="xar" name="terminology">
+    <property name="build.dir" value="build"/>
+    <target name="xar">
+        <mkdir dir="${build.dir}"/>
+        <zip basedir="." destfile="${build.dir}/terminology-0.9.0.xar" excludes="${build.dir}/*"/>
+    </target>
+</project>

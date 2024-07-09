@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-syn-tasks" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-done" level="ephemeral">Subform has updated itself.</xf:message>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            
+            <xf:instance id="i-tasks">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-tasks" instance="i-tasks" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/tasks?subject=', instance('i-pat')/*:id/@value,'&amp;status=')"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get tasks!</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-t-infos" src="FHIR/Task/task-infos.xml"/>            
+            
+            <xf:instance id="views">
+                <data xmlns="">
+                    <tasksToSelect/>
+                    <notasks/>
+                </data>
+            </xf:instance>
+            <xf:bind id="tasksToSelect" ref="instance('views')/*:tasksToSelect" relevant="count(instance('i-tasks')/*:Task) &gt; 0"/>
+            <xf:bind id="notasks" ref="instance('views')/*:notasks" relevant="count(instance('i-tasks')/*:Task) = 0"/>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+                <xf:send submission="s-get-tasks"/>
+            </xf:action>
+        </xf:model>
+    </div>
+    <div>
+        <xf:group ref="instance('views')/*:tasksToSelect" class="bordered">
+            <xf:label>Tasks</xf:label>
+            <xf:repeat id="r-tasks-id" ref="instance('i-tasks')/*:Task" appearance="compact" class="svRepeat">
+                <xf:output value="format-dateTime(./*:authoredOn/@value, '[D01].[M01].[Y01]')">
+                    <xf:label class="svRepeatHeader">Datum</xf:label>
+                </xf:output>
+                <xf:output value="substring(./*:status/@value,1,3)">
+                    <xf:label class="svRepeatHeader">Stat</xf:label>
+                </xf:output>
+                <xf:output value="./*:requester/*:agent/*:display/@value">
+                    <xf:label class="svRepeatHeader">Von</xf:label>
+                </xf:output>
+                <xf:output value="concat(*:restriction/*:recipient/*:role/@value,':',*:restriction/*:recipient/*:display/@value)">
+                    <xf:label class="svRepeatHeader">An</xf:label>
+                </xf:output>
+                <xf:output value="./*:description/@value">
+                    <xf:label class="svRepeatHeader">Betreff</xf:label>
+                </xf:output>
+                <xf:output value="./*:basedOn/*:display/@value">
+                    <xf:label class="svRepeatHeader">CarePlan</xf:label>
+                </xf:output>
+            </xf:repeat>
+            <hr style="border: none; height: 1px; color: blue; background: blue;"/>
+            <xf:group ref="instance('i-tasks')/*:Task[index('r-tasks-id')]" class="svFullGroup bordered">
+            <table>
+                <tr>
+                    <th>Type</th>
+                    <td>
+                        <xf:output ref="./*:code/*:coding/*:display/@value" class=""/>
+                    </td>
+                    <th>Priorität</th>
+                    <td>
+                        <xf:output ref="./*:priority/@value" class="short-input"/>
+                    </td>
+                    <th>Ext. Anfrage</th>
+                    <td>
+                        <xf:output ref="./*:requester/*:agent/*:display/@value" class="long-input"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Zugewiesen an</th>
+                    <td colspan="5">
+                        <xf:output value="instance('i-tasks')/*:Task[index('r-tasks-id')]/*:restriction/*:recipient/*:display/@value"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Betreff</th>
+                    <td colspan="5">
+                        <xf:output ref="./*:description/@value"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Text</th>
+                    <td colspan="5">
+                        <xf:textarea ref="./*:note[1]/*:text/@value" class="bigarea"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Kommentar</th>
+                    <td colspan="5">
+                        <xf:textarea ref="./*:note[2]/*:text/@value" class="bigarea"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Fällig am</th>
+                    <td>
+                        <xf:output ref="./*:restriction/*:period/*:end/@value" class=""/>
+                    </td>
+                    <th>Tags</th>
+                    <td>
+                        <xf:output ref="./*:input[*:type/*:coding/*:system[@value='#task-input-types']]/*:valueString/@value" class=""/>
+                    </td>
+                    <th>Status</th>
+                    <td>
+                        <xf:output value="instance('i-t-infos')/*:status[@value=instance('i-tasks')/*:Task[index('r-tasks-id')]/*:status/@value]/@label-de"/>
+                    </td>
+                </tr>
+            </table>
+            </xf:group>
+        </xf:group>
+        <xf:group ref="instance('views')/*:notasks">
+            <xf:label>Keine Tasks</xf:label>
+        </xf:group>
+    </div>
+</div>

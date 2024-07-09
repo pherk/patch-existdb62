@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle-infos>
+  <type>
+    <code value="document" label-ger="Dokument"/>
+    <code value="message" label-ger="Message"/>
+    <code value="transaction" label-ger="Transaction"/>
+    <code value="transaction-response" label-ger="Transaction-Response"/>
+    <code value="batch" label-ger="Batch"/>
+    <code value="batch-response" label-ger="Batch-Response"/>
+    <code value="history" label-ger="History"/>
+    <code value="searchset" label-ger="Searchset"/>
+    <code value="collection" label-ger="Collection"/>
+  </type>
+  <bricks xmlns="http://hl7.org/fhir" version="">
+    <Bundle> 
+      <id value=""/>
+      <meta>
+        <versionId value="0"/>
+      </meta>
+      <type value=""/>
+      <total value=""/>
+    </Bundle>
+    <entry>
+      <fullUrl value=""/>
+      <resource>
+      </resource>
+    </entry>
+    <link>
+      <relation value=""/>
+      <url value=""/>
+    </link>
+    <signature>
+      <type/>
+      <when value=""/>
+      <who>
+        <reference value=""/>
+        <display value=""/>
+      </who>
+      <onBehalfOf>
+        <reference value=""/>
+        <display value=""/>
+      </onBehalfOf>
+      <contentType value=""/>
+      <blob value=""/>
+    </signature>
+    <search>  <!-- ?? 0..1 Search related information -->
+        <mode value="[code]"/><!-- 0..1 match | include | outcome - why this is in the result set -->
+        <score value="[decimal]"/><!-- 0..1 Search ranking (between 0 and 1) -->
+    </search>
+    <request>  <!-- ?? 0..1 Transaction Related Information -->
+         <method value="[code]"/><!-- 1..1 GET | POST | PUT | DELETE -->
+         <url value="[uri]"/><!-- 1..1 URL for HTTP equivalent of this entry -->
+         <ifNoneMatch value="[string]"/><!-- 0..1 For managing cache currency -->
+         <ifModifiedSince value="[instant]"/><!-- 0..1 For managing update contention -->
+         <ifMatch value="[string]"/><!-- 0..1 For managing update contention -->
+         <ifNoneExist value="[string]"/><!-- 0..1 For conditional creates -->
+    </request>
+    <response>  <!-- ?? 0..1 Transaction Related Information -->
+        <status value="[string]"/><!-- 1..1 Status response code (text optional) -->
+        <location value="[uri]"/><!-- 0..1 The location, if the operation returns a location -->
+        <etag value="[string]"/><!-- 0..1 The etag for the resource (if relevant) -->
+        <lastModified value="[instant]"/><!-- 0..1 Server's date time modified -->
+        <outcome><!-- 0..1 Resource OperationOutcome with hints and warnings (for batch/transaction) --></outcome>
+    </response>
+  </bricks>
+</bundle-infos>

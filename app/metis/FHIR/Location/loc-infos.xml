@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<loc-infos><!-- FHIR status -->
+    <status>
+        <code value="active" label-de="Aktiv"/>
+        <code value="suspended" label-de="Gesperrt"/>
+        <code value="inactive" label-de="Inaktiv"/>
+    </status>
+    <mode>
+        <code value="instance" label-de="Instanz"/>
+        <code value="kind" label-de="Klasse"/>
+    </mode>
+    <physicalType value="bu" label="Gebäude"/>
+    <physicalType value="fl" label="Etage"/>
+    <physicalType value="ro" label="Raum"/>
+    <roomType value="ub" label="UB"/>
+    <roomType value="admin" label="Büro"/>
+    <roomType value="aux" label="Archiv/Lager"/>
+    <group value="ateam" label="AmbulanzTeam"/>
+    <group value="arzt" label="Arzt"/>
+    <group value="ergo" label="Ergotherapie"/>
+    <group value="hp" label="Heilpädagogik"/>
+    <group value="logo" label="Logopädie"/>
+    <group value="physio" label="Physiotherapie"/>
+    <group value="psych" label="Psychologe"/>
+    <group value="sa" label="Sozialarbeit"/>
+    <group value="se" label="Sekretariat"/>
+    <group value="tx" label="Therapeuten"/>
+    <bricks xmlns="http://hl7.org/fhir" version="4.0.1"><!-- resource fragments -->
+        <Location>
+            <id value=""/>
+            <meta>
+                <versionID value="0"/>
+            </meta>
+            <identifier>
+                <value value=""/>
+            </identifier>
+            <name value=""/>
+            <alias value=""/>
+            <description value=""/>
+            <mode value=""/>
+            <type>
+                <coding>
+                    <system value="http://hl7.org/fhir/ValueSet/v3-ServiceDeliveryLocationRoleType"/>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>                
+            </type>
+            <physicalType>
+                <coding>
+                    <system value="http://hl7.org/fhir/location-physical-type"/>
+                    <code value="ro"/>
+                    <display value="Raum"/>
+                </coding>
+            </physicalType>
+            <managingOrganization>
+                <reference value="metis/organizations/kikl-spz"/>
+                <display value="SPZ Kinderklinik"/>
+            </managingOrganization>
+            <partOf>
+                <reference value=""/>
+            </partOf>
+            <extension url="#managedByGroup">
+                <valueCode value="arzt"/>
+            </extension>
+            <extension url="#room-type">
+                <valueCode value="ub"/>
+            </extension>
+            <extension url="#room-area">
+                <valueCode value=""/>
+            </extension>
+            <status value="active"/>
+        </Location>
+        <operationalStatus>
+            <coding>
+                <system value=""/>
+                <code value=""/>
+                <display value=""/>
+            </coding>
+            <text value=""/>
+        </operationalStatus>
+        <telecom><!-- 0..* ContactPoint Contact details of the location --></telecom>
+        <address><!-- 0..1 Address Physical location --></address>
+         <position>  <!-- 0..1 The absolute geographic location -->
+            <longitude value="[decimal]"/><!-- 1..1 Longitude with WGS84 datum -->
+            <latitude value="[decimal]"/><!-- 1..1 Latitude with WGS84 datum -->
+            <altitude value="[decimal]"/><!-- 0..1 Altitude with WGS84 datum -->
+        </position>
+        <endpoint>
+            <reference value=""/>
+            <display value=""/>
+        </endpoint>
+    </bricks>
+</loc-infos>

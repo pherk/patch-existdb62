@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<consent-infos>
+    <status>
+        <system value="http://hl7.org/fhir/ValueSet/consent-state-codes"/>
+        <code value="draft" label-de="Entwurf" label-en="Pending"/>
+        <code value="proposed" label-de="Vorschlag" label-en="Proposed"/>
+        <code value="active" label-de="aktiv" label-en="active"/>
+        <code value="rejected" label-de="abgelehnt" label-en="rejected"/>
+        <code value="inactive" label-de="beendet" label-en="Inactive"/>
+        <code value="entered-in-error" label-de="???" label-en="entered-in-error"/>
+	</status>
+	<category>
+	    <system value="http://hl7.org/fhir/ValueSet/consent-category"/>
+	    <code value="59284-0" label-de="Einverständnis zur Behandlung" label-en="Patient Consent"/>
+        <code value="57016-8" label-de="Anerkennung der Datenschutzregelungen" label-en="Privacy policy acknowledgement Document"/>
+        <code value="57017-6" label-de="Datenschutzregelungen" label-en="Privacy policy Organization Document"/>
+        <code value="64292-6" label-de="Einverständnis zur Datenweitergabe" label-en="Release of information consent"/>
+    </category>
+    <action>
+        <system value="http://hl7.org/fhir/ValueSet/consent-action"/>
+        <code value="collect" label-en="Collect" comment="Gather/acquire information by an entity to achieve a stated purpose"/>
+        <code value="access" label-en="Access" comment="Provide an entity access to information to achieve a stated purpose"/>
+        <code value="use" label-en="Use" comment="Use of stored information by an entity fo the stated purpose"/>
+        <code value="disclose" label-en="Disclose" comment="Release / transfer of information to an entity"/>
+        <code value="correct" label-en="Access and Correct" comment="Allowing an entity to correct a patient\'s information"/>
+    </action>
+    <security-role-type>
+        <system value="http://hl7.org/fhir/ValueSet/security-role-type"/>
+        <code value="PROV" label-de="Erbringer" label-en="healthcare provider" comment="An Entity (player) that is authorized to provide health care services by some authorizing agency (scoper)."/>
+    </security-role-type>
+    <security-labels>
+        <system value="http://hl7.org/fhir/ValueSet/security-labels"/>
+        <code value="U" label="unrestricted" definition="Privacy metadata indicating that the information is not classified as sensitive."/>
+        <code value="L" label="low" definition="Privacy metadata indicating that the information has been de-identified, and there are mitigating circumstances that prevent re-identification, which minimize risk of harm from unauthorized disclosure. The information requires protection to maintain low sensitivity."/>
+        <code value="M" label="moderate" definition="Privacy metadata indicating moderately sensitive information, which presents moderate risk of harm if disclosed without authorization."/>
+        <code value="N" label="normal" definition="Privacy metadata indicating that the information is typical, non-stigmatizing health information, which presents typical risk of harm if disclosed without authorization."/>
+        <code value="R" label="restricted" definition="Privacy metadata indicating highly sensitive, potentially stigmatizing information, which presents a high risk to the information subject if disclosed without authorization. May be pre-empted by jurisdictional law, e.g., for public health reporting or emergency treatment."/>
+        <code value="V" label="very restricted" definition="Privacy metadata indicating that the information is extremely sensitive and likely stigmatizing health information that presents a very high risk if disclosed without authorization. This information must be kept in the highest confidence."/>
+    </security-labels>
+    <purpose-of-use>
+        <code value="PATADMIN" label-de="Patienten-Administration" label-en="patient administration" comment="To perform one or more operations on information used for operational activities conducted to administer the delivery of health care to a patient."/>
+    </purpose-of-use>
+    <data-meaning>
+        <system value="http://hl7.org/fhir/ValueSet/consent-data-meaning"/>
+        <code value="instance" label-en="Instance" comment="The consent applies directly to the instance of the resource"/>
+        <code value="related" label-en="Related" comment="The consent applies directly to the instance of the resource and instances it refers to"/>
+        <code value="dependents" label-en="Dependents" comment="The consent applies directly to the instance of the resource and instances that refer to it"/>
+        <code value="authoredby" label-en="AuthoredBy" comment="The consent applies to instances of resources that are authored by"/>
+    </data-meaning>
+    <content-class>
+        <system value="http://hl7.org/fhir/ValueSet/consent-content-class"/>
+    </content-class>
+    <except-type>
+        <system value="http://hl7.org/fhir/ValueSet/consent-except-type"/>
+        <code value="deny" label-de="Opt Out" label-en="Opt Out" comment="Consent is denied for actions meeting these rules"/>
+        <code value="permit" label-de="Opt In" label-en="Opt In" comment="Consent is provided for actions meeting these rules"/>
+    </except-type>
+    <bricks xmlns="http://hl7.org/fhir" comp="4.0.1">
+        <Consent>
+            <id value=""/>
+            <meta>
+                <versionID value=""/>
+            </meta>
+            <status value="draft"/>
+            <scope value=""/>
+            <category>
+                <coding>
+                    <system value="http://hl7.org/fhir/ValueSet/consent-category"/>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>
+            </category>
+            <patient>
+                <reference value=""/>
+                <display value=""/>
+            </patient>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <dateTime value=""/>
+            <performer>
+                <reference value="metis/organizations/kikl-nspz"/>
+                <display value="KiKl nSPZ"/>
+            </performer>
+            <organization>
+                <reference value="metis/organizations/ukk-kikl"/>
+                <display value="UK Köln KiKl"/>
+            </organization>
+            <action>
+                <coding>
+                    <system value=""/>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>                
+            </action>
+            <dataPeriod>
+                <start value=""/>
+                <end value=""/>
+            </dataPeriod>
+ <!-- 0..1 Attachment|Reference(Consent|DocumentReference|Contract|
+   QuestionnaireResponse) Source from which this consent is taken 
+  <source></source>
+ -->
+            <policy>  <!-- 0..* Policies covered by this consent -->
+                <authority value="[uri]"/><!-- ?? 0..1 Enforcement source for policy -->
+                <uri value="[uri]"/><!-- ?? 0..1 Specific policy covered by this consent -->
+            </policy>
+            <policyRule><!-- ?? 0..1 CodeableConcept Regulation that this consents to --></policyRule>
+            <verification>  <!-- 0..* Consent Verified by patient or family -->
+                <verified value="[boolean]"/><!-- 1..1 Has been verified -->
+                <verifiedWith><!-- 0..1 Reference(Patient|RelatedPerson) Person who verified --></verifiedWith>
+                <verificationDate value="[dateTime]"/><!-- 0..1 When consent verified -->
+            </verification>
+            <provision>  <!-- 0..1 Constraints to the base Consent.policyRule -->
+                <type value="[code]"/><!-- 0..1 deny | permit -->
+                <period><!-- 0..1 Period Timeframe for this rule --></period>
+                <actor>  <!-- 0..* Who|what controlled by this rule (or group, by role) -->
+                    <role><!-- 1..1 CodeableConcept How the actor is involved --></role>
+                    <reference><!-- 1..1 Reference(Device|Group|CareTeam|Organization|Patient|
+                        Practitioner|RelatedPerson|PractitionerRole) Resource for the actor (or group, by role) --></reference>
+                </actor>
+                <action><!-- 0..* CodeableConcept Actions controlled by this rule --></action>
+                <securityLabel><!-- 0..* Coding Security Labels that define affected resources --></securityLabel>
+                <purpose><!-- 0..* Coding Context of activities covered by this rule --></purpose>
+                <class><!-- 0..* Coding e.g. Resource Type, Profile, CDA, etc. --></class>
+                <code><!-- 0..* CodeableConcept e.g. LOINC or SNOMED CT code, etc. in the content --></code>
+                <dataPeriod><!-- 0..1 Period Timeframe for data controlled by this rule --></dataPeriod>
+                <data>  <!-- 0..* Data controlled by this rule -->
+                    <meaning value="[code]"/><!-- 1..1 instance | related | dependents | authoredby -->
+                    <reference><!-- 1..1 Reference(Any) The actual data reference --></reference>
+                </data>
+                <provision><!-- 0..* Content as for Consent.provision Nested Exception Rules --></provision>
+            </provision>
+        </Consent>
+        <actor>
+            <role>
+                <coding>
+                    <system value="http://hl7.org/fhir/ValueSet/security-role-type"/>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>
+            </role>
+            <reference>
+                <reference value=""/>
+                <display value=""/>
+            </reference>
+        </actor>
+        <action>
+            <coding>
+                <system value="http://hl7.org/fhir/ValueSet/consent-action"/>
+                <code value=""/>
+                <display value=""/>
+            </coding>
+            <text value=""/>                
+        </action>
+            <sourceReference>
+                <reference value=""/>
+            </sourceReference>
+    </bricks>
+</consent-infos>

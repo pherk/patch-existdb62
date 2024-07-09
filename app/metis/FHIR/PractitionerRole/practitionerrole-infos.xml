@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<role-infos>
+    <telecom>
+        <use value="home" label="Privat"/>
+        <use value="work" label="Arbeit"/>
+        <system value="phone" label="Phone"/>
+        <system value="mobil" label="Mobil"/>
+        <system value="email" label="Email"/>
+        <system value="url" label="Internet"/>
+        <system value="fax" label="Fax"/>
+        <system value="pager" label="Funker"/>
+    </telecom>
+    <profs>
+        <prof value="arzt" label="Arzt"/>
+        <prof value="arzt-ki" label="Kinderarzt"/>
+        <prof value="arzt-ortho" label="Orthopäde"/>
+        <prof value="arzt-kjp" label="KJP"/>
+        <prof value="arzt-nch" label="NCH"/>
+        <prof value="at-shk" label="Stud.Hilfskraft"/>
+        <prof value="at-kk" label="Kinderkrankenschwester"/>
+        <prof value="at-kr" label="Krankenschwester"/>
+        <prof value="at-mfa" label="Med.Fachangestellte"/>
+        <prof value="at-ass" label="Teamassistent"/>
+        <prof value="at-prakt" label="Praktikant"/>
+        <prof value="at-helfer" label="Amb Helfer"/>
+        <prof value="ergo" label="Ergotherapie"/>
+        <prof value="hp" label="Heilpädagogik"/>
+        <prof value="logo" label="Logopädie"/>
+        <prof value="musik" label="Musiktherapie"/>
+        <prof value="orthotic" label="Orthopädie-Technik"/>
+        <prof value="orthoptic" label="Orthoptik"/>
+        <prof value="physio" label="Physiotherapie"/>
+        <prof value="psych" label="Psychologe"/>
+        <prof value="psych-pt" label="Psychotherapeut"/>
+        <prof value="se" label="Sekretariat"/>
+        <prof value="sa" label="Sozialarbeit"/>
+        <prof value="babwl" label="BA BWL"/>
+        <prof value="other" label="Sonstige"/>
+    </profs>
+    <hcs>
+        <healthcareService id="hcs-ukk-kikl-spzn" value="nSPZ Kinderklinik UKK" label-ger="nSPZ"/>
+    </hcs>
+    <daysOfWeek>
+        <code value="mon" label-ger="Montag"/>
+        <code value="tue" label-ger="Dienstag"/>
+        <code value="wed" label-ger="Mittwoch"/>
+        <code value="thu" label-ger="Donnerstag"/>
+        <code value="fri" label-ger="Freitag"/>
+        <code value="sat" label-ger="Samstag"/>
+        <code value="sun" label-ger="Sonntag"/>
+    </daysOfWeek>
+    <bricks xmlns="http://hl7.org/fhir" version="4.0.1">
+        <PractitionerRole>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+            <identifier>
+                <use value="usual"/>
+                <type value="MetisID"/>
+                <system value="http://eNahar.org/nabu/system#metis-account"/>
+                <value value="guest123"/>
+                <period>
+                    <start value=""/>
+                    <end value=""/>
+                </period>
+                <assigner>
+                    <reference value="metis/organizations/ukk-kikl-spzn"/>
+                    <display value="nSPZ UKK"/>
+                </assigner>
+            </identifier>
+            <active value="true"/>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <practitioner>
+                <reference value=""/>
+                <display value=""/>
+            </practitioner>
+            <organization>
+                <reference value="metis/organizations/ukk-kikl-spzn"/>
+                <display value="nSPZ KiKl UKK"/>
+            </organization>
+            <code>
+                <coding>
+                    <code value="guest"/>
+                    <display value="Gast"/>
+                </coding>
+            </code>
+            <specialty>
+                <coding>
+                    <system value="http://hl7.org/fhir/vs/practitioner-specialty"/>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+                <text value=""/>
+            </specialty>
+            <location>
+                <reference value="metis/locations/ukk-kikl-spzn"/>
+                <display value="nSPZ Kinderklinik"/>                
+            </location>
+            <healthcareService>
+                <reference value="metis/HealthcareService/ukk-kikl-spzn"/>
+                <display value="nSPZ Kinderklinik UKK"/>
+            </healthcareService>
+        </PractitionerRole>
+        <availableTime>  <!-- 0..* Times the Service Site is available -->
+            <daysOfWeek value=""/><!-- 0..* mon | tue | wed | thu | fri | sat | sun -->
+            <allDay value="true"/><!-- 0..1 Always available? e.g. 24 hour service -->
+            <availableStartTime value="08:00:00"/>
+            <availableEndTime value="17:00:00"/>
+        </availableTime>
+        <notAvailable>  <!-- 0..* Not available during this time due to provided reason -->
+            <description value="[string]"/><!-- 1..1 Reason presented to the user explaining why time not available -->
+            <during>
+                <start value=""/>
+                <end value=""/>
+            </during>
+        </notAvailable>
+        <availabilityExceptions value="[string]"/><!-- 0..1 Description of availability exceptions --> 
+        <telecom>
+            <system value="phone"/>
+            <value value=""/><!-- 0..1 The actual contact point details -->
+            <use value="work"/>
+            <rank value="1"/>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+        </telecom>
+    </bricks>
+</role-infos>

@@ -1,0 +1,31 @@
+<p>
+XSD
+  Careplan 
+      status in activity (keine Extension weil in detail enthalten)
+  Communication
+      contentTEI  
+
+serialize
+  base und domain 
+
+bricks verschlanken
+  Base types in eigene Datei
+
+info dateien
+
+
+Migration
+  Composition
+    extension url ref
+  Condition
+    onset, abatement
+  Task
+    definition
+
+Allgmein
+  choice types in XForms howto implement
+
+
+ 
+
+</p>

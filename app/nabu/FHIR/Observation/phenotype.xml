@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Observation xmlns="http://hl7.org/fhir">
+    <id value=""/>
+    <identifier><!-- 0..* Identifier Unique Id for this particular observation --></identifier>
+    <status value="[code]"/><!-- 1..1 registered | preliminary | final | amended + -->
+    <category><!-- 0..* CodeableConcept Classification of  type of observation --></category>
+    <code><!-- 1..1 CodeableConcept Type of observation (code / type) --></code>
+    <subject>
+        <reference value=""/>
+        <display value=""/>
+    </subject>
+    <encounter/>
+    <effectivePeriod>
+        <start value=""/>
+        <end value=""/>
+    </effectivePeriod>
+    <issued value="[instant]"/><!-- 0..1 Date/Time this was made available -->
+    <performer><!-- 0..* Reference(Practitioner|Organization|Patient|RelatedPerson) Who is responsible for the observation --></performer>
+    <value><!-- ?? 0..1 Quantity|CodeableConcept|string|Range|Ratio|SampledData|
+   Attachment|time|dateTime|Period Actual result --></value>
+    <dataAbsentReason><!-- ?? 0..1 CodeableConcept Why the result is missing --></dataAbsentReason>
+    <interpretation><!-- 0..1 CodeableConcept High, low, normal, etc. --></interpretation>
+    <comment value="[string]"/><!-- 0..1 Comments about result -->
+    <bodySite><!-- 0..1 CodeableConcept Observed body part --></bodySite>
+    <method><!-- 0..1 CodeableConcept How it was done --></method>
+    <specimen><!-- 0..1 Reference(Specimen) Specimen used for this observation --></specimen>
+    <device><!-- 0..1 Reference(Device|DeviceMetric) (Measurement) Device --></device>
+    <referenceRange><!-- 0..* Provides guide for interpretation -->
+        <low><!-- ?? 0..1 Quantity(SimpleQuantity) Low Range, if relevant --></low>
+        <high><!-- ?? 0..1 Quantity(SimpleQuantity) High Range, if relevant --></high>
+        <meaning><!-- 0..* CodeableConcept Reference range qualifier --></meaning>
+        <age><!-- 0..1 Range Applicable age range, if relevant --></age>
+        <text value="[string]"/><!-- 0..1 Text based reference range in an observation -->
+    </referenceRange>
+    <related><!-- 0..* Resource related to this observation -->
+        <type value="[code]"/><!-- 0..1 has-member | derived-from | sequel-to | replaces | qualified-by | interfered-by -->
+        <target><!-- 1..1 Reference(Observation|QuestionnaireResponse) Resource that is related to this one --></target>
+    </related>
+    <component><!-- 0..* Component results -->
+        <code><!-- 1..1 CodeableConcept Type of component observation (code / type) --></code>
+        <value><!-- 0..1 Quantity|CodeableConcept|string|Range|Ratio|SampledData|
+    Attachment|time|dateTime|Period Actual component result --></value>
+        <dataAbsentReason><!-- ?? 0..1 CodeableConcept Why the component result is missing --></dataAbsentReason>
+        <interpretation><!-- 0..1 CodeableConcept High, low, normal, etc. --></interpretation>
+        <referenceRange><!-- 0..* Content as for Observation.referenceRange Provides guide for interpretation of component result --></referenceRange>
+    </component>
+</Observation>

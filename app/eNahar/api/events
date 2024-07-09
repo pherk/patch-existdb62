@@ -1,0 +1,250 @@
+
+  "kind": "calendar#event",
+  "etag": etag,
+  "id": string,
+  "status": string,
+  "htmlLink": string,
+  "created": datetime,
+  "updated": datetime,
+  "summary": string,
+  "description": string,
+  "location": string,
+  "colorId": string,
+  "creator": {
+    "id": string,
+    "email": string,
+    "displayName": string,
+    "self": boolean
+  },
+  "organizer": {
+    "id": string,
+    "email": string,
+    "displayName": string,
+    "self": boolean
+  },
+  "start": {
+    "date": date,
+    "dateTime": datetime,
+    "timeZone": string
+  },
+  "end": {
+    "date": date,
+    "dateTime": datetime,
+    "timeZone": string
+  },
+  "endTimeUnspecified": boolean,
+  "recurrence": [
+    string
+  ],
+  "recurringEventId": string,
+  "originalStartTime": {
+    "date": date,
+    "dateTime": datetime,
+    "timeZone": string
+  },
+  "transparency": string,
+  "visibility": string,
+  "iCalUID": string,
+  "sequence": integer,
+  "attendees": [
+    {
+      "id": string,
+      "email": string,
+      "displayName": string,
+      "organizer": boolean,
+      "self": boolean,
+      "resource": boolean,
+      "optional": boolean,
+      "responseStatus": string,
+      "comment": string,
+      "additionalGuests": integer
+    }
+  ],
+  "attendeesOmitted": boolean,
+  "extendedProperties": {
+    "private": {
+      (key): string
+    },
+    "shared": {
+      (key): string
+    }
+  },
+  "hangoutLink": string,
+  "gadget": {
+    "type": string,
+    "title": string,
+    "link": string,
+    "iconLink": string,
+    "width": integer,
+    "height": integer,
+    "display": string,
+    "preferences": {
+      (key): string
+    }
+  },
+  "anyoneCanAddSelf": boolean,
+  "guestsCanInviteOthers": boolean,
+  "guestsCanModify": boolean,
+  "guestsCanSeeOtherGuests": boolean,
+  "privateCopy": boolean,
+  "locked": boolean,
+  "reminders": {
+    "useDefault": boolean,
+    "overrides": [
+      {
+        "method": string,
+        "minutes": integer
+      }
+    ]
+  },
+  "source": {
+    "url": string,
+    "title": string
+  }
+}
+
+Property name     Value 	Description 	Notes
+kind 	string 	Type of the resource ("calendar#event"). 	
+etag 	etag 	ETag of the resource. 	
+id 	string 	Identifier of the event. 	
+status 	string 	Status of the event. Optional. Possible values are:
+
+    "confirmed" - The event is confirmed. This is the default status.
+    "tentative" - The event is tentatively confirmed.
+    "cancelled" - The event is cancelled.
+
+	writable
+htmlLink 	string 	An absolute link to this event in the Google Calendar Web UI. Read-only. 	
+created 	datetime 	Creation time of the event (as a RFC 3339 timestamp). Read-only. 	
+updated 	datetime 	Last modification time of the event (as a RFC 3339 timestamp). Read-only. 	
+summary 	string 	Title of the event. 	writable
+description 	string 	Description of the event. Optional. 	writable
+location 	string 	Geographic location of the event as free-form text. Optional. 	writable
+colorId 	string 	The color of the event. This is an ID referring to an entry in the "event" section of the colors definition (see the "colors" endpoint). Optional. 	writable
+creator 	object 	The creator of the event. Read-only. 	
+creator.id 	string 	The creator's Profile ID, if available. 	
+creator.email 	string 	The creator's email address, if available. 	
+creator.displayName 	string 	The creator's name, if available. 	
+creator.self 	boolean 	Whether the creator corresponds to the calendar on which this copy of the event appears. Read-only. The default is False. 	
+organizer 	object 	The organizer of the event. If the organizer is also an attendee, this is indicated with a separate entry in 'attendees' with the 'organizer' field set to True. To change the organizer, use the "move" operation. Read-only, except when importing an event. 	writable
+organizer.id 	string 	The organizer's Profile ID, if available. 	
+organizer.email 	string 	The organizer's email address, if available. 	writable
+organizer.displayName 	string 	The organizer's name, if available. 	writable
+organizer.self 	boolean 	Whether the organizer corresponds to the calendar on which this copy of the event appears. Read-only. The default is False. 	
+start 	nested object 	The (inclusive) start time of the event. For a recurring event, this is the start time of the first instance. 	
+start.date 	date 	The date, in the format "yyyy-mm-dd", if this is an all-day event. 	writable
+start.dateTime 	datetime 	The time, as a combined date-time value (formatted according to RFC 3339). A time zone offset is required unless a time zone is explicitly specified in 'timeZone'. 	writable
+start.timeZone 	string 	The name of the time zone in which the time is specified (e.g. "Europe/Zurich"). Optional. The default is the time zone of the calendar. 	writable
+end 	nested object 	The (exclusive) end time of the event. For a recurring event, this is the end time of the first instance. 	
+end.date 	date 	The date, in the format "yyyy-mm-dd", if this is an all-day event. 	writable
+end.dateTime 	datetime 	The time, as a combined date-time value (formatted according to RFC 3339). A time zone offset is required unless a time zone is explicitly specified in 'timeZone'. 	writable
+end.timeZone 	string 	The name of the time zone in which the time is specified (e.g. "Europe/Zurich"). Optional. The default is the time zone of the calendar. 	writable
+recurrence[] 	list 	List of RRULE, EXRULE, RDATE and EXDATE lines for a recurring event. This field is omitted for single events or instances of recurring events. 	writable
+recurringEventId 	string 	For an instance of a recurring event, this is the event ID of the recurring event itself. Immutable. 	
+originalStartTime 	nested object 	For an instance of a recurring event, this is the time at which this event would start according to the recurrence data in the recurring event identified by recurringEventId. Immutable. 	
+originalStartTime.date 	date 	The date, in the format "yyyy-mm-dd", if this is an all-day event. 	writable
+originalStartTime.dateTime 	datetime 	The time, as a combined date-time value (formatted according to RFC 3339). A time zone offset is required unless a time zone is explicitly specified in 'timeZone'. 	writable
+originalStartTime.timeZone 	string 	The name of the time zone in which the time is specified (e.g. "Europe/Zurich"). Optional. The default is the time zone of the calendar. 	writable
+transparency 	string 	Whether the event blocks time on the calendar. Optional. Possible values are:
+
+    "opaque" - The event blocks time on the calendar. This is the default value.
+    "transparent" - The event does not block time on the calendar.
+
+	writable
+visibility 	string 	Visibility of the event. Optional. Possible values are:
+
+    "default" - Uses the default visibility for events on the calendar. This is the default value.
+    "public" - The event is public and event details are visible to all readers of the calendar.
+    "private" - The event is private and only event attendees may view event details.
+    "confidential" - The event is private. This value is provided for compatibility reasons.
+
+	writable
+iCalUID 	string 	Event ID in the iCalendar format. 	
+sequence 	integer 	Sequence number as per iCalendar. 	writable
+attendees[] 	list 	The attendees of the event. 	writable
+attendees[].id 	string 	The attendee's Profile ID, if available. 	
+attendees[].email 	string 	The attendee's email address, if available. This field must be present when adding an attendee. 	
+attendees[].displayName 	string 	The attendee's name, if available. Optional. 	writable
+attendees[].organizer 	boolean 	Whether the attendee is the organizer of the event. Read-only. The default is False. 	
+attendees[].self 	boolean 	Whether this entry represents the calendar on which this copy of the event appears. Read-only. The default is False. 	
+attendees[].resource 	boolean 	Whether the attendee is a resource. Read-only. The default is False. 	
+attendees[].optional 	boolean 	Whether this is an optional attendee. Optional. The default is False. 	writable
+attendees[].responseStatus 	string 	The attendee's response status. Possible values are:
+
+    "needsAction" - The attendee has not responded to the invitation.
+    "declined" - The attendee has declined the invitation.
+    "tentative" - The attendee has tentatively accepted the invitation.
+    "accepted" - The attendee has accepted the invitation.
+
+	writable
+attendees[].comment 	string 	The attendee's response comment. Optional. 	writable
+attendees[].additionalGuests 	integer 	Number of additional guests. Optional. The default is 0. 	writable
+attendeesOmitted 	boolean 	Whether attendees may have been omitted from the event's representation. When retrieving an event, this may be due to a restriction specified by the 'maxAttendee' query parameter. When updating an event, this can be used to only update the participant's response. Optional. The default is False. 	writable
+extendedProperties 	object 	Extended properties of the event. 	
+extendedProperties.private 	object 	Properties that are private to the copy of the event that appears on this calendar. 	writable
+extendedProperties.private.(key) 	string 	The name of the private property and the corresponding value. 	
+extendedProperties.shared 	object 	Properties that are shared between copies of the event on other attendees' calendars. 	writable
+extendedProperties.shared.(key) 	string 	The name of the shared property and the corresponding value. 	
+gadget 	object 	A gadget that extends this event. 	
+gadget.type 	string 	The gadget's type. 	writable
+gadget.title 	string 	The gadget's title. 	writable
+gadget.link 	string 	The gadget's URL. 	writable
+gadget.iconLink 	string 	The gadget's icon URL. 	writable
+gadget.width 	integer 	The gadget's width in pixels. Optional. 	writable
+gadget.height 	integer 	The gadget's height in pixels. Optional. 	writable
+gadget.display 	string 	The gadget's display mode. Optional. Possible values are:
+
+    "icon" - The gadget displays next to the event's title in the calendar view.
+    "chip" - The gadget displays when the event is clicked.
+
+	writable
+gadget.preferences 	object 	Preferences. 	writable
+gadget.preferences.(key) 	string 	The preference name and corresponding value. 	
+anyoneCanAddSelf 	boolean 	Whether anyone can invite themselves to the event. Optional. The default is False. 	writable
+guestsCanInviteOthers 	boolean 	Whether attendees other than the organizer can invite others to the event. Optional. The default is True. 	writable
+guestsCanSeeOtherGuests 	boolean 	Whether attendees other than the organizer can see who the event's attendees are. Optional. The default is True. 	writable
+privateCopy 	boolean 	Whether this is a private event copy where changes are not shared with other copies on other calendars. Optional. Immutable. The default is False. 	
+reminders 	object 	Information about the event's reminders for the authenticated user. 	
+reminders.useDefault 	boolean 	Whether the default reminders of the calendar apply to the event. 	writable
+reminders.overrides[] 	list 	If the event doesn't use the default reminders, this lists the reminders specific to the event, or, if not set, indicates that no reminders are set for this event. 	writable
+reminders.overrides[].method 	string 	The method used by this reminder. Possible values are:
+
+    "email" - Reminders are sent via email.
+    "sms" - Reminders are sent via SMS.
+    "popup" - Reminders are sent via a UI popup.
+
+	
+reminders.overrides[].minutes 	integer 	Number of minutes before the start of the event when the reminder should trigger. 	
+endTimeUnspecified 	boolean 	Whether the end time is actually unspecified. An end time is still provided for compatibility reasons, even if this attribute is set to True. The default is False. 	
+locked 	boolean 	Whether this is a locked event copy where no changes can be made to the main event fields "summary", "description", "location", "start", "end" or "recurrence". The default is False. Read-Only. 	
+hangoutLink 	string 	An absolute link to the Google+ hangout associated with this event. Read-only. 	
+source 	object 	Source of an event from which it was created; for example a web page, an email message or any document identifiable by an URL using HTTP/HTTPS protocol. Accessible only by the creator of the event. 	
+source.url 	string 	URL of the source pointing to a resource. URL's protocol must be HTTP or HTTPS. 	writable
+source.title 	string 	Title of the source; for example a title of a web page or an email subject. 	writable
+Methods
+
+delete
+    Deletes an event.
+get
+    Returns an event.
+import
+    Imports an event. This operation is used to add a private copy of an existing event to a calendar.
+insert
+    Creates an event.
+instances
+    Returns instances of the specified recurring event.
+list
+    Returns events on the specified calendar.
+move
+    Moves an event to another calendar, i.e. changes an event's organizer.
+quickAdd
+    Creates an event based on a simple text string.
+update
+    Updates an event.
+patch
+    Updates an event. This method supports patch semantics.
+watch
+    Watch for changes to Events resources.
+
+Except as otherwise noted, the content of this page is licensed under the Creative Commons Attribution 3.0 License, and code samples are licensed under the Apache 2.0 License. For details, see our Site Policies.
+Last updated July 24, 2013.

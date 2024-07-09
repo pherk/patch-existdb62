@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cal-infos><!-- FHIR status -->
+    <status><!-- <code value="open"      label="offen"/> -->
+        <code value="confirmed" label="bestätigt"/>
+        <code value="tentative" label="provisorisch"/>
+        <code value="cancelled" label="cancelled"/>
+    </status>
+    <duration>
+        <code value="15" label="15min"/>
+        <code value="30" label="30min"/>
+        <code value="60" label="60min"/>
+        <code value="90" label="90min"/>
+        <code value="120" label="120m"/>
+    </duration>
+    <transparancy id="opaque" name="exklusiv"/>
+    <transparency id="transparent" name="transparent"/>
+    <visibility id="default" name="default"/>
+    <visibility id="public" name="publik"/>
+    <visibility id="private" name="privat"/>
+    <response id="needsAction" name="keine Bestätigung"/>
+    <response id="declined" name="abgelehnt"/>
+    <responde id="tentative" name="provisorisch"/>
+    <response id="accepted" name="akzeptiert"/>
+    <orderby id="startTime" name="Beginn"/>
+    <orderby id="updated" name="updated"/>
+    <accessRole id="none" name="kein Zugriff"/>
+    <accessRole id="freeBusyRead" name="FreeBusy lesen"/>
+    <accessRole id="reader" name="Lesen"/>
+    <accessRole id="write" name="Schreiben"/>
+    <accessRole id="owner" name="Besitzer"/>
+    <fbtype id="free" name="frei"/>
+    <fbtype id="busy" name="busy"/>
+    <fbtype id="busy-unavailable" name="nicht verfügbar"/>
+    <fbtype id="busy-tentative" name="busy-provisorisch"/>
+    <fbtype id="out-of-office" name="nicht da"/>
+    <cutype id="person" name="Person"/>
+    <cutype id="group" name="Gruppe"/>
+    <cutype id="resource" name="Resource"/>
+    <cutype id="room" name="Raum"/>
+    <firstDay>1</firstDay>
+    <monat id="1" name="Januar" short="Jan"/>
+    <monat id="2" name="Februar" short="Feb"/>
+    <monat id="3" name="März" short="Mar"/>
+    <monat id="4" name="April" short="Apr"/>
+    <monat id="5" name="Mai" short="Mai"/>
+    <monat id="6" name="Juni" short="Jun"/>
+    <monat id="7" name="Juli" short="Jul"/>
+    <monat id="8" name="August" short="Aug"/>
+    <monat id="9" name="September" short="Sep"/>
+    <monat id="10" name="Oktober" short="Okt"/>
+    <monat id="11" name="November" short="Nov"/>
+    <monat id="12" name="Dezember" short="Dez"/>
+    <day id="1" name="Montag" short="Mo"/>
+    <day id="2" name="Dienstag" short="Di"/>
+    <day id="3" name="Mittwoch" short="Mi"/>
+    <day id="4" name="Donnerstag" short="Do"/>
+    <day id="5" name="Freitag" short="Fr"/>
+    <day id="6" name="Samstag" short="Sa"/>
+    <day id="0" name="Sonntag" short="So"/>
+    <weekend>Sa,So</weekend>
+    <rrule>
+        <freq value="daily" label="täglich"/>
+        <freq value="weekly" label="wöchentlich"/>
+        <freq value="monthly" label="monatlich"/>
+        <freq value="yearly" label="jährlich"/>
+        <byWeekNo value="every" label="jede"/>
+        <byWeekNo value="odd" label="ungerade"/>
+        <byWeekNo value="even" label="gerade"/>
+        <byWeekNo value="1" label="1"/>
+        <byWeekNo value="2" label="2"/>
+        <byWeekNo value="3" label="3"/>
+        <byWeekNo value="4" label="4"/>
+        <byDay value="Mo" label="Mo"/>
+        <byDay value="Di" label="Di"/>
+        <byDay value="Mi" label="Mi"/>
+        <byDay value="Do" label="Do"/>
+        <byDay value="Fr" label="Fr"/>
+        <byDay value="Sa" label="Sa"/>
+        <byDay value="So" label="So"/>
+    </rrule>
+    <schedule>
+        <type value="service" label="Ambulanz"/>
+        <type value="worktime" label="Arbeitszeit"/>
+        <type value="meeting" label="Meeting"/>
+    </schedule>
+    <bricks>
+        <cal>
+            <id value=""/>
+            <meta>
+                <tag>
+                    <text value=""/>
+                </tag>
+                <versionID value="0"/>
+            </meta>
+            <active value="true"/>
+            <owner>
+                <group value=""/>
+                <reference value=""/>
+                <display value=""/>
+            </owner>
+            <cutype>
+                <coding>
+                    <system value="#ical-type"/>
+                    <code value="person"/>
+                    <display value="Person"/>
+                </coding>
+                <text value="Person"/>
+            </cutype>
+            <caltype>
+                <coding>
+                    <system value="#ical-caltype"/>
+                    <code value="primary"/>
+                    <display value="Hauptkalender"/>
+                </coding>
+                <text value="Hauptkalender"/>
+            </caltype>
+            <summary value=""/>
+            <description value=""/>
+            <timezone value="MEZ"/>
+            <location>
+                <reference value="metis/locations/kikl-spz"/>
+                <display value="SPZ Kinderklinik"/>
+            </location>
+            <schedule>
+                <global>
+                    <type value="worktime"/>
+                    <reference value="enahar/schedules/worktime"/>
+                    <display value="Reguläre AZ"/>
+                </global>
+                <note value=""/>
+            </schedule>
+        </cal>
+        <overbookable value="false"/>
+        <parallel-per-hour value="1"/>
+        <blocking value="true"/>
+        <schedule>
+            <global>
+                <type value=""/>
+                <reference value=""/>
+                <display value=""/>
+                <isSpecial value="false"/>
+                <ff value="true"/>
+            </global>
+            <note value=""/>
+        </schedule>
+        <schedule>
+            <global>
+                <type value="worktime"/>
+                <reference value="enahar/schedules/worktime"/>
+                <display value="Reguläre AZ"/>
+            </global>
+            <note value=""/>
+        </schedule>
+        <agenda>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <blocking value="true"/>
+            <note value=""/>
+        </agenda>
+        <event>
+            <name value="amb-???"/>
+            <summary value=""/>
+            <description value=""/>
+            <start value=""/>
+            <end value=""/>
+            <note value=""/>
+        </event>
+        <rrule>
+            <freq value=""/>
+            <byWeekNo value=""/>
+            <byDay value=""/>
+        </rrule>
+        <rdate>
+            <date value=""/>
+        </rdate>
+        <exdate>
+            <date value=""/>
+        </exdate>
+        <date value=""/>
+    </bricks>
+</cal-infos>

@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-demo-support" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:bind ref="*:name[*:use/@value='official']/*:given/@value" type="xs:string" required="true()"/>
+            <xf:bind ref="*:name[*:use/@value='official']/*:family/@value" type="xs:string" required="true()"/><!--
+            <xf:bind ref="*:birthDate/@value" type="xs:date" required="true()"/>
+-->
+            <xf:bind ref="*:telecom/*:rank/@value" type="xs:int" required="true()"/>
+            <xf:bind ref="*:contact/*:extension[@url='#patient-contact-preferred']/*:valueBoolean/@value" type="xs:boolean"/>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:submission id="s-update-patient-master" resource="model:m-patient#instance('i-patient')//*:Patient" replace="none" method="post">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="bf:instanceOfModel('m-patient','i-control-center')/*:isDirty" value="'true'"/>
+                    <xf:message level="ephemeral">Subform has updated Master.</xf:message>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot update Master!.</xf:message>
+            </xf:submission>
+            <xf:submission id="s-update-patient-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" model="m-demo-support" replace="none" method="post">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="bf:instanceOfModel('m-patient','i-control-center')/*:changed" value="'true'"/>
+                    <xf:setvalue ref="bf:instanceOfModel('m-demo-support','i-control-center')/*:isDirty" value="'false'"/>
+                    <xf:message level="ephemeral">Subform has updated Master.</xf:message>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot update Master!.</xf:message>
+            </xf:submission>
+            <xf:instance id="i-control-center">
+                <data xmlns="">
+                    <isDirty>false</isDirty>
+                    <changed>false</changed>
+                    <updated/>
+                </data>
+            </xf:instance>
+            <xf:bind id="updated" ref="instance('i-control-center')/*:updated" relevant="instance('i-control-center')/*:changed[.='false']"/>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready"/>
+        </xf:model>
+    </div>
+    <xf:group ref="instance('i-pat')" class="svFullGroup bordered">
+        <xf:action ev:event="xforms-value-changed">
+            <xf:setvalue ref="instance('i-control-center')/*:isDirty" value="'true'"/>
+        </xf:action>
+        <xf:label>Eltern, soziales Netzwerk</xf:label>
+        <xf:repeat id="r-supports-id" ref="./*:contact" appearance="compact" class="svRepeat">
+            <xf:output value="choose(./*:extension[@url='#patient-contact-preferred']/*:valueBoolean/@value='true', '*!*','')" class="tiny-input">
+                <xf:label class="svRepeatHeader">Pref</xf:label>
+            </xf:output>
+            <xf:output ref="./*:relationship/*:display/@value">
+                <xf:label class="svRepeatHeader">Bezug:</xf:label>
+            </xf:output>
+            <xf:output ref="./*:name[*:use/@value='official']/*:given/@value">
+                <xf:label class="svRepeatHeader">Vorname:</xf:label>
+            </xf:output>
+            <xf:output ref="./*:name[*:use/@value='official']/*:family/@value">
+                <xf:label class="svRepeatHeader">Name:</xf:label>
+            </xf:output>
+            <xf:output value="string-join(./*:telecom/*:value/@value,' ')">
+                <xf:label class="svRepeatHeader">Telecom:</xf:label>
+            </xf:output>
+        </xf:repeat>
+        <xf:switch>
+            <xf:case id="support-hide">
+                <xf:group appearance="minimal" class="svTriggerGroup">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svSubTrigger" ref="./*:contact">
+                                    <xf:label>Edit Kontakt</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:action if="not(instance('i-pat')/*:contact[index('r-supports-id')]/*:name/*:use)">
+                                            <xf:insert ref="instance('i-pat')/*:contact[index('r-supports-id')]/*:name/*:use" context="instance('i-pat')/*:contact[index('r-supports-id')]/*:name" origin="bf:instanceOfModel('m-patient','i-pinfos')/*:bricks/*:contact/*:name/*:use"/>
+                                        </xf:action>
+                                        <xf:setvalue ref="instance('i-control-center')/*:changed" value="'true'"/>
+                                        <xf:toggle case="support-edit"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svAddTrigger">
+                                    <xf:label>Neuer Kontakt</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:insert position="after" at="index('r-supports-id')" nodeset="./*:contact" context="." origin="bf:instanceOfModel('m-patient','i-pinfos')/*:bricks/*:contact"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svDelTrigger" ref="./*:contact">
+                                    <xf:label>Entfernen</xf:label>
+                                    <xf:delete ev:event="DOMActivate" nodeset="instance('i-pat')/*:contact" at="index('r-supports-id')"/>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                </xf:group>
+            </xf:case>
+            <xf:case id="support-edit">
+                <xf:group class="svTriggerGroup">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Update Kontakt</xf:label>
+                                    <xf:setvalue ref="instance('i-control-center')/*:changed" value="'false'"/>
+                                    <xf:toggle case="support-hide"/>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <xf:group ref="instance('i-pat')/*:contact[index('r-supports-id')]" appearance="bf:horizontalTable">
+                        <xf:input ref="./*:extension[@url='#patient-contact-preferred']/*:valueBoolean/@value" class="tiny-class">
+                            <xf:label>Post</xf:label>
+                            <xf:hint>Haken bedeutet: Kontakt bekommt Briefe!</xf:hint>
+                        </xf:input>
+                        <xf:select1 id="support-relation" ref="./*:relationship/*:coding/*:code/@value" class="medium-select">
+                            <xf:label>Beziehung</xf:label>
+                            <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-pinfos')/relations/relation">
+                                <xf:label ref="./@label"/>
+                                <xf:value ref="./@value"/>
+                            </xf:itemset>
+                            <xf:action ev:event="xforms-value-changed">
+                                <xf:setvalue ref="instance('i-pat')/*:contact[index('r-supports-id')]/*:relationship/*:coding/*:display/@value" value="bf:instanceOfModel('m-patient','i-pinfos')/*:relations/*:relation[@value=instance('i-pat')/*:contact[index('r-supports-id')]/*:relationship/*:coding/*:code/@value]/@label"/>
+                                <xf:setvalue ref="instance('i-pat')/*:contact[index('r-supports-id')]/*:relationship/*:text/@value" value="bf:instanceOfModel('m-patient','i-pinfos')/*:relations/*:relation[@value=instance('i-pat')/*:contact[index('r-supports-id')]/*:relationship/*:coding/*:code/@value]/@label"/>
+                            </xf:action>
+                        </xf:select1>
+                        <xf:select1 id="support-gender" ref="./*:gender/@value" appearance="full" class="radio-horizontal">
+                            <xf:label>Geschlecht</xf:label>
+                            <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-pinfos')/gender">
+                                <xf:label ref="./@label"/>
+                                <xf:value ref="./@value"/>
+                            </xf:itemset>
+                        </xf:select1>
+                        <xf:select1 ref=".//*:coding[*:system/@value='#nabu-confidentiality']/*:code/@value" class="">
+                            <xf:label>Schweigepflichtsentbindung?</xf:label>
+                            <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-pinfos')/confidentiality/code">
+                                <xf:label ref="./@label"/>
+                                <xf:value ref="./@value"/>
+                            </xf:itemset>
+                            <xf:action ev:event="xforms-value-changed">
+                                <xf:setvalue ref="instance('i-pat')/*:contact[index('r-supports-id')]//*:coding[*:system/@value='#nabu-confidentiality']/*:display/@value" value="bf:instanceOfModel('m-patient','i-pinfos')/confidentiality/code[@value=instance('i-pat')/*:contact[index('r-supports-id')]//*:coding[*:system/@value='#nabu-confidentiality']/*:code/@value]/@label"/>
+                            </xf:action>
+                        </xf:select1>
+                    </xf:group>
+                    <xf:group ref="instance('i-pat')/*:contact[index('r-supports-id')]" appearance="bf:horizontalTable">
+                        <xf:input id="support-vorname" ref="./*:name[*:use/@value='official']/*:given/@value" class="">
+                            <xf:label>Vorname</xf:label>
+                        </xf:input>
+                        <xf:input id="support-name" ref="./*:name[*:use/@value='official']/*:family/@value" class="long-input">
+                            <xf:label>Name</xf:label>
+                        </xf:input>
+                    </xf:group>
+                    <xf:group ref="instance('i-pat')/*:contact[index('r-supports-id')]">
+                        <xf:switch>
+                            <xf:case id="hide-Address">
+                                <xf:trigger>
+                                    <xf:label>Adresse clonen?</xf:label>
+                                    <xf:action>
+                                        <xf:delete ref="instance('i-pat')/*:contact[index('r-supports-id')]/*:address"/>
+                                        <xf:insert ref="./*:address" context="." origin="instance('i-pat')/*:address"/>
+                                        <xf:toggle case="unhide-Address"/>
+                                    </xf:action>
+                                </xf:trigger>
+                                <xf:trigger>
+                                    <xf:label>Adresse?</xf:label>
+                                    <xf:action>
+                                        <xf:insert if="count(./*:address)=0" nodeset="./*:address" context="." origin="bf:instanceOfModel('m-patient','i-pinfos')/*:bricks/*:address"/>
+                                        <xf:toggle case="unhide-Address"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </xf:case>
+                            <xf:case id="unhide-Address">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <xf:trigger>
+                                                <xf:label>schließen!</xf:label>
+                                                <xf:toggle case="hide-Address"/>
+                                            </xf:trigger>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <xf:group ref="./*:address" class="bordered">
+                                    <xf:label>Adresse</xf:label>
+                                    <xf:group appearance="bf:horizontalTable">
+                                        <xf:input id="sup-street" ref="./*:line[1]/@value" class="long-input">
+                                            <xf:label class="svListHeader">Zeile-1</xf:label>
+                                        </xf:input>
+                                        <xf:input id="supp-app" ref="./*:line[2]/@value" class="long-input">
+                                            <xf:label class="svListHeader">Zeile-2</xf:label>
+                                        </xf:input>
+                                    </xf:group>
+                                    <xf:group appearance="bf:horizontalTable">
+                                        <xf:input id="supp-plz" ref="./*:postalCode/@value">
+                                            <xf:label class="svListHeader">PLZ:</xf:label>
+                                        </xf:input>
+                                        <xf:input id="supp-locality" ref="./*:city/@value">
+                                            <xf:label class="svListHeader">Ort:</xf:label>
+                                        </xf:input>
+                                    </xf:group>
+                                    <xf:group appearance="bf:horizontalTable">
+                                        <xf:select1 id="supp-region" ref="./*:state/@value" class="medium-select">
+                                            <xf:label>Region:</xf:label>
+                                            <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-iso3166-2')/de/region">
+                                                <xf:label ref="./@label"/>
+                                                <xf:value ref="./@value"/>
+                                            </xf:itemset>
+                                        </xf:select1>
+                                        <xf:select1 id="supp-staat" ref="./*:country/@value" class="medium-select">
+                                            <xf:label>Land:</xf:label>
+                                            <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-iso3166-1')/country">
+                                                <xf:label ref="./@label"/>
+                                                <xf:value ref="./@value"/>
+                                            </xf:itemset>
+                                        </xf:select1>
+                                    </xf:group>
+                                </xf:group>
+                            </xf:case>
+                        </xf:switch>
+                        <xf:switch>
+                            <xf:case id="hide-telecom">
+                                <xf:trigger>
+                                    <xf:label>Telefon?</xf:label>
+                                    <xf:action>
+                                        <xf:insert if="count(./*:telecom)=0" nodeset="./*:telecom" context="." origin="bf:instanceOfModel('m-patient','i-pinfos')/*:bricks/*:telecom"/>
+                                        <xf:toggle case="unhide-telecom"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </xf:case>
+                            <xf:case id="unhide-telecom">
+                                <xf:group class="svFullGroup bordered">
+                                    <xf:label>Telecom</xf:label>
+                                    <xf:repeat id="c-home-id" ref="./*:telecom" appearance="compact" class="svRepeat">
+                                        <xf:select1 ref="./*:use/@value" class="short-input">
+                                            <xf:label class="svRepeatHeader">Use:</xf:label>
+                                            <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-pinfos')/telecom/use">
+                                                <xf:label ref="./@label"/>
+                                                <xf:value ref="./@value"/>
+                                            </xf:itemset>
+                                        </xf:select1>
+                                        <xf:select1 ref="./*:system/@value" class="short-input">
+                                            <xf:label class="svRepeatHeader">System:</xf:label>
+                                            <xf:itemset nodeset="bf:instanceOfModel('m-patient','i-pinfos')/telecom/system">
+                                                <xf:label ref="./@label"/>
+                                                <xf:value ref="./@value"/>
+                                            </xf:itemset>
+                                        </xf:select1>
+                                        <xf:input ref="./*:value/@value">
+                                            <xf:label class="svRepeatHeader">Nr:</xf:label>
+                                        </xf:input>
+                                    </xf:repeat>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <xf:trigger>
+                                                    <xf:label>schließen!</xf:label>
+                                                    <xf:toggle case="hide-telecom"/>
+                                                </xf:trigger>
+                                            </td>
+                                            <td>
+                                                <xf:trigger>
+                                                    <xf:label>+</xf:label>
+                                                    <xf:action ev:event="DOMActivate">
+                                                        <xf:insert nodeset="./*:telecom" context="." origin="bf:instanceOfModel('m-patient','i-pinfos')/*:bricks/*:telecom"/>
+                                                    </xf:action>
+                                                </xf:trigger>
+                                            </td>
+                                            <td>
+                                                <xf:trigger>
+                                                    <xf:label>-</xf:label>
+                                                    <xf:action ev:event="DOMActivate">
+                                                        <xf:delete nodeset="./*:telecom" at="index('c-home-id')"/>
+                                                    </xf:action>
+                                                </xf:trigger>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </xf:group>
+                            </xf:case>
+                        </xf:switch>
+                    </xf:group>
+                    <xf:textarea class="fullareashort" ref="./*:extension/*:note/@value">
+                        <xf:label id="support-note">Notiz:</xf:label>
+                    </xf:textarea>
+                </xf:group>
+            </xf:case>
+        </xf:switch>
+    </xf:group>
+    <xf:group ref="instance('i-control-center')/*:updated" class="svTriggerGroup">
+        <hr/>
+        <xf:group appearance="bf:horizontalTable">
+            <xf:trigger id="demo-save" class="svSaveTrigger">
+                <xf:label>Speichern</xf:label>
+                <xf:send submission="s-update-patient-master"/>
+            </xf:trigger>
+            <xf:trigger id="t-close" class="svUpdateMasterTrigger">
+                <xf:label>Schließen</xf:label>
+                <xf:action if="instance('i-control-center')/*:isDirty='true'">
+                    <script type="text/javascript">
+                        closeForm();
+                    </script>
+                </xf:action>
+                <xf:action if="instance('i-control-center')/*:isDirty='false'">
+                    <xf:dispatch name="unload-subform" targetid="controlCenter"/>
+                </xf:action>
+            </xf:trigger>
+            <xf:trigger id="close" class="hiddenControl">
+                <xf:label>close form</xf:label>
+                <xf:dispatch name="unload-subform" targetid="controlCenter"/>
+            </xf:trigger>
+        </xf:group>
+    </xf:group>
+</div>

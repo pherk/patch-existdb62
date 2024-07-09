@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questionnaire-infos>
+    <status>
+        <code label-de="in Arbeit" value="in-progress"/>
+        <code label-de="fertig" value="completed"/>
+        <code label-de="ergänzt" value="amended"/>
+        <code label-de="gestoppt" value="stopped"/>
+        <code label-de="Fehler" value="entered-in-error"/>
+    </status>
+    <item-type>
+        <code value="group" label-en="Group" comment="An item with no direct answer but should have at least one child item."/>
+        <code value="display" label-en="Display" comment="Text for display that will not capture an answer or have child items."/>
+        <code value="question" label-en="Question An item that defines a specific answer to be captured, and may have child items. (the answer provided in the QuestionnaireResponse should be of the defined datatype)"/>
+          <code value="boolean" label-en="Boolean" comment="Question with a yes/no answer (valueBoolean)"/>
+          <code value="decimal" label-en="Decimal" comment="Question with is a real number answer (valueDecimal)"/>
+          <code value="integer" label-en="Integer" comment="Question with an integer answer (valueInteger)"/>
+          <code value="date" label-en="Date Question with a date answer (valueDate)"/>
+          <code value="dateTime" label-en="Date Time" comment="Question with a date and time answer (valueDateTime)"/>
+          <code value="time" label-en="Time" comment="Question with a time (hour:minute:second) answer independent of date. (valueTime)"/>
+          <code value="string" label-en="String" comment="Question with a short (few words to short sentence) free-text entry answer (valueString)"/>
+          <code value="text" label-en="Text" comment="Question with a long (potentially multi-paragraph) free-text entry answer (valueString)"/>
+          <code value="url" label-en="Url" comment="Question with a URL (website, FTP site, etc.) answer (valueUri)"/>
+          <code value="choice" label-en="Choice" comment="Question with a Coding drawn from a list of options (specified in either the option property, or via the valueset referenced in the options property) as an answer (valueCoding)"/>
+          <code value="open-choice" label-en="Open Choice" comment="Answer is a Coding drawn from a list of options (as with the choice type) or a free-text entry in a string (valueCoding or valueString)"/>
+          <code value="attachment" label-en="Attachment" comment="Question with binary content such as a image, PDF, etc. as an answer (valueAttachment)"/>
+          <code value="reference" label-en="Reference Question with a reference to another resource (practitioner, organization, etc.) as an answer (valueReference)"/>
+          <code value="quantity" label-en="Quantity" comment="Question with a combination of a numeric value and unit, potentially with a comparator (&lt;, &gt;, etc.) as an answer. (valueQuantity) There is an extension 'http://hl7.org/fhir/StructureDefinition/questionnaire-unit' that can be used to define what unit whould be captured (or the a unit that has a ucum conversion from the provided unit)"/>
+    </item-type>
+    <bricks xmlns="http://hl7.org/fhir" comp="4.0.1">
+        <Questionnaire>
+            <url value="[uri]"/><!-- 0..1 Logical URI to reference this questionnaire (globally unique) -->
+            <identifier><!-- 0..* Identifier Additional identifier for the questionnaire --></identifier>
+            <version value="[string]"/><!-- 0..1 Business version of the questionnaire -->
+            <name value="[string]"/><!-- 0..1 Name for this questionnaire (computer friendly) -->
+            <title value="[string]"/><!-- 0..1 Name for this questionnaire (human friendly) -->
+            <status value="[code]"/><!-- 1..1 draft | active | retired | unknown -->
+            <experimental value="[boolean]"/><!-- 0..1 For testing purposes, not real usage -->
+            <date value="[dateTime]"/><!-- 0..1 Date this was last changed -->
+            <publisher value="[string]"/><!-- 0..1 Name of the publisher (organization or individual) -->
+            <description value="[markdown]"/><!-- 0..1 Natural language description of the questionnaire -->
+            <purpose value="[markdown]"/><!-- 0..1 Why this questionnaire is defined -->
+            <approvalDate value="[date]"/><!-- 0..1 When the questionnaire was approved by publisher -->
+            <lastReviewDate value="[date]"/><!-- 0..1 When the questionnaire was last reviewed -->
+            <effectivePeriod>
+                <start value=""/>
+                <end value=""/>
+            </effectivePeriod>
+            <useContext><!-- 0..* UsageContext Context the content is intended to support --></useContext>
+            <jurisdiction><!-- 0..* CodeableConcept Intended jurisdiction for questionnaire (if applicable) --></jurisdiction>
+            <contact><!-- 0..* ContactDetail Contact details for the publisher --></contact>
+            <copyright value="[markdown]"/><!-- 0..1 Use and/or publishing restrictions -->
+            <code><!-- 0..* Coding Concept that represents the overall questionnaire --></code>
+            <subjectType value="[code]"/><!-- 0..* Resource that can be subject of QuestionnaireResponse -->
+            <item>  <!-- ?? 0..* Questions and sections within the Questionnaire -->
+                <linkId value="[string]"/><!-- 1..1 Unique id for item in questionnaire -->
+                <definition value="[uri]"/><!-- 0..1 ElementDefinition - details for the item -->
+                <code><!-- ?? 0..* Coding Corresponding concept for this item in a terminology --></code>
+                <prefix value="[string]"/><!-- 0..1 E.g. "1(a)", "2.5.3" -->
+                <text value="[string]"/><!-- 0..1 Primary text for the item -->
+                <type value="[code]"/><!-- 1..1 group | display | boolean | decimal | integer | date | dateTime + -->
+                <enableWhen>  <!-- 0..* Only allow data when -->
+                    <question value="[string]"/><!-- 1..1 Question that determines whether item is enabled -->
+                    <hasAnswer value="[boolean]"/><!-- ?? 0..1 Enable when answered or not -->
+                    <answerString><!-- ?? 0..1 boolean|decimal|integer|date|dateTime|time|string|uri|
+     Attachment|Coding|Quantity|Reference(Any) Value question must have --></answerString>
+               </enableWhen>
+                <required value="[boolean]"/><!-- ?? 0..1 Whether the item must be included in data results -->
+                <repeats value="[boolean]"/><!-- ?? 0..1 Whether the item may repeat -->
+                <readOnly value="[boolean]"/><!-- ?? 0..1 Don't allow human editing -->
+                <maxLength value="[integer]"/><!-- ?? 0..1 No more than this many characters -->
+                <options><!-- ?? 0..1 Reference(ValueSet) Valueset containing permitted answers --></options>
+                <option>  <!-- ?? 0..* Permitted answer -->
+                    <valueString><!-- 1..1 integer|date|time|string|Coding Answer value --></valueString>
+                </option>
+                <initialString><!-- ?? 0..1 boolean|decimal|integer|date|dateTime|time|string|uri|
+    Attachment|Coding|Quantity|Reference(Any) Default value when item is first rendered --></initialString>
+                <item><!-- ?? 0..* Content as for Questionnaire.item Nested questionnaire items --></item>
+            </item>
+        </Questionnaire>
+        <QuestionnaireResponse>
+            <id value=""/>
+            <meta>
+                <versionId value="0"/>
+            </meta>
+            <identifier/>
+            <basedOn>
+                <reference value=""/>
+                <display value=""/>                
+            </basedOn>
+            <questionnaire>
+                <reference value=""/>
+                <display value=""/>                
+            </questionnaire>
+            <status value="in-progress"/>
+            <subject>
+                <reference value=""/>
+                <display value=""/>
+            </subject>
+            <context>
+                <reference value=""/>
+                <display value=""/>                
+            </context>
+            <authored value=""/>
+            <author>
+                <reference value=""/>
+                <display value=""/>                
+            </author>
+            <source>
+                <reference value=""/>
+                <display value=""/>
+            </source>
+        </QuestionnaireResponse>
+            <parent>
+                <reference value=""/>
+                <display value=""/>
+            </parent>
+        <item>  <!-- 0..* Groups and questions -->
+            <linkId value="[string]"/>
+            <definition value="[uri]"/>
+            <text value="[string]"/>
+            <answer>
+                <valueString value=""/>
+            </answer>
+        </item>
+        <subject>
+            <reference value=""/>
+            <display value=""/>
+        </subject>
+        <answer>
+            <valueString value=""/>
+        </answer>
+        <answer>
+            <valueDecimal value=""/>
+        </answer>
+        <answer>
+            <valueInteger value=""/>
+        </answer>
+        <answer>
+            <valueDate value=""/>
+        </answer>
+        <answer>
+            <valueDateTime value=""/>
+        </answer>
+        <answer>
+            <valueBool value=""/>
+        </answer>
+        <answer>
+            <valueCoding value=""/>
+        </answer>
+    </bricks>
+</questionnaire-infos>

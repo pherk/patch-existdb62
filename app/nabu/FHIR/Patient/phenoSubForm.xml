@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="sv" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="default" src="data/templates/patients/sign.xml"/>
+            <xf:submission id="s-load-feature" resource="model:m-patient#instance('i-thedoc')/data/document/resource/content/phenotype/signs/sign[index('r-pheno-ids')]" ref="instance('default')" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-done" level="ephemeral">Subform has updated itself.</xf:message>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:submission id="s-update-feature" resource="model:m-patient#instance('i-thedoc')/data/document/resource/content/phenotype/signs/sign[index('r-pheno-ids')]" replace="none" method="post">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:message level="ephemeral">Subform has updated Master.</xf:message>
+                    <xf:dispatch name="unload-subforms" targetid="phenotype"/>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot update Master!.</xf:message>
+            </xf:submission>
+            <xf:instance xmlns="" id="i-pinfos" src="patient/patient-infos.xml"/>
+            <xf:action ev:event="xforms-ready">
+                <xf:send submission="s-load-feature"/><!--
+                <xf:delete if="count(instance()/sign)>0" nodeset="instance()/sign" at='1'/>
+                <xf:insert 
+                    nodeset="instance()/sign" at='1' position='before'
+                    context="instance()"
+                    origin="bf:instanceOfModel('m-patient','i-thedoc')/document/resource/content/phenotype/signs/sign[index('r-pheno-ids')]"  />
+            -->
+            </xf:action>
+        </xf:model>
+    </div>
+    <div>
+        <xf:group id="pheno-feature" class="bordered" appearance="minimal">
+            <xf:action ev:event="betterform-variable-changed" ev:observer="i-thedoc">
+                <xf:message>it worked</xf:message>
+            </xf:action>
+            <xf:label>Edit</xf:label>
+            <xf:input id="feature-name" ref="name">
+                <xf:label>Merkmal:</xf:label>
+            </xf:input>
+            <xf:input id="feature-hpo-id" ref="hpo-id">
+                <xf:label>HPO-ID:</xf:label>
+            </xf:input>
+            <xf:select1 id="feature-modifier" ref="modifier">
+                <xf:label>Modifier:</xf:label>
+                <xf:itemset nodeset="instance('i-pinfos')/phenotype/modifier/item">
+                    <xf:label ref="./@value"/>
+                    <xf:value ref="./@id"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:textarea id="feature-note" class="halfareashort" ref="note">
+                <xf:label>Notiz:</xf:label>
+            </xf:textarea>
+        </xf:group>
+        <xf:trigger class="svUpdateMasterTrigger">
+            <xf:label>update</xf:label>
+            <xf:hint>This button will update the table above with the data from the subform</xf:hint>
+            <xf:send ev:event="DOMActivate" submission="s-update-feature"/><!--
+            <xf:action ev:event="DOMActivate">
+            <xf:delete 
+                nodeset="bf:instanceOfModel('patient','i-thedoc')/document/resource/content/phenotype/signs/sign[index('r-pheno-ids')]" 
+                at="index('r-pheno-ids')"/>
+            <xf:insert  at="index('r-pheno-ids')" position="before"
+                nodeset="bf:instanceOfModel('patient','i-thedoc')/document/resource/content/phenotype/signs/sign[index('r-pheno-ids')]"
+                context="bf:instanceOfModel('patient','i-thedoc')/document/resource/content/phenotype/signs"
+                origin="instance('default')/sign"  />
+            </xf:action>
+        -->
+        </xf:trigger>
+    </div>
+</div>

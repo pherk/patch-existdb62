@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://expath.org/ns/pkg" name="http://enahar.org/lib/xqtime" abbrev="xqtime" version="0.1.12" spec="1.0">
+    <title>Time Periods for XQuery</title>
+    <xquery>
+        <namespace>http://enahar.org/lib/xqtime</namespace>
+        <file>timePeriod.xqm</file>
+    </xquery>
+    <xquery>
+        <namespace>http://enahar.org/lib/xxpath</namespace>
+        <file>xxpath.xqm</file>
+    </xquery>
+    <xquery>
+        <namespace>http://enahar.org/lib/allen</namespace>
+        <file>allen.xqm</file>
+    </xquery>
+    <xquery>
+        <namespace>http://enahar.org/lib/tlm</namespace>
+        <file>timeLineMoment.xqm</file>
+    </xquery>
+    <xquery>
+        <namespace>http://enahar.org/lib/ical</namespace>
+        <file>ical.xqm</file>
+    </xquery>
+    <xquery>
+        <namespace>http://enahar.org/lib/ice</namespace>
+        <file>ice.xqm</file>
+    </xquery>
+</package>

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-demo-hcp" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <!--
+            <xf:bind ref="instance('i-pat')/*:generalPractitioner">
+                <xf:bind ref="*:extension[@url='#patient-gp-preferred']/*:valueBoolean/@value" type="xs:boolean"/>
+                <xf:bind ref="*:extension[@url='#patient-gp-period']/*:valuePeriod/*:start/@value" type="xs:string" constraint="matches(.,'|\d{4}-\d{2}-\d{2}')"/>
+                <xf:bind ref="*:extension[@url='#patient-gp-period']/*:valuePeriod/*:end/@value" type="xs:string" constraint="matches(.,'|\d{4}-\d{2}-\d{2}')"/>
+            </xf:bind>
+            -->
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:submission id="s-update-patient-master" resource="model:m-patient#instance('i-patient')//*:Patient" replace="none" method="post">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="bf:instanceOfModel('m-patient','i-control-center')/*:changed" value="'true'"/>
+                    <xf:setvalue ref="bf:instanceOfModel('m-demo-hcp','i-control-center')/*:isDirty" value="'false'"/>
+                    <xf:message level="ephemeral">Subform has updated Master.</xf:message>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot update Master!.</xf:message>
+            </xf:submission>
+            <xf:instance id="i-control-center">
+                <data xmlns="">
+                    <isDirty>false</isDirty>
+                    <updated/>
+                </data>
+            </xf:instance>
+            <xf:bind id="updated" ref="instance('i-control-center')/*:updated" relevant="instance('i-control-center')/*:isDirty[.='true']"/>
+            <xf:instance xmlns="" id="i-pinfos" src="../metis/FHIR/Practitioner/practitioner-infos.xml"/>
+            <xf:instance xmlns="" id="views">
+                <data>
+                    <ListActive/>
+                    <ListInactive/>
+                    <ListNotEmpty/>
+                    <ListTooLong/>
+                    <NotDeleted/>
+                    <Deleted/>
+                    <TriggerPrevActive/>
+                    <TriggerNextActive/>
+                    <TriggerSaveActive/>
+                </data>
+            </xf:instance>
+            <xf:bind id="ListActive" ref="instance('views')/*:ListActive" relevant="instance('i-search')/*:active = 'true'"/>
+            <xf:bind id="ListInActive" ref="instance('views')/*:ListInactive" relevant="instance('i-search')/*:active = 'false'"/>
+            <xf:bind id="ListNotEmpty" ref="instance('views')/*:ListNotEmpty" readonly="count(instance('i-suggested')/*:Practitioner) &gt; 0"/>
+            <xf:bind id="ListTooLong" ref="instance('views')/*:ListTooLong" readonly="instance('i-suggested')/*:length &gt; instance('i-suggested')/*:count"/>
+            <xf:bind id="NotDeleted" ref="instance('views')/*:NotDeleted" relevant="instance('i-suggested')/*:Practitioner[index('r-contacts-id')]/*:active/@value = 'true'"/>
+            <xf:bind id="Deleted" ref="instance('views')/*:Deleted" relevant="instance('i-suggested')/*:Practitioner[index('r-contacts-id')]/*:active/@value = 'false'"/>
+            <xf:bind id="Stored" ref="instance('views')/*:Stored" relevant="instance('i-suggested')/*:Practitioner[index('r-contacts-id')]/*:active/@value = 'true'"/>
+            <xf:bind id="TriggerPrevActive" ref="instance('views')/*:TriggerPrevActive" readonly="instance('i-suggested')/*:length &gt; instance('i-suggested')/*:start"/>
+            <xf:bind id="TriggerNextActive" ref="instance('views')/*:TriggerNextActive" readonly="instance('i-suggested')/*:start &gt; (instance('i-suggested')/*:count - instance('i-suggested')/*:length)"/><!-- this is the place that we store the parameters that are going out to the remote suggest service -->
+            <xf:instance id="i-search">
+                <query xmlns="">
+                    <start>1</start>
+                    <length>10</length>
+                    <tag/>
+                    <city/>
+                    <name/>
+                    <specialty/>
+                </query>
+            </xf:instance><!-- this is where we put the suggested contact that are returned from the server -->
+            <xf:instance xmlns="" id="i-suggested">
+                <suggestions>
+                    <start>1</start>
+                    <count>1678</count>
+                    <length>0</length>
+                </suggestions>
+            </xf:instance><!-- This sends the request to the contact suggestion service.  -->
+            <xf:submission id="s-search" resource="/exist/restxq/metis/practitioners" method="get" ref="instance('i-search')" replace="instance" instance="i-suggested"/>
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready"/>
+        </xf:model>
+    </div>
+    <xf:group id="hcps" ref="instance('i-pat')" class="svFullGroup bordered">
+            <!-- health care provider -->
+            <xf:label>Betreuende Ärzte, Psychologen, Therapeuten</xf:label>
+            <xf:repeat id="r-hcps-id" ref="instance('i-pat')/*:generalPractitioner" appearance="compact" class="svRepeat">
+                <xf:output value="choose(./*:extension[@url='#patient-gp-preferred']/*:valueBoolean/@value='true', '*!*','')" class="tiny-input">
+                    <xf:label class="svRepeatHeader">Pref</xf:label>
+                </xf:output>
+                <xf:output ref="./*:display/@value">
+                    <xf:label class="svRepeatHeader">Name:</xf:label>
+                </xf:output>
+                <xf:output ref="./*:extension[@url='#patient-gp-specialty']/*:valueString/@value">
+                    <xf:label class="svRepeatHeader">Beruf:</xf:label>
+                </xf:output>
+                <xf:output value="choose(*:extension[@url='#patient-gp-period']/*:valuePeriod/*:start/@value='', '&lt;---',./*:period/*:start/@value)">
+                    <xf:label class="svRepeatHeader">Von:</xf:label>
+                </xf:output>
+                <xf:output value="choose(*:extension[@url='#patient-gp-period']/*:valuePeriod/*:end/@value='', '---&gt;',./*:period/*:end/@value)">
+                    <xf:label class="svRepeatHeader">Bis:</xf:label>
+                </xf:output>
+            </xf:repeat>
+            <xf:switch>
+                <xf:case id="hcp-hide">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svSubTrigger" ref="instance('i-pat')/*:generalPractitioner">
+                                    <xf:label>Update aus DB</xf:label>
+                                    <xf:toggle case="hcp-edit"/>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svAddTrigger">
+                                    <xf:label>Neuer Kontakt</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:insert ref="instance('i-pat')/*:generalPractitioner" context="instance('i-pat')" origin="bf:instanceOfModel('m-patient','i-pinfos')/*:bricks/*:generalPractitioner"/>
+                                        <xf:toggle case="hcp-edit"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svDelTrigger" ref="instance('i-pat')/*:generalPractitioner">
+                                    <xf:label>Entfernen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:delete ref="instance('i-pat')/*:generalPractitioner" at="index('r-hcps-id')"/>
+                                        <xf:setvalue ref="instance('i-control-center')/*:isDirty" value="'true'"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                </xf:case>
+                <xf:case id="hcp-edit">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger ref="instance('i-suggested')/*:Practitioner[count(.)&gt;0]" class="svUpdateMasterTrigger">
+                                    <xf:label>Update Kontakt</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:action if="count(instance('i-suggested')/*:Practitioner)&gt;0">
+                                            <xf:setvalue ref="instance('i-pat')/*:generalPractitioner[index('r-hcps-id')]/*:reference/@value" value="concat('metis/practitioners/',instance('i-suggested')/*:Practitioner[index('r-contacts-id')]/*:id/@value)"/>
+                                            <xf:setvalue ref="instance('i-pat')/*:generalPractitioner[index('r-hcps-id')]/*:display/@value" value="concat(instance('i-suggested')/*:Practitioner[index('r-contacts-id')]/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-suggested')/*:Practitioner[index('r-contacts-id')]/*:name[*:use/@value='official']/*:given/@value)"/>
+                                            <xf:setvalue ref="instance('i-pat')/*:generalPractitioner[index('r-hcps-id')]/*:extension[@url='#patient-gp-specialty']/*:valueString/@value" value="instance('i-suggested')/*:Practitioner[index('r-contacts-id')]/*:specialty/*:text/@value"/>
+                                        </xf:action>
+                                        <xf:setvalue ref="bf:instanceOfModel('m-demo-hcp','i-control-center')/*:isDirty" value="'true'"/>
+                                        <xf:toggle case="hcp-hide"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Zurück</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="hcp-hide"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <xf:group>
+                        <table>
+                            <tr>
+                                <td>
+                                    <xf:input class="search-short" ref="instance('i-search')/*:name" incremental="true">
+                                        <xf:label>Name:</xf:label>
+                                        <xf:action ev:event="xforms-value-changed">
+                                            <xf:setvalue ref="instance('i-search')/*:start" value="'1'"/>
+                                            <xf:send submission="s-search"/>
+                                        </xf:action>
+                                    </xf:input>
+                                </td>
+                                <td>
+                                    <xf:input class="search-short" ref="instance('i-search')/*:city" incremental="true">
+                                        <xf:label>PLZ o. Ort:</xf:label>
+                                        <xf:action ev:event="xforms-value-changed">
+                                            <xf:setvalue ref="instance('i-search')/*:start" value="'1'"/>
+                                            <xf:send submission="s-search"/>
+                                        </xf:action>
+                                    </xf:input>
+                                </td>
+                                <td>
+                                    <xf:input class="search-short" ref="instance('i-search')/*:tag" incremental="true">
+                                        <xf:label>Tags:</xf:label>
+                                        <xf:action ev:event="xforms-value-changed">
+                                            <xf:setvalue ref="instance('i-search')/*:start" value="'1'"/>
+                                            <xf:send submission="s-search"/>
+                                        </xf:action>
+                                    </xf:input>
+                                </td>
+                                <td>
+                                    <xf:select1 class="search-short" ref="instance('i-search')/*:specialty" incremental="true">
+                                        <xf:label>Beruf:</xf:label>
+                                        <xf:itemset nodeset="instance('i-pinfos')/profs/prof">
+                                            <xf:label ref="./@label"/>
+                                            <xf:value ref="./@value"/>
+                                        </xf:itemset>
+                                        <xf:action ev:event="xforms-value-changed">
+                                            <xf:setvalue ref="instance('i-search')/*:start" value="'1'"/>
+                                            <xf:send submission="s-search"/>
+                                        </xf:action>
+                                    </xf:select1>
+                                </td>
+                                <td colspan="2">
+                                    <xf:trigger class="svSaveTrigger">
+                                        <xf:label>Reset</xf:label>
+                                        <xf:action>
+                                            <xf:setvalue ref="instance('i-search')/*:start" value="'1'"/>
+                                            <xf:setvalue ref="instance('i-search')/*:name" value="''"/>
+                                            <xf:setvalue ref="instance('i-search')/*:city" value="''"/>
+                                            <xf:setvalue ref="instance('i-search')/*:tag" value="''"/>
+                                            <xf:setvalue ref="instance('i-search')/*:specialty" value="''"/>
+                                            <xf:send submission="s-search"/>
+                                        </xf:action>
+                                    </xf:trigger>
+                                </td>
+                            </tr>
+                        </table>
+                        <xf:group id="contacts" class="svFullGroup">
+                            <xf:repeat id="r-contacts-id" ref="instance('i-suggested')/*:Practitioner" appearance="compact" class="svRepeat">
+                                <xf:output value="concat(./*:name[*:use/@value='official']/*:family/@value,', ',./*:name[*:use/@value='official']/*:given/@value)">
+                                    <xf:label class="svListHeader">Name:</xf:label>
+                                </xf:output>
+                                <xf:output ref="./*:address/*:postalCode/@value">
+                                    <xf:label class="svListHeader">PLZ:</xf:label>
+                                </xf:output>
+                                <xf:output ref="./*:address/*:city/@value">
+                                    <xf:label class="svListHeader">Ort:</xf:label>
+                                </xf:output>
+                                <xf:output ref="./*:address/*:line/@value">
+                                    <xf:label class="svListHeader">Straße:</xf:label>
+                                </xf:output>
+                                <xf:output ref="./*:telecom[*:use/@value='work']/*:value/@value">
+                                    <xf:label class="svListHeader">Telefon:</xf:label>
+                                </xf:output>
+                            </xf:repeat>
+                        </xf:group>
+                        <hr/>
+                        <xf:group ref="instance('views')/*:ListTooLong">
+                            <xf:trigger ref="instance('views')/*:TriggerPrevActive">
+                                <xf:label>&lt;&lt;</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:setvalue ref="instance('i-search')/*:start" value="instance('i-search')/*:start - instance('i-search')/*:length"/>
+                                    <xf:send submission="s-search"/>
+                                </xf:action>
+                            </xf:trigger>
+                            <xf:output value="choose((instance('i-suggested')/*:start &gt; instance('i-suggested')/*:count),instance('i-suggested')/*:count,instance('i-suggested')/*:start)"/>-
+                            <xf:output value="choose((instance('i-suggested')/*:start + instance('i-suggested')/*:length &gt; instance('i-suggested')/*:count),instance('i-suggested')/*:count,instance('i-suggested')/*:start + instance('i-suggested')/*:length - 1)"/>
+                            <xf:output value="concat('(',instance('i-suggested')/*:count,')')"/>
+                            <xf:trigger ref="instance('views')/*:TriggerNextActive">
+                                <xf:label>&gt;&gt;</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:setvalue ref="instance('i-search')/*:start" value="instance('i-search')/*:start + instance('i-search')/*:length"/>
+                                    <xf:send submission="s-search"/>
+                                </xf:action>
+                            </xf:trigger>
+                        </xf:group>
+                        <xf:input ref="./*:extension[@url='#patient-gp-preferred']/*:valueBoolean/@value" class="tiny-input">
+                            <xf:label class="svListHeader">Pref:</xf:label>
+                        </xf:input>
+                        <xf:input ref="./*:extension[@url='#patient-gp-period']/*:valuePeriod/*:start/@value" class="">
+                            <xf:label class="svListHeader">Von:</xf:label>
+                            <xf:hint>date: yyyy-mm-dd</xf:hint>
+                        </xf:input>
+                        <xf:input ref="./*:extension[@url='#patient-gp-period']/*:valuePeriod/*:end/@value" class="">
+                            <xf:label class="svListHeader">Bis:</xf:label>
+                            <xf:hint>date: yyyy-mm-dd</xf:hint>
+                        </xf:input>
+                    </xf:group>
+                </xf:case>
+            </xf:switch>
+            <hr/>
+            <xf:group appearance="bf:horizontalTable" class="svTriggerGroup">
+                <xf:trigger id="demo-save" ref="instance('i-control-center')/*:updated" class="svSaveTrigger">
+                    <xf:label>Speichern</xf:label>
+                    <xf:send submission="s-update-patient-master"/>
+                </xf:trigger>
+                <xf:trigger id="t-close" class="svUpdateMasterTrigger">
+                    <xf:label>Schließen</xf:label>
+                    <xf:action if="instance('i-control-center')/*:isDirty='true'">
+                        <script type="text/javascript">
+                            closeForm();
+                        </script>
+                    </xf:action>
+                    <xf:action if="instance('i-control-center')/*:isDirty='false'">
+                        <xf:dispatch name="unload-subform" targetid="controlCenter"/>
+                    </xf:action>
+                </xf:trigger>
+                <xf:trigger id="close" class="hiddenControl">
+                    <xf:label>close form</xf:label>
+                    <xf:dispatch name="unload-subform" targetid="controlCenter"/>
+                </xf:trigger>
+            </xf:group>
+    </xf:group>
+</div>

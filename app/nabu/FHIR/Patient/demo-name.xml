@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-demo-name" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:bind ref="*:Patient/*:name[*:use/@value='official']/*:given/@value" type="xs:string" required="true()"/>
+            <xf:bind ref="*:Patient/*:name[*:use/@value='official']/*:family/@value" type="xs:string" required="true()"/>
+            <xf:bind ref="*:Patient/*:multipleBirthBoolean/@value" type="xs:boolean"/>
+            <!--
+            <xf:bind ref="*:birthDate/@value" type="xs:date" required="true()"/>
+-->
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:action if="not(instance('i-pat')/*:multipleBirthBoolean)">
+                        <xf:insert ref="instance('i-pat')/*:multipleBirthBoolean" context="instance('i-pat')" origin="instance('i-bricks')/*:multipleBirthBoolean"/>
+                        <xf:insert ref="instance('i-pat')/*:multipleBirthInteger" context="instance('i-pat')" origin="instance('i-bricks')/*:multipleBirthInteger"/>
+                        <xf:setvalue ref="bf:instanceOfModel('m-demo-name','i-control-center')/*:isDirty" value="'true'"/>
+                    </xf:action>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:submission id="s-update-patient-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" model="m-demo-name" replace="none" method="post">
+                <xf:action ev:event="xforms-submit">
+                    <xf:setvalue ref="instance('i-pat')/*:name[*:use/@value='official']/*:family/@value" value="normalize-space(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value)"/>
+                </xf:action>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="bf:instanceOfModel('m-patient','i-control-center')/*:changed" value="'true'"/>
+                    <xf:setvalue ref="bf:instanceOfModel('m-demo-name','i-control-center')/*:isDirty" value="'false'"/>
+                    <xf:message level="ephemeral">Subform has updated Master.</xf:message>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot update Master!.</xf:message>
+            </xf:submission>
+
+            <xf:instance xmlns="" id="i-bricks">
+                <data xmlns="http://hl7.org/fhir">
+                    <multipleBirthBoolean value="false"/>
+                    <multipleBirthInteger value=""/>
+                    <deceasedDateTime value=""/>
+                </data>
+            </xf:instance>
+            
+            <xf:instance id="i-control-center">
+                <data xmlns="">
+                    <isDirty>false</isDirty>
+                </data>
+            </xf:instance>
+            
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+                <script type="text/javascript">
+                    setBirthDate();
+                </script>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+            </xf:action>
+        </xf:model>
+        <xf:input id="bdate" ref="./*:birthDate/@value" appearance="bf:iso8601" data-bf-params="date:'dd.MM.yyyy'">
+            <xf:label>Geburtsdatum:</xf:label>
+            <xf:alert>a valid date is required</xf:alert>
+            <xf:action ev:event="xforms-value-changed">
+                <xf:setvalue ref="instance('i-control-center')/*:isDirty" value="'true'"/>
+                <xf:message level="ephemeral">GebDat geändert</xf:message>
+            </xf:action>
+        </xf:input>
+    </div>
+    <xf:group ref="instance('i-pat')" class="svFullGroup bordered">
+        <xf:action ev:event="xforms-value-changed">
+            <xf:setvalue ref="instance('i-control-center')/*:isDirty" value="'true'"/>
+        </xf:action>
+        <xf:label>PID, Name, Geburtsdatum</xf:label>
+        <br/>
+        <xf:input id="demo-pid" ref="./*:identifier/*:value/@value">
+            <xf:label>ORBIS PatNR:</xf:label>
+            <xf:hint>wenn Patient in UniKlinik bekannt</xf:hint>
+        </xf:input>
+        <xf:output ref="./*:id/@value"/>
+        <br/>
+        <xf:input id="demo-vorname" ref="./*:name[*:use/@value='official']/*:given/@value" incremental="true">
+            <xf:label>Vorname:</xf:label>
+            <xf:alert>a name is required</xf:alert>
+        </xf:input>
+        <xf:input id="demo-name" ref="./*:name[*:use/@value='official']/*:family/@value" incremental="true">
+            <xf:label>Name:</xf:label>
+            <xf:alert>a name is required</xf:alert>
+        </xf:input>
+        <table>
+            <tr>
+            <td>
+        <xf:trigger class="svAddTrigger">
+            <xf:label>Namenswechsel</xf:label>
+            <xf:action if="not(instance('i-pat')/*:name[*:use/@value='official']/*:period)">
+                <xf:insert ref="instance('i-pat')/*:name[*:use/@value='official']/*:period" context="instance('i-pat')/*:name[*:use/@value='official']" origin="bf:instanceOfModel('m-patient','i-pinfos')/*:bricks/*:period"/>
+            </xf:action>
+            <xf:setvalue ref="instance('i-pat')/*:name[*:use/@value='official']/*:period/*:end/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+            <xf:setvalue ref="instance('i-pat')/*:name[*:use/@value='official']/*:use/@value" value="'old'"/>
+            <xf:insert at="1" position="before" ref="instance('i-pat')/*:name[*:use/@value='official']" context="instance('i-pat')" origin="bf:instanceOfModel('m-patient','i-pinfos')/*:bricks/*:name"/>
+            <xf:setvalue ref="instance('i-pat')/*:name[*:use/@value='official']/*:given/@value" value="instance('i-pat')/*:name[*:use/@value='old'][1]/*:given/@value"/>
+            <xf:setvalue ref="instance('i-pat')/*:name[*:use/@value='official']/*:family/@value" value="''"/>
+            <xf:setvalue ref="instance('i-pat')/*:name[*:use/@value='official']/*:period/*:start/@value" value="current-dateTime()"/>
+        </xf:trigger>
+            </td>
+            <td>
+        <xf:group ref="instance('i-pat')/*:name[*:use/@value='official']/*:family[@value='']">
+            <strong>Neuen Familiennamen eingeben!</strong>
+        </xf:group>
+            </td>
+            </tr>
+        </table>
+        <div class="form-group">
+            <label>Geburtstag</label>
+            <div class="input-group date col-xs-4" id="demo-bdate" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-language="de" data-date-assumeNearbyYear="true">
+                <input type="text" class="form-control" id="demo-bdate-input"/>
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"/>
+                </div>
+            </div>
+        </div>
+        <xf:group class="formGroup">
+            <xf:label class="">Mehrling?</xf:label>
+            <xf:input ref="instance('i-pat')/*:multipleBirthBoolean/@value" incremental="true" class="xsdBoolean svRepeatBool">
+
+                <xf:action ev:event="xforms-value-changed">
+                    <xf:action if="instance('i-pat')/*:multipleBirthBoolean/@value='false'">
+                        <xf:setvalue ref="instance('i-pat')/*:multipleBirthInteger/@value" value="''"/>
+                    </xf:action>
+                </xf:action>
+            </xf:input>
+            <xf:select1 ref="instance('i-pat')/*:multipleBirthInteger/@value" appearance="minimal" incremental="true" class="tiny-input">
+                <xf:label class="">Nummer:</xf:label>
+                    <xf:item>
+                        <xf:label>1</xf:label>
+                        <xf:value>1</xf:value>
+                    </xf:item>
+                    <xf:item>
+                        <xf:label>2</xf:label>
+                        <xf:value>2</xf:value>
+                    </xf:item>
+                    <xf:item>
+                        <xf:label>3</xf:label>
+                        <xf:value>3</xf:value>
+                    </xf:item>
+                    <xf:item>
+                        <xf:label>4</xf:label>
+                        <xf:value>4</xf:value>
+                    </xf:item>
+                </xf:select1>
+        </xf:group>
+        <xf:group ref="bf:instanceOfModel('m-patient','i-eocs')/*:EpisodeOfCare">
+            <xf:repeat ref="./*:statusHistory[*:period/*:end/@value!='']" appearance="compact" class="svRepeatBlank">
+            
+                <xf:group ref="./*:extension[@url='#eoc-workflow-change']/*:valueCodeableConcept//*:text[@value!='']">
+                    <xf:textarea ref="./@value" class="fullarea xfReadOnly">
+                        <xf:label>Verlauf:</xf:label>
+                    </xf:textarea>
+                </xf:group>
+            
+                <xf:group>
+                    <xf:output value="tokenize(./*:period/*:start/@value,'T')[1]">
+                    </xf:output>
+                    <xf:output ref=".//*:display/@value">
+                    </xf:output>
+                </xf:group>
+            </xf:repeat>
+        <!--
+            <xf:group ref="./*:statusHistory[*:period/*:end/@value='']">
+                <xf:label>Aktueller Status</xf:label>
+                <xf:textarea ref=".//*:text/@value" class="fullarea">
+                </xf:textarea>
+                <xf:group>
+                    <xf:output value="tokenize(./*:period/*:start/@value,'T')[1]"/>
+                    <xf:output ref=".//*:display/@value"/>
+                </xf:group>
+            </xf:group>
+        -->
+        </xf:group>
+        <br/>
+        <xf:group ref="instance('i-pat')/*:extension[@url='#patient-over-18']">
+            <xf:select1 ref="instance('i-pat')/*:extension[@url='#patient-over-18']/*:valueCodeableConcept/*:coding/*:code/@value" appearance="minimal" incremental="true">
+                <xf:label>Über18-Status:</xf:label>
+                <xf:itemset ref="bf:instanceOfModel('m-patient','i-pinfos')/*:over-18/*:code">
+                    <xf:label ref="./@label-de"/>
+                    <xf:value ref="./@value"/>
+                </xf:itemset>
+                <xf:action ev:event="xforms-value-changed">
+                            <xf:setvalue ref="instance('i-pat')/*:extension[@url='#patient-over-18']/*:valueCodeableConcept/*:coding/*:display/@value" value="bf:instanceOfModel('m-patient','i-pinfos')/*:over-18/*:code[@value=instance('i-pat')/*:extension[@url='#patient-over-18']/*:valueCodeableConcept/*:coding/*:code/@value]/@label"/>
+                </xf:action>
+            </xf:select1>
+            <xf:input ref="instance('i-pat')/*:extension[@url='#patient-over-18-limit']/*:valueDate/@value">
+                <xf:label>Bewilligt bis (bitte ISO-Datum):</xf:label>    
+            </xf:input>
+        </xf:group>
+        <xf:group ref="instance('i-pat')/*:birthDate[((substring(current-date(),1,4)*12+substring(current-date(),6,2)) - (substring(@value,1,4)*12+substring(@value,6,2))) &gt; 206]" class="svFullGroup">
+            <xf:trigger ref="instance('i-pat')/*:extension[not(../*:extension[@url='#patient-over-18'])]" class="svAddTrigger">
+                <xf:label>Über 18.LJ?</xf:label>
+                <xf:action ev:event="DOMActivate">
+                    <xf:action if="not(instance('i-pat')/*:extension[@url='#patient-over-18'])">
+                        <xf:insert ref="instance('i-pat')/*:extension[@url='#patient-over-18']" context="instance('i-pat')" origin="bf:instanceOfModel('m-patient','i-pinfos')/*:bricks/*:extension[@url='#patient-over-18']"/>
+                        <xf:setvalue ref="instance('i-pat')/*:extension[@url='#patient-over-18']/*:valueCodeableConcept/*:coding/*:code/@value" value="'unknown'"/>
+                                <xf:setvalue ref="instance('i-pat')/*:extension[@url='#patient-over-18']/*:valueCodeableConcept/*:coding/*:display/@value" value="'unklar'"/>
+                        <xf:insert ref="instance('i-pat')/*:extension[@url='#patient-over-18-limit']" context="instance('i-pat')" origin="bf:instanceOfModel('m-patient','i-pinfos')/*:bricks/*:extension[@url='#patient-over-18-limit']"/>
+                    </xf:action>
+                </xf:action>
+            </xf:trigger>
+        </xf:group>   
+    </xf:group>
+    <div class="svTriggerGroup">
+        <xf:group appearance="bf:horizontalTable">
+            <xf:trigger id="demo-name-save" class="svSaveTrigger">
+                <xf:label>Speichern</xf:label>
+                <xf:send submission="s-update-patient-master"/>
+            </xf:trigger>
+            <xf:trigger id="t-close" class="svUpdateMasterTrigger">
+                <xf:label>Schließen</xf:label>
+                <xf:action if="instance('i-control-center')/*:isDirty='true'">
+                    <script type="text/javascript">
+                        closeForm();
+                    </script>
+                </xf:action>
+                <xf:action if="instance('i-control-center')/*:isDirty='false'">
+                    <xf:dispatch name="unload-subform" targetid="controlCenter"/>
+                </xf:action>
+            </xf:trigger>
+            <xf:trigger id="close" class="hiddenControl">
+                <xf:label>close form</xf:label>
+                <xf:dispatch name="unload-subform" targetid="controlCenter"/>
+            </xf:trigger>
+        </xf:group>
+    </div>
+</div>

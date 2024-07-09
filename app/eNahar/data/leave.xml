@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<leave>
+    <id value=""/>
+    <meta>
+        <tag>
+            <coding>
+                <code value=""/>
+                <display value=""/>
+            </coding>
+            <text value=""/>
+        </tag>
+        <versionID value="0"/>
+    </meta>
+    <actor>
+        <reference value=""/>
+        <display value=""/>
+    </actor>
+    <event>
+        <allDay value="true"/>
+        <summary value=""/>
+        <description value=""/>
+        <start value=""/>
+        <end value=""/>
+    </event>
+</leave>

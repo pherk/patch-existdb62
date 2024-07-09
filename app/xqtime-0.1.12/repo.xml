@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<meta xmlns="http://exist-db.org/xquery/repo">
+    <author>Peter Herkenrath</author>
+    <website>https://github.com/pherk/xqtime</website>
+    <license>Apache License, Version 2.0</license>
+    <copyright>true</copyright>
+    <description>xquery modules for handling time periods and calendars</description>
+    <type>library</type>
+    <status>unstable</status>
+    <changelog>
+        <change version="0.1.12">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>byWeekNo: filter for calendar week lists</li>
+            </ul>
+        </change>
+        <change version="0.1.11">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>timeperiod: subtractPeriods should call xqtime:gaps not tlm:gaps</li>
+            </ul>
+        </change>
+        <change version="0.1.10">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>timeperiod: hasInside changed to be exclusive; intersectsWith then also exclusive</li>
+            </ul>
+        </change>
+        <change version="0.1.9">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>ice: exdate added</li>
+            </ul>
+        </change>
+        <change version="0.1.8">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>subtractPeriods: false attr in sort</li>
+            </ul>
+        </change>
+        <change version="0.1.7">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>overlap did not cover all cases</li>
+            </ul>
+        </change>
+        <change version="0.1.6">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>intersectPeriod expects sorted tp</li>
+            </ul>
+        </change>
+        <change version="0.1.5">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>intersectPeriod bug</li>
+            </ul>
+        </change>
+        <change version="0.1.4">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>overlap bug</li>
+            </ul>
+        </change>
+        <change version="0.1.0">
+            <ul xmlns="http://www.w3.org/1999/xhtml">
+                <li>Initial version</li>
+            </ul>
+        </change>
+    </changelog>
+    
+<deployed>2019-04-11T13:41:59.019+02:00</deployed></meta>

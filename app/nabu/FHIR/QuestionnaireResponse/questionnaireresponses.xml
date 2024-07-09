@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="m-qrmaster" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" xmlns:fhir="http://hl7.org/fhir" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:instance xmlns="" xmlns:fhir="http://hl7.org/fhir" id="i-orders">
+                <data/>
+            </xf:instance>
+            
+            <xf:instance xmlns="" id="i-login">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-login-from-master" resource="model:m-patient#instance('i-login')//*:data" instance="i-login" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">login: cannot load from Master!.</xf:message>
+            </xf:submission>
+            
+            <xf:instance xmlns="" id="i-qrs-user">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-qrs-user" instance="i-qrs-user" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/questionnaireresponses?subject=', instance('i-pat')/*:id/@value,'&amp;loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:action if="count(instance('i-qrs-user')/*:QuestionnaireResponse)&gt;0">
+                        <xf:setvalue ref="instance('i-control-center')/*:rqrsid" value="'1'"/>
+                        <xf:setvalue ref="instance('i-control-center')/*:qr-formid" value="substring-after(instance('i-qrs-user')/*:QuestionnaireResponse[1]/*:questionnaire/*:reference/@value,'nabu/questionnaires/q-')"/>
+                    </xf:action>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get qrs!</xf:message>
+            </xf:submission>
+            <xf:submission id="s-submit-qr-user" ref="instance('i-qrs-user')/*:QuestionnaireResponse[instance('i-control-center')/*:rqrsid]" method="put" replace="none">
+                <xf:resource value="concat('/exist/restxq/nabu/questionnaireresponses?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:setvalue ref="instance('i-control-center')/*:qr-dirty" value="'false'"/>
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot submit questionnaireResponse!</xf:message>
+            </xf:submission>
+            <xf:instance xmlns="" id="i-questionnaire">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-questionnaire" instance="i-questionnaire" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/questionnaires/q-',instance('i-control-center')/*:qr-formid,'?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get questionnaire!</xf:message>
+            </xf:submission>
+            <xf:instance xmlns="" id="i-qr-compiled">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-get-qr-compiled" instance="i-qr-compiled" method="get" replace="instance">
+                <xf:resource value="concat('/exist/restxq/nabu/questionnaireresponses/qr-',instance('i-control-center')/*:qr-formid,'/compiled?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+                <xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:action ev:event="xforms-submit-done">
+                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot get compiled QR!</xf:message>
+            </xf:submission>
+
+            <xf:instance xmlns="" id="i-q-infos" src="FHIR/Questionnaire/questionnaire-infos.xml"/>
+            <xf:instance xmlns="" id="i-qr-infos" src="FHIR/QuestionnaireResponse/questionnaireresponse-infos.xml"/>
+        
+            <xf:instance id="i-control-center">
+                <data xmlns="">
+                    <rqrsid>0</rqrsid>
+                    <qr-dirty>false</qr-dirty>
+                    <qr-new>false</qr-new>
+                    <qr-formid/>
+                    <q>
+                        <id>soziales-v2019-09-30</id>
+                        <name>Sozialdaten</name>
+                        <singleton>true</singleton>
+                        <cloning>false</cloning>
+                        <ro>false</ro>
+                    </q>
+                    <q>
+                        <id>bayleyIII-v2017-08-08</id>
+                        <name>BayleyIII</name>
+                        <singleton>false</singleton>
+                        <cloning>false</cloning>
+                        <ro>false</ro>
+                    </q>
+                    <q>
+                        <id>neodat-v2017-08-08</id>
+                        <name>NeoDat</name>
+                        <singleton>true</singleton>
+                        <cloning>false</cloning>
+                        <ro>true</ro>
+                    </q>
+                    <q>
+                        <id>neons-v2018-01-08</id>
+                        <name>NeoNachsorge</name>
+                        <singleton>true</singleton>
+                        <cloning>false</cloning>
+                        <ro>false</ro>
+                    </q>
+                    <q>
+                        <id>hilfsmittel-v2018-04-08</id>
+                        <name>Hilfsmittel</name>
+                        <singleton>true</singleton>
+                        <cloning>false</cloning>
+                        <ro>false</ro>
+                    </q>
+                    <q>
+                        <id>medication-v2018-05-08</id>
+                        <name>Medikamente</name>
+                        <singleton>false</singleton>
+                        <cloning>true</cloning>
+                        <ro>false</ro>
+                    </q>
+                </data>
+            </xf:instance>            
+            <xf:bind id="brqrsid" ref="instance('i-control-center')/*:rqrsid" type="xs:int"/>
+
+            <xf:instance id="views">
+                <data xmlns="">
+                    <noQR/>
+                </data>
+            </xf:instance>
+            <xf:bind id="noQR" ref="instance('views')/*:noQR" relevant="count(instance('i-qrs-user')/*:QuestionnaireResponse) = 0"/>
+            
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+                <xf:send submission="s-load-login-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+                <xf:send submission="s-get-qrs-user"/>
+            </xf:action>
+        </xf:model>
+    </div>
+    <xf:group id="qrlist" class="svFullGroup bordered">
+        <xf:action ev:event="newQR">
+            <xf:action if="count(instance('i-qr-compiled')/*:QuestionnaireResponse)=0 or instance('i-qr-compiled')/*:QuestionnaireResponse/*:id/@value!=concat('qr-',instance('i-control-center')/*:qr-formid)">
+                <xf:send submission="s-get-questionnaire"/>
+                <xf:send submission="s-get-qr-compiled"/>
+            </xf:action>
+            <xf:insert at="last()" nodeset="instance('i-qrs-user')/*:QuestionnaireResponse" context="instance('i-qrs-user')" origin="instance('i-qr-compiled')/*:QuestionnaireResponse"/>
+            <xf:setvalue ref="instance('i-qrs-user')/*:QuestionnaireResponse[last()]/*:authored/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+            <xf:setvalue ref="instance('i-qrs-user')/*:QuestionnaireResponse[last()]/*:author/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+            <xf:setvalue ref="instance('i-qrs-user')/*:QuestionnaireResponse[last()]/*:author/*:display/@value" value="instance('i-login')/*:lognam"/>
+            <xf:setvalue ref="instance('i-qrs-user')/*:QuestionnaireResponse[last()]/*:subject/*:reference/@value" value="concat('nabu/patients/',instance('i-pat')/*:id/@value)"/>
+            <xf:setvalue ref="instance('i-qrs-user')/*:QuestionnaireResponse[last()]/*:subject/*:display/@value" value="concat(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-pat')/*:name[*:use/@value='official']/*:given/@value,', *',instance('i-pat')/*:birthDate/@value)"/>
+            <xf:setvalue ref="instance('i-control-center')/*:qr-dirty" value="'false'"/>
+            <xf:setvalue ref="instance('i-control-center')/*:qr-new" value="'true'"/>
+            <xf:setvalue ref="instance('i-control-center')/*:rqrsid" value="count(instance('i-qrs-user')/*:QuestionnaireResponse)"/>
+        </xf:action>
+        <xf:group>
+            <xf:action ev:event="betterform-index-changed">
+                <xf:action if="instance('i-control-center')/*:qr-dirty='true'">
+                    <xf:send submission="s-submit-qr-user"/>
+                </xf:action>
+                <xf:setvalue ref="instance('i-control-center')/*:rqrsid" value="index('r-qrs-id')"/>
+                <xf:setvalue ref="instance('i-control-center')/*:qr-dirty" value="'false'"/>
+                <xf:setvalue ref="instance('i-control-center')/*:qr-formid" value="substring-after(instance('i-qrs-user')/*:QuestionnaireResponse[index('r-qrs-id')]/*:questionnaire/*:reference/@value,'nabu/questionnaires/q-')"/>
+                <xf:action if="instance('i-qr-compiled')/*:QuestionnaireResponse/*:id/@value!=concat('qr-',instance('i-control-center')/*:qr-formid)">
+                    <xf:send submission="s-get-questionnaire"/>
+                    <xf:send submission="s-get-qr-compiled"/>
+                </xf:action>
+                <xf:toggle case="listQRs"/>
+            </xf:action>
+            <xf:label>Befunde</xf:label>
+            <xf:repeat id="r-qrs-id" ref="instance('i-qrs-user')/*:QuestionnaireResponse" appearance="compact" class="svRepeat">
+                <xf:output value="tokenize(./*:lastModified/@value,'T')[1]">
+                    <xf:label class="svListHeader">Letzte Änd.</xf:label>
+                </xf:output>
+                <xf:output value="./*:questionnaire/*:display/@value">
+                    <xf:label class="svListHeader">Formular</xf:label>
+                </xf:output>
+                <xf:output ref="*:status/@value">
+                    <xf:label class="svListHeader">Status</xf:label>
+                </xf:output>
+            </xf:repeat>
+        </xf:group>
+        <xf:group ref="instance('views')/noQR">
+            <xf:output value="'Keine Befunde'"/>
+        </xf:group>
+        <xf:switch id="qr-switch">
+            <xf:case id="listQRs">
+                <xf:group class="svTriggerGroup">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svSubTrigger" ref="instance('i-qrs-user')/*:QuestionnaireResponse[index('r-qrs-id')]/*:status[@value=('in-progress','stopped')]">
+                                    <xf:label>Edit</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:load show="embed" targetid="editpane">
+                                            <xf:resource value="concat('FHIR/QuestionnaireResponse/qr-',instance('i-control-center')/*:qr-formid,'-xform.xml')"/>
+                                        </xf:load>
+                                        <xf:toggle case="editQR"/>
+                                    </xf:action>
+                                </xf:trigger>
+                                <xf:trigger class="svSubTrigger" ref="instance('i-qrs-user')/*:QuestionnaireResponse[index('r-qrs-id')]/*:status[@value=('completed','amended','stopped')]">
+                                    <xf:label>Zeige</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:load show="embed" targetid="editpane">
+                                            <xf:resource value="concat('FHIR/QuestionnaireResponse/qr-',instance('i-control-center')/*:qr-formid,'-xhtml.xml')"/>
+                                        </xf:load>
+                                        <xf:toggle case="showQR"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <strong>Formular</strong>
+                            </td>
+                            <td>
+                                <xf:select1 ref="instance('i-control-center')/*:qr-formid" class="">
+                                    <xf:itemset ref="instance('i-control-center')/*:q[*:ro='false']">
+                                        <xf:label ref="./*:name"/>
+                                        <xf:value ref="./*:id"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </td>
+                            <td>
+                                <xf:trigger class="svAddTrigger">
+                                    <xf:label>Neu</xf:label>
+                                   <xf:action ev:event="DOMActivate">
+                                        <xf:action if="instance('i-control-center')/*:q[*:id=../*:qr-formid]/*:singleton='true' and count(instance('i-qrs-user')/*:QuestionnaireResponse[*:questionnaire/*:reference/@value=concat('nabu/questionnaires/q-',instance('i-control-center')/*:qr-formid)]) &gt; 0">
+                                            <xf:message level="modal">
+                                                <xf:output ref="instance('i-control-center')/*:q[*:id=../*:qr-formid]/*:name"/> Formular schon angelegt</xf:message>
+                                        </xf:action>
+                                        <xf:action if="instance('i-control-center')/*:q[*:id=../*:qr-formid]/*:singleton='false' or count(instance('i-qrs-user')/*:QuestionnaireResponse[*:questionnaire/*:reference/@value=concat('nabu/questionnaires/q-',instance('i-control-center')/*:qr-formid)])=0">
+                                            <xf:dispatch name="newQR" targetid="qrlist"/>
+                                            <xf:load show="embed" targetid="editpane">
+                                                <xf:resource value="concat('FHIR/QuestionnaireResponse/qr-',instance('i-control-center')/*:qr-formid,'-xform.xml')"/>
+                                            </xf:load>
+                                            <xf:toggle case="editQR"/>
+                                        </xf:action>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger ref="instance('i-qrs-user')/*:QuestionnaireResponse[index('r-qrs-id')]/*:status[@value=('in-progress','stopped')]">
+                                    <xf:label>
+                                        <span class="glyphicon glyphicon-trash"/>
+                                    </xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:setvalue ref="instance('i-qrs-user')/*:QuestionnaireResponse[index('r-qrs-id')]/*:status/@value" value="'entered-in-error'"/>
+                                        <xf:setvalue ref="instance('i-control-center')/*:rqrsid" value="index('r-qrs-id')"/>
+                                        <xf:send submission="s-submit-qr-user"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger ref="instance('i-qrs-user')/*:QuestionnaireResponse[index('r-qrs-id')]/*:status[@value=('in-progress','stopped','unknown')]">
+                                    <xf:label>
+                                        <span class="glyphicon glyphicon-ok"/>
+                                    </xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:setvalue ref="instance('i-qrs-user')/*:QuestionnaireResponse[index('r-qrs-id')]/*:authored/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                                        <xf:setvalue ref="instance('i-qrs-user')/*:QuestionnaireResponse[index('r-qrs-id')]/*:status/@value" value="'completed'"/>
+                                        <xf:setvalue ref="instance('i-control-center')/*:rqrsid" value="index('r-qrs-id')"/>
+                                        <xf:send submission="s-submit-qr-user"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                            <td>
+                                <xf:trigger>
+                                    <xf:label>
+                                        <strong>?</strong>
+                                    </xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="showHelp"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                </xf:group>
+            </xf:case>
+            <xf:case id="showQR">
+                <xf:group id="showQRGroup" ref="instance('i-qrs-user')/*:QuestionnaireResponse[index('r-qrs-id')]">
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Schließen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="listQRs"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                    <xf:output value="./*:item/*:text/@value" class="long-input">
+                                <xf:label>Titel:</xf:label>
+                    </xf:output>
+                </xf:group>
+            </xf:case>
+            <xf:case id="editQR">
+                <xf:group id="editpane0">
+                    <hr style="border: none; height: 1px; color: blue; background: blue;"/>
+                    <div id="editpane"/>
+                </xf:group>
+            </xf:case>
+            <xf:case id="showHelp">
+                <xf:group>
+                    <table>
+                        <tr>
+                            <td>
+                                <xf:trigger class="svUpdateMasterTrigger">
+                                    <xf:label>Schließen</xf:label>
+                                    <xf:action ev:event="DOMActivate">
+                                        <xf:toggle case="listQRs"/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </td>
+                        </tr>
+                    </table>
+                    <h4>Hilfe</h4>
+                    <p>
+                    <strong>Formulardaten</strong> also Befunde werden mit QuestionnaireResponse Objekten <strong>(QR)</strong> erfasst.</p>
+                    <p>
+                    <strong>Lebenszyklus des QR</strong>: Anlage -&gt; (Stop) -&gt; Fertig -&gt; (Ergänzung)</p>
+                    <ol>
+                        <li>Bei der <strong>Anlage des QR</strong> wird ein vorgefertigtes Formularobjekt (Questionnaire), zugrunde gelegt.</li>
+                        <li>Formularstrukturen werden kompiliert und als XFORMS-Formular geladen.</li>
+                    </ol>
+                </xf:group>
+            </xf:case>
+        </xf:switch>
+    </xf:group>
+</div>

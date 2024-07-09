@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cal>
+    <id value=""/>
+    <meta>
+        <tag>
+            <text value=""/>
+        </tag>
+        <versionID value="0"/>
+    </meta>
+    <active value="true"/>
+    <owner>
+        <group value=""/>
+        <reference value=""/>
+        <display value=""/>
+    </owner>
+    <cutype>
+        <coding>
+            <system vlaue="#ical-type"/>
+            <code value="individual"/>
+            <display value="Person"/>
+        </coding>
+        <text value="Person"/>
+    </cutype>
+    <caltype>
+        <coding>
+            <system value="#ical-caltype"/>
+            <code value="primary"/>
+            <display value="Hauptkalender"/>
+        </coding>
+        <text value="Hauptkalender"/>
+    </caltype>
+    <summary value=""/>
+    <description value=""/>
+    <timezone value="MEZ"/>
+    <location>
+        <reference value="metis/locations/kikl-spz"/>
+        <display value="SPZ Kinderklinik"/>
+    </location>
+</cal>

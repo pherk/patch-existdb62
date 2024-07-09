@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActivityDefinition xmlns="http://hl7.org/fhir">
+    <id value="appArzt-Logo-EEG-3m"/> 
+    <url value="http://enahar.org/exist/apps/nabu/FHIR/ActivtyDefinition/appArzt-Logo-EEG-3m"/> 
+    <identifier> 
+        <use value="official"/> 
+        <system value="#artifacts"/> 
+        <value value="nabu:appArztLogoEEG-3m"/> 
+    </identifier> 
+    <version value="0.1.0"/> 
+    <name value="Arzt-Logo+EEG 3m"/> 
+    <title value="Arzt-Logo+EEG 3m"/> 
+    <status value="active"/> 
+    <experimental value="true"/> 
+    <date value="2018-08-18"/> 
+    <publisher value="Nabu SPZ Partner"/> 
+    <description value="Orders to be applied to a child which should get a appointment with physician, EEG and speech therapist."/> 
+    <purpose value="This order set helps ensure consistent application of appropriate orders for the care of childs with epilepsy."/> 
+    <usage value="This order set should be applied after assessing a child for risks, when the findings of that assessment indicate the child belong to the epilepsy or has other risks arising from cortical functional problems."/> 
+    <approvalDate value="2018-06-18"/> 
+    <lastReviewDate value="2018-08-18"/> 
+    <effectivePeriod> 
+        <start value="2018-08-18"/> 
+        <end value="2021-04-01"/> 
+    </effectivePeriod> 
+    <useContext> 
+        <code> 
+            <system value="http://hl7.org/fhir/usage-context-type"/> 
+            <code value="user"/> 
+        </code> 
+        <valueCodeableConcept> 
+            <coding> 
+                <system value="http://snomed.info/sct"/> 
+                <code value="309343006"/> 
+                <display value="Physician"/> 
+            </coding> 
+        </valueCodeableConcept> 
+    </useContext>
+    <useContext> 
+        <code> 
+            <system value="http://hl7.org/fhir/usage-context-type"/> 
+            <code value="user"/> 
+        </code> 
+        <valueCodeableConcept> 
+            <coding> 
+                <system value="http://snomed.info/sct"/> 
+                <code value="159026005"/> 
+                <display value="Speech therapist"/> 
+            </coding> 
+        </valueCodeableConcept> 
+    </useContext>
+    <useContext> 
+        <code> 
+            <system value="http://hl7.org/fhir/usage-context-type"/> 
+            <code value="user"/> 
+        </code> 
+        <valueCodeableConcept> 
+            <coding> 
+                <system value="http://snomed.info/sct"/> 
+                <code value="159037062"/> 
+                <display value="EEG technician"/> 
+            </coding> 
+        </valueCodeableConcept> 
+    </useContext>
+    <useContext> 
+        <code> 
+            <system value="http://hl7.org/fhir/usage-context-type"/> 
+            <code value="venue"/> 
+        </code> 
+        <valueCodeableConcept> 
+            <coding> 
+                <system value="http://snomed.info/sct"/> 
+                <code value="440655000"/> 
+                <display value="Outpatient environment"/> 
+            </coding> 
+        </valueCodeableConcept> 
+    </useContext> 
+    <jurisdiction> 
+        <coding> 
+            <system value="urn:iso:std:iso:3166"/> 
+            <code value="DE"/> 
+        </coding> 
+    </jurisdiction> 
+    <topic> 
+        <text value="Interdisciplinary neuropediatric Ambulance"/> 
+    </topic> 
+    <contributor> 
+        <type value="author"/> 
+        <name value="Peter Herkenrath"/> 
+        <contact> 
+            <telecom> 
+                <system value="phone"/> 
+                <value value="0221 478 6074"/> 
+                <use value="work"/> 
+            </telecom> 
+            <telecom> 
+                <system value="email"/> 
+                <value value="p.herkenrath@uni-koeln.de"/> 
+                <use value="work"/> 
+            </telecom> 
+        </contact> 
+    </contributor> 
+    <contact> 
+        <telecom> 
+            <system value="phone"/> 
+            <value value="0221 478 5900"/> 
+            <use value="work"/> 
+        </telecom> 
+        <telecom> 
+            <system value="email"/> 
+            <value value="spz@uk-koeln.de"/> 
+            <use value="work"/> 
+        </telecom> 
+    </contact> 
+    <copyright value="© Copyright 2018 Nabu SPZ Partner. All rights reserved."/> 
+    <relatedArtifact> 
+        <type value="derived-from"/> 
+        <display value="LL Diagnostische Prinzipien bei Epilepsien des Kindesalters"/> 
+        <url value="https://www.awmf.org/uploads/tx_szleitlinien/022-007l_S1_Diagnostische-Prinzipien-bei-Epilepsien-des-Kindesalters_2018-03.pdf"/> 
+    </relatedArtifact> 
+    <!--   Actions   -->
+    <action> 
+        <title value="Arzt-Logo+EEG"/>
+        <action> 
+            <title value="Arzt-Logo+EEG Kombitermin"/> 
+            <textEquivalent value="Arzt-Logo+EEG 3m"/>
+            <definition> 
+                <reference value="nabu/activityDefs/appArzt"/>
+                <display value="SPZ Arzt"/>
+            </definition>
+            <definition> 
+                <reference value="nabu/activityDefs/appLogo"/>
+                <display value="SPZ EEG"/>
+            </definition>
+            <definition> 
+                <reference value="nabu/activityDefs/appEEG"/>
+                <display value="SPZ EEG"/>
+            </definition> 
+            <!--   These expressions will be evaluated with the library referenced above as an include  -->
+            <dynamicValue> 
+                <path value="timingTiming.event"/>
+                <language value="text/cql"/>
+                <expression value="3 months"/> 
+            </dynamicValue>
+            <dynamicValue> 
+                <path value="timingTiming.event"/>
+                <language value="application/xquery"/>
+                <expression value="3 * xs:dayTimeDuration('P30D')"/> 
+            </dynamicValue>
+            <dynamicValue> 
+                <path value="spec.interdisplinary"/>
+                <expression value="true"/> 
+            </dynamicValue>
+        </action> 
+    </action>
+</ActivityDefinition>

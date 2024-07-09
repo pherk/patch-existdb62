@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<leave-infos><!-- FHIR status -->
+    <state value="new" label="neu"/>
+    <state value="tentative" label="provisorisch"/>
+    <state value="accepted" label="angenommen"/>
+    <state value="confirmed" label="bestätigt"/>
+    <state value="cancelled" label="cancelled"/>
+    <event value="open" label="eintragen"/>
+    <event value="confirm" label="bestätigen"/>
+    <event value="accept" label="annehmen"/>
+    <event value="leave" label="cancel"/>
+    <scxml version="1.0" initial="new">
+        <state id="new">
+            <transition target="tentative" event="open"/>
+            <transition target="leave" event="leave"/>
+        </state>
+        <state id="tentative">
+            <transition target="confirmed" event="confirm"/>
+            <transition target="cancelled" event="cancel"/>
+            <transition target="leave" event="leave"/>
+        </state>
+        <state id="confirmed">
+            <transition target="cancelled" event="cancel"/>
+            <transition target="leave" event="leave"/>
+        </state>
+        <state id="cancelled">
+            <transition target="leave" event="leave"/>
+        </state>
+    </scxml>
+    <cause value="FZA" label="Freizeit" allDay="true"/>
+    <cause value="ND" label="Nachtdienst" allDay="true"/>
+    <cause value="KS1" label="Spätdienst-1" allDay="false"/>
+    <cause value="KS2" label="Spätdienst-2" allDay="false"/>
+    <cause value="L" label="Studenten" allDay="false"/>
+    <cause value="V" label="Vertretung" allDay="true"/>
+    <cause value="AB" label="abwesend" allDay="true"/>
+<!--
+    <cause value="U" label="Urlaub" allDay="true"/>
+    <cause value="SU" label="Sonderurlaub" allDay="true"/>
+    <cause value="DR" label="Dienstreise" allDay="false"/>
+    <cause value="SUoB" label="SU ohne Bezüge" allDay="true"/>
+    <cause value="AU" label="AU krank" allDay="true"/>
+    <cause value="AUwK" label="AU Kind krank" allDay="true"/>
+    <cause value="REHA" label="REHA (AU)" allDay="true"/>
+    <cause value="BV" label="Berufsverbot" allDay="true"/>
+    <cause value="MS" label="Mutterschutz" allDay="true"/>
+    <cause value="EZ" label="Elternzeit" allDay="true"/>
+-->
+    <cause value="???" label="???" allDay="true"/>
+    <time>
+        <code label="8:00" value="08:00:00"/>
+        <code label="8:30" value="08:30:00"/>
+        <code label="9:00" value="09:00:00"/>
+        <code label="9:30" value="09:30:00"/>
+        <code label="10:00" value="10:00:00"/>
+        <code label="10:30" value="10:30:00"/>
+        <code label="11:00" value="11:00:00"/>
+        <code label="11:30" value="11:30:00"/>
+        <code label="12:00" value="12:00:00"/>
+        <code label="12:30" value="12:30:00"/>
+        <code label="13:00" value="13:00:00"/>
+        <code label="13:30" value="13:30:00"/>
+        <code label="14:00" value="14:00:00"/>
+        <code label="14:30" value="14:30:00"/>
+        <code label="15:00" value="15:00:00"/>
+        <code label="15:30" value="15:30:00"/>
+        <code label="16:00" value="16:00:00"/>
+        <code label="16:30" value="16:30:00"/>
+        <code label="17:00" value="17:00:00"/>
+        <code label="17:30" value="17:30:00"/>
+        <code label="18:00" value="18:00:00"/>
+        <code label="18:30" value="18:30:00"/>
+        <code label="19:00" value="19:00:00"/>
+    </time>
+    <bricks>
+        <leave>
+            <id value=""/>
+            <meta>
+                <tag>
+                    <text value=""/>
+                </tag>
+                <versionID value="0"/>
+            </meta>
+            <identifier>
+                <value value=""/>
+            </identifier>
+            <cause>
+                <coding>
+                    <code value=""/>
+                    <display value=""/>
+                </coding>
+            </cause>
+            <actor>
+                <reference value=""/>
+                <display value=""/>
+            </actor>
+            <allDay value="true"/>
+            <summary value=""/>
+            <description value=""/>
+            <period>
+                <start value=""/>
+                <end value=""/>
+            </period>
+            <status>
+                <coding>
+                    <code value="tentative"/>
+                    <display value="provisorisch"/>
+                </coding>
+            </status>
+        </leave>
+    </bricks>
+</leave-infos>

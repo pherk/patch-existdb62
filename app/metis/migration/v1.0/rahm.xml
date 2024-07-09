@@ -1,0 +1,79 @@
+<Practitioner xmlns="http://hl7.org/fhir" xml:id="c-150317db-b5ed-4f80-a4d9-07f81fb1205c">
+    <id value="c-1361"/>
+    <meta>
+        <tag>
+            <coding>
+                <system value="http://enahar.org/exist/apps/nabu#tag"/>
+                <code value="Heil-/ Hilfsmittel, invalid"/>
+                <display value="Heil-/ Hilfsmittel"/>
+            </coding>
+            <text value="Heil-/ Hilfsmittel"/>
+        </tag>
+        <versionID value="2"/>
+    </meta>
+    <lastModifiedBy>
+        <reference value="metis/practitioners/metis/practitioners/u-admin"/>
+        <display value="importBot"/>
+    </lastModifiedBy>
+    <lastModified value="2016-03-05T17:24:38.436+01:00"/>
+    <identifier>
+        <use value="official"/>
+        <label value="Nabu"/>
+        <system value="http://enahar.org/exist/apps/nabu#organization-id"/>
+        <value value="1361"/>
+    </identifier>
+    <specialty>
+        <coding>
+            <system value="http://enahar.org/exist/apps/nabu#organization-role"/>
+            <code value="tx"/>
+            <display value="tx"/>
+        </coding>
+        <text value="tx"/>
+    </specialty>
+    <telecom>
+        <system value="home"/>
+        <value value="0221 478 4668"/>
+        <use value="work"/>
+    </telecom>
+    <telecom>
+        <system value="email"/>
+        <value value=""/>
+        <use value="work"/>
+    </telecom>
+    <telecom>
+        <system value="internet"/>
+        <value value=""/>
+        <use value="work"/>
+    </telecom>
+    <address>
+        <line value="Uni Orthopädie Erdgeschoss"/>
+        <line value="Joseph-Stelzmann-Str."/>
+        <city value="Köln"/>
+        <state value="NW"/>
+        <postalCode value="50937"/>
+        <country value="DEU"/>
+    </address>
+    <organization>
+        <reference value="metis/organizations/fa-rahm"/>
+        <display value="Fa. Rahm"/>
+    </organization>
+    <name>
+        <use value="official"/>
+        <prefix value="">
+            <extension url="http://hl7.org/fhir/ExtensionDefinition/iso21090-EN-qualifier">
+                <valueCode value="AC"/>
+            </extension>
+        </prefix>
+        <given value=""/>
+        <family value="Kast"/>
+    </name>
+    <telecom>
+        <system value="home"/>
+        <value value="0221 478 4668"/>
+        <use value="work"/>
+    </telecom>
+    <gender value=""/>
+    <active value="true"/>
+</Practitioner>
+
+

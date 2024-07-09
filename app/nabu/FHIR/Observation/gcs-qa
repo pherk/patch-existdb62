@@ -1,0 +1,74 @@
+<Observation xmlns="http://hl7.org/fhir">
+  <id value="gcs-qa"/> 
+  <code> 
+    <!--     LOINC - always recommended to have a LOINC code     -->
+    <coding> 
+      <system value="http://loinc.org"/> 
+      <code value="9269-2"/> 
+      <display value="Glasgow coma score total"/> 
+    </coding> 
+    <text value="Glasgow Coma Scale , (GCS)"/> 
+  </code> 
+  <subject> 
+    <reference value="Patient/example"/> 
+    <display value="Peter James Chalmers"/> 
+  </subject> 
+  <effectiveDateTime value="2014-12-11T04:44:16Z"/> 
+  <!--     In FHIR, units may be represented twice. Once in the
+    agreed human representation, and once in a coded form.
+    In this example the UCUM unit is provided but no human representation since this is
+   often not displayed
+       -->
+  <valueQuantity> 
+    <value value="13"/> 
+    <system value="http://unitsofmeasure.org"/> 
+    <code value="{score}"/> 
+  </valueQuantity> 
+  <referenceRange> 
+    <high> 
+      <value value="8"/> 
+      <system value="http://unitsofmeasure.org"/> 
+      <code value="{score}"/> 
+    </high> 
+    <!--     meaning as text     -->
+    <type> 
+      <text value="Severe TBI"/> 
+    </type> 
+  </referenceRange> 
+  <referenceRange> 
+    <low> 
+      <value value="9"/> 
+      <system value="http://unitsofmeasure.org"/> 
+      <code value="{score}"/> 
+    </low> 
+    <high> 
+      <value value="12"/> 
+      <system value="http://unitsofmeasure.org"/> 
+      <code value="{score}"/> 
+    </high> 
+    <!--     meaning as text     -->
+    <type> 
+      <text value="Moderate TBI"/> 
+    </type> 
+  </referenceRange> 
+  <referenceRange> 
+    <low> 
+      <value value="13"/> 
+      <system value="http://unitsofmeasure.org"/> 
+      <code value="{score}"/> 
+    </low> 
+    <!--     meaning as text     -->
+    <type> 
+      <text value="Mild TBI"/> 
+    </type> 
+  </referenceRange> 
+  <!--     put the references to the QuestionnairAnswer example here using the derived-From type
+        -->
+  <related> 
+    <type value="derived-from"/> 
+    <target> 
+      <reference value="QuestionnaireResponse/gcs"/> 
+      <display value="GCS form results"/> 
+    </target> 
+  </related> 
+</Observation> 

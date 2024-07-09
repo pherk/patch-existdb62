@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:bf="http://betterform.sourceforge.org/xforms" xmlns:xf="http://www.w3.org/2002/xforms">
+    <div style="display:none">
+        <xf:model id="ticket" ev:event="xforms-revalidate" ev:defaultAction="cancel">
+            <xf:instance xmlns="" xmlns:fhir="http://hl7.org/fhir" id="i-pat">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-patient-from-master" resource="model:m-patient#instance('i-patient')//*:Patient" instance="i-pat" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">Subform: cannot load from Master!.</xf:message>
+            </xf:submission>
+            <xf:instance xmlns="" id="i-login">
+                <data/>
+            </xf:instance>
+            <xf:submission id="s-load-login-from-master" resource="model:m-patient#instance('i-login')//*:data" instance="i-login" replace="instance" method="get">
+                <xf:message ev:event="xforms-submit-error" level="ephemeral">login: cannot load from Master!.</xf:message>
+            </xf:submission>
+
+            <xf:instance xmlns="" id="i-task">
+                <Task xmlns="http://hl7.org/fhir">
+                    <id value=""/>
+                    <meta>
+                        <versionId value="0"/>
+                    </meta>
+                    <definition>
+                        <reference value=""/>
+                        <display value=""/>
+                    </definition>
+                    <basedOn>
+                        <reference value=""/>
+                        <display value=""/>                
+                    </basedOn>
+                    <status value="draft"/>
+                    <intent value="order"/>
+                    <priority value="normal"/>
+                    <code>
+                        <coding>
+                            <system value="http://eNahar.org/ValueSet/task-reason"/>
+                            <code value="task"/>
+                            <display value="ToDo"/>
+                        </coding>
+                        <text value="ToDo"/>
+                    </code>
+                    <description value=""/>
+                    <for>
+                        <reference value=""/>
+                        <display value=""/>
+                    </for>
+                    <executionPeriod>
+                        <start value=""/>
+                        <end value=""/>
+                    </executionPeriod>
+                    <authoredOn value=""/>
+                    <requester>
+                        <reference value=""/>
+                        <display value=""/>
+                        <extension url="http://eNahar.org/nabu/extension#onBehalfOf">
+                            <reference value="metis/organizations/kikl-spz"/>
+                            <display value="Unikliniken Köln Kinderklinik"/>
+                        </extension>
+                    </requester>
+                    <performerType>    
+                        <coding>
+                            <system value="http://hl7.org/ValueSet/performer-type"/>
+                            <code value="performer"/>
+                            <display value="Erbringer"/>
+                        </coding>
+                        <text value="Erbringer"/>
+                    </performerType>
+                    <owner>
+                        <reference value=""/>
+                        <display value=""/>
+                    </owner>
+                    <reasonCode>
+                        <text value="spz"/>
+                    </reasonCode>
+                    <note>
+                        <authorReference>
+                            <reference value=""/>
+                            <display value=""/>
+                        </authorReference>
+                        <time value=""/>
+                        <text value=""/>
+                    </note>
+                    <restriction>
+                        <period>
+                            <start value=""/>
+                            <end value=""/>
+                        </period>
+                        <recipient>
+                            <extension url="http://eNahar.org/nabu/extension#task-recipient-role">
+                                <valueString value=""/>
+                            </extension>
+                            <reference value=""/>
+                            <display value=""/>
+                        </recipient>
+                    </restriction>
+                    <input>
+                        <type>
+                            <coding>
+                                <system value="http://eNahar.org/ValueSet/task-input-types"/>
+                                <code value="tags"/>
+                            </coding>
+                        </type>
+                        <valueString value="spz"/>
+                    </input>
+                </Task>
+            </xf:instance>
+
+            <xf:submission id="s-submit-task" ref="instance('i-task')" method="put" replace="none">
+	    		<xf:resource value="concat('/exist/restxq/nabu/tasks?loguid=',encode-for-uri(instance('i-login')/*:loguid),'&amp;lognam=',encode-for-uri(instance('i-login')/*:lognam),'&amp;realm=',encode-for-uri(instance('i-login')/*:realm))"/>
+    			<xf:header>
+                    <xf:name>Content-Type</xf:name>
+                    <xf:value>application/xml</xf:value>
+                </xf:header>
+                <xf:message ev:event="xforms-submit-error" level="modal">cannot submit task! validation?</xf:message>
+            </xf:submission>
+
+            <xf:instance xmlns="" id="i-t-infos" src="FHIR/Task/task-infos.xml"/>
+
+            <xf:action ev:event="xforms-model-construct-done">
+                <xf:send submission="s-load-patient-from-master"/>
+                <xf:send submission="s-load-login-from-master"/>
+            </xf:action>
+            <xf:action ev:event="xforms-ready">
+                <xf:setvalue ref="instance('i-task')/*:authoredOn/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                <xf:setvalue ref="instance('i-task')/*:requester/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-task')/*:requester/*:display/@value" value="instance('i-login')/*:lognam"/>
+                <xf:setvalue ref="instance('i-task')/*:requester/*:extension[@url='http://eNahar.org/nabu/extension#onBehalfOf']/*:valueReference/*:reference/@value" value="instance('i-login')/*:realm"/>
+                <xf:setvalue ref="instance('i-task')/*:owner/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-task')/*:owner/*:display/@value" value="instance('i-login')/*:lognam"/>
+<!--
+                <xf:setvalue ref="instance('i-task')/*:author/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-task')/*:author/*:display/@value" value="instance('i-login')/*:lognam"/>
+-->
+                <xf:setvalue ref="instance('i-task')/*:note/*:authorReference/*:reference/@value" value="concat('metis/practitioners/',instance('i-login')/*:loguid)"/>
+                <xf:setvalue ref="instance('i-task')/*:note/*:authorReference/*:display/@value" value="instance('i-login')/*:lognam"/>
+                <xf:setvalue ref="instance('i-task')/*:note/*:time/@value" value="adjust-dateTime-to-timezone(current-dateTime())"/>
+                <xf:setvalue ref="instance('i-task')/*:restriction/*:period/*:start/@value" value="instance('i-login')/*:today"/> 
+                <xf:setvalue ref="instance('i-task')/*:restriction/*:period/*:end/@value" value="instance('i-login')/*:today"/> 
+                <xf:setvalue ref="instance('i-task')/*:for/*:reference/@value" value="concat('nabu/patients/',instance('i-pat')/*:id/@value)"/>
+                <xf:setvalue ref="instance('i-task')/*:for/*:display/@value" value="concat(instance('i-pat')/*:name[*:use/@value='official']/*:family/@value,', ',instance('i-pat')/*:name[*:use/@value='official']/*:given/@value,', *',instance('i-pat')/*:birthDate/@value)"/>
+            </xf:action>
+        </xf:model>
+    <!-- shadowed inputs for select2 hack, to register refs for fluxprocessor -->
+
+        <xf:input id="target-role" ref="instance('i-task')/*:restriction/*:recipient/*:extension/*:valueString/@value">
+            <xf:action ev:event="xforms-value-changed">
+                    <xf:setvalue ref="instance('i-task')/*:status/@value" value="'received'"/>
+            </xf:action>
+        </xf:input>
+        <xf:input id="target-ref" ref="instance('i-task')/*:restriction/*:recipient/*:reference/@value">
+            <xf:action ev:event="xforms-value-changed">
+                    <xf:setvalue ref="instance('i-task')/*:status/@value" value="'received'"/>
+            </xf:action>
+        </xf:input>
+        <xf:input id="target-display" ref="instance('i-task')/*:restriction/*:recipient/*:display/@value"/>        
+    </div>
+    <xf:group>
+        <xf:label>
+            <xf:output ref="instance('i-t-infos')/types/option[@value=instance('i-task')/*:code/*:coding/*:code/@value]/@label">
+                </xf:output>: <xf:output ref="instance('i-task')/*:description/@value">
+            </xf:output>
+        </xf:label>
+        <table>
+            <tr>
+                <td colspan="3">
+    <xf:group ref="instance('i-task')" class="svFullGroup bordered">
+        <xf:select1 ref="./*:code/*:coding/*:code/@value" class="medium-input" incremental="true">
+            <xf:label>Type:</xf:label>
+            <xf:itemset nodeset="instance('i-t-infos')/types/option">
+                <xf:label ref="./@label"/>
+                <xf:value ref="./@value"/>
+            </xf:itemset>
+            <xf:action ev:event="xforms-value-changed">
+                <xf:setvalue ref="instance('i-task')/*:code/*:text/@value" value="instance('i-t-infos')/types/option[@value= instance('i-task')/*:code/*:coding/*:code/@value]/@label"/>
+                <xf:setvalue ref="instance('i-task')/*:code/*:coding/*:display/@value" value="instance('i-t-infos')/types/option[@value= instance('i-task')/*:code/*:coding/*:code/@value]/@label"/>
+            </xf:action>
+        </xf:select1>
+        <xf:select1 ref="./*:priority/@value" class="short-input">
+            <xf:label>Priorität:</xf:label>
+            <xf:itemset nodeset="instance('i-t-infos')/priorities/option">
+                <xf:label ref="./@label"/>
+                <xf:value ref="./@value"/>
+            </xf:itemset>
+        </xf:select1>
+            <xf:input ref="./*:requester/*:display/@value" class="long-input">
+                <xf:label>Ext. Anfrage?</xf:label>
+                <xf:hint>Initiator des Tickets</xf:hint>
+            </xf:input>
+            <br/>
+            <label for="role-hack" class="xfLabel aDefault xfEnabled">Queue:</label>
+            <select class="task-select" name="role-hack">
+                <option/>
+            </select>
+            <br/>
+            <label for="target-hack" class="xfLabel aDefault xfEnabled">Zugewiesen an:</label>
+            <select class="task-select" name="target-hack">
+                <option/>
+            </select>
+            <br/>
+        <script type="text/javascript" defer="defer" src="../nabu/FHIR/Task/task.js"/>
+        <br/>
+        <xf:input ref="./*:description/@value" class="long-input">
+            <xf:label>Betreff:</xf:label>
+        </xf:input>
+        <xf:textarea ref="./*:note/*:text/@value" class="bigarea">
+            <xf:label>Text:</xf:label>
+        </xf:textarea>
+        <xf:input ref="./*:restriction/*:period/*:end/@value" class="">
+            <xf:label>Fällig am:</xf:label>
+            <xf:hint>(h|m|nw|\dw|\mM|dd.mm.yy|yy-mm-dd)</xf:hint>
+        </xf:input>
+        <xf:input ref="./*:input[*:type/*:coding/*:system[@value='http://eNahar.org/ValueSet/task-input-types']]/*:valueString/@value" class="">
+            <xf:label>Tags:</xf:label>
+            <xf:hint>Tags erlauben Filtern und Sortieren von Tickets</xf:hint>
+        </xf:input>
+        <xf:output ref="instance('i-task')/*:status/@value">
+            <xf:label>Status:</xf:label>
+        </xf:output>
+    </xf:group>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <xf:trigger class="svSaveTrigger">
+                        <xf:label>Speichern</xf:label>
+                        <xf:action ev:event="DOMActivate">
+                            <xf:send submission="s-submit-task"/>
+                            <xf:dispatch name="unload-subform" targetid="controlCenter"/>
+                        </xf:action>
+                    </xf:trigger>
+                </td>
+                <td>
+                    <xf:trigger class="svUpdateMasterTrigger">
+                        <xf:label>Abbrechen</xf:label>
+                        <xf:dispatch name="unload-subform" targetid="controlCenter"/>
+                    </xf:trigger>
+                </td>
+            </tr>
+        </table>
+    </xf:group>
+</div>

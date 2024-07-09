@@ -1,0 +1,71 @@
+/* print styles */
+
+
+body * {
+    visibility:hidden;
+}
+
+/* --- Synopsis pane ---*/
+#doc-synopsis, #doc-synopsis * {
+    visibility: visible;
+}
+#doc-synopsis {
+    position: absolute;
+    left: 0;
+    top: 1em;
+}
+
+/* --- Document pane ---*/
+#doc-textarea, #doc-textarea * {
+    visibility: visible;
+}
+#doc-textarea {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.hletter {
+
+    background: #fffff;
+    padding:0px;
+    margin:0px;
+    overflow: auto;
+    height: 400px;
+}
+.address {
+    border:1px solid #EE0000;
+    padding: 10px;
+    margin: 10px;
+}
+.dt-published {
+    border:1px solid #EE00EE;
+    padding: 10px;
+    margin: 10px 10px 10px 255px;
+}
+.betreff {
+    border:1px solid #0000EE;
+    padding: 10px;
+    margin: 10px;
+}
+.event {
+    
+}
+.letter-body {
+    border:1px solid #00EE00;
+}
+.signee {
+    padding: 10px;
+    margin: 10px;
+}
+.hnote {
+    background: #ffffff;
+    padding: 0px;
+    margin: 0px;
+    overflow: auto;
+    height: 400px;
+}
+.note-body {
+    border:1px solid #00EE00;
+    padding: 10px;
+    margin: 10px;
+}
