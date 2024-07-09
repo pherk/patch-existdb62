@@ -48,7 +48,7 @@ declare function leave:showFunctions($uid as xs:string)
  :)
 declare function leave:listLeaves()
 {
-    let $logu := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid  :=  substring-after($uref,'metis/practitioners/')
@@ -102,7 +102,7 @@ return
  :)
 declare function leave:adminValidateAll()
 {
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid  := substring-after($uref,'metis/practitioners/')
@@ -169,7 +169,7 @@ declare %private function leave:leavesToRows($leaves)
 
 declare function leave:editLeave($id)
 {
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid  := substring-after($uref,'metis/practitioners/')
@@ -347,7 +347,7 @@ let $lll := util:log-app('TRACE','apps.nabu',$leave)
 
 declare function leave:adminValidateSingle($id)
 {
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid  := substring-after($uref,'metis/practitioners/')
@@ -497,7 +497,7 @@ declare function leave:adminValidateSingle($id)
 declare function leave:adminNew()
 {
     let $realm  := "kikl-spzn"
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid  := substring-after($uref,'metis/practitioners/')
@@ -672,7 +672,7 @@ declare function leave:adminNew()
 declare function leave:userNew()
 {
     let $realm  := "metis/organizations/kikl-spzn"
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid  := substring-after($uref,'metis/practitioners/')

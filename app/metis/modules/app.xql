@@ -35,7 +35,7 @@ declare namespace fhir   = "http://hl7.org/fhir";
 declare function app:main($node as node(), $model as map(*), $action, $topic, $uid)
 {
     let $server := request:get-header('host')
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $pref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $pid  := substring-after($pref,'metis/practitioners/')
@@ -95,7 +95,7 @@ declare function app:news($node as node(), $model as map(*)) {
 };
 
 declare function app:dashboard($node as node(), $model as map(*)) {
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid  := substring-after($uref,'metis/practitioners/')
@@ -148,7 +148,7 @@ declare function app:main-admin($node as node(), $model as map(*), $action as xs
 
 declare function app:admin() 
 {
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid  := substring-after($uref,'metis/practitioners/')

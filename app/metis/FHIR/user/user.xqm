@@ -38,7 +38,7 @@ declare function user:showFunctions($account as item(), $uid as xs:string)
     let $isAdmin := $uid = ('u-admin','u-metis-admin')
     let $hasUA := 'perm_updateAccount' = $perms
     let $hasVL := 'perm_validateLeaves' = $perms
-    let $logu   := r-user:userByAlias(xdb:get-current-user())
+    let $logu   := r-user:userByAlias(sm:id()//sm:real/sm:username/string())
     let $loguid := $logu/fhir:id/@value/string()
     let $perms   := r-user:perms($loguid)/perm
 
@@ -82,8 +82,8 @@ declare function user:showFunctions($account as item(), $uid as xs:string)
  : @return
  :)
 declare %private function user:ensureGroup($group as xs:string) {
-    if (not(xmldb:group-exists($group)))
-    then system:as-user('admin', '', xmldb:create-group($group))
+    if (not(sm:group-exists($group)))
+    then system:as-user('admin', '', sm:create-group($group))
     else ()
 };
 
@@ -91,21 +91,21 @@ declare %private function user:ensureGroup($group as xs:string) {
 
 declare function user:check-user($repoConf as element()) as xs:string+ {
     let $perms := $repoConf/repo:permissions
-    let $user := if ($perms/@user) then $perms/@user/string() else xmldb:get-current-user()
-    let $group := if ($perms/@group) then $perms/@group/string() else xmldb:get-user-groups($user)[1]
+    let $user := if ($perms/@user) then $perms/@user/string() else sm:id()//sm:real/sm:username/string()
+    let $group := if ($perms/@group) then $perms/@group/string() else sm:get-user-groups($user)[1]
     return
         try {
             let $create := system:as-user('admin', '', (
-                if (xmldb:exists-user($user)) then
-                    if (index-of(xmldb:get-user-groups($user), $group)) then
+                if (sm:user-exists($user)) then
+                    if (index-of(sm:get-user-groups($user), $group)) then
                         ()
                     else (
                         user:ensureGroup($group),
-                        xmldb:add-user-to-group($user, $group)
+                        sm:add-group-member($user, $group)
                     )
                 else (
                         user:ensureGroup($group),
-                        xmldb:create-user($user, $perms/@password, $group, ())
+                        sm:create-account($user, $perms/@password, $group, ())
                 )))
             return 
                         ($user, $group)
@@ -135,7 +135,7 @@ declare %private function user:getName($id as xs:string*) as xs:string
 declare function user:adminTeam()
 {
     let $realm  := "kikl-spz"
-    let $logu   := xdb:get-current-user()
+    let $logu   := sm:id()//sm:real/sm:username/string()
     let $loguid := r-user:userByAlias($logu)/fhir:id/@value/string()
     let $roles  := r-user:rolesByID($loguid,$realm,$loguid)
     let $org    := 'metis/organizations/kikl-spz'
@@ -196,7 +196,7 @@ declare %private function user:accountsToRows($users)
  :)
 declare function user:editAccount($uid as xs:string)
 {
-    let $logu    := r-user:userByAlias(xdb:get-current-user())
+    let $logu    := r-user:userByAlias(sm:id()//sm:real/sm:username/string())
     let $loguid  := $logu/fhir:id/@value/string()
     let $self    := $loguid = $uid
     let $perms   := r-user:perms($loguid)/perm
@@ -964,7 +964,7 @@ declare %private function user:mkQualificationGroup()
  :)
 declare function user:changePasswd()
 {
-let $account:= r-user:userByAlias(xmldb:get-current-user())
+let $account:= r-user:userByAlias(sm:id()//sm:real/sm:username/string())
 let $loguid := $account/fhir:id/@value/string()
 let $uname  :=  string-join($account/fhir:name[fhir:use/@value='official']/fhir:family/@value, ' ')
 let $header := concat("Passwort für: ", $uname)

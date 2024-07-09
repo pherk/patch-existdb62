@@ -8,7 +8,6 @@ xquery version "3.0";
  :)
 module namespace date="http://enahar.org/exist/apps/metis/date";
 
-import module namespace dt="http://exist-db.org/xquery/datetime" at "java:org.exist.xquery.modules.datetime.DateTimeModule";
 
 declare function date:shortTime(
     $dt as xs:dateTime
@@ -100,7 +99,7 @@ declare function date:formatDate($dateTime as xs:dateTime) {
         else if ($daysAgo lt 14) then
             $daysAgo || " days ago"
         else
-            dt:format-dateTime($dateTime, "EEE, d MMM yyyy HH:mm:ss")
+            format-dateTime($dateTime, "EEE, d MMM yyyy HH:mm:ss")
 };
 
 declare function date:mmddyyyy-to-date 

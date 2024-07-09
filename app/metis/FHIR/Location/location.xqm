@@ -49,7 +49,7 @@ declare function loc:showFunctions($account as item(), $uid as xs:string)
 
 declare function loc:locations()
 {
-    let $logu   := r-practrole:userByAlias(xmldb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid := substring-after($uref,'metis/practitioners/')
