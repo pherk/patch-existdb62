@@ -12,6 +12,7 @@ import module namespace xxpath = "http://enahar.org/lib/xxpath";
 
 import module namespace config ="http://enahar.org/exist/apps/metis/config"  at "../../modules/config.xqm";
 import module namespace date   = "http://enahar.org/exist/apps/metis/date"   at "../../modules/date.xqm";
+import module namespace mutil = "http://enahar.org/exist/apps/metis/mutil"   at "../../modules/mutils.xqm";
 
 declare namespace rest   = "http://exquery.org/ns/restxq";
 declare namespace http = "http://expath.org/ns/http-client";
@@ -527,20 +528,6 @@ declare function local:newest($coll, $matched) as item()*
         $newest
 };
 
-declare function local:addNamespaceToXML($noNamespaceXML as element(*),$namespaceURI as xs:string) as element(*)
-{
-    element {fn:QName($namespaceURI,fn:local-name($noNamespaceXML))}
-    {
-         $noNamespaceXML/@*
-        ,for $node in $noNamespaceXML/node()
-            return
-                if (exists($node/node()))
-                then local:addNamespaceToXML($node,$namespaceURI)
-                else if ($node instance of element()) 
-                then element {fn:QName($namespaceURI,fn:local-name($node))}{$node/@*}
-                else $node
-    }
-};
 
 (:~
  : PUT: /metis/practitioners
@@ -566,7 +553,7 @@ function r-practitioner:putPractitionerXML(
         then $content
         else let $lll := util:log-app('TRACE','apps.nabu',$content)
             return
-            document { local:addNamespaceToXML($content/*:Practitioner,"http://hl7.org/fhir") }
+            document { mutil:addNamespaceToXML($content/*:Practitioner,"http://hl7.org/fhir") }
     let $isNew := not($content/fhir:Practitioner/@xml:id)
     let $cid   := if ($isNew)
         then concat("c-", util:uuid())

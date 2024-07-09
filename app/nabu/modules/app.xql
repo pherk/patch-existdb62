@@ -3,7 +3,6 @@ xquery version "3.0";
 module namespace app="http://enahar.org/exist/apps/nabu";
 
 import module namespace templates="http://exist-db.org/xquery/templates";
-import module namespace jquery   ="http://exist-db.org/xquery/jquery"         at "resource:org/exist/xquery/lib/jquery.xql";
 
 import module namespace config   ="http://enahar.org/exist/apps/nabu/config"  at "config.xqm";
 import module namespace help     ="http://enahar.org/exist/apps/nabu/help"    at "help.xqm";
@@ -52,7 +51,7 @@ declare function app:main($node as node(), $model as map(*), $action, $id, $filt
 {
     let $server := request:get-header('host')
     (:  let $log := util:log-app('DEBUG','apps.nabu', ($server,"?", $action, ":", $id, ":", $filter, ":", $self, ":", $status, ":", $topic)) :)
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $perms   := r-practrole:perms($prid)/fhir:perm
 
@@ -564,7 +563,7 @@ declare function app:news($node as node(), $model as map(*)) {
 };
 
 declare function app:dashboard($node as node(), $model as map(*), $action, $cal) {
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $unam := $logu/fhir:practitioner/fhir:display/@value/string()

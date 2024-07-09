@@ -47,7 +47,7 @@ declare function practrole:showFunctions($account as element(fhir:PractitionerRo
     let $isAdmin := $uid = ('u-admin','u-metis-admin')
     let $hasUA := 'perm_updateAccount' = $perms
     let $hasVL := 'perm_validateLeaves' = $perms
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid   := $logu/fhir:id/@value/string()
     let $perms   := r-practrole:perms($prid)/fhir:perm
 
@@ -91,8 +91,8 @@ declare function practrole:showFunctions($account as element(fhir:PractitionerRo
  : @return
  :)
 declare %private function practrole:ensureGroup($group as xs:string) {
-    if (not(xmldb:group-exists($group)))
-    then system:as-user('admin', '', xmldb:create-group($group))
+    if (not(sm:group-exists($group)))
+    then system:as-user('admin', '', sm:create-group($group))
     else ()
 };
 
@@ -100,21 +100,21 @@ declare %private function practrole:ensureGroup($group as xs:string) {
 
 declare function practrole:check-user($repoConf as element()) as xs:string+ {
     let $perms := $repoConf/repo:permissions
-    let $user := if ($perms/@user) then $perms/@user/string() else xmldb:get-current-user()
-    let $group := if ($perms/@group) then $perms/@group/string() else xmldb:get-user-groups($user)[1]
+    let $user := if ($perms/@user) then $perms/@user/string() else sm:id()//sm:real/sm:username/string()
+    let $group := if ($perms/@group) then $perms/@group/string() else sm:get-user-groups($user)[1]
     return
         try {
             let $create := system:as-user('admin', '', (
-                if (xmldb:exists-user($user)) then
-                    if (index-of(xmldb:get-user-groups($user), $group)) then
+                if (sm:user-exists($user)) then
+                    if (index-of(sm:get-user-groups($user), $group)) then
                         ()
                     else (
                         practrole:ensureGroup($group),
-                        xmldb:add-user-to-group($user, $group)
+                        sm:add-group-member($user, $group)
                     )
                 else (
                         practrole:ensureGroup($group),
-                        xmldb:create-user($user, $perms/@password, $group, ())
+                        sm:create-account($user, $perms/@password, $group, ())
                 )))
             return 
                         ($user, $group)
@@ -151,7 +151,7 @@ declare function practrole:listUsers()
 declare function practrole:adminTeam()
 {
     let $realm  := "metis/organizations/kikl-spzn"
-    let $logu   := r-practrole:userByAlias(xmldb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid   := $logu/fhir:id/@value/string()
     let $uref   := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid    := substring-after($uref,'metis/practitioners/')
@@ -246,7 +246,7 @@ declare %private function practrole:accountsToRows(
 declare function practrole:editAccount($id as xs:string)
 {
     let $realm  := "metis/organizations/kikl-spzn"
-    let $logu   := r-practrole:userByAlias(xmldb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid   := $logu/fhir:id/@value/string()
     let $uref   := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid    := substring-after($uref,'metis/practitioners/')

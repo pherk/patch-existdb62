@@ -39,7 +39,7 @@ declare function practitioner:showFunctions()
 
 declare function practitioner:listContacts()
 {
-    let $logu := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid   := $logu/fhir:id/@value/string()
     let $uref   := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid    := substring-after($uref,'metis/practitioners/')

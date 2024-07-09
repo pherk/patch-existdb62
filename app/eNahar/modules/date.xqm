@@ -8,8 +8,6 @@ xquery version "3.0";
  :)
 module namespace date="http://enahar.org/exist/apps/enahar/date";
 
-import module namespace dt="http://exist-db.org/xquery/datetime" at "java:org.exist.xquery.modules.datetime.DateTimeModule";
-
 
 declare variable $date:tzrex := "(Z|[+-](?:2[0-3]|[01][0-9])(?::?(?:[0-5][0-9]))?)";
 declare variable $date:daterex := "(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])";
@@ -126,7 +124,7 @@ declare function date:formatDateTime($dateTime as xs:dateTime) {
         else if ($daysAgo lt 14) then
             $daysAgo || " days ago"
         else
-            dt:format-dateTime($dateTime, "EEE, d MMM yyyy HH:mm:ss")
+            format-dateTime($dateTime, "EEE, d MMM yyyy HH:mm:ss")
 };
 
 declare function date:mmddyyyy-to-date 

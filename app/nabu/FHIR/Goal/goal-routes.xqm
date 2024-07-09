@@ -6,6 +6,7 @@ xquery version "3.0";
 module namespace r-goal = "http://enahar.org/exist/restxq/nabu/goals";
 
 import module namespace config  = "http://enahar.org/exist/apps/nabu/config"    at "../../modules/config.xqm";
+import module namespace nutil  = "http://enahar.org/exist/apps/nabu/utils"    at "../../modules/utils.xqm";
 import module namespace tei2fo = "http://enahar.org/lib/tei2fo";
 import module namespace teic   = "http://enahar.org/lib/teic";
 (: provides highest, lowest, sort :)

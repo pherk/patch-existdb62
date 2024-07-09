@@ -5,12 +5,11 @@ module namespace app="http://enahar.org/exist/apps/enahar/app";
 import module namespace config    = "http://enahar.org/exist/apps/enahar/config" at "../modules/config.xqm";
 import module namespace cal       = "http://enahar.org/exist/apps/enahar/edit"   at "../cal/cal.xqm";
 import module namespace order     = "http://enahar.org/exist/apps/enahar/order"  at "../order/ical-order.xqm";
-import module namespace new-order     = "http://enahar.org/exist/apps/enahar/order"  at "../order/new-order.xqm";
+import module namespace new-order     = "http://enahar.org/exist/apps/enahar/neworder"  at "../order/new-order.xqm";
 import module namespace sched = "http://enahar.org/exist/apps/enahar/schedule"   at "../schedule/schedules.xqm";
 
 import module namespace r-practrole  = "http://enahar.org/exist/restxq/metis/practrole"   at "/db/apps/metis/FHIR/PractitionerRole/practitionerrole-routes.xqm";
 
-declare namespace xdb = "http://exist-db.org/xquery/xmldb";
 declare namespace html= "http://www.w3.org/1999/xhtml";
 declare namespace fhir= "http://hl7.org/fhir";
 
@@ -129,7 +128,7 @@ declare function app:news($node as node(), $model as map(*)) {
  :)
 declare function app:main($node as node(), $model as map(*)) 
 {
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $loguid := $logu/fhir:id/@value/string()
     let $perms := r-practrole:perms($loguid)/fhir:perm
     let $hasMA := 'perm_makeAppointment' = $perms
@@ -147,7 +146,7 @@ declare function app:main($node as node(), $model as map(*))
  :)
 declare function app:main2($node as node(), $model as map(*)) 
 {
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $loguid := $logu/fhir:id/@value/string()
     let $perms := r-practrole:perms($loguid)/fhir:perm
     let $hasMA := 'perm_makeAppointment' = $perms
@@ -176,7 +175,7 @@ declare function app:main-admin($node as node(), $model as map(*), $action as xs
 
 declare function app:admin() 
 {
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $loguid := $logu/fhir:id/@value/string()
     let $perms := r-practrole:perms($loguid)/fhir:perm
     let $hasUC := 'perm_updateCalendar' = $perms

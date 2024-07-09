@@ -123,7 +123,7 @@ declare function date:formatDateTime($dateTime as xs:dateTime) {
         else if ($daysAgo lt 14) then
             $daysAgo || " days ago"
         else
-            dt:format-dateTime($dateTime, "EEE, d MMM yyyy HH:mm:ss")
+            format-dateTime($dateTime, "EEE, d MMM yyyy HH:mm:ss")
 };
 
 declare function date:mmddyyyy-to-date 

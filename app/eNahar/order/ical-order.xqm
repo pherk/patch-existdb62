@@ -89,7 +89,7 @@ declare variable $order:restxq-metis-users-ref  := "/exist/restxq/metis/Practiti
 declare function order:listOrders() as item()*
 {
     let $realm  := "kikl-spz"
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid  := substring-after($uref,'metis/practitioners/')

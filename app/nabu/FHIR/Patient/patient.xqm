@@ -54,7 +54,7 @@ declare function local:lookup($tableName, $name as xs:string)
 declare function pat:listPatients($pid as xs:string?)
 {
     let $realm  := "metis/organizations/kikl-spzn"
-    let $logu   := r-practrole:userByAlias(xmldb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid   := $logu/fhir:id/@value/string()
     let $uref   := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid    := substring-after($uref,'metis/practitioners/')

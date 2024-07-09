@@ -16,6 +16,7 @@ import module namespace ical   = "http://enahar.org/lib/ical";
 
 import module namespace config ="http://enahar.org/exist/apps/metis/config"  at "../../modules/config.xqm";
 import module namespace date   = "http://enahar.org/exist/apps/metis/date"   at "../../modules/date.xqm";
+import module namespace mutil = "http://enahar.org/exist/apps/metis/mutil"   at "../../modules/mutils.xqm";
 import module namespace serialize = "http://enahar.org/exist/apps/nabu/serialize" at "/db/apps/nabu/FHIR/meta/serialize-fhir-resources.xqm";
 
 import module namespace r-group = "http://enahar.org/exist/restxq/metis/groups"  at "../Group/group-routes.xqm";
@@ -540,20 +541,6 @@ return
     , $pdf)
 };
 
-declare function local:addNamespaceToXML($noNamespaceXML as element(*),$namespaceURI as xs:string) as element(*)
-{
-    element {fn:QName($namespaceURI,fn:local-name($noNamespaceXML))}
-    {
-         $noNamespaceXML/@*
-        ,for $node in $noNamespaceXML/node()
-            return
-                if (exists($node/node()))
-                then local:addNamespaceToXML($node,$namespaceURI)
-                else if ($node instance of element()) 
-                then element {fn:QName($namespaceURI,fn:local-name($node))}{$node/@*}
-                else $node
-    }
-};
 
 (:~
  : PUT: /metis/PractitionerRole
@@ -579,7 +566,7 @@ function r-practrole:putPractitionerRoleXML(
         then $content
         else let $lll := util:log-app('TRACE','apps.nabu',$content)
             return
-            document { local:addNamespaceToXML($content/*:PractitionerRole,"http://hl7.org/fhir") }
+            document { mutil:addNamespaceToXML($content/*:PractitionerRole,"http://hl7.org/fhir") }
     let $lll := util:log-app('TRACE','apps.nabu',$content//fhir:practitioner)
     let $isNew := not($content//@xml:id)
     let $lll := util:log-app('TRACE','apps.nabu',$content//fhir:practitioner)

@@ -6,6 +6,7 @@ xquery version "3.0";
 module namespace r-condition = "http://enahar.org/exist/restxq/nabu/conditions";
 
 import module namespace config = "http://enahar.org/exist/apps/nabu/config"    at "../../modules/config.xqm";
+import module namespace nutil = "http://enahar.org/exist/apps/nabu/utils"    at "../../modules/utils.xqm";
 import module namespace condition = "http://enahar.org/exist/apps/nabu/condition"    at "../../FHIR/Condition/condition.xqm";
 
 import module namespace tei2fo = "http://enahar.org/lib/tei2fo";
@@ -781,7 +782,7 @@ function r-condition:newConditionXML(
             <reference value="{concat('nabu/patients/',$pid)}"/>
             <display value="{$pnam}"/>
           </subject>
-        , format-dateTime(adjust-dateTime-to-timezone(current-dateTime(),()),"[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]")
+        , format-dateTime(adjust-dateTime-to-timezone(current-dateTime()),"[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01]")
         , ()
         , <recorder xmlns="http://hl7.org/fhir">
             <reference value="{concat('metis/practitioners/',$loguid)}"/>

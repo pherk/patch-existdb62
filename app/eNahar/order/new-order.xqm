@@ -1,6 +1,6 @@
 xquery version "3.0";
 
-module namespace new-order = "http://enahar.org/exist/apps/enahar/new-order";
+module namespace new-order = "http://enahar.org/exist/apps/enahar/neworder";
 
 import module namespace config  = "http://enahar.org/exist/apps/enahar/config" at "../modules/config.xqm";
 
@@ -89,7 +89,7 @@ declare variable $new-order:restxq-metis-users-ref  := "/exist/restxq/metis/Prac
 declare function new-order:listOrders() as item()*
 {
     let $realm  := "kikl-spz"
-    let $logu   := r-practrole:userByAlias(xdb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid  := substring-after($uref,'metis/practitioners/')

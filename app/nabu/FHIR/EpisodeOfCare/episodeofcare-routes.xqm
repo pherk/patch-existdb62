@@ -6,6 +6,7 @@ xquery version "3.0";
 module namespace r-eoc = "http://enahar.org/exist/restxq/nabu/eocs";
 
 import module namespace config  = "http://enahar.org/exist/apps/nabu/config"    at "../../modules/config.xqm";
+import module namespace nutil  = "http://enahar.org/exist/apps/nabu/utils"    at "../../modules/utils.xqm";
 import module namespace tei2fo = "http://enahar.org/lib/tei2fo";
 import module namespace teic   = "http://enahar.org/lib/teic";
 (: provides highest, lowest, sort :)
@@ -562,20 +563,7 @@ function r-eoc:postEpisodeOfCareXML(
         r-eoc:putEpisodeOfCareXML(document {$cnd}, $realm, $loguid,$lognam)
 };
 
-declare function local:addNamespaceToXML($noNamespaceXML as element(*),$namespaceURI as xs:string) as element(*)
-{
-    element {fn:QName($namespaceURI,fn:local-name($noNamespaceXML))}
-    {
-         $noNamespaceXML/@*
-        ,for $node in $noNamespaceXML/node()
-            return
-                if (exists($node/node()))
-                then local:addNamespaceToXML($node,$namespaceURI)
-                else if ($node instance of element()) 
-                then element {fn:QName($namespaceURI,fn:local-name($node))}{$node/@*}
-                else $node
-    }
-};
+
 
 (:~
  : PUT: nabu/eocs
@@ -601,7 +589,7 @@ function r-eoc:putEpisodeOfCareXML(
     let $content := if($content/fhir:EpisodeOfCare)
         then $content
         else if ($content/*:EpisodeOfCare)
-        then document { local:addNamespaceToXML($content/*:EpisodeOfCare,"http://hl7.org/fhir") }
+        then document { nutil:addNamespaceToXML($content/*:EpisodeOfCare,"http://hl7.org/fhir") }
         else let $lll := util:log-app('TRACE','apps.nabu',$content)
             return
                 error()

@@ -35,7 +35,7 @@ declare function cal:edit($what as xs:string)
 
 declare function cal:user-schedules($what as xs:string)
 {
-    let $logu   := r-practrole:userByAlias(xmldb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid := substring-after($uref,'metis/practitioners/')
@@ -605,7 +605,7 @@ declare function cal:events($header as xs:string, $what)
 
 declare function cal:user-meetings()
 {
-    let $logu   := r-practrole:userByAlias(xmldb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid := substring-after($uref,'metis/practitioners/')

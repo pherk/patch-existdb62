@@ -44,8 +44,8 @@ declare variable $enc-day:order-infos-uri     := "/exist/apps/nabu/FHIR/Order/or
  :)
 declare function enc-day:showFunctions()
 {
-    let $now := adjust-dateTime-to-timezone(current-dateTime(), ())
-    let $logu   := r-practrole:userByAlias(xmldb:get-current-user())
+    let $now := adjust-dateTime-to-timezone(current-dateTime())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid := substring-after($uref,'metis/practitioners/')
@@ -95,8 +95,8 @@ declare function enc-day:list()
 :)
         , <status>tentative</status>
         )
-    let $date   := adjust-date-to-timezone(current-date(),())
-    let $logu   := r-practrole:userByAlias(xmldb:get-current-user())
+    let $date   := adjust-date-to-timezone(current-date())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid := substring-after($uref,'metis/practitioners/')
@@ -346,7 +346,7 @@ return
             relevant="instance('i-wf')/*:dirty = 'false'"/>
         <xf:bind id="today"
             ref="instance('views')/*:today"
-            relevant="instance('i-search')/*:date = adjust-date-to-timezone(current-date(),())"/>
+            relevant="instance('i-search')/*:date = adjust-date-to-timezone(current-date())"/>
 
         <xf:instance xmlns="" id="i-dateTime">
             <data>
@@ -368,7 +368,7 @@ return
                 <dirty>false</dirty>
                 <prio>high</prio>
                 <prio-display>dringend</prio-display>
-                <date>{adjust-date-to-timezone(current-date(),())}</date>
+                <date>{adjust-date-to-timezone(current-date())}</date>
             </data>
         </xf:instance>
         
@@ -448,7 +448,7 @@ return
             <xf:label>Patient-ID:</xf:label>
             <xf:action ev:event="xforms-value-changed">
                 <xf:setvalue ref="instance('i-search')/*:start" value="'1'"/>
-                <xf:setvalue ref="instance('i-search')/*:rangeStart" value="adjust-date-to-timezone(current-date(),())"/>
+                <xf:setvalue ref="instance('i-search')/*:rangeStart" value="adjust-date-to-timezone(current-date())"/>
                 <xf:setvalue ref="instance('i-search')/*:rangeEnd" value="'2021-04-01'"/>
                 <xf:send submission="s-get-encounters"/>
             </xf:action>
@@ -487,7 +487,7 @@ return
 declare %private function enc-day:daylist($uid as xs:string)
 {
 <span>
-    <h2><xf:output value="choose(instance('i-search')/*:date = adjust-date-to-timezone(current-date(),()),'Heute','Termine')"/></h2>
+    <h2><xf:output value="choose(instance('i-search')/*:date = adjust-date-to-timezone(current-date()),'Heute','Termine')"/></h2>
     <table class="svTriggerGroup">
         <tr>
             <td colspan="1">

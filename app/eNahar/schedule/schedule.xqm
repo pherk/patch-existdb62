@@ -19,7 +19,7 @@ declare variable $sched:restxq-schedules     := "/exist/restxq/enahar/schedules"
 
 declare function sched:schedules($what)
 {
-    let $logu   := xdb:get-current-user()
+    let $logu   := sm:id()//sm:real/sm:username/string()
     let $user   := r-practrole:userByAlias($logu)
     let $prid := $user/fhir:id/@value/string()
     let $uref := $user/fhir:practitioner/fhir:reference/string()

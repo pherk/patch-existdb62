@@ -38,7 +38,7 @@ declare variable $goal-regrv:condition-infos-uri := "/exist/apps/nabu/FHIR/Condi
 declare function goal-regrv:review($tag as xs:string) as item()*
 {
     let $realm  := "kikl-spz"
-    let $logu   := r-practrole:userByAlias(xmldb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid   := substring-after($uref,'metis/practitioners/')
