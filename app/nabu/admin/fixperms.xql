@@ -19,15 +19,15 @@ declare variable $eNahar-data   := "/db/apps/eNaharData/data";
 declare variable $config-collection  := "/db/system/config";
 
 declare function local:create-admin-user() {
-    if (not(xmldb:exists-user( $nabu-admin-user))) then
-        xmldb:create-user($nabu-admin-user, $nabu-admin-pw, $metis-users-group, ())
+    if (not(sm:user-exists( $nabu-admin-user))) then
+        sm:create-account($nabu-admin-user, $nabu-admin-pw, $metis-users-group, ())
     else
         ()
 };
 
 declare function local:create-pmh-user() {
-    if (not(xmldb:exists-user($nabu-pmh-user))) then
-        xmldb:create-user($nabu-pmh-user, $nabu-pmh-pw, $metis-users-group, ())
+    if (not(sm:user-exists($nabu-pmh-user))) then
+        sm:create-account($nabu-pmh-user, $nabu-pmh-pw, $metis-users-group, ())
     else
         ()
 };

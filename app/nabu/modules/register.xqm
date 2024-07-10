@@ -24,9 +24,9 @@ let $server := request:get-header('host')
 (:  let $log := util:log-app('DEBUG','nabu', ($server,"?", $action, ":", $id, ":", $filter, ":", $self, ":", $status, ":", $topic)) :)
 return
     switch ($action)
-        case "reviewTagged"    return  review:tagged($filter)
+        case "reviewTagged"    return  register:tagged($filter)
         default
-            return review:tagged('')
+            return register:tagged('')
 };     
 
 
@@ -44,10 +44,9 @@ declare variable $register:con-infos-uri     := "/exist/apps/nabu/FHIR/Condition
 declare function register:tagged($tag as xs:string) as item()*
 {
     let $realm  := "kikl-spz"
-    let $user   := r-user:userByAlias(xdb:get-current-user())
+    let $user   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $loguid := $user/fhir:id/@value/string()
     let $lognam := concat(string-join($user/fhir:name[fhir:use/@value='official']/fhir:family/@value, ' '),', ',$user/fhir:name[fhir:use/@value='official']/fhir:given/@value)
-    let $roles  := r-user:rolesByID($loguid, $realm, $loguid)
 
     let $now    := current-dateTime()
     return
@@ -76,7 +75,7 @@ declare function register:tagged($tag as xs:string) as item()*
                 ref="instance('i-search-cons')" 
                 instance='i-cons' 
                 replace="instance">
-            <xf:resource value="concat('{$review:restxq-conditions}','?loguid=',encode-for-uri('{$loguid}'),'&amp;lognam=',encode-for-uri('{$lognam}'),'&amp;realm=',encode-for-uri('{$realm}'))"/>
+            <xf:resource value="concat('{$register:restxq-conditions}','?loguid=',encode-for-uri('{$loguid}'),'&amp;lognam=',encode-for-uri('{$lognam}'),'&amp;realm=',encode-for-uri('{$realm}'))"/>
 			<xf:header>
                 <xf:name>Content-Type</xf:name>
                 <xf:value>application/xml</xf:value>
@@ -87,7 +86,7 @@ declare function register:tagged($tag as xs:string) as item()*
             <xf:message ev:event="xforms-submit-error" level="ephemeral">Error: search</xf:message>
         </xf:submission>
 
-        <xf:instance id="i-cond-infos" xmlns="" src="{$review:con-infos-uri}"/>
+        <xf:instance id="i-cond-infos" xmlns="" src="{$register:con-infos-uri}"/>
 
         <xf:instance id="views">
             <data xmlns="">
@@ -159,7 +158,7 @@ declare function register:tagged($tag as xs:string) as item()*
         <xf:case id="listCases">
                 <h4>Review</h4>
 
-                { review:mkConditionListGroup() }
+                { register:mkConditionListGroup() }
 <!--
                 { review:mkConditionListTriggerGroup() }
 -->
@@ -174,7 +173,7 @@ declare function register:tagged($tag as xs:string) as item()*
 )
 };
 
-declare %private function review:mkConditionListGroup()
+declare %private function register:mkConditionListGroup()
 {
     <div>
         <table class="">
@@ -325,7 +324,7 @@ declare %private function review:mkConditionListGroup()
     </div>
 };
 
-declare %private function review:mkConditionListTriggerGroup()
+declare %private function register:mkConditionListTriggerGroup()
 {
     <table>
         <tr>

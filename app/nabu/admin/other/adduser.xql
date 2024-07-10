@@ -8,8 +8,8 @@ declare variable $user-group    := "spz";
 declare variable $data-group    := "spz";
 
 declare function local:create-user($user as xs:string) {
-    if (not(xmldb:exists-user($user))) then
-        xmldb:create-user($user, 'guest123', $user-group, ())
+    if (not(sm:user-exists($user))) then
+        sm:create-account($user, 'guest123', $user-group, ())
     else
         ()
 };

@@ -10,7 +10,7 @@ module namespace order="http://enahar.org/exist/apps/nabu/order";
 
 import module namespace config= "http://enahar.org/exist/apps/nabu/config" at "../../modules/config.xqm";
 
-import module namespace r-user = "http://enahar.org/exist/restxq/metis/users"   at "/db/apps/metis/FHIR/user/user-routes.xqm";
+import module namespace r-practrole = "http://enahar.org/exist/restxq/metis/practrole"   at "/db/apps/metis/FHIR/PractitionerRole/practitionerrole-routes.xqm";
 
 import module namespace r-order = "http://enahar.org/exist/restxq/nabu/orders"   at "../Order/order-routes.xqm";
 
@@ -87,13 +87,13 @@ declare function order:listOrders($status as xs:string)
 {
     let $realm := "kikl-spz"
     let $org  := concat('metis/organizations/', $realm)
-    let $logu   := r-practrole:userByAlias(xmldb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid := substring-after($uref,'metis/practitioners/')
     let $unam := $logu/fhir:practitioner/fhir:display/@value/string()
-let $roles  := r-user:rolesByID($uid, $realm, $uid)
-let $myOrders := r-order:orders($realm,$uid, $unam, '1', '*',
+    let $roles  := r-practrole:rolesByID($uid, $realm, $uid, $unam)
+    let $myOrders := r-order:orders($realm,$uid, $unam, '1', '*',
                                 "", $uid, '', 'appointment', 'requested',
                                 "", "",
                                 '1994-06-01T08:00:00', '2021-04-01T19:00:00',
@@ -149,7 +149,7 @@ declare variable $order:order-infos-uri     := "FHIR/Order/order-infos.xml";
 :)
 declare function order:editOrdersByPID($pid as xs:string)
 {
-    let $logu   := r-practrole:userByAlias(xmldb:get-current-user())
+    let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
     let $prid := $logu/fhir:id/@value/string()
     let $uref := $logu/fhir:practitioner/fhir:reference/@value/string()
     let $uid := substring-after($uref,'metis/practitioners/')

@@ -8,7 +8,6 @@ xquery version "3.0";
  :)
 module namespace date="http://enahar.org/exist/apps/nabu/date";
 
-import module namespace dt="http://exist-db.org/xquery/datetime" at "java:org.exist.xquery.modules.datetime.DateTimeModule";
 
 (:~
  : converts several shortcuts to xs:date
@@ -48,7 +47,7 @@ declare function date:easyDate($string as xs:string) as xs:date
                 else $string
             else date:ddmmyyyy-to-date($string)     (: german date :)
         return
-            adjust-date-to-timezone($date,())
+            adjust-date-to-timezone($date)
     }
 };
 
@@ -94,7 +93,7 @@ declare function date:easyDateTime($string as xs:string) as xs:dateTime
                         then xs:dateTime(concat(date:yyyymmdd-to-date($string), 'T08:00:00'))     (: iso date :)
                         else xs:dateTime(concat(date:ddmmyyyy-to-date($string), 'T08:00:00'))     (: german date :)
         return
-            adjust-dateTime-to-timezone($dt,())
+            adjust-dateTime-to-timezone($dt)
     }
 };
 

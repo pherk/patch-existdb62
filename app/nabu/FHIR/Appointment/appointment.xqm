@@ -73,7 +73,7 @@ declare function appointment:listAppointmentsJQuery($status as xs:string?, $filt
 {
     let $status := ($status, 'booked')[1]
     let $filter := adjust-date-to-timezone(($filter, current-date())[1], ())
-    let $logu   := r-user:userByAlias(xmldb:get-current-user())
+    let $logu   := r-user:userByAlias(sm:id()//sm:real/sm:username/string())
     let $loguid := $logu/fhir:id/@value/string()
     let $group  := 'spz-arzt'
     let $myAppointments := r-appointment:appointmentsXML(
@@ -180,7 +180,7 @@ declare function appointment:view()
         ,   <status>noshow</status>
         )
     let $date   := adjust-date-to-timezone(current-date(),())
-    let $logu   := r-user:userByAlias(xmldb:get-current-user())
+    let $logu   := r-user:userByAlias(sm:id()//sm:real/sm:username/string())
     let $loguid := $logu/fhir:id/@value/string()
     let $lognam:= appointment:formatFHIRName($logu)
     let $group  := 'spz-arzt'
@@ -228,7 +228,7 @@ declare function appointment:list()
         ,   <status>noshow</status>
         )
     let $date   := adjust-date-to-timezone(current-date(),())
-    let $logu   := r-user:userByAlias(xmldb:get-current-user())
+    let $logu   := r-user:userByAlias(sm:id()//sm:real/sm:username/string())
     let $loguid := $logu/fhir:id/@value/string()
     let $lognam:= appointment:formatFHIRName($logu)
     let $group  := 'spz-arzt'
@@ -841,7 +841,7 @@ declare function appointment:accept()
     let $date   := adjust-date-to-timezone(current-date(),())
     let $start  := dateTime($date,xs:time("08:00:00"))
     let $end    := $start + xs:yearMonthDuration("P1Y")
-    let $logu   := r-user:userByAlias(xmldb:get-current-user())
+    let $logu   := r-user:userByAlias(sm:id()//sm:real/sm:username/string())
     let $loguid := $logu/fhir:id/@value/string()
     let $lognam := appointment:formatFHIRName($logu)
     let $group  := 'spz-arzt'
@@ -1141,7 +1141,7 @@ declare function appointment:orphan-view()
           <status>booked</status>
         , <status>tentative</status>
         )
-    let $logu   := r-user:userByAlias(xmldb:get-current-user())
+    let $logu   := r-user:userByAlias(sm:id()//sm:real/sm:username/string())
     let $loguid := $logu/fhir:id/@value/string()
     let $lognam:= appointment:formatFHIRName($logu)
     let $start := dateTime($today,xs:time("08:00:00"))
