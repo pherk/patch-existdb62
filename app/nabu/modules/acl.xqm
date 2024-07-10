@@ -41,7 +41,7 @@ declare function acl:show-permissions($node as node(), $model as map(*)) {
             let $permissions := sm:get-permissions($doc)
             let $owner := $permissions/@owner/string()
             return
-                if ($owner = xmldb:get-current-user()) then
+                if ($owner = sm:id()//sm:real/sm:username/string()) then
                     let $processed := templates:copy-node($node, $model)
                     return
                         acl:process-permissions($processed, $permissions/*)

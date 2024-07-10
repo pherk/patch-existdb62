@@ -1,4 +1,4 @@
-xquery version "3.0";
+xquery version "3.1";
 
 import module namespace xmldb = "http://exist-db.org/xquery/xmldb";
 import module namespace util = "http://exist-db.org/xquery/util";
@@ -8,10 +8,10 @@ import module namespace response = "http://exist-db.org/xquery/response";
 import module namespace config = "http://enahar.org/exist/apps/nabu/config" at "../modules/config.xqm";
 import module namespace date   = "http://enahar.org/exist/apps/nabu/date"   at "../modules/date.xqm";
 
-import module namespace user   = "http://enahar.org/exist/apps/metis/user"    at "/db/apps/metis/user/user.xqm";
-import module namespace r-user = "http://enahar.org/exist/restxq/metis/users" at "/db/apps/metis/user/user-routes.xqm";
 
-import module namespace task   = "http://enahar.org/exist/apps/nabu/task"     at "../task/tasks.xqm";
+import module namespace r-practrole = "http://enahar.org/exist/restxq/metis/practrole" at "/db/apps/metis/FHIR/PractitionerRole/practitionerrole-routes.xqm";
+
+import module namespace task   = "http://enahar.org/exist/apps/nabu/task"     at "../FHIR/Task/tasks.xqm";
 
 (: import module namespace doc    = "http://enahar.org/exist/apps/nabu/document"     at "../patient/doc.xqm"; :)
 import module namespace r-doc  = "http://enahar.org/exist/restxq/nabu/documents"  at "../patient/doc-routes.xqm";
@@ -38,7 +38,7 @@ let $dates   := collection($config:nabu-imports)/dataroot/Datum
 let $filter := '2015-06-09'
 let $status := 'booked'
 let $pats := collection($config:nabu-patients)
-let $logu   := r-user:userByAlias(xmldb:get-current-user())
+let $logu   := r-practrole:userByAlias(sm:id()//sm:real/sm:username/string())
 let $loguid := $logu/fhir:id/@value/string()
 let $myAppointments := r-appointment:appointmentsXML($loguid, 'kikl-spz',
                             'u-gritzmannr', 'arzt', '',
