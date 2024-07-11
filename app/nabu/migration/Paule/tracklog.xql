@@ -13,10 +13,10 @@ let $sectionName := request:get-parameter("section", "test")
 let $data        := request:get-data()
 let $logFile     := collection('ziziphus/data/tracklog')/tracklog/workrecord[@id = $uuid]
 
-let $sectionlog :=  element {$sectionName} { attribute {'id'} {$uuid}, attribute {'status'} {'inProgress'}, attribute {'user'} {xmldb:get-current-user()}, attribute {'date'} {current-date()} } 
+let $sectionlog :=  element {$sectionName} { attribute {'id'} {$uuid}, attribute {'status'} {'inProgress'}, attribute {'user'} {sm:id()//sm:real/sm:username/string()}, attribute {'date'} {current-date()} } 
 let $worklog :=
 <tracklog>
-   <workrecord id="{$uuid}" status="inProgress" user="{xmldb:get-current-user()}" date="{current-date()}">
+   <workrecord id="{$uuid}" status="inProgress" user="{sm:id()//sm:real/sm:username/string()}" date="{current-date()}">
         {$sectionlog}
    </workrecord>
 </tracklog>
