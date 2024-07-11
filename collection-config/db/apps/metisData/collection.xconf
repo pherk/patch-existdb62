@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://exist-db.org/collection-config/1.0">
+    <index xmlns:fhir="http://hl7.org/fhir" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <fulltext default="none" attributes="false"/>
+        <range><!-- FHIR objects -->
+            <create qname="fhir:Practitioner">
+                <field name="pract-tag" match="fhir:meta/fhir:tag/fhir:text/@value" type="xs:string"/>
+                <field name="pract-specialty" match="fhir:specialty/fhir:coding/fhir:code/@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:practitioner">
+                <field name="practrole-name" match="fhir:display/@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:reference">
+                <field name="fhir-ref" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:family">
+                <field name="pract-family" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:code">
+                <field name="fhir-code" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:Group">
+                <field name="group-tag" match="fhir:meta/fhir:tag/fhir:text/@value" type="xs:string"/>
+                <field name="group-type" match="fhir:type/@value" type="xs:string"/>
+                <field name="group-name" match="fhir:name/@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:characteristics">
+                <field name="char-code" match="fhir:code/fhir:text/@value" type="xs:string"/>
+                <field name="char-value" match="fhir:valueCode/@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:id">
+                <field name="fhir-id" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:identifier">
+                <field name="fhir-identifier" match="fhir:value/@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:active">
+                <field name="fhir-active" match="@value" type="xs:string"/>
+            </create>
+            
+            <!-- Non-FHIR objects -->
+            <create qname="id">
+                <field name="leave-id" match="@value" type="xs:string"/>
+            </create>
+            <create qname="status">
+                <field name="leave-status" match="coding/code/@value" type="xs:string"/>
+            </create>
+            <create qname="reference">
+                <field name="leave-ref" match="@value" type="xs:string"/>
+            </create>
+            <create qname="start">
+                <field name="leave-start" match="@value" type="xs:dateTime"/>
+            </create>
+            <create qname="end">
+                <field name="leave-end" match="@value" type="xs:dateTime"/>
+            </create>
+        </range>
+    </index>
+</collection>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://exist-db.org/collection-config/1.0">
+    <index xmlns:fhir="http://hl7.org/fhir" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <fulltext default="none" attributes="false"/>
+        <range>
+            <create qname="fhir:reference">
+                <field name="fhir-ref" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:id">
+                <field name="fhir-id" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:identifier">
+                <field name="fhir-identifier" match="fhir:value/@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:date">
+                <field name="fhir-date" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:start">
+                <field name="fhir-start" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:end">
+                <field name="fhir-end" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:status">
+                <field name="fhir-status" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:active">
+                <field name="fhir-active" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:family">
+                <field name="pat-family" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:given">
+                <field name="pat-given" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:use">
+                <field name="pat-use" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:birthDate">
+                <field name="pat-bd" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:role">
+                <field name="actor-role" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:coding">
+                <field name="ord-coding" match="fhir:code/@value" type="xs:string"/>
+            </create>
+        </range>
+    </index>
+</collection>

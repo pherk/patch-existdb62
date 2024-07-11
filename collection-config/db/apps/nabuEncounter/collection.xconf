@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://exist-db.org/collection-config/1.0">
+    <index xmlns:fhir="http://hl7.org/fhir" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <fulltext default="none" attributes="false"/>
+        <range>
+            <create qname="fhir:subject">
+                <field name="fhir-subject-ref" match="fhir:reference/@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:individual">
+                <field name="fhir-individual-ref" match="fhir:reference/@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:id">
+                <field name="fhir-id" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:start">
+                <field name="fhir-start" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:end">
+                <field name="fhir-end" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:status">
+                <field name="fhir-status" match="@value" type="xs:string"/>
+            </create>
+        <!-- FHIR objects -->
+            <create qname="@url" type="xs:string"/>
+        </range>
+    </index>
+</collection>

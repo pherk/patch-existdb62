@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://exist-db.org/collection-config/1.0">
+    <index xmlns:fhir="http://hl7.org/fhir" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <fulltext default="none" attributes="false"/>
+        <range><!-- FHIR objects -->
+            <create qname="@url" type="xs:string"/>
+            <create qname="fhir:id">
+                <field name="fhir-id" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:sender">
+                <field name="fhir-sender" match="fhir:reference/@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:subject">
+                <field name="fhir-subject" match="fhir:reference/@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:patient">
+                <field name="fhir-patient" match="fhir:reference/@value" type="xs:string"/>
+            </create>
+            <!-- Task -->
+            <create qname="fhir:recipient">
+                <field name="fhir-recipient" match="fhir:reference/@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:owner">
+                <field name="fhir-owner" match="fhir:reference/@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:for">
+                <field name="fhir-for" match="fhir:reference/@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:careManager">
+                <field name="fhir-cm" match="fhir:reference/@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:status">
+                <field name="fhir-status" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:lifecycleStatus">
+                <field name="fhir-lifecycleStatus" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:coding">
+                <field name="fhir-coding" match="fhir:code/@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:system">
+                <field name="fhir-system" match="@value" type="xs:string"/>
+            </create>
+            <create qname="fhir:sent">
+                <field name="fhir-sent" match="@value" type="xs:string"/>
+            </create>
+            <create qname="error">
+                <field name="err-collection" match="collection" type="xs:string"/>
+            </create>
+        </range>
+    </index>
+</collection>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://exist-db.org/collection-config/1.0">
+    <index xmlns:fhir="http://hl7.org/fhir" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <fulltext default="none" attributes="false"/>
+        <range><!-- FHIR objects -->
+            <create qname="fhir:c">
+                <field name="fhir-c" match="@value" type="xs:string"/>
+            </create>
+        </range>
+    </index>
+</collection>
