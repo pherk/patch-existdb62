@@ -79,12 +79,7 @@ return
     </p>
     <table>
         <tr>
-            <td colspan="3">
-                <div class="divider"></div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">
+            <td colspan="4">
                 { prpass:mkPasswdGroup() }
             </td>
         </tr>
@@ -113,18 +108,39 @@ return
 };
 
 declare %private function prpass:mkPasswdGroup() {
-        <xf:group class="svFullGroup bordered">
-            <xf:label>Passwort ändern?</xf:label><br/>
-            <xf:secret ref="instance('i-passwd')/oldPassword">
-                <xf:label>Altes Password</xf:label>
-            </xf:secret>
-            <xf:secret ref="instance('i-passwd')/newPassword">
-                <xf:label>Neues Password</xf:label>
-            </xf:secret>
-            <xf:secret ref="instance('i-passwd')/confirmPassword">
-                <xf:label>Password bestätigen</xf:label>
-            </xf:secret>
-        </xf:group>
+    <xf:group class="svFullGroup">
+       <table>                                                                                       
+        <tr>                                                                                         
+          <td>                                                                                       
+             <h3>Passwort ändern?</h3>                                                       
+          </td>                                                                                      
+        </tr>                                                                                        
+        <tr>                                                                                         
+          <td>                                                                                       
+             <strong>Altes Passwort</strong>                                                         
+          </td>                                                                                      
+          <td>                                                                                       
+             <xf:secret ref="instance('i-passwd')/oldPassword"></xf:secret>                          
+          </td>                                                                                      
+        </tr>                                                                                        
+        <tr>                                                                                         
+          <td>                                                                                       
+             <strong>Neues Passwort</strong>                                                         
+          </td>                                                                                      
+          <td>                                                                                       
+             <xf:secret ref="instance('i-passwd')/newPassword"></xf:secret>                          
+          </td>
+        </tr>
+        <tr>                                                                                         
+          <td>                                                                                       
+             <strong>Password bestätigen</strong>                                                    
+          </td>                                                                                      
+          <td>                                                                                       
+             <xf:secret ref="instance('i-passwd')/confirmPassword"></xf:secret>                      
+          </td>                                                                                      
+        </tr>                                                                                        
+      </table>  
+    </xf:group>
 };
 
 

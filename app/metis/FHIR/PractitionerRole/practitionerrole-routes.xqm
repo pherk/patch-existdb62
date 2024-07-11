@@ -16,7 +16,7 @@ import module namespace ical   = "http://enahar.org/lib/ical";
 
 import module namespace config ="http://enahar.org/exist/apps/metis/config"  at "../../modules/config.xqm";
 import module namespace date   = "http://enahar.org/exist/apps/metis/date"   at "../../modules/date.xqm";
-import module namespace mutil = "http://enahar.org/exist/apps/metis/mutil"   at "../../modules/mutils.xqm";
+import module namespace mutil = "http://enahar.org/exist/apps/metis/mutil"   at "../../modules/mutil.xqm";
 import module namespace serialize = "http://enahar.org/exist/apps/nabu/serialize" at "/db/apps/nabu/FHIR/meta/serialize-fhir-resources.xqm";
 
 import module namespace r-group = "http://enahar.org/exist/restxq/metis/groups"  at "../Group/group-routes.xqm";
@@ -941,10 +941,10 @@ function r-practrole:changePasswdXML(
     , $uid as xs:string*
     )
 {
-    let $lll := util:log-app('TRACE','apps.nabu',$content)
-    let $opw  := $content//oldPassword
-    let $npw  := $content//newPassword
-    let $cpw  := $content//confirmPassword
+    let $lll := util:log-app('TRACE','app.nabu',$content)
+    let $opw  := $content//*:oldPassword/string()
+    let $npw  := $content//*:newPassword/string()
+    let $cpw  := $content//*:confirmPassword/string()
     let $isAuth := if ($uid = $loguid)
         then 'basic' = r-practrole:perms($uid)/perm
         else 'perm_updateAccount' = r-practrole:perms($loguid)/perm
