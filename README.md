@@ -1,4 +1,11 @@
-# Totenbuch
+# Nabu on eXistDB 6.2
+
+As you can see, most of the patches are stolen from the Totenbuch app of the CCEH.
+I don't know if Marcel Schaeben developed the way to integrate betterform as shadowed jar into 6.2.
+Many thanks to him or whoever.
+
+https://gitlab.dh.uni-koeln.de/cceh/totenbuch
+
 
 This is the Totenbuch eXist-db application running at http://totenbuch.awk.uni-koeln.de. It has originally been written
 by Ulrike Henny, Jonathan Blumtritt et al. for eXist 1.4.3 and has since been adapted to newer eXist versions:
