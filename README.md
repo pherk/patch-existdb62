@@ -1,8 +1,10 @@
 # Nabu on eXistDB 6.2
 
+Only the jars and the patches are used.
 As you can see, most of the patches are stolen from the Totenbuch app of the CCEH.
 I don't know if Marcel Schaeben developed the way to integrate betterform as shadowed jar into 6.2.
 Many thanks to him or whoever.
+The Totenbuch app and the gulpfile are unchanged and unused.
 
 https://gitlab.dh.uni-koeln.de/cceh/totenbuch
 
