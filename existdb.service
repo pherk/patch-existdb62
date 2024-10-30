@@ -1,0 +1,23 @@
+[Unit]
+Description=eXist-db Server
+Documentation=https://exist-db.org/exist/apps/doc/
+After=syslog.target
+StartLimitIntervalSec=0
+
+[Service]
+#Type=simple
+# Type must be set correctly for $MAINPID detection to work
+Type=exec
+User=existdb
+Group=existdb
+Environment="JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/"
+Environment="JAVA_OPTS=-XX:+UseG1GC -XX:+UseStringDeduplication -XX:MaxRAMPercentage=75.0 -Xmx12000M -Dorg.exist.db-connection.cacheSize=512M"
+Restart=always
+RestartSec=1
+ExecStart=/home/peter/exist-distribution-6.2.0/bin/startup.sh
+ExecStop=/home/peter/exist-distribution-6.2.0/bin/shutdown.sh -p XXXXX --uri xmldb:exist://localhost:8080/exist/xmlrpc
+ExecStop=tail --pid $MAINPID -f /dev/null
+TimeoutStopSec=120
+
+[Install]
+WantedBy=multi-user.target

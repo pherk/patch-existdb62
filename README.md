@@ -1,4 +1,6 @@
-# Nabu on eXistDB 6.2
+# Nabu on eXistDB 6.2 or 6.3
+
+the patches can also used for 6.3 since these files did not change otherwise.
 
 Only the jars and the patches are used.
 As you can see, most of the patches are stolen from the Totenbuch app of the CCEH.
@@ -6,10 +8,9 @@ I don't know if Marcel Schaeben developed the way to integrate betterform as sha
 Many thanks to him or whoever.
 The Totenbuch app and the gulpfile are unchanged and unused.
 
-https://gitlab.dh.uni-koeln.de/cceh/totenbuch
+<https://gitlab.dh.uni-koeln.de/cceh/totenbuch>
 
-
-This is the Totenbuch eXist-db application running at http://totenbuch.awk.uni-koeln.de. It has originally been written
+This is the Totenbuch eXist-db application running at <http://totenbuch.awk.uni-koeln.de>. It has originally been written
 by Ulrike Henny, Jonathan Blumtritt et al. for eXist 1.4.3 and has since been adapted to newer eXist versions:
 
 - eXist 2.2 in 2016
@@ -19,35 +20,35 @@ by Ulrike Henny, Jonathan Blumtritt et al. for eXist 1.4.3 and has since been ad
 
 The current version has been tested in eXist 6.2.0.
 
-
 <!-- MarkdownTOC -->
 
 - [Repository structure](#repository-structure)
 - [Code depenencies](#code-depenencies)
 - [Development and Deployment](#development-and-deployment)
-    - [Setting up a development instance](#setting-up-a-development-instance)
-        - [Create the deployment config file \(`exist-secrets.conf`\)](#create-the-deployment-config-file-exist-secretsconf)
-        - [Set up eXist-db](#set-up-exist-db)
-            - [Without docker](#without-docker)
-            - [With docker](#with-docker)
-            - [Install the Totenbuch application into eXist](#install-the-totenbuch-application-into-exist)
-    - [Migrating to a newer eXist version](#migrating-to-a-newer-exist-version)
-    - [Configuraton details](#configuraton-details)
+  - [Setting up a development instance](#setting-up-a-development-instance)
+    - [Create the deployment config file \(`exist-secrets.conf`\)](#create-the-deployment-config-file-exist-secretsconf)
+    - [Set up eXist-db](#set-up-exist-db)
+      - [Without docker](#without-docker)
+      - [With docker](#with-docker)
+      - [Install the Totenbuch application into eXist](#install-the-totenbuch-application-into-exist)
+  - [Migrating to a newer eXist version](#migrating-to-a-newer-exist-version)
+  - [Configuraton details](#configuraton-details)
 - [Data updates and maintenance](#data-updates-and-maintenance)
 - [Visual Regression Testing with *backstop.js*](#visual-regression-testing-with-backstopjs)
 - [Migration Notes](#migration-notes)
-    - [5.2.0 to 6.2.0 \(September 2023\)](#520-to-620-september-2023)
-        - [betterFORM dependency conflicts \(Re-inclusion of betterFORM and downgrade of Saxon and Xerces, part 2\)](#betterform-dependency-conflicts-re-inclusion-of-betterform-and-downgrade-of-saxon-and-xerces-part-2)
-    - [4.5.0 to 5.2.0 \(May / June 2021\)](#450-to-520-may--june-2021)
-        - [Range Index problems](#range-index-problems)
-        - [Inconsistent result order from ``fn:collection``](#inconsistent-result-order-from-fncollection)
-        - [Re-inclusion of betterFORM and downgrade of Saxon and Xerces](#re-inclusion-of-betterform-and-downgrade-of-saxon-and-xerces)
+  - [5.2.0 to 6.2.0 \(September 2023\)](#520-to-620-september-2023)
+    - [betterFORM dependency conflicts \(Re-inclusion of betterFORM and downgrade of Saxon and Xerces, part 2\)](#betterform-dependency-conflicts-re-inclusion-of-betterform-and-downgrade-of-saxon-and-xerces-part-2)
+  - [4.5.0 to 5.2.0 \(May / June 2021\)](#450-to-520-may--june-2021)
+    - [Range Index problems](#range-index-problems)
+    - [Inconsistent result order from ``fn:collection``](#inconsistent-result-order-from-fncollection)
+    - [Re-inclusion of betterFORM and downgrade of Saxon and Xerces](#re-inclusion-of-betterform-and-downgrade-of-saxon-and-xerces)
 - [Documentation TODO](#documentation-todo)
 - [Maintenance TODO](#maintenance-todo)
 
 <!-- /MarkdownTOC -->
 
 <a id="repository-structure"></a>
+
 ## Repository structure
 
 - `app`: contains the source eXist app source code to be deployed to eXist
@@ -60,6 +61,7 @@ The current version has been tested in eXist 6.2.0.
 - `betterform`: Maven project to build the betterFORM shaded JAR (see [below](#betterform-dependency-conflicts-re-inclusion-of-betterform-and-downgrade-of-saxon-and-xerces-part-2))
 
 <a id="code-depenencies"></a>
+
 ## Code depenencies
 
 This app makes heavy use the betterFORM XForms processor (previously included in eXist, now to be installed into eXist
@@ -67,6 +69,7 @@ manually) as well as dojo 1.6 as a javascript framework. Further dependencies
 are [AWLD.js](http://isawnyu.github.io/awld-js/) as well as [openseadragon](https://openseadragon.github.io/).
 
 <a id="development-and-deployment"></a>
+
 ## Development and Deployment
 
 Changes to the app like new functionality, data updates and migrations to newer eXist versions should be made and tested
@@ -85,9 +88,11 @@ steps of setting up an app instance**. It is recommended to read and understand 
 work on this app.
 
 <a id="setting-up-a-development-instance"></a>
+
 ### Setting up a development instance
 
 <a id="create-the-deployment-config-file-exist-secretsconf"></a>
+
 #### Create the deployment config file (`exist-secrets.conf`)
 
 Create an `exist-secrets.conf` file and configure eXist server instances for deployment.
@@ -99,9 +104,11 @@ Use `exist-secrets.conf.example` as a template.
   this: `gulp deploy --env live`.
 
 <a id="set-up-exist-db"></a>
+
 #### Set up eXist-db
 
 <a id="without-docker"></a>
+
 ##### Without docker
 
 1. Install a clean eXist-db instance on the development machine.
@@ -133,6 +140,7 @@ cd exist-config
    your local deployment.
 
 <a id="with-docker"></a>
+
 ##### With docker
 
 1. Run `docker plugin install vieux/sshfs`. This will install the `docker-volume-sshfs` plugin which allows to mount the
@@ -145,8 +153,8 @@ cd exist-config
    image directory. If you use public key authentication for SSH, you need to configure the `exist_images` volume
    in `docker-compose.yml` accordingly as described [here](https://github.com/vieux/docker-volume-sshfs).
 
-
 <a id="install-the-totenbuch-application-into-exist"></a>
+
 ##### Install the Totenbuch application into eXist
 
 1. Start the eXist-db database or the docker container.
@@ -163,6 +171,7 @@ cd exist-config
 3. `gulp watch` can be used to automatically upload changed files to eXist during development.
 
 <a id="migrating-to-a-newer-exist-version"></a>
+
 ### Migrating to a newer eXist version
 
 The following process is recommended:
@@ -180,27 +189,29 @@ to back up and restore at least `/db/system/security` for the user accounts and 
 will not be lost.
 
 <a id="configuraton-details"></a>
+
 ### Configuraton details
 
 Find an explanation of the necessary eXist configuration below (paths relative to the eXist root directory).
 
 - `conf.xml`:
-    - increase cacheSize to 256M and collectionCache to 128M
-    - configure a regular data backup job
+  - increase cacheSize to 256M and collectionCache to 128M
+  - configure a regular data backup job
 - `webapp/WEB-INF/controller-config.xml`
-    - configure the `Flux` and `inspector` servlets used by betterFORM
-    - redirect root (/) to `xmldb:exist:///db/totenbuch`
-    - make the contents of the eXist `webapp` subdir available under the path `/fs`
+  - configure the `Flux` and `inspector` servlets used by betterFORM
+  - redirect root (/) to `xmldb:exist:///db/totenbuch`
+  - make the contents of the eXist `webapp` subdir available under the path `/fs`
 - `webapp/WEB-INF/web.xml`
-    - adjust `inspector` and betterForm servlet paths
-    - configure the XFormsFilter mapping for each sub-url of the app (this was necessary for eXist 2.2 due to a bug, not
+  - adjust `inspector` and betterForm servlet paths
+  - configure the XFormsFilter mapping for each sub-url of the app (this was necessary for eXist 2.2 due to a bug, not
       sure if this is still necessary or if a wildcard would work with newer versions)
 - `tools/jetty/webapps/exist-webapp-context.xml`
-    - change default webapp context from `/exist` to `/`
+  - change default webapp context from `/exist` to `/`
 - `tools/jetty/webapps/portal/WEB-INF/web.xml`
-    - disable the eXist portal placeholder that would normally appear under `/`
+  - disable the eXist portal placeholder that would normally appear under `/`
 
 <a id="data-updates-and-maintenance"></a>
+
 ## Data updates and maintenance
 
 When making changes to any object, knowledge entry or the bibliography, the generated data has to be updated.
@@ -216,6 +227,7 @@ the git repository before proceeding (*see Maintenance TODO*).
 Index problems*)
 
 <a id="visual-regression-testing-with-backstopjs"></a>
+
 ## Visual Regression Testing with *backstop.js*
 
 This repository includes a configuration for *visual regression testing* of a testing instance against a production
@@ -232,14 +244,19 @@ Quick how-to:
 
 - adapt production and testing URLs in ``backtop.config.js``
 - test against included reference screenshots:
+
   ```bash
   backstop test --config="backstop.config.js"  --docker
   ```
+
 - filter test cases by name, i.e. include only Spruch 20:
+
   ```bash
   backstop test --config="backstop.config.js" --filter='Spruch 20' --docker
   ```
+
 - create a new set of reference images, overwriting the old ones
+
   ```bash
   backstop reference --config="backstop.config.js"
   ```
@@ -248,14 +265,16 @@ The `--docker` switch makes backstop use a docker container to take the screensh
 Docker needs to be installed for this to work. You can also use backstop without `--docker`, but then rendering depends on the operating system,
 operating system version, installed fonts etc. which can lead to false positives when backstop checks for mismatches.
 
-
 <a id="migration-notes"></a>
+
 ## Migration Notes
 
 <a id="520-to-620-september-2023"></a>
+
 ### 5.2.0 to 6.2.0 (September 2023)
 
 <a id="betterform-dependency-conflicts-re-inclusion-of-betterform-and-downgrade-of-saxon-and-xerces-part-2"></a>
+
 #### betterFORM dependency conflicts (Re-inclusion of betterFORM and downgrade of Saxon and Xerces, part 2)
 
 *Read first*: [Re-inclusion of betterFORM and downgrade of Saxon and Xerces](#re-inclusion-of-betterform-and-downgrade-of-saxon-and-xerces)
@@ -280,9 +299,11 @@ The Maven project for building the shaded JAR is in the `betterform` directory. 
 3. Make sure to commit the newly built JAR into the repository if it works as intended.
 
 <a id="450-to-520-may--june-2021"></a>
+
 ### 4.5.0 to 5.2.0 (May / June 2021)
 
 <a id="range-index-problems"></a>
+
 #### Range Index problems
 
 The eXist range index speeds up data generation and website response times. However, eXist has a problem with complex
@@ -300,9 +321,10 @@ configuration file (`conf.xml`) and restarting eXist:
 Remember to enable the index again after updating or the app will get slow.
 
 There is a (at the time of writing still open) eXist-db issue which might be
-related: https://github.com/eXist-db/exist/issues/1720
+related: <https://github.com/eXist-db/exist/issues/1720>
 
 <a id="inconsistent-result-order-from-fncollection"></a>
+
 #### Inconsistent result order from ``fn:collection``
 
 In eXist 5.2.0, the order in which the results are returned from calls to ``fn:collection`` has changed. This affected a
@@ -313,10 +335,8 @@ in this order. All queries accessing documents have been modified do access them
 original collection ``/db/totenbuch/objects``. The editing forms still operate on the ``objects`` collection directly,
 so after each edit, the step ``update-basis-allgemein`` has to be run again.
 
-
-
-
 <a id="re-inclusion-of-betterform-and-downgrade-of-saxon-and-xerces"></a>
+
 #### Re-inclusion of betterFORM and downgrade of Saxon and Xerces
 
 **Update**: Downgrading Saxon like this does not work anymore as of eXist 6.2.0,
@@ -333,16 +353,18 @@ also included in this repository (which luckily does not seem to break eXist... 
 older versions.
 
 Related sources:  
-https://github.com/eXist-db/exist/issues/2007 (Xerces downgrade)  
-https://sourceforge.net/p/exist/mailman/message/36935226/ (Saxon downgrade)
+<https://github.com/eXist-db/exist/issues/2007> (Xerces downgrade)  
+<https://sourceforge.net/p/exist/mailman/message/36935226/> (Saxon downgrade)
 
 <a id="documentation-todo"></a>
+
 ## Documentation TODO
 
 - which files are the data base, which files are static content, and which files are generated by the update scripts?
 - for what is AWLD.js actually used?
 
 <a id="maintenance-todo"></a>
+
 ## Maintenance TODO
 
 - Migrate away from remote Google APIs for data tables and charts
@@ -350,4 +372,4 @@ https://sourceforge.net/p/exist/mailman/message/36935226/ (Saxon downgrade)
 - Convert into eXist app package
 - Define a process for updating data; make sure that no one modifies data in the live instance in the future
 - Move away from betterFORM – possible to migrate to Orbeon XForms or move away from XForms at all?
-    - or: https://github.com/Jinntec/Fore (work-in-progress)
+  - or: <https://github.com/Jinntec/Fore> (work-in-progress)
